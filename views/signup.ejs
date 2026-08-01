@@ -1,0 +1,29 @@
+<%- include('layout/header', { title: 'Signup' }) %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2 class="mb-4">Signup</h2>
+    <form method="POST" action="">
+      <p>   <% if (error) { %>
+                        <div style="color: red; font-weight: bold;">
+                            <%= error %>
+                        </div>
+                        <% } %></p>
+      <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label>Password</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Sign Up</button>
+    </form>
+  </div>
+</div>
+
+<%- include('layout/footer') %>
