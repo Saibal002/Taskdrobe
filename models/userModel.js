@@ -1,20 +1,17 @@
 const query = require("../plugins/query");
 
-
-
 /**
  * Create User
  */
 const createUser = async ({
-    roleId,
-    fullName,
-    email,
-    password,
-    phone = null,
-    profileImage = null,
+  roleId,
+  fullName,
+  email,
+  password,
+  phone = null,
+  profileImage = null,
 }) => {
-
-    const sql = `
+  const sql = `
         INSERT INTO users
         (
             role_id,
@@ -33,73 +30,87 @@ const createUser = async ({
             $5,
             $6
         )
-        RETURNING *;
+       RETURNING
+    user_id,
+    role_id,
+    full_name,
+    email,
+    phone,
+    profile_image,
+    is_active,
+    created_at,
+    updated_at;
     `;
 
-    const values = [
-        roleId,
-        fullName,
-        email,
-        password,
-        phone,
-        profileImage,
-    ];
+  const values = [roleId, fullName, email, password, phone, profileImage];
 
-    const { rows } = await query(sql, values);
+  const { rows } = await query(sql, values);
 
-    return rows[0];
+  return rows[0];
 };
 
 /**
  * Find user by email
  */
 const findUserByEmail = async (email) => {
-    const params = [email];
+  const params = [email];
 
-    const sql= `
-        SELECT *
-        FROM users
-        WHERE email = $1;
+  const sql = `
+      SELECT
+    u.user_id,
+    u.role_id,
+    u.full_name,
+    u.email,
+    u.password,
+    u.phone,
+    u.profile_image,
+    u.is_active,
+    u.last_login,
+    r.role_name
+FROM users u
+INNER JOIN roles r
+ON u.role_id = r.role_id
+WHERE u.email = $1;
     `;
 
-    const { rows } = await query(sql, params);
+  const { rows } = await query(sql, params);
 
-    return rows[0];
+  return rows[0];
 };
 
 /**
  * Find user by ID
  */
 const findUserById = async (userId) => {
-    const params = [userId];
-    const sql = `
+  const params = [userId];
+  const sql = `
         SELECT *
         FROM users
         WHERE user_id = $1;
     `;
 
-    const { rows } = await query(sql, params);
+  const { rows } = await query(sql, params);
 
-    return rows[0];
+  return rows[0];
 };
 
 /**
  * Update Last Login
  */
 const updateLastLogin = async (userId) => {
-    const params = [userId];
-    const sql = `
+  const params = [userId];
+  const sql = `
         UPDATE users
         SET last_login = CURRENT_TIMESTAMP
         WHERE user_id = $1;
     `;
 
-    await query(sql, params);
+  await query(sql, params);
 };
 
 module.exports = {
-    createUser,
-    findUserByEmail,
-    findUserById,
-    updateLastLogin,
+  createUser,
+  findUserByEmail,
+  findUserById,
+  updateLastLogin,
 };

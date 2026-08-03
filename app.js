@@ -4,8 +4,10 @@ const path = require('path');
 
 const { app: appConfig } = require('./config/environment');
 const pool = require('./plugins/db');
+const errorHandler = require("./middleware/errorHandler");
 
 const homeRoute = require('./routes/homeRoute');
+const authRoute = require("./routes/authRoute");
 
 const app = express();
 
@@ -42,7 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 // ======================
 app.use('/', homeRoute);
-
+app.use('/auth', authRoute);
+app.use(errorHandler);
 // ======================
 // Start Server
 // ======================
