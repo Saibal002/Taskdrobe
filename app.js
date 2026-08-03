@@ -1,48 +1,55 @@
-require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const homeRoute = require('./routes/homeRoute');
 
-// const connectDB = require('./config/db');
-// const routeServiceProvider = require('./config/routeServiceProvider');
+const { app: appConfig } = require('./config/environment');
+const pool = require('./plugins/db');
+
+const homeRoute = require('./routes/homeRoute');
 
 const app = express();
 
 // ======================
-// 1. Connect Database
+// Test Database Connection
 // ======================
-// connectDB();
+(async () => {
+    try {
+        const result = await pool.query("SELECT NOW()");
+        console.log("✅ Database Connected");
+        console.log("🕒 Server Time:", result.rows[0].now);
+    } catch (err) {
+        console.error("❌ Database Connection Failed");
+        console.error(err.message);
+        process.exit(1);
+    }
+})();
 
 // ======================
-// 2. Middleware
+// Middleware
 // ======================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // ======================
-// 3. Static Files & Views
+// Static Files & Views
 // ======================
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ======================
-// 4. Load Routes
+// Routes
 // ======================
-// routeServiceProvider(app);
 app.use('/', homeRoute);
 
-
-
 // ======================
-// 5. Start Server
+// Start Server
 // ======================
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.listen(appConfig.port, () => {
+    console.log(
+        `🚀 ${appConfig.name} running on http://localhost:${appConfig.port}`
+    );
 });
 
 module.exports = app;
