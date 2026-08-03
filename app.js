@@ -46,9 +46,9 @@ app.use('/', homeRoute);
 // ======================
 // Start Server
 // ======================
-app.listen(appConfig.port, () => {
+app.listen(appConfig.PORT, () => {
     console.log(
-        `🚀 ${appConfig.name} running on http://localhost:${appConfig.port}`
+        `🚀 ${appConfig.APP_NAME} running on http://localhost:${appConfig.PORT}`
     );
 });
 
