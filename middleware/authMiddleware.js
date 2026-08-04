@@ -7,21 +7,24 @@ const authMiddleware = (req, res, next) => {
 
         const authHeader = req.headers.authorization;
 
-        if (!authHeader) {
-            throw new AppError("Access token is required.", 401);
-        }
+const token =
+    req.cookies.token ||
+    (
+        authHeader &&
+        authHeader.startsWith("Bearer ")
+            ? authHeader.split(" ")[1]
+            : null
+    );
 
-        if (!authHeader.startsWith("Bearer ")) {
-            throw new AppError("Invalid authorization format.", 401);
-        }
+if (!token) {
+    throw new AppError("Access token is required.", 401);
+}
 
-        const token = authHeader.split(" ")[1];
+const decoded = verifyToken(token);
 
-        const decoded = verifyToken(token);
+req.user = decoded;
 
-        req.user = decoded;
-
-        next();
+next();
 
     } catch (err) {
 

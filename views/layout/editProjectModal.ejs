@@ -1,0 +1,71 @@
+<!-- Edit Project Modal -->
+<div class="modal fade" id="editProjectModal-<%= project._id %>" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form action="/api/v1/projects/<%= project._id %>/update" method="POST">
+        <div class="modal-body">
+          <!-- Project Name -->
+          <div class="mb-3">
+            <label class="form-label">Project Name</label>
+            <input type="text" class="form-control" name="name" value="<%= project.name %>" required>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3"><%= project.description %></textarea>
+          </div>
+
+          <!-- Deadline -->
+          <div class="mb-3">
+            <label class="form-label">Deadline</label>
+            <input type="date" class="form-control" name="deadline"
+              value="<%= project.deadline ? project.deadline.toISOString().split('T')[0] : '' %>">
+          </div>
+
+          <!-- Status -->
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status">
+              <option value="Not Started" <%= project.status === 'Not Started' ? 'selected' : '' %>>Not Started</option>
+              <option value="In Progress" <%= project.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+              <option value="Completed" <%= project.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+              <option value="On Hold" <%= project.status === 'On Hold' ? 'selected' : '' %>>On Hold</option>
+            </select>
+          </div>
+
+          <!-- Progress -->
+          <div class="mb-3">
+            <label class="form-label">Progress (%)</label>
+            <input type="number" class="form-control" name="progress"
+              value="<%= project.progress || 0 %>" min="0" max="100">
+          </div>
+
+          <!-- Tasks -->
+          <div class="mb-3">
+            <label class="form-label">Tasks</label>
+            <div id="taskListEdit-<%= project._id %>">
+              <% if (project.tasks && project.tasks.length > 0) { %>
+                <% project.tasks.forEach((task, i) => { %>
+                  <input type="text" class="form-control mb-2" name="tasks[]" value="<%= task %>">
+                <% }) %>
+              <% } else { %>
+                <input type="text" class="form-control mb-2" name="tasks[]" placeholder="Enter task">
+              <% } %>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addTaskField('taskListEdit-<%= project._id %>')">+ Add Task</button>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-dark">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -8,6 +8,7 @@ const errorHandler = require("./middleware/errorHandler");
 
 const homeRoute = require('./routes/homeRoute');
 const authRoute = require("./routes/authRoute");
+const dashboardRoute = require("./routes/dashboardRoute");
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRoute);
 app.use('/auth', authRoute);
 app.use(errorHandler);
+app.use('/',dashboardRoute)
 // ======================
 // Start Server
 // ======================

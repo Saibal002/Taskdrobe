@@ -1,29 +1,105 @@
 <%- include('layout/header', { title: 'Signup' }) %>
 
 <div class="row justify-content-center">
-  <div class="col-md-6">
-    <h2 class="mb-4">Signup</h2>
-    <form method="POST" action="">
-      <p>   <% if (error) { %>
-                        <div style="color: red; font-weight: bold;">
-                            <%= error %>
-                        </div>
-                        <% } %></p>
-      <div class="mb-3">
-        <label>Name</label>
-        <input type="text" name="name" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label>Email</label>
-        <input type="email" name="email" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label>Password</label>
-        <input type="password" name="password" class="form-control" required>
-      </div>
-      <button type="submit" class="btn btn-success w-100">Sign Up</button>
-    </form>
-  </div>
+    <div class="col-md-6">
+
+        <h2 class="mb-4">Signup</h2>
+
+        <% if (error) { %>
+            <div class="alert alert-danger">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <% if (success) { %>
+            <div class="alert alert-success">
+                <%= success %>
+            </div>
+        <% } %>
+
+        <form method="POST" action="/auth/signup">
+
+            <div class="mb-3">
+                <label for="fullName" class="form-label">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    class="form-control"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    value="<%= typeof formData !== 'undefined' ? formData.fullName : '' %>"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    value="<%= typeof formData !== 'undefined' ? formData.email : '' %>"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="phone" class="form-label">
+                    Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    class="form-control"
+                    placeholder="Enter your phone number"
+                    autocomplete="tel"
+                    value="<%= typeof formData !== 'undefined' ? formData.phone : '' %>"
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-success w-100"
+            >
+                Sign Up
+            </button>
+
+        </form>
+
+        <div class="text-center mt-3">
+            Already have an account?
+            <a href="/login">Login</a>
+        </div>
+
+    </div>
 </div>
 
 <%- include('layout/footer') %>

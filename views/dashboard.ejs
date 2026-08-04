@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Demo DashBoard Page For RIMISA TASKBOARD" />
+    <meta name="author" content="DASHBOARD">
+    <title>TaskDrobe</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <!-- bootstrap icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/style.css" rel="stylesheet">
+
+
+    <style>
+        /* Dark Theme Styles */
+        .dark-theme {
+            background-color: #121212;
+            color: #f1f1f1;
+        }
+
+        .dark-theme .navbar,
+        .dark-theme .modal-content,
+        .dark-theme .card {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+        }
+
+        .dark-theme .form-control {
+            background-color: #2b2b2b;
+            color: #f1f1f1;
+        }
+
+        .dark-theme .btn-outline-secondary {
+            border-color: #f1f1f1;
+            color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <%- include("layout/navBar.ejs") %>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <%- include("layout/sideBar.ejs") %>
+
+                    <!-- Main Content -->
+                    <main class="col-lg-9 col-xl-10 ms-sm-auto px-4 main-content">
+                        <!-- Welcome Section -->
+                        <div class="d-flex justify-content-between align-items-center pt-4 pb-4 border-bottom">
+                            <div>
+                                <h1 class="h2 fw-bold mb-1">Hello, <%= user.full_name %>
+                                </h1>
+                                <p class="text-muted mb-0">
+                                    <%=today%>
+                                </p>
+                            </div>
+                            <!-- <button class="btn btn-dark px-4 py-2 add-project-btn">Add New Project</button> -->
+                            <button class="btn btn-dark px-4 py-2 add-project-btn" data-bs-toggle="modal"
+                                data-bs-target="#addProjectModal">
+                                Add New Project
+                            </button>
+                            <div class="btn">
+                                <a href="/projects" class="btn btn-outline-dark">View All Projects</a>
+                            </div>
+                           
+                        </div>
+
+                        <!-- Project Cards -->
+                        <div class="position-relative my-4">
+
+                            <!-- Scrollable Projects Row -->
+                            <div class="d-flex overflow-auto gap-3 px-5" id="projectsScroll"
+                                style="scroll-behavior:smooth; white-space: nowrap;">
+                                <% if (projects.length===0) { %>
+                                    <div class="text-muted text-center w-100">No projects found. Add one!</div>
+                                    <% } else { %>
+                                        <% projects.forEach((project, index)=> { %>
+                                            <div class="card project-card 
+                                                <%= index % 3 === 0 ? 'purple-gradient' : index % 3 === 1 ? 'teal-gradient' : 'orange-gradient' %> 
+                                                 text-white border-0 position-relative"
+                                                style="min-width: 280px; flex: 0 0 auto;">
+                                                <div class="card-body p-4">
+                                                    <h5 class="card-title fw-bold mb-2">
+                                                        <%= project.name %>
+                                                    </h5>
+                                                    <p class="small">
+                                                        <%= project.description || 'No description' %>
+                                                    </p>
+
+                                                    <div class="progress mb-2"
+                                                        style="height: 6px; background: rgba(255,255,255,0.3);">
+                                                        <div class="progress-bar 
+                                                      <%= (project.progress || 0) < 30 ? 'bg-danger' 
+                                                      : (project.progress || 0) < 70 ? 'bg-warning' 
+                                                      : 'bg-success' %>" role="progressbar"
+                                                            style="width: <%= project.progress || 0 %>%">
+                                                        </div>
+                                                    </div>
+
+                                                    <small class="text-white-50">
+                                                        <%= project.tasks ? project.tasks.length : 0 %> tasks |
+                                                            <%= project.progress || 0 %>% |
+                                                                <span class="badge 
+                                                             <%= project.status === 'Completed' ? 'bg-success' 
+                                                             : project.status === 'In Progress' ? 'bg-warning text-dark' 
+                                                             : project.status === 'On Hold' ? 'bg-secondary' 
+                                                             : 'bg-light text-dark' %>">
+                                                                    <%= project.status || 'Not Started' %>
+                                                                </span>
+                                                    </small>
+                                                </div>
+
+
+                                                <!-- Action Buttons (Top Right) -->
+                                                <div class="position-absolute top-0 end-0 m-2 d-flex gap-1">
+                                                    <!-- Edit -->
+                                                    <button class="btn btn-sm btn-warning rounded-circle shadow-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editProjectModal-<%= project.project.project._id %>"
+                                                        title="Edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+
+                                                    <!-- Delete -->
+                                                    <form action="/projects/<%= project.project._id %>/delete"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Are you sure you want to delete this project?')">
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-danger rounded-circle shadow-sm"
+                                                            title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <!-- Edit Project Modal -->
+                                            <%- include('layout/editProjectModal.ejs', { project: project }) %>
+                                                <% }) %>
+                                                    <% } %>
+                            </div>
+                            <!-- Left Arrow -->
+                            <button
+                                class="btn btn-dark rounded-circle shadow position-absolute top-50 start-0 translate-middle-y z-1"
+                                id="scrollLeft" style="width: 40px; height: 40px;">‹</button>
+                            <!-- Right Arrow -->
+                            <button
+                                class="btn btn-dark rounded-circle shadow position-absolute top-50 end-0 translate-middle-y z-1"
+                                id="scrollRight" style="width: 40px; height: 40px;">›</button>
+                        </div>
+
+                        <!-- Content Grid -->
+                        <div class="row g-4">
+                            <!-- Tasks and Statistics -->
+                            <div class="col-xl-8">
+                                <!-- Tasks Section -->
+                                <%- include("layout/task.ejs") %>
+
+                                    <!-- Statistics Section -->
+                                    <%- include("layout/statistics.ejs") %>
+                            </div>
+
+                            <!-- Calendar Sidebar -->
+                            <%- include("layout/calendarSidebar.ejs") %>
+                        </div>
+                    </main>
+            </div>
+        </div>
+
+        <!-- Chat Button -->
+        <button class="btn chat-button position-fixed">
+            <i class="fas fa-comment"></i>
+        </button>
+
+        <!-- Including layouts  -->
+        <%- include("layout/addProjectModal.ejs") %>
+            <%- include('layout/footer') %>
+
+                <!-- Bootstrap JS -->
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+                <script>
+
+                    const themeToggle = document.getElementById("themeToggle");
+                    const body = document.body;
+
+                    // Load saved theme
+                    if (localStorage.getItem("theme") === "dark") {
+                        body.classList.add("dark-theme");
+                        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    }
+
+                    themeToggle.addEventListener("click", () => {
+                        body.classList.toggle("dark-theme");
+
+                        if (body.classList.contains("dark-theme")) {
+                            localStorage.setItem("theme", "dark");
+                            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                        } else {
+                            localStorage.setItem("theme", "light");
+                            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                        }
+                    });
+
+                    // Task checkbox functionality
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const checkboxes = document.querySelectorAll('.task-checkbox');
+                        checkboxes.forEach(checkbox => {
+                            checkbox.addEventListener('click', function () {
+                                this.classList.toggle('checked');
+                                if (this.classList.contains('checked')) {
+                                    this.innerHTML = '<i class="fas fa-check text-white"></i>';
+                                } else {
+                                    this.innerHTML = '';
+                                }
+                            });
+                        });
+
+                        // Add Project button functionality
+                        /*   const addProjectBtn = document.querySelector('.add-project-btn');
+                           addProjectBtn?.addEventListener('click', function () {
+                               alert('Add New Project functionality would be implemented here!');
+                           }); */
+
+                        // New widget click
+                        const newWidget = document.querySelector('.new-widget');
+                        newWidget?.addEventListener('click', function () {
+                            alert('Add new widget functionality!');
+                        });
+                    });
+
+                    // Project Cards Scroller
+                    const scrollContainer = document.getElementById('projectsScroll');
+                    document.getElementById('scrollLeft').onclick = () => {
+                        scrollContainer.scrollBy({ left: -300, behavior: 'smooth' });
+                    };
+                    document.getElementById('scrollRight').onclick = () => {
+                        scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
+                    };
+
+                    //  Dynamic Task Fields 
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const addTaskBtn = document.getElementById("addTaskBtn");
+                        const taskFields = document.getElementById("taskFields");
+
+                        addTaskBtn.addEventListener("click", function () {
+                            const taskGroup = document.createElement("div");
+                            taskGroup.classList.add("input-group", "mb-2");
+                            taskGroup.innerHTML = `
+        <input type="text" class="form-control" name="tasks[]" placeholder="Enter task">
+        <button type="button" class="btn btn-outline-danger remove-task">✖</button>
+      `;
+                            taskFields.appendChild(taskGroup);
+                        });
+
+                        taskFields.addEventListener("click", function (e) {
+                            if (e.target.classList.contains("remove-task")) {
+                                e.target.closest(".input-group").remove();
+                            }
+                        });
+                    });
+
+                    function addTaskField(containerId) {
+                        const container = document.getElementById(containerId);
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.name = 'tasks[]';
+                        input.className = 'form-control mb-2';
+                        input.placeholder = 'Enter task';
+                        container.appendChild(input);
+                    }
+                </script>
+</body>
+
+</html>

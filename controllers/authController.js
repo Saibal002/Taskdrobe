@@ -38,17 +38,38 @@ const signup = async (req, res, next) => {
  * User Login
  */
 
+// const login = async (req, res, next) => {
+
+//     try {
+
+//         const user = await authService.loginUser(req.body);
+
+//         return res.status(200).json({
+//             success: true,
+//             message: "User found.",
+//             data: user
+//         });
+
+//     } catch (err) {
+
+//         next(err);
+
+//     }
+
+// };
 const login = async (req, res, next) => {
 
     try {
 
-        const user = await authService.loginUser(req.body);
+        const result = await authService.loginUser(req.body);
 
-        return res.status(200).json({
-            success: true,
-            message: "User found.",
-            data: user
+        res.cookie("token", result.token, {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false
         });
+
+        return res.redirect("/dashboard");
 
     } catch (err) {
 
