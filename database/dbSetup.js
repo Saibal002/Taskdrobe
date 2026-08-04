@@ -23,10 +23,22 @@ async function setupDatabase() {
     for (const file of files) {
         await runSQLFile(path.join(authFolder, file));
     }
+     // ======================
+    // Projects Module
+    // ======================
+
+    const projectFolder = path.join(__dirname, "modules", "projects");
+
+    const projectFiles = fs.readdirSync(projectFolder).sort();
+
+    for (const file of projectFiles) {
+        await runSQLFile(path.join(projectFolder, file));
+    }
 
     console.log("\n🎉 Database setup completed.");
 
     process.exit(0);
+    
 }
 
 setupDatabase().catch((err) => {

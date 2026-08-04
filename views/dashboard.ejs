@@ -16,7 +16,7 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 
 
     <style>
@@ -77,87 +77,170 @@
                         </div>
 
                         <!-- Project Cards -->
-                        <div class="position-relative my-4">
+<div class="position-relative my-4">
 
-                            <!-- Scrollable Projects Row -->
-                            <div class="d-flex overflow-auto gap-3 px-5" id="projectsScroll"
-                                style="scroll-behavior:smooth; white-space: nowrap;">
-                                <% if (projects.length===0) { %>
-                                    <div class="text-muted text-center w-100">No projects found. Add one!</div>
-                                    <% } else { %>
-                                        <% projects.forEach((project, index)=> { %>
-                                            <div class="card project-card 
-                                                <%= index % 3 === 0 ? 'purple-gradient' : index % 3 === 1 ? 'teal-gradient' : 'orange-gradient' %> 
-                                                 text-white border-0 position-relative"
-                                                style="min-width: 280px; flex: 0 0 auto;">
-                                                <div class="card-body p-4">
-                                                    <h5 class="card-title fw-bold mb-2">
-                                                        <%= project.name %>
-                                                    </h5>
-                                                    <p class="small">
-                                                        <%= project.description || 'No description' %>
-                                                    </p>
+    <!-- Scrollable Projects Row -->
+    <div class="d-flex overflow-auto gap-3 px-5"
+         id="projectsScroll"
+         style="scroll-behavior:smooth; white-space: nowrap;">
 
-                                                    <div class="progress mb-2"
-                                                        style="height: 6px; background: rgba(255,255,255,0.3);">
-                                                        <div class="progress-bar 
-                                                      <%= (project.progress || 0) < 30 ? 'bg-danger' 
-                                                      : (project.progress || 0) < 70 ? 'bg-warning' 
-                                                      : 'bg-success' %>" role="progressbar"
-                                                            style="width: <%= project.progress || 0 %>%">
-                                                        </div>
-                                                    </div>
+        <% if (projects.length === 0) { %>
 
-                                                    <small class="text-white-50">
-                                                        <%= project.tasks ? project.tasks.length : 0 %> tasks |
-                                                            <%= project.progress || 0 %>% |
-                                                                <span class="badge 
-                                                             <%= project.status === 'Completed' ? 'bg-success' 
-                                                             : project.status === 'In Progress' ? 'bg-warning text-dark' 
-                                                             : project.status === 'On Hold' ? 'bg-secondary' 
-                                                             : 'bg-light text-dark' %>">
-                                                                    <%= project.status || 'Not Started' %>
-                                                                </span>
-                                                    </small>
-                                                </div>
+            <div class="text-muted text-center w-100">
+                No projects found. Add one!
+            </div>
 
+        <% } else { %>
 
-                                                <!-- Action Buttons (Top Right) -->
-                                                <div class="position-absolute top-0 end-0 m-2 d-flex gap-1">
-                                                    <!-- Edit -->
-                                                    <button class="btn btn-sm btn-warning rounded-circle shadow-sm"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editProjectModal-<%= project.project.project._id %>"
-                                                        title="Edit">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                    </button>
+            <% projects.forEach((project, index) => { %>
 
-                                                    <!-- Delete -->
-                                                    <form action="/projects/<%= project.project._id %>/delete"
-                                                        method="POST"
-                                                        onsubmit="return confirm('Are you sure you want to delete this project?')">
-                                                        <button type="submit"
-                                                            class="btn btn-sm btn-danger rounded-circle shadow-sm"
-                                                            title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <!-- Edit Project Modal -->
-                                            <%- include('layout/editProjectModal.ejs', { project: project }) %>
-                                                <% }) %>
-                                                    <% } %>
+                <div class="card project-card
+                    <%= index % 3 === 0
+                        ? 'purple-gradient'
+                        : index % 3 === 1
+                        ? 'teal-gradient'
+                        : 'orange-gradient' %>
+                    text-white border-0 position-relative"
+                    style="min-width:280px; flex:0 0 auto;">
+
+                    <div class="card-body p-4">
+
+                        <h5 class="card-title fw-bold mb-2">
+                            <%= project.project_name %>
+                        </h5>
+
+                        <p class="small">
+                            <%= project.description || "No description" %>
+                        </p>
+
+                        <div class="progress mb-2"
+                             style="height:6px; background:rgba(255,255,255,.3);">
+
+                            <div
+                                class="progress-bar
+                                <%= project.progress < 30
+                                    ? 'bg-danger'
+                                    : project.progress < 70
+                                    ? 'bg-warning'
+                                    : 'bg-success' %>"
+                                role="progressbar"
+                                style="width:<%= project.progress %>%">
                             </div>
-                            <!-- Left Arrow -->
-                            <button
-                                class="btn btn-dark rounded-circle shadow position-absolute top-50 start-0 translate-middle-y z-1"
-                                id="scrollLeft" style="width: 40px; height: 40px;">‹</button>
-                            <!-- Right Arrow -->
-                            <button
-                                class="btn btn-dark rounded-circle shadow position-absolute top-50 end-0 translate-middle-y z-1"
-                                id="scrollRight" style="width: 40px; height: 40px;">›</button>
+
                         </div>
+
+                        <small class="text-white-50 d-block">
+
+                            Progress:
+                            <strong><%= project.progress %>%</strong>
+
+                        </small>
+
+                        <small class="text-white-50 d-block">
+
+                            Status:
+
+                            <span class="badge
+                                <%= project.status === 'Completed'
+                                    ? 'bg-success'
+                                    : project.status === 'In Progress'
+                                    ? 'bg-warning text-dark'
+                                    : project.status === 'On Hold'
+                                    ? 'bg-secondary'
+                                    : project.status === 'Archived'
+                                    ? 'bg-dark'
+                                    : 'bg-light text-dark' %>">
+
+                                <%= project.status %>
+
+                            </span>
+
+                        </small>
+
+                        <small class="text-white-50 d-block">
+
+                            Deadline:
+
+                            <%= project.deadline
+                                ? new Date(project.deadline).toLocaleDateString()
+                                : "Not Set" %>
+
+                        </small>
+
+                        <small class="text-white-50 d-block">
+
+                            Created By:
+
+                            <%= project.full_name %>
+
+                        </small>
+
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="position-absolute top-0 end-0 m-2 d-flex gap-1">
+
+                        <!-- Edit -->
+
+                        <button
+                            class="btn btn-sm btn-warning rounded-circle shadow-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editProjectModal-<%= project.project_id %>"
+                            title="Edit">
+
+                            <i class="fas fa-pencil-alt"></i>
+
+                        </button>
+
+                        <!-- Delete -->
+
+                        <form
+                            action="/projects/<%= project.project_id %>/delete"
+                            method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete this project?')">
+
+                            <button
+                                type="submit"
+                                class="btn btn-sm btn-danger rounded-circle shadow-sm"
+                                title="Delete">
+
+                                <i class="fas fa-trash"></i>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <%- include("layout/editProjectModal", { project: project }) %>
+
+            <% }) %>
+
+        <% } %>
+
+    </div>
+
+    <!-- Left Arrow -->
+
+    <button
+        class="btn btn-dark rounded-circle shadow position-absolute top-50 start-0 translate-middle-y z-1"
+        id="scrollLeft"
+        style="width:40px;height:40px;">
+        ‹
+    </button>
+
+    <!-- Right Arrow -->
+
+    <button
+        class="btn btn-dark rounded-circle shadow position-absolute top-50 end-0 translate-middle-y z-1"
+        id="scrollRight"
+        style="width:40px;height:40px;">
+        ›
+    </button>
+
+</div>
 
                         <!-- Content Grid -->
                         <div class="row g-4">

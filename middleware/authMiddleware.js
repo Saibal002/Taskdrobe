@@ -1,30 +1,37 @@
 const { verifyToken } = require("../utils/jwt");
 const AppError = require("../utils/AppError");
+const userModel = require("../models/userModel");
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
 
     try {
 
         const authHeader = req.headers.authorization;
 
-const token =
-    req.cookies.token ||
-    (
-        authHeader &&
-        authHeader.startsWith("Bearer ")
-            ? authHeader.split(" ")[1]
-            : null
-    );
+        const token =
+            req.cookies.token ||
+            (
+                authHeader &&
+                authHeader.startsWith("Bearer ")
+                    ? authHeader.split(" ")[1]
+                    : null
+            );
 
-if (!token) {
-    throw new AppError("Access token is required.", 401);
-}
+        if (!token) {
+            throw new AppError("Access token is required.", 401);
+        }
 
-const decoded = verifyToken(token);
+        const decoded = verifyToken(token);
 
-req.user = decoded;
+        const user = await userModel.findUserById(decoded.userId);
 
-next();
+        if (!user) {
+            throw new AppError("User not found.", 401);
+        }
+
+        req.user = user;
+
+        next();
 
     } catch (err) {
 

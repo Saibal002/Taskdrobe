@@ -1,19 +1,19 @@
+const projectService = require("../services/projectService");
+
 const dashboard = async (req, res, next) => {
 
     try {
 
+        const projects = await projectService.getAllProjects();
+
         res.render("dashboard", {
             title: "Dashboard",
 
-            user: {
-                full_name: "Saibal Chakraborty",
-                role_name: "Employee",
-                profile_image: null
-            },
+            user: req.user,
 
             today: new Date().toDateString(),
 
-            projects: []
+            projects,
         });
 
     } catch (err) {
