@@ -1,71 +1,168 @@
 <!-- Edit Project Modal -->
-<div class="modal fade" id="editProjectModal-<%= project._id %>" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content rounded-3 shadow">
-      <div class="modal-header">
-        <h5 class="modal-title">Edit Project</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+<div
+    class="modal fade"
+    id="editProjectModal-<%= project.project_id %>"
+    tabindex="-1"
+    aria-labelledby="editProjectModalLabel-<%= project.project_id %>"
+    aria-hidden="true">
 
-      <form action="/api/v1/projects/<%= project._id %>/update" method="POST">
-        <div class="modal-body">
-          <!-- Project Name -->
-          <div class="mb-3">
-            <label class="form-label">Project Name</label>
-            <input type="text" class="form-control" name="name" value="<%= project.name %>" required>
-          </div>
+    <div class="modal-dialog">
 
-          <!-- Description -->
-          <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" name="description" rows="3"><%= project.description %></textarea>
-          </div>
+        <div class="modal-content rounded-3 shadow">
 
-          <!-- Deadline -->
-          <div class="mb-3">
-            <label class="form-label">Deadline</label>
-            <input type="date" class="form-control" name="deadline"
-              value="<%= project.deadline ? project.deadline.toISOString().split('T')[0] : '' %>">
-          </div>
+            <div class="modal-header">
 
-          <!-- Status -->
-          <div class="mb-3">
-            <label class="form-label">Status</label>
-            <select class="form-select" name="status">
-              <option value="Not Started" <%= project.status === 'Not Started' ? 'selected' : '' %>>Not Started</option>
-              <option value="In Progress" <%= project.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
-              <option value="Completed" <%= project.status === 'Completed' ? 'selected' : '' %>>Completed</option>
-              <option value="On Hold" <%= project.status === 'On Hold' ? 'selected' : '' %>>On Hold</option>
-            </select>
-          </div>
+                <h5
+                    class="modal-title"
+                    id="editProjectModalLabel-<%= project.project_id %>">
 
-          <!-- Progress -->
-          <div class="mb-3">
-            <label class="form-label">Progress (%)</label>
-            <input type="number" class="form-control" name="progress"
-              value="<%= project.progress || 0 %>" min="0" max="100">
-          </div>
+                    Edit Project
 
-          <!-- Tasks -->
-          <div class="mb-3">
-            <label class="form-label">Tasks</label>
-            <div id="taskListEdit-<%= project._id %>">
-              <% if (project.tasks && project.tasks.length > 0) { %>
-                <% project.tasks.forEach((task, i) => { %>
-                  <input type="text" class="form-control mb-2" name="tasks[]" value="<%= task %>">
-                <% }) %>
-              <% } else { %>
-                <input type="text" class="form-control mb-2" name="tasks[]" placeholder="Enter task">
-              <% } %>
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
             </div>
-            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addTaskField('taskListEdit-<%= project._id %>')">+ Add Task</button>
-          </div>
+
+            <form
+                action="/projects/<%= project.project_id %>/update"
+                method="POST">
+
+                <div class="modal-body">
+
+                    <!-- Project Name -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Project Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="projectName"
+                            value="<%= project.project_name %>"
+                            required>
+
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            name="description"
+                            rows="3"><%= project.description || "" %></textarea>
+
+                    </div>
+
+                    <!-- Deadline -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Deadline
+                        </label>
+
+                        <input
+                            type="date"
+                            class="form-control"
+                            name="deadline"
+                            value="<%= project.deadline ? project.deadline.toISOString().substring(0,10) : '' %>">
+
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Status
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="status">
+
+                            <option value="Not Started"
+                                <%= project.status === "Not Started" ? "selected" : "" %>>
+                                Not Started
+                            </option>
+
+                            <option value="In Progress"
+                                <%= project.status === "In Progress" ? "selected" : "" %>>
+                                In Progress
+                            </option>
+
+                            <option value="Completed"
+                                <%= project.status === "Completed" ? "selected" : "" %>>
+                                Completed
+                            </option>
+
+                            <option value="On Hold"
+                                <%= project.status === "On Hold" ? "selected" : "" %>>
+                                On Hold
+                            </option>
+
+                            <option value="Archived"
+                                <%= project.status === "Archived" ? "selected" : "" %>>
+                                Archived
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Progress (%)
+                        </label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="progress"
+                            min="0"
+                            max="100"
+                            value="<%= project.progress %>">
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-dark">
+
+                        Update Project
+
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
 
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-dark">Update</button>
-        </div>
-      </form>
     </div>
-  </div>
+
 </div>

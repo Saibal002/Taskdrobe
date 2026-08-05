@@ -22,5 +22,11 @@ router.post(
     validate(createProjectSchema),
     projectController.createProject
 );
+router.post(
+    "/:id/update",
+    authMiddleware,
+    validate(createProjectSchema),
+    projectController.updateProject
+);
 
 module.exports = router;

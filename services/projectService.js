@@ -40,8 +40,26 @@ const getAllProjects = async () => {
     return await projectModel.getAllProjects();
 
 };
+/**
+ * Update Project
+ */
+const updateProject = async (projectId, projectData) => {
+
+    const project = await projectModel.updateProject(
+        projectId,
+        projectData
+    );
+
+    if (!project) {
+        throw new AppError("Project not found.", 404);
+    }
+
+    return project;
+
+};
 
 module.exports = {
     createProject,
     getAllProjects,
+    updateProject,
 };

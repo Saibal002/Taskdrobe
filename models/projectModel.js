@@ -68,8 +68,50 @@ const getAllProjects = async () => {
     return rows;
 
 };
+/**
+ * Update Project
+ */
+const updateProject = async (
+    projectId,
+    {
+        projectName,
+        description,
+        status,
+        progress,
+        deadline,
+    }
+) => {
+
+    const sql = `
+        UPDATE projects
+        SET
+            project_name = $1,
+            description = $2,
+            status = $3,
+            progress = $4,
+            deadline = $5,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE project_id = $6
+        RETURNING *;
+    `;
+
+    const values = [
+        projectName,
+        description,
+        status,
+        progress,
+        deadline,
+        projectId,
+    ];
+
+    const { rows } = await query(sql, values);
+
+    return rows[0];
+
+};
 
 module.exports = {
     createProject,
     getAllProjects,
+    updateProject,
 };

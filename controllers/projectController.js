@@ -23,7 +23,29 @@ const createProject = async (req, res, next) => {
     }
 
 };
+/**
+ * Update Project
+ */
+const updateProject = async (req, res, next) => {
+
+    try {
+
+        await projectService.updateProject(
+            req.params.id,
+            req.body
+        );
+
+        return res.redirect("/dashboard");
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
+};
 
 module.exports = {
     createProject,
+    updateProject,
 };
