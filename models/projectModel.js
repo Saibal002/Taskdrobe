@@ -107,6 +107,20 @@ const updateProject = async (
     const { rows } = await query(sql, values);
 
     return rows[0];
+    
+
+};
+const deleteProject = async (projectId) => {
+
+    const sql = `
+        DELETE FROM projects
+        WHERE project_id = $1
+        RETURNING *;
+    `;
+
+    const { rows } = await query(sql, [projectId]);
+
+    return rows[0];
 
 };
 
@@ -114,4 +128,5 @@ module.exports = {
     createProject,
     getAllProjects,
     updateProject,
+    deleteProject,
 };

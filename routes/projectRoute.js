@@ -28,5 +28,9 @@ router.post(
     validate(createProjectSchema),
     projectController.updateProject
 );
-
+router.post(
+    "/:id/delete",
+    authMiddleware,
+    projectController.deleteProject
+);
 module.exports = router;

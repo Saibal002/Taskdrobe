@@ -57,9 +57,21 @@ const updateProject = async (projectId, projectData) => {
     return project;
 
 };
+const deleteProject = async (projectId) => {
+
+    const project = await projectModel.deleteProject(projectId);
+
+    if (!project) {
+        throw new AppError("Project not found.", 404);
+    }
+
+    return project;
+
+};
 
 module.exports = {
     createProject,
     getAllProjects,
     updateProject,
+    deleteProject,
 };
