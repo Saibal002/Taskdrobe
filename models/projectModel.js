@@ -123,10 +123,31 @@ const deleteProject = async (projectId) => {
     return rows[0];
 
 };
+/**
+ * Get Project By ID
+ */
+const getProjectById = async (projectId) => {
+
+    const sql = `
+        SELECT
+            p.*,
+            u.full_name
+        FROM projects p
+        INNER JOIN users u
+            ON p.created_by = u.user_id
+        WHERE p.project_id = $1;
+    `;
+
+    const { rows } = await query(sql, [projectId]);
+
+    return rows[0];
+
+};
 
 module.exports = {
     createProject,
     getAllProjects,
     updateProject,
     deleteProject,
+    getProjectById,
 };

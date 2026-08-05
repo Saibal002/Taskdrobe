@@ -33,4 +33,9 @@ router.post(
     authMiddleware,
     projectController.deleteProject
 );
+router.get(
+    "/:id",
+    authMiddleware,
+    projectController.viewProject
+);
 module.exports = router;

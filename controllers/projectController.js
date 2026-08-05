@@ -59,9 +59,33 @@ const deleteProject = async (req, res, next) => {
     }
 
 };
+const viewProject = async (req, res, next) => {
+
+    try {
+
+        const project = await projectService.getProjectById(req.params.id);
+
+        res.render("project", {
+
+            title: project.project_name,
+
+            user: req.user,
+
+            project,
+
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
+};
 
 module.exports = {
     createProject,
     updateProject,
     deleteProject,
+    viewProject,
 };

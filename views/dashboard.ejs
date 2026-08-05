@@ -91,7 +91,10 @@
                                     <% } else { %>
 
                                         <% projects.forEach((project, index)=> { %>
-
+                                            
+                                            <a
+                                             href="/projects/<%= project.project_id %>"
+                                             class="text-decoration-none">
                                             <div class="card project-card
                                                       <%= index % 3 === 0
                                                           ? 'purple-gradient'
@@ -114,11 +117,11 @@
                                                         style="height:6px; background:rgba(255,255,255,.3);">
 
                                                         <div class="progress-bar
-                                <%= project.progress < 30
-                                    ? 'bg-danger'
-                                    : project.progress < 70
-                                    ? 'bg-warning'
-                                    : 'bg-success' %>" role="progressbar" style="width:<%= project.progress %>%">
+                                                                    <%= project.progress < 30
+                                                                        ? 'bg-danger'
+                                                                        : project.progress < 70
+                                                                        ? 'bg-warning'
+                                                                        : 'bg-success' %>" role="progressbar" style="width:<%= project.progress %>%">
                                                         </div>
 
                                                     </div>
@@ -137,15 +140,15 @@
                                                         Status:
 
                                                         <span class="badge
-                                <%= project.status === 'Completed'
-                                    ? 'bg-success'
-                                    : project.status === 'In Progress'
-                                    ? 'bg-warning text-dark'
-                                    : project.status === 'On Hold'
-                                    ? 'bg-secondary'
-                                    : project.status === 'Archived'
-                                    ? 'bg-dark'
-                                    : 'bg-light text-dark' %>">
+                                                                     <%= project.status === 'Completed'
+                                                                         ? 'bg-success'
+                                                                         : project.status === 'In Progress'
+                                                                         ? 'bg-warning text-dark'
+                                                                         : project.status === 'On Hold'
+                                                                         ? 'bg-secondary'
+                                                                         : project.status === 'Archived'
+                                                                         ? 'bg-dark'
+                                                                         : 'bg-light text-dark' %>">
 
                                                             <%= project.status %>
 
@@ -205,6 +208,7 @@
                                                 </div>
 
                                             </div>
+                                            </a>
                                             <%- include("layout/editProjectModal", { project }) %>
                                             <% }) %>
                                                 

@@ -1,0 +1,69 @@
+<%- include("layout/header", { title: project.project_name }) %>
+
+<div class="container mt-5">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h2><%= project.project_name %></h2>
+
+            <hr>
+
+            <p>
+
+                <strong>Description:</strong>
+
+                <%= project.description || "No description." %>
+
+            </p>
+
+            <p>
+
+                <strong>Status:</strong>
+
+                <%= project.status %>
+
+            </p>
+
+            <p>
+
+                <strong>Progress:</strong>
+
+                <%= project.progress %>%
+
+            </p>
+
+            <p>
+
+                <strong>Deadline:</strong>
+
+                <%= project.deadline
+                    ? new Date(project.deadline).toLocaleDateString()
+                    : "Not Set" %>
+
+            </p>
+
+            <p>
+
+                <strong>Created By:</strong>
+
+                <%= project.full_name %>
+
+            </p>
+
+            <a
+                href="/dashboard"
+                class="btn btn-dark">
+
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<%- include("layout/footer") %>
