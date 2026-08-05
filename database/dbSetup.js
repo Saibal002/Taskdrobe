@@ -16,14 +16,20 @@ async function runSQLFile(filePath) {
 }
 
 async function setupDatabase() {
+
+    // ======================
+    // Auth Module
+    // ======================
+
     const authFolder = path.join(__dirname, "modules", "auth");
 
-    const files = fs.readdirSync(authFolder).sort();
+    const authFiles = fs.readdirSync(authFolder).sort();
 
-    for (const file of files) {
+    for (const file of authFiles) {
         await runSQLFile(path.join(authFolder, file));
     }
-     // ======================
+
+    // ======================
     // Projects Module
     // ======================
 
@@ -35,10 +41,22 @@ async function setupDatabase() {
         await runSQLFile(path.join(projectFolder, file));
     }
 
+    // ======================
+    // Tasks Module
+    // ======================
+
+    const taskFolder = path.join(__dirname, "modules", "tasks");
+
+    const taskFiles = fs.readdirSync(taskFolder).sort();
+
+    for (const file of taskFiles) {
+        await runSQLFile(path.join(taskFolder, file));
+    }
+
     console.log("\n🎉 Database setup completed.");
 
     process.exit(0);
-    
+
 }
 
 setupDatabase().catch((err) => {
