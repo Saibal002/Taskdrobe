@@ -1,69 +1,255 @@
 <%- include("layout/header", { title: project.project_name }) %>
 
-<div class="container mt-5">
+    <div class="container mt-5">
 
-    <div class="card shadow-sm">
+        <div class="card shadow-sm">
 
-        <div class="card-body">
+            <div class="card-body">
 
-            <h2><%= project.project_name %></h2>
+                <h2>
+                    <%= project.project_name %>
+                </h2>
 
-            <hr>
+                <hr>
 
-            <p>
+                <p>
 
-                <strong>Description:</strong>
+                    <strong>Description:</strong>
 
-                <%= project.description || "No description." %>
+                    <%= project.description || "No description." %>
 
-            </p>
+                </p>
 
-            <p>
+                <p>
 
-                <strong>Status:</strong>
+                    <strong>Status:</strong>
 
-                <%= project.status %>
+                    <%= project.status %>
 
-            </p>
+                </p>
 
-            <p>
+                <p>
 
-                <strong>Progress:</strong>
+                    <strong>Progress:</strong>
 
-                <%= project.progress %>%
+                    <%= project.progress %>%
 
-            </p>
+                </p>
 
-            <p>
+                <p>
 
-                <strong>Deadline:</strong>
+                    <strong>Deadline:</strong>
 
-                <%= project.deadline
-                    ? new Date(project.deadline).toLocaleDateString()
-                    : "Not Set" %>
+                    <%= project.deadline ? new Date(project.deadline).toLocaleDateString() : "Not Set" %>
 
-            </p>
+                </p>
 
-            <p>
+                <p>
 
-                <strong>Created By:</strong>
+                    <strong>Created By:</strong>
 
-                <%= project.full_name %>
+                    <%= project.full_name %>
 
-            </p>
+                </p>
+                <hr>
 
-            <a
-                href="/dashboard"
-                class="btn btn-dark">
+                <div class="d-flex justify-content-between align-items-center mb-4">
 
-                Back to Dashboard
+                    <h3 class="mb-0">
+                        Tasks
+                    </h3>
 
-            </a>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+
+                        <i class="fas fa-plus me-2"></i>
+
+                        Add Task
+
+                    </button>
+
+                </div>
+
+                <% if(tasks.length===0){ %>
+
+                    <div class="card shadow-sm">
+
+                        <div class="card-body text-center text-muted py-5">
+
+                            No tasks available.
+
+                        </div>
+
+                    </div>
+
+                    <% } else { %>
+
+                        <div class="row g-3">
+
+                            <% tasks.forEach(task=> { %>
+
+                                <div class="col-md-6">
+
+                                    <div class="card border-0 shadow-sm h-100">
+
+                                        <div class="card-body">
+
+                                            <div class="d-flex justify-content-between">
+
+                                                <div>
+
+                                                    <h5 class="fw-bold mb-1">
+
+                                                        <%= task.title %>
+
+                                                    </h5>
+
+                                                    <p class="text-muted mb-3">
+
+                                                        <%= task.description || "No description" %>
+
+                                                    </p>
+
+                                                </div>
+
+                                                <div>
+
+                                                    <form action="/tasks/<%= task.task_id %>/toggle" method="POST">
+
+                                                        <button class="btn btn-sm
+<%= task.status ===" Completed" ? "btn-success" : "btn-outline-success" %>">
+
+                                                            <%= task.status==="Completed" ? "✔" : "○" %>
+
+                                                        </button>
+
+                                                    </form>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="mb-3">
+
+                                                <span class="badge
+<%= task.priority===" Critical" ? "bg-danger" : task.priority ==="High" ? "bg-warning text-dark" :
+                                                    task.priority ==="Medium" ? "bg-primary" : "bg-secondary" %>">
+
+                                                    <%= task.priority %>
+
+                                                </span>
+
+                                                <span class="badge bg-dark">
+
+                                                    <%= task.status %>
+
+                                                </span>
+
+                                            </div>
+
+                                            <small class="text-muted d-block mb-3">
+
+                                                <i class="fas fa-calendar me-2"></i>
+
+                                                <%= task.due_date ? new Date(task.due_date).toLocaleDateString()
+                                                    : "No Due Date" %>
+
+                                            </small>
+
+                                            <div class="d-flex justify-content-end gap-2">
+
+                                                <button
+    type="button"
+    class="btn btn-warning btn-sm editTaskBtn"
+
+    data-id="<%= task.task_id %>"
+    data-title="<%= task.title %>"
+    data-description="<%= task.description || '' %>"
+    data-priority="<%= task.priority %>"
+    data-status="<%= task.status %>"
+    data-due-date="<%= task.due_date ? new Date(task.due_date).toISOString().split('T')[0] : '' %>"
+
+    data-bs-toggle="modal"
+    data-bs-target="#editTaskModal">
+
+    <i class="fas fa-pen"></i>
+
+</button>
+
+                                                <form action="/tasks/<%= task.task_id %>/delete" method="POST"
+                                                    onsubmit="return confirm('Delete this task?')">
+
+                                                    <button class="btn btn-danger btn-sm">
+
+                                                        <i class="fas fa-trash"></i>
+
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <% }) %>
+                                
+                        </div>
+                        
+
+                        <% } %>
+
+                        
+
+
+
+
+                            <a href="/dashboard" class="btn btn-dark">
+
+                                Back to Dashboard
+
+                            </a>
+
+            </div>
 
         </div>
 
     </div>
+   <%- include("layout/addTaskModal") %>
 
-</div>
+<%- include("layout/editTaskModal") %>
+
+<script>
+
+document.querySelectorAll(".editTaskBtn").forEach(button => {
+
+    button.addEventListener("click", function () {
+
+        document.getElementById("editTitle").value =
+            this.dataset.title;
+
+        document.getElementById("editDescription").value =
+            this.dataset.description;
+
+        document.getElementById("editPriority").value =
+            this.dataset.priority;
+
+        document.getElementById("editStatus").value =
+            this.dataset.status;
+
+        document.getElementById("editDueDate").value =
+            this.dataset.dueDate;
+
+        document.getElementById("editTaskForm").action =
+            `/tasks/${this.dataset.id}/update`;
+
+    });
+
+});
+
+</script>
 
 <%- include("layout/footer") %>

@@ -1,4 +1,5 @@
 const projectService = require("../services/projectService");
+const taskService = require("../services/taskService");
 
 /**
  * Create Project
@@ -65,13 +66,19 @@ const viewProject = async (req, res, next) => {
 
         const project = await projectService.getProjectById(req.params.id);
 
-        res.render("project", {
+        const tasks = await taskService.getTasksByProject(
+            req.params.id
+        );
+
+        return res.render("project", {
 
             title: project.project_name,
 
-            user: req.user,
-
             project,
+
+            tasks,
+
+            user: req.user,
 
         });
 
