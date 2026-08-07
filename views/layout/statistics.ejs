@@ -1,43 +1,171 @@
-<div class="card border-0 shadow-sm">
-                            <div class="card-body p-4">
-                                <h4 class="card-title fw-bold mb-4">Statistics</h4>
-                                <div class="row g-3 mb-4">
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm text-center">
-                                            <div class="card-body p-4">
-                                                <h2 class="fw-bold mb-2">28 h</h2>
-                                                <small class="text-muted">Tracked<br>time</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm text-center">
-                                            <div class="card-body p-4">
-                                                <h2 class="fw-bold mb-2">18</h2>
-                                                <small class="text-muted">Finished<br>tasks</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-2 border-dashed text-center new-widget">
-                                            <div
-                                                class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
-                                                <i class="fas fa-plus fs-4 text-muted mb-2"></i>
-                                                <small class="text-muted">New<br>widget</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!-- Statistics Section -->
+<div class="card border-0 shadow-sm mt-4">
 
-                                <!-- Pricing Section -->
-                                <div
-                                    class="card pricing-card purple-gradient text-white border-0 position-relative overflow-hidden">
-                                    <div class="card-body p-4 position-relative">
-                                        <h2 class="fw-bold mb-2">$9.99 <small class="fs-6">/m</small></h2>
-                                        <p class="mb-1">Pro Plan</p>
-                                        <p class="mb-0 text-white-75">More productivity<br>with premium!</p>
-                                        <div class="pricing-illustration"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="card-header bg-white border-0">
+
+        <h5 class="mb-0 fw-bold">
+            Dashboard Statistics
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <!-- Total Projects -->
+            <div class="col-md-6">
+
+                <div class="card border-0 bg-light">
+
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Total Projects
+                        </small>
+
+                        <h3 class="fw-bold">
+                            <%= stats.totalProjects %>
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Active Projects -->
+            <div class="col-md-6">
+
+                <div class="card border-0 bg-light">
+
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Active Projects
+                        </small>
+
+                        <h3 class="fw-bold text-primary">
+                            <%= stats.activeProjects %>
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Total Tasks -->
+            <div class="col-md-6">
+
+                <div class="card border-0 bg-light">
+
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Total Tasks
+                        </small>
+
+                        <h3 class="fw-bold">
+                            <%= stats.totalTasks %>
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Completed Tasks -->
+            <div class="col-md-6">
+
+                <div class="card border-0 bg-light">
+
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Completed Tasks
+                        </small>
+
+                        <h3 class="fw-bold text-success">
+                            <%= stats.completedTasks %>
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Pending Tasks -->
+            <div class="col-md-6">
+
+                <div class="card border-0 bg-light">
+
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Pending Tasks
+                        </small>
+
+                        <h3 class="fw-bold text-warning">
+                            <%= stats.pendingTasks %>
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Overdue -->
+            <div class="col-md-6">
+
+                <div class="card border-0 bg-light">
+
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Overdue Tasks
+                        </small>
+
+                        <h3 class="fw-bold text-danger">
+                            <%= stats.overdueTasks %>
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <h6 class="fw-bold mb-2">
+
+            Overall Completion
+
+        </h6>
+
+        <div class="progress" style="height: 12px;">
+
+            <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: <%= stats.completionRate %>%">
+
+            </div>
+
+        </div>
+
+        <small class="text-muted">
+
+            <%= stats.completionRate %>% Completed
+
+        </small>
+
+    </div>
+
+</div>

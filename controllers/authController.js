@@ -1,123 +1,98 @@
 const authService = require("../services/authService");
 const home = (req, res) => {
-    res.render('landing'); // views/home.ejs
+  res.render("landing"); // views/home.ejs
 };
 
 const viewLogin = (req, res) => {
-     console.log("Locals:", res.locals);
-    res.render("login", {
-        title: "Login"
-    });
-
+  console.log("Locals:", res.locals);
+  res.render("login", {
+    title: "Login",
+  });
 };
 
 const viewSignup = (req, res) => {
-
-    res.render("signup", {
-        title: "Signup"
-    });
-
+  res.render("signup", {
+    title: "Signup",
+  });
 };
 
 /**
  * User Registration
  */
 const signup = async (req, res, next) => {
-    console.log("1. Controller");
-    try {
-        
-        const user = await authService.registerUser(req.body);
-        console.log("7. Back to controller");
-        req.session.success = "Account created successfully.";
-        
+  console.log("1. Controller");
+  try {
+    const user = await authService.registerUser(req.body);
+    console.log("7. Back to controller");
+    req.session.success = "Account created successfully.";
 
-return res.redirect("/login");
-
-    } catch (err) {
-
+    return res.redirect("/login");
+  } catch (err) {
     if ([400, 409].includes(err.statusCode)) {
+      req.session.error = err.message;
 
-        req.session.error = err.message;
-
-        return res.redirect("/signup");
-
+      return res.redirect("/signup");
     }
 
     next(err);
-
-}
-
+  }
 };
 
-
 const login = async (req, res, next) => {
+  try {
+    const result = await authService.loginUser(req.body);
 
-    try {
+    const rememberMe = req.body.rememberMe === "on";
 
-        const result = await authService.loginUser(req.body);
+    res.cookie("token", result.token, {
+      httpOnly: true,
 
-        res.cookie("token", result.token, {
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false
-        });
+      sameSite: "lax",
 
-        req.session.success = "Welcome back!";
+      secure: false,
 
-        return res.redirect("/dashboard");
+      maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : undefined,
+    });
+    req.session.success = "Welcome back!";
 
-    } catch (err) {
-
+    return res.redirect("/dashboard");
+  } catch (err) {
     if ([400, 401, 403].includes(err.statusCode)) {
+      req.session.error = err.message;
 
-        req.session.error = err.message;
-
-        return res.redirect("/login");
-
+      return res.redirect("/login");
     }
 
     next(err);
-
-}
-
+  }
 };
 
 /**
  * Logout User
  */
 const logout = async (req, res, next) => {
+  try {
+    // Destroy Session
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
 
-    try {
+      // Clear JWT Cookie
+      res.clearCookie("token");
 
-        // Destroy Session
-        req.session.destroy((err) => {
-
-            if (err) {
-
-                return next(err);
-
-            }
-
-            // Clear JWT Cookie
-            res.clearCookie("token");
-
-            return res.redirect("/");
-
-        });
-
-    } catch (err) {
-
-        next(err);
-
-    }
-
+      return res.redirect("/");
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {
-    home,
-    viewLogin,
-    viewSignup,
-    signup,
-    login,
-    logout,
+  home,
+  viewLogin,
+  viewSignup,
+  signup,
+  login,
+  logout,
 };
