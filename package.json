@@ -22,11 +22,13 @@
   "homepage": "https://github.com/Saibal002/Taskdrobe#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "connect-pg-simple": "^10.0.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "ejs": "^6.0.1",
     "express": "^5.2.1",
     "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.19.0",
     "fs": "^0.0.1-security",
     "joi": "^18.2.3",
     "jsonwebtoken": "^9.0.3",

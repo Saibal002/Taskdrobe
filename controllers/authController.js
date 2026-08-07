@@ -20,6 +20,7 @@ const signup = async (req, res, next) => {
         
         const user = await authService.registerUser(req.body);
         console.log("7. Back to controller");
+        req.session.success = "Account created successfully.";
         return res.status(201).json({
             success: true,
             message: "User registered successfully.",
@@ -27,7 +28,7 @@ const signup = async (req, res, next) => {
         });
 
     } catch (err) {
-
+        req.session.error = "Invalid email or password.";
         next(err);
 
     }
@@ -68,11 +69,11 @@ const login = async (req, res, next) => {
             sameSite: "lax",
             secure: false
         });
-
+        req.session.success = "Welcome back!";
         return res.redirect("/dashboard");
 
     } catch (err) {
-
+        req.session.error = "Invalid email or password.";
         next(err);
 
     }

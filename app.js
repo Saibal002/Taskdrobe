@@ -1,6 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
 
 const { app: appConfig } = require('./config/environment');
 const pool = require('./plugins/db');
@@ -35,6 +37,44 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+//session middleware 
+app.use(
+    session({
+
+        store: new pgSession({
+            pool: pool,
+            tableName: "user_sessions",
+        }),
+
+        secret: process.env.SESSION_SECRET,
+
+        resave: false,
+
+        saveUninitialized: false,
+
+        cookie: {
+
+            secure: false,
+
+            httpOnly: true,
+
+            maxAge: 24 * 60 * 60 * 1000,
+
+        },
+
+    })
+);
+app.use((req, res, next) => {
+
+    res.locals.success = req.session.success || null;
+    res.locals.error = req.session.error || null;
+
+    delete req.session.success;
+    delete req.session.error;
+
+    next();
+
+});
 
 // ======================
 // Static Files & Views

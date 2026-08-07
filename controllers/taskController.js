@@ -11,7 +11,7 @@ const createTask = async (req, res, next) => {
             ...req.body,
             createdBy: req.user.user_id,
         });
-
+        req.session.success = "Task created successfully.";
         return res.redirect(`/projects/${req.body.projectId}`);
 
     } catch (err) {
@@ -33,7 +33,7 @@ const updateTask = async (req, res, next) => {
             req.params.id,
             req.body
         );
-
+        req.session.success = "Task updated successfully.";
         return res.redirect(`/projects/${task.project_id}`);
 
     } catch (err) {
@@ -52,7 +52,7 @@ const deleteTask = async (req, res, next) => {
     try {
 
         const task = await taskService.deleteTask(req.params.id);
-
+        req.session.success = "Task deleted successfully.";
         return res.redirect(`/projects/${task.project_id}`);
 
     } catch (err) {
@@ -72,6 +72,7 @@ const toggleTaskStatus = async (req, res, next) => {
 
         const task = await taskService.toggleTaskStatus(req.params.id);
 
+        req.session.success = "Task status updated successfully.";
         return res.redirect(`/projects/${task.project_id}`);
 
     } catch (err) {

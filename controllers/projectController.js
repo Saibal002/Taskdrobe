@@ -14,7 +14,7 @@ const createProject = async (req, res, next) => {
             ...req.body,
             createdBy: req.user.user_id,
         });
-
+        req.session.success = "Project created successfully.";
         return res.redirect("/dashboard");
 
     } catch (err) {
@@ -35,7 +35,7 @@ const updateProject = async (req, res, next) => {
             req.params.id,
             req.body
         );
-
+        req.session.success = "Project updated successfully.";
         return res.redirect("/dashboard");
 
     } catch (err) {
@@ -50,7 +50,7 @@ const deleteProject = async (req, res, next) => {
     try {
 
         await projectService.deleteProject(req.params.id);
-
+        req.session.success = "Project deleted successfully.";
         return res.redirect("/dashboard");
 
     } catch (err) {

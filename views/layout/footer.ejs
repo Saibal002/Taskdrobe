@@ -11,5 +11,41 @@
 
   <!-- Custom Alerts JS -->
   <script src="/js/alerts.js"></script>
+
+  <% if (success) { %>
+<script>
+
+Swal.fire({
+
+    toast: true,
+    position: "top-end",
+    icon: "success",
+    title: "<%= success %>",
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true
+
+});
+
+</script>
+<% } %>
+
+<% if (error) { %>
+<script>
+
+Swal.fire({
+
+    toast: true,
+    position: "top-end",
+    icon: "error",
+    title: "<%= error %>",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+
+});
+
+</script>
+<% } %>
 </body>
 </html>
