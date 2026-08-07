@@ -4,11 +4,19 @@ const home = (req, res) => {
 };
 
 const viewLogin = (req, res) => {
-    res.render('login',{ title: "Login", error: null, success: null }); // views/login.ejs
+
+    res.render("login", {
+        title: "Login"
+    });
+
 };
 
 const viewSignup = (req, res) => {
-    res.render('signup',{ title: "Login", error: null, success: null }); // views/signup.ejs
+
+    res.render("signup", {
+        title: "Signup"
+    });
+
 };
 
 /**
@@ -21,43 +29,27 @@ const signup = async (req, res, next) => {
         const user = await authService.registerUser(req.body);
         console.log("7. Back to controller");
         req.session.success = "Account created successfully.";
-        return res.status(201).json({
-            success: true,
-            message: "User registered successfully.",
-            data: user,
-        });
+        
+
+return res.redirect("/login");
 
     } catch (err) {
-        req.session.error = "Invalid email or password.";
-        next(err);
+
+    if ([400, 409].includes(err.statusCode)) {
+
+        req.session.error = err.message;
+
+        return res.redirect("/signup");
 
     }
 
+    next(err);
+
+}
+
 };
 
-/**
- * User Login
- */
 
-// const login = async (req, res, next) => {
-
-//     try {
-
-//         const user = await authService.loginUser(req.body);
-
-//         return res.status(200).json({
-//             success: true,
-//             message: "User found.",
-//             data: user
-//         });
-
-//     } catch (err) {
-
-//         next(err);
-
-//     }
-
-// };
 const login = async (req, res, next) => {
 
     try {
@@ -69,14 +61,24 @@ const login = async (req, res, next) => {
             sameSite: "lax",
             secure: false
         });
+
         req.session.success = "Welcome back!";
+
         return res.redirect("/dashboard");
 
     } catch (err) {
-        req.session.error = "Invalid email or password.";
-        next(err);
+
+    if ([400, 401, 403].includes(err.statusCode)) {
+
+        req.session.error = err.message;
+
+        return res.redirect("/login");
 
     }
+
+    next(err);
+
+}
 
 };
 

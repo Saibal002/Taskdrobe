@@ -11,10 +11,11 @@ module.exports = (schema) => {
 
         if (error) {
 
-            const errors = error.details.map((err) => err.message);
-
             return next(
-                new AppError("Validation Failed", 400, errors)
+                new AppError(
+                    error.details[0].message,
+                    400
+                )
             );
 
         }

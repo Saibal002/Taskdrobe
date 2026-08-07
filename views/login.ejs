@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="keywords" content="TaskDrobe Login">
-    <meta name="description"
-        content="Login to TaskDrobe and manage your projects, teams and tasks efficiently.">
+    <meta name="description" content="Login to TaskDrobe and manage your projects, teams and tasks efficiently.">
     <meta name="author" content="TaskDrobe">
 
     <link rel="icon" href="/images/cutout.png">
 
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         :root {
@@ -55,13 +55,13 @@
         .right-card {
             background: rgba(255, 255, 255, .15);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,.2);
+            border: 2px solid rgba(255, 255, 255, .2);
             border-radius: 20px;
             padding: 40px 30px;
             max-width: 350px;
             text-align: center;
             position: relative;
-            box-shadow: 0 8px 20px rgba(25,1,63,.4);
+            box-shadow: 0 8px 20px rgba(25, 1, 63, .4);
         }
 
         .right-card h2 {
@@ -72,218 +72,207 @@
         }
 
         .image-container {
-            width:180px;
-            height:220px;
-            position:relative;
-            left:114px;
-            top:24px;
+            width: 180px;
+            height: 220px;
+            position: relative;
+            left: 114px;
+            top: 24px;
         }
 
-        button{
-            border:none;
-            border-radius:20px;
+        button {
+            border: none;
+            border-radius: 20px;
         }
 
-        .login-btn{
-            background:var(--secondary-color);
-            color:white;
+        .login-btn {
+            background: var(--secondary-color);
+            color: white;
         }
 
-        .reg-btn{
-            color:var(--accent-color);
-            text-decoration:none;
-            text-align:center;
+        .reg-btn {
+            color: var(--accent-color);
+            text-decoration: none;
+            text-align: center;
         }
 
-        .dec-circle{
-            position:absolute;
-            inset:0;
+        .dec-circle {
+            position: absolute;
+            inset: 0;
         }
 
-        .circle{
-            position:absolute;
-            border-radius:50%;
-            background:linear-gradient(to right,
-                var(--accent-color),
-                var(--primary-color));
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(to right,
+                    var(--accent-color),
+                    var(--primary-color));
         }
 
-        .circle-1{
-            width:80px;
-            height:80px;
-            top:40%;
-            right:-10%;
+        .circle-1 {
+            width: 80px;
+            height: 80px;
+            top: 40%;
+            right: -10%;
         }
 
-        .circle-2{
-            width:60px;
-            height:60px;
-            bottom:20%;
-            left:-10%;
+        .circle-2 {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: -10%;
         }
 
-        .circle-3{
-            width:40px;
-            height:40px;
-            top:15%;
-            left:-6%;
+        .circle-3 {
+            width: 40px;
+            height: 40px;
+            top: 15%;
+            left: -6%;
         }
     </style>
 </head>
 
 <body>
 
-<div class="parent container-fluid d-flex vh-100 align-items-center justify-content-center">
+    <div class="parent container-fluid d-flex vh-100 align-items-center justify-content-center">
 
-<div class="main-card row w-100 bg-white">
+        <div class="main-card row w-100 bg-white">
 
-<!-- LEFT -->
+            <!-- LEFT -->
 
-<div class="left col-lg-6 col-md-6 order-2 order-md-1 d-flex flex-column align-items-center justify-content-center">
+            <div
+                class="left col-lg-6 col-md-6 order-2 order-md-1 d-flex flex-column align-items-center justify-content-center">
 
-<div class="mb-4 w-100">
+                <div class="mb-4 w-100">
 
-<h2>Login</h2>
+                    <h2>Login</h2>
 
-<p>Let's get inside...</p>
+                    <p>Let's get inside...</p>
 
-<% if(error){ %>
+                    <% if(error){ %>
 
-<div class="alert alert-danger">
+                        <div class="alert alert-danger">
 
-<%= error %>
+                            <%= error %>
 
-</div>
+                        </div>
 
-<% } %>
+                        <% } %>
 
-<% if(success){ %>
+                            <% if(success){ %>
 
-<div class="alert alert-success">
+                                <div class="alert alert-success">
 
-<%= success %>
+                                    <%= success %>
 
-</div>
+                                </div>
 
-<% } %>
+                                <% } %>
 
-</div>
+                </div>
 
-<form action="/auth/login" method="POST" class="w-100">
+                <form action="/auth/login" method="POST" class="w-100" id="loginForm">
 
-<div class="mb-3">
+                    <div class="mb-3">
 
-<label for="email" class="form-label">
+                        <label for="email" class="form-label">
 
-Email
+                            Email
 
-</label>
+                        </label>
 
-<input
-type="email"
-id="email"
-name="email"
-class="form-control"
-placeholder="Enter your email"
-autocomplete="email"
-value=""
-required>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email"
+                            autocomplete="email" required>
 
-</div>
+                        <div id="emailError" class="invalid-feedback">
 
-<div class="mb-3">
+                        </div>
 
-<label for="password" class="form-label">
+                    </div>
 
-Password
+                    <div class="mb-3">
 
-</label>
+                        <label for="password" class="form-label">
 
-<input
-type="password"
-id="password"
-name="password"
-class="form-control"
-placeholder="Enter your password"
-autocomplete="current-password"
-required>
+                            Password
 
-</div>
+                        </label>
 
-<div class="text-end mb-3">
+                        <input type="password" id="password" name="password" class="form-control"
+                            placeholder="Enter your password" autocomplete="current-password" required>
 
-<a href="javascript:void(0)">Forgot password?</a>
+                        <div id="passwordError" class="invalid-feedback">
 
-</div>
+                        </div>
 
-<div class="d-flex flex-column gap-3">
+                    </div>
 
-<button
-class="login-btn"
-type="submit">
+                    <div class="text-end mb-3">
 
-Login
+                        <a href="javascript:void(0)">Forgot password?</a>
 
-</button>
+                    </div>
 
-<a
-href="/signup"
-class="reg-btn">
+                    <div class="d-flex flex-column gap-3">
 
-Register
+                        <button class="login-btn" type="submit">
 
-</a>
+                            Login
 
-</div>
+                        </button>
 
-</form>
+                        <a href="/signup" class="reg-btn">
 
-<p class="text-center text-muted small mt-4">
+                            Register
 
-&copy; <%= new Date().getFullYear() %> TaskDrobe. All Rights Reserved.
+                        </a>
 
-</p>
+                    </div>
 
-</div>
+                </form>
 
-<!-- RIGHT -->
+                <p class="text-center text-muted small mt-4">
 
-<div class="right col-lg-6 col-md-6 order-1 order-md-2">
+                    &copy; <%= new Date().getFullYear() %> TaskDrobe. All Rights Reserved.
 
-<div class="right-card">
+                </p>
 
-<div class="dec-circle">
+            </div>
 
-<div class="circle circle-1"></div>
-<div class="circle circle-2"></div>
-<div class="circle circle-3"></div>
+            <!-- RIGHT -->
 
-</div>
+            <div class="right col-lg-6 col-md-6 order-1 order-md-2">
 
-<h2 class="text-start p-2">
+                <div class="right-card">
 
-Very good works are waiting for you
+                    <div class="dec-circle">
 
-</h2>
+                        <div class="circle circle-1"></div>
+                        <div class="circle circle-2"></div>
+                        <div class="circle circle-3"></div>
 
-<div class="image-container">
+                    </div>
 
-<img
-src="/images/cutout.png"
-alt="Login Illustration"
-class="mw-100">
+                    <h2 class="text-start p-2">
 
-</div>
+                        Very good works are waiting for you
 
-</div>
+                    </h2>
 
-</div>
+                    <div class="image-container">
 
-</div>
+                        <img src="/images/cutout.png" alt="Login Illustration" class="mw-100">
 
-</div>
+                    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

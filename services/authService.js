@@ -19,9 +19,16 @@ const registerUser = async (userData) => {
         phone,
     } = userData;
 
-    console.log("3. Before findUserByEmail");
-
     const existingUser = await userModel.findUserByEmail(email);
+
+if (existingUser) {
+
+    throw new AppError(
+        "Email is already registered.",
+        409
+    );
+
+}
 
     console.log("4. After findUserByEmail");
 
@@ -50,10 +57,15 @@ const loginUser = async ({ email, password }) => {
 
     // Find User
     const user = await userModel.findUserByEmail(email);
-
+    console.log("LOGIN USER:", user);
     if (!user) {
-        throw new AppError("Invalid email or password.", 401);
-    }
+
+    throw new AppError(
+        "Invalid email or password.",
+        401
+    );
+
+}
 
     // Check Account Status
     if (!user.is_active) {
