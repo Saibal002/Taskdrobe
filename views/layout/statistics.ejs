@@ -151,10 +151,35 @@
 
         <div class="progress" style="height: 12px;">
 
-            <div
-                class="progress-bar bg-success"
-                role="progressbar"
-                style="width: <%= stats.completionRate %>%">
+            <div class="progress-bar bg-success" role="progressbar" style="width: <%= stats.completionRate %>%">
+
+            </div>
+
+        </div>
+        <hr class="my-4">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">
+
+                    Task Status
+                    
+
+                </h5>
+                <p class="text-muted small mb-4">
+
+    Current task distribution
+
+</p>
+
+                <div class="mx-auto" style="height:250px; max-width:320px;">
+
+                    <canvas id="taskChart" data-completed="<%= stats.completedTasks %>"
+                        data-pending="<%= stats.pendingTasks %>" data-overdue="<%= stats.overdueTasks %>"></canvas>
+
+                </div>
 
             </div>
 

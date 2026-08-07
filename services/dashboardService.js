@@ -37,7 +37,27 @@ const getDashboardStats = async () => {
     };
 
 };
+/**
+ * Task Chart Data
+ */
+const getTaskChartData = async () => {
+
+    const data =
+        await dashboardModel.getTaskChartData();
+
+    return {
+
+        completed: Number(data.completed),
+
+        pending: Number(data.pending),
+
+        overdue: Number(data.overdue),
+
+    };
+
+};
 
 module.exports = {
     getDashboardStats,
+    getTaskChartData,
 };

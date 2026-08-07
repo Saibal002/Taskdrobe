@@ -5,37 +5,30 @@ const dashboardService = require("../services/dashboardService");
  * Dashboard
  */
 const dashboard = async (req, res, next) => {
+  try {
+    const projects = await projectService.getAllProjects();
 
-    try {
+    const stats = await dashboardService.getDashboardStats();
+    const chartData = await dashboardService.getTaskChartData();
 
-        const projects =
-            await projectService.getAllProjects();
+    res.render("dashboard", {
+      title: "Dashboard",
 
-        const stats =
-            await dashboardService.getDashboardStats();
+      user: req.user,
 
-        res.render("dashboard", {
+      today: new Date().toDateString(),
 
-            title: "Dashboard",
+      projects,
 
-            user: req.user,
+      stats,
 
-            today: new Date().toDateString(),
-
-            projects,
-
-            stats,
-
-        });
-
-    } catch (err) {
-
-        next(err);
-
-    }
-
+      chartData,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {
-    dashboard,
+  dashboard,
 };

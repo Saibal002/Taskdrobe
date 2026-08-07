@@ -50,7 +50,35 @@ const getDashboardStats = async () => {
     return rows[0];
 
 };
+const getTaskChartData = async () => {
+
+    const sql = `
+        SELECT
+
+            (SELECT COUNT(*)
+             FROM tasks
+             WHERE status = 'Completed')
+                AS completed,
+
+            (SELECT COUNT(*)
+             FROM tasks
+             WHERE status <> 'Completed')
+                AS pending,
+
+            (SELECT COUNT(*)
+             FROM tasks
+             WHERE due_date < CURRENT_DATE
+             AND status <> 'Completed')
+                AS overdue;
+    `;
+
+    const { rows } = await query(sql);
+
+    return rows[0];
+
+};
 
 module.exports = {
     getDashboardStats,
+    getTaskChartData,
 };
