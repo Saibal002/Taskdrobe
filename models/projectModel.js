@@ -144,10 +144,32 @@ const getProjectById = async (projectId) => {
 
 };
 
+/**
+ * Update project progress
+ */
+const updateProjectProgress = async (projectId, progress) => {
+
+    const sql = `
+        UPDATE projects
+        SET progress = $1
+        WHERE project_id = $2
+        RETURNING *;
+    `;
+
+    const { rows } = await query(sql, [
+        progress,
+        projectId,
+    ]);
+
+    return rows[0];
+
+};
+
 module.exports = {
     createProject,
     getAllProjects,
     updateProject,
     deleteProject,
     getProjectById,
+    updateProjectProgress,
 };

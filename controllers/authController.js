@@ -4,7 +4,7 @@ const home = (req, res) => {
 };
 
 const viewLogin = (req, res) => {
-
+     console.log("Locals:", res.locals);
     res.render("login", {
         title: "Login"
     });

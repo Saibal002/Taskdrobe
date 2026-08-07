@@ -1,12 +1,20 @@
 const AppError = require("../utils/AppError");
+
 const taskModel = require("../models/taskModel");
+const projectService = require("./projectService");
 
 /**
  * Create Task
  */
 const createTask = async (taskData) => {
 
-    return await taskModel.createTask(taskData);
+    const task = await taskModel.createTask(taskData);
+
+    await projectService.updateProjectProgress(
+        task.project_id
+    );
+
+    return task;
 
 };
 
@@ -27,7 +35,12 @@ const getTaskById = async (taskId) => {
     const task = await taskModel.getTaskById(taskId);
 
     if (!task) {
-        throw new AppError("Task not found.", 404);
+
+        throw new AppError(
+            "Task not found.",
+            404
+        );
+
     }
 
     return task;
@@ -41,7 +54,16 @@ const updateTask = async (taskId, taskData) => {
 
     await getTaskById(taskId);
 
-    return await taskModel.updateTask(taskId, taskData);
+    const task = await taskModel.updateTask(
+        taskId,
+        taskData
+    );
+
+    await projectService.updateProjectProgress(
+        task.project_id
+    );
+
+    return task;
 
 };
 
@@ -50,9 +72,15 @@ const updateTask = async (taskId, taskData) => {
  */
 const deleteTask = async (taskId) => {
 
-    await getTaskById(taskId);
+    const task = await getTaskById(taskId);
 
-    return await taskModel.deleteTask(taskId);
+    await taskModel.deleteTask(taskId);
+
+    await projectService.updateProjectProgress(
+        task.project_id
+    );
+
+    return task;
 
 };
 
@@ -63,15 +91,23 @@ const toggleTaskStatus = async (taskId) => {
 
     await getTaskById(taskId);
 
-    return await taskModel.toggleTaskStatus(taskId);
+    const task = await taskModel.toggleTaskStatus(taskId);
+
+    await projectService.updateProjectProgress(
+        task.project_id
+    );
+
+    return task;
 
 };
 
 module.exports = {
+
     createTask,
     getTasksByProject,
     getTaskById,
     updateTask,
     deleteTask,
     toggleTaskStatus,
+
 };

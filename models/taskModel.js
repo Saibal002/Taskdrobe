@@ -130,6 +130,36 @@ const toggleTaskStatus = async (taskId) => {
 
   return rows[0];
 };
+
+/**
+ * Get project task statistics
+ */
+const getProjectTaskStats = async (projectId) => {
+
+    const sql = `
+        SELECT
+            COUNT(*) AS total_tasks,
+
+            COUNT(
+                CASE
+                    WHEN status = 'Completed'
+                    THEN 1
+                END
+            ) AS completed_tasks
+
+        FROM tasks
+
+        WHERE project_id = $1;
+    `;
+
+    const { rows } = await query(sql, [projectId]);
+
+    return {
+        totalTasks: Number(rows[0].total_tasks),
+        completedTasks: Number(rows[0].completed_tasks),
+    };
+
+};
 module.exports = {
   createTask,
   getTasksByProject,
@@ -137,4 +167,5 @@ module.exports = {
   updateTask,
   deleteTask,
   toggleTaskStatus,
+  getProjectTaskStats,
 };

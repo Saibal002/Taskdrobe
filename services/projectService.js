@@ -1,4 +1,5 @@
 const projectModel = require("../models/projectModel");
+const taskModel = require("../models/taskModel");
 const AppError = require("../utils/AppError");
 
 /**
@@ -79,6 +80,31 @@ const getProjectById = async (projectId) => {
     return project;
 
 };
+/**
+ * Recalculate project progress
+ */
+const updateProjectProgress = async (projectId) => {
+
+    const stats =
+        await taskModel.getProjectTaskStats(projectId);
+
+    let progress = 0;
+
+    if (stats.totalTasks > 0) {
+
+        progress = Math.round(
+            (stats.completedTasks / stats.totalTasks) * 100
+        );
+
+    }
+
+    return await projectModel.updateProjectProgress(
+        projectId,
+        progress
+    );
+
+};
+
 
 module.exports = {
     createProject,
@@ -86,4 +112,5 @@ module.exports = {
     updateProject,
     deleteProject,
     getProjectById,
+    updateProjectProgress,
 };

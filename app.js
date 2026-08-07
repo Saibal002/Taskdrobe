@@ -58,7 +58,7 @@ app.use(
 
             httpOnly: true,
 
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 30 * 24 * 60 * 60 * 1000,
 
         },
 
@@ -69,9 +69,8 @@ app.use((req, res, next) => {
     res.locals.success = req.session.success || null;
     res.locals.error = req.session.error || null;
 
-    delete req.session.success;
-    delete req.session.error;
-
+     req.session.success = null;
+     req.session.error = null
     next();
 
 });
