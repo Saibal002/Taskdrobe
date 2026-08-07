@@ -80,10 +80,42 @@ const login = async (req, res, next) => {
 
 };
 
+/**
+ * Logout User
+ */
+const logout = async (req, res, next) => {
+
+    try {
+
+        // Destroy Session
+        req.session.destroy((err) => {
+
+            if (err) {
+
+                return next(err);
+
+            }
+
+            // Clear JWT Cookie
+            res.clearCookie("token");
+
+            return res.redirect("/");
+
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
+};
+
 module.exports = {
     home,
     viewLogin,
     viewSignup,
     signup,
     login,
+    logout,
 };
