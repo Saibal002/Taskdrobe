@@ -84,3 +84,73 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+//project chart data
+
+const projectCanvas =
+    document.getElementById("projectChart");
+
+if (projectCanvas) {
+
+    const projects =
+        JSON.parse(projectCanvas.dataset.projects);
+
+    new Chart(projectCanvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: projects.map(p => p.status),
+
+            datasets: [{
+
+                label: "Projects",
+
+                data: projects.map(p => p.total),
+
+                borderRadius: 8,
+
+            }]
+
+        },
+
+        options: {
+
+            indexAxis: "y",
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    display: false
+
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        precision: 0
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}

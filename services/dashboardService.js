@@ -56,8 +56,25 @@ const getTaskChartData = async () => {
     };
 
 };
+/**
+ * Project Chart Data
+ */
+const getProjectChartData = async () => {
 
+    const rows =
+        await dashboardModel.getProjectChartData();
+
+    return rows.map(row => ({
+
+        status: row.status,
+
+        total: Number(row.total),
+
+    }));
+
+};
 module.exports = {
     getDashboardStats,
     getTaskChartData,
+    getProjectChartData,
 };

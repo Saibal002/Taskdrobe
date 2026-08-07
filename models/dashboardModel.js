@@ -77,8 +77,28 @@ const getTaskChartData = async () => {
     return rows[0];
 
 };
+/**
+ * Project Status Chart
+ */
+const getProjectChartData = async () => {
+
+    const sql = `
+        SELECT
+            status,
+            COUNT(*) AS total
+        FROM projects
+        GROUP BY status
+        ORDER BY status;
+    `;
+
+    const { rows } = await query(sql);
+
+    return rows;
+
+};
 
 module.exports = {
     getDashboardStats,
     getTaskChartData,
+    getProjectChartData
 };

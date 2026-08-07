@@ -10,6 +10,7 @@ const dashboard = async (req, res, next) => {
 
     const stats = await dashboardService.getDashboardStats();
     const chartData = await dashboardService.getTaskChartData();
+    const projectChartData = await dashboardService.getProjectChartData();
 
     res.render("dashboard", {
       title: "Dashboard",
@@ -23,6 +24,7 @@ const dashboard = async (req, res, next) => {
       stats,
 
       chartData,
+      projectChartData,
     });
   } catch (err) {
     next(err);
