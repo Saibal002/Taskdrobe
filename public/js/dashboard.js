@@ -9,218 +9,476 @@ const leftBtn = document.getElementById("scrollLeft");
 const rightBtn = document.getElementById("scrollRight");
 
 if (scrollContainer && leftBtn && rightBtn) {
+  function getCardWidth() {
+    const card = scrollContainer.querySelector(".project-card");
 
-    function getCardWidth() {
+    if (!card) return 340;
 
-        const card = scrollContainer.querySelector(".project-card");
+    const style = window.getComputedStyle(card);
 
-        if (!card) return 340;
+    const gap = 16;
 
-        const style = window.getComputedStyle(card);
+    return card.offsetWidth + gap;
+  }
 
-        const gap = 16;
+  function updateButtons() {
+    leftBtn.disabled = scrollContainer.scrollLeft <= 5;
 
-        return card.offsetWidth + gap;
+    rightBtn.disabled =
+      scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+      scrollContainer.scrollWidth - 5;
+  }
 
-    }
+  leftBtn.addEventListener("click", () => {
+    scrollContainer.scrollBy({
+      left: -getCardWidth(),
 
-    function updateButtons() {
-
-        leftBtn.disabled = scrollContainer.scrollLeft <= 5;
-
-        rightBtn.disabled =
-            scrollContainer.scrollLeft + scrollContainer.clientWidth >=
-            scrollContainer.scrollWidth - 5;
-
-    }
-
-    leftBtn.addEventListener("click", () => {
-
-        scrollContainer.scrollBy({
-
-            left: -getCardWidth(),
-
-            behavior: "smooth"
-
-        });
-
+      behavior: "smooth",
     });
+  });
 
-    rightBtn.addEventListener("click", () => {
+  rightBtn.addEventListener("click", () => {
+    scrollContainer.scrollBy({
+      left: getCardWidth(),
 
-        scrollContainer.scrollBy({
-
-            left: getCardWidth(),
-
-            behavior: "smooth"
-
-        });
-
+      behavior: "smooth",
     });
+  });
 
-    scrollContainer.addEventListener("scroll", updateButtons);
+  scrollContainer.addEventListener("scroll", updateButtons);
 
-    window.addEventListener("resize", updateButtons);
+  window.addEventListener("resize", updateButtons);
 
-    updateButtons();
-
+  updateButtons();
 }
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
+  const scrollContainer = document.getElementById("projectsScroll");
 
-    const chartCanvas =
-        document.getElementById("taskChart");
+  const chartCanvas = document.getElementById("taskChart");
 
-    if (!chartCanvas) return;
+  initGlobalSearch();
 
-    const completed =
-        Number(chartCanvas.dataset.completed);
+  if (!chartCanvas) return;
 
-    const pending =
-        Number(chartCanvas.dataset.pending);
+  const completed = Number(chartCanvas.dataset.completed);
 
-    const overdue =
-        Number(chartCanvas.dataset.overdue);
+  const pending = Number(chartCanvas.dataset.pending);
 
-    new Chart(chartCanvas, {
+  const overdue = Number(chartCanvas.dataset.overdue);
 
-        type: "doughnut",
+  new Chart(chartCanvas, {
+    type: "doughnut",
 
-        data: {
+    data: {
+      labels: ["Completed", "Pending", "Overdue"],
 
-            labels: [
+      datasets: [
+        {
+          data: [completed, pending, overdue],
 
-                "Completed",
+          backgroundColor: ["#22c55e", "#f59e0b", "#ef4444"],
 
-                "Pending",
-
-                "Overdue"
-
-            ],
-
-            datasets: [
-
-                {
-
-                    data: [
-
-                        completed,
-
-                        pending,
-
-                        overdue
-
-                    ],
-
-                    backgroundColor: [
-
-                        "#22c55e",
-
-                        "#f59e0b",
-
-                        "#ef4444"
-
-                    ],
-
-                    borderWidth: 0,
-
-                }
-
-            ]
-
+          borderWidth: 0,
         },
+      ],
+    },
 
-        options: {
+    options: {
+      responsive: true,
 
-            responsive: true,
+      maintainAspectRatio: false,
+      cutout: "70%",
 
-            maintainAspectRatio: false,
-            cutout: "70%",
-
-            plugins: {
-
-                legend: {
-
-                    position: "bottom"
-
-                }
-
-            }
-
-        }
-
-    });
-
+      plugins: {
+        legend: {
+          position: "bottom",
+        },
+      },
+    },
+  });
 });
 
 //project chart data
 
-const projectCanvas =
-    document.getElementById("projectChart");
+const projectCanvas = document.getElementById("projectChart");
 
 if (projectCanvas) {
+  const projects = JSON.parse(projectCanvas.dataset.projects);
 
-    const projects =
-        JSON.parse(projectCanvas.dataset.projects);
+  new Chart(projectCanvas, {
+    type: "bar",
 
-    new Chart(projectCanvas, {
+    data: {
+      labels: projects.map((p) => p.status),
 
-        type: "bar",
+      datasets: [
+        {
+          label: "Projects",
 
-        data: {
+          data: projects.map((p) => p.total),
 
-            labels: projects.map(p => p.status),
-
-            datasets: [{
-
-                label: "Projects",
-
-                data: projects.map(p => p.total),
-
-                borderRadius: 8,
-
-            }]
-
+          borderRadius: 8,
         },
+      ],
+    },
 
-        options: {
+    options: {
+      indexAxis: "y",
 
-            indexAxis: "y",
+      responsive: true,
 
-            responsive: true,
+      maintainAspectRatio: false,
 
-            maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
 
-            plugins: {
+      scales: {
+        x: {
+          beginAtZero: true,
 
-                legend: {
+          ticks: {
+            precision: 0,
+          },
+        },
+      },
+    },
+  });
+}
+function initGlobalSearch() {
 
-                    display: false
+    const searchInput =
+        document.getElementById("globalSearch");
+
+    const searchResults =
+        document.getElementById("searchResults");
+
+    const clearSearch =
+        document.getElementById("clearSearch");
+
+    if (!searchInput || !searchResults) return;
+
+    let searchTimeout;
+
+
+    // ================================
+    // Close Search
+    // ================================
+
+    function closeSearch() {
+
+        searchResults.innerHTML = "";
+
+        searchResults.classList.add("d-none");
+
+    }
+
+
+    // ================================
+    // Search Input
+    // ================================
+
+    searchInput.addEventListener("input", function () {
+
+        const searchTerm = this.value.trim();
+
+        clearTimeout(searchTimeout);
+
+
+        if (searchTerm) {
+
+            clearSearch?.classList.remove("d-none");
+
+        } else {
+
+            clearSearch?.classList.add("d-none");
+
+        }
+
+
+        if (!searchTerm) {
+
+            closeSearch();
+
+            return;
+
+        }
+
+
+        searchTimeout = setTimeout(async () => {
+
+            try {
+
+                searchResults.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <div>Searching...</div>
+                    </div>
+                `;
+
+                searchResults.classList.remove("d-none");
+
+
+                const response = await fetch(
+                    `/search?q=${encodeURIComponent(searchTerm)}`
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Search request failed."
+                    );
 
                 }
 
-            },
 
-            scales: {
+                const data =
+                    await response.json();
 
-                x: {
 
-                    beginAtZero: true,
+                renderSearchResults(
+                    data,
+                    searchResults
+                );
 
-                    ticks: {
 
-                        precision: 0
+            } catch (error) {
 
-                    }
+                console.error(
+                    "Search Error:",
+                    error
+                );
 
-                }
+                searchResults.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div>Unable to search.</div>
+                    </div>
+                `;
 
             }
+
+        }, 300);
+
+    });
+
+
+    // ================================
+    // Clear Search Button
+    // ================================
+
+    clearSearch?.addEventListener("click", () => {
+
+        searchInput.value = "";
+
+        clearTimeout(searchTimeout);
+
+        clearSearch.classList.add("d-none");
+
+        closeSearch();
+
+        searchInput.focus();
+
+    });
+
+
+    // ================================
+    // Click Outside
+    // ================================
+
+    document.addEventListener("click", (event) => {
+
+        const searchWrapper =
+            searchInput.closest(".search-wrapper");
+
+        if (
+            searchWrapper &&
+            !searchWrapper.contains(event.target)
+        ) {
+
+            closeSearch();
 
         }
 
     });
 
+
+    // ================================
+    // Escape Key
+    // ================================
+
+    searchInput.addEventListener("keydown", (event) => {
+
+        if (event.key === "Escape") {
+
+            closeSearch();
+
+            searchInput.blur();
+
+        }
+
+    });
+
+    document.addEventListener("click", (event) => {
+
+    const searchWrapper =
+        searchInput.closest(".search-wrapper");
+
+    if (
+        searchWrapper &&
+        !searchWrapper.contains(event.target)
+    ) {
+
+        closeSearch();
+
+    }
+
+});
+
+}
+function renderSearchResults(data, container) {
+  const projects = data.projects || [];
+
+  const tasks = data.tasks || [];
+
+  if (projects.length === 0 && tasks.length === 0) {
+    container.innerHTML = `
+            <div class="search-no-results">
+
+                <i class="fas fa-search"></i>
+
+                <div>
+                    No results found.
+                </div>
+
+            </div>
+        `;
+
+    container.classList.remove("d-none");
+
+    return;
+  }
+
+  let html = "";
+
+  // =========================
+  // Projects
+  // =========================
+
+  if (projects.length > 0) {
+    html += `
+            <div class="search-result-section">
+
+                <div class="search-result-title">
+                    Projects
+                </div>
+        `;
+
+    projects.forEach((project) => {
+      html += `
+                <a
+                    href="/projects/${project.project_id}"
+                    class="search-result-item">
+
+                    <div class="search-result-icon">
+
+                        <i class="fas fa-folder"></i>
+
+                    </div>
+
+                    <div class="search-result-content">
+
+                        <div class="search-result-name">
+
+                            ${escapeSearchHTML(project.project_name)}
+
+                        </div>
+
+                        <div class="search-result-meta">
+
+                            ${escapeSearchHTML(project.status)}
+
+                            ·
+
+                            ${project.progress ?? 0}%
+
+                        </div>
+
+                    </div>
+
+                </a>
+            `;
+    });
+
+    html += `</div>`;
+  }
+
+  // =========================
+  // Tasks
+  // =========================
+
+  if (tasks.length > 0) {
+    html += `
+            <div class="search-result-section">
+
+                <div class="search-result-title">
+                    Tasks
+                </div>
+        `;
+
+    tasks.forEach((task) => {
+      html += `
+                <a
+                    href="/projects/${task.project_id}"
+                    class="search-result-item">
+
+                    <div class="search-result-icon">
+
+                        <i class="fas fa-check-circle"></i>
+
+                    </div>
+
+                    <div class="search-result-content">
+
+                        <div class="search-result-name">
+
+                            ${escapeSearchHTML(task.title)}
+
+                        </div>
+
+                        <div class="search-result-meta">
+
+                            ${escapeSearchHTML(
+                              task.project_name || "No Project",
+                            )}
+
+                            ·
+
+                            ${escapeSearchHTML(task.priority || "No Priority")}
+
+                        </div>
+
+                    </div>
+
+                </a>
+            `;
+    });
+
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+
+  container.classList.remove("d-none");
+}
+function escapeSearchHTML(value) {
+  const div = document.createElement("div");
+
+  div.textContent = value ?? "";
+
+  return div.innerHTML;
 }

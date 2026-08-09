@@ -192,6 +192,40 @@ const getUpcomingTasks = async (limit = 10) => {
 
     return result.rows;
 };
+/**
+ * Search Tasks
+ */
+const searchTasks = async (searchTerm) => {
+
+    const sql = `
+        SELECT
+            t.task_id,
+            t.title,
+            t.description,
+            t.priority,
+            t.status,
+            t.due_date,
+            t.project_id,
+            p.project_name
+        FROM tasks t
+
+        LEFT JOIN projects p
+            ON t.project_id = p.project_id
+
+        WHERE
+            t.title ILIKE $1
+            OR t.description ILIKE $1
+
+        ORDER BY
+            t.created_at DESC
+
+        LIMIT 10;
+    `;
+
+    const { rows } = await query(sql, [`%${searchTerm}%`]);
+
+    return rows;
+};
 module.exports = {
   createTask,
   getTasksByProject,
@@ -201,4 +235,5 @@ module.exports = {
   toggleTaskStatus,
   getProjectTaskStats,
   getUpcomingTasks,
+  searchTasks,
 };

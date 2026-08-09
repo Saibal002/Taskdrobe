@@ -13,6 +13,7 @@ const authRoute = require("./routes/authRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
 const projectRoute = require("./routes/projectRoute");
 const taskRoute = require("./routes/taskRoute");
+const searchRoute = require("./routes/searchRoute");
 
 const app = express();
 
@@ -90,6 +91,7 @@ app.use('/auth', authRoute);
 app.use('/',dashboardRoute);
 app.use('/projects', projectRoute);
 app.use('/tasks', taskRoute);
+app.use("/search", searchRoute);
 
 
 

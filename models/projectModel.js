@@ -164,6 +164,39 @@ const updateProjectProgress = async (projectId, progress) => {
     return rows[0];
 
 };
+/**
+ * Search Projects
+ */
+const searchProjects = async (searchTerm) => {
+
+    const sql = `
+        SELECT
+            p.project_id,
+            p.project_name,
+            p.description,
+            p.status,
+            p.progress,
+            p.deadline,
+            u.full_name
+        FROM projects p
+
+        INNER JOIN users u
+            ON p.created_by = u.user_id
+
+        WHERE
+            p.project_name ILIKE $1
+            OR p.description ILIKE $1
+
+        ORDER BY
+            p.created_at DESC
+
+        LIMIT 10;
+    `;
+
+    const { rows } = await query(sql, [`%${searchTerm}%`]);
+
+    return rows;
+};
 
 module.exports = {
     createProject,
@@ -172,4 +205,5 @@ module.exports = {
     deleteProject,
     getProjectById,
     updateProjectProgress,
+    searchProjects,
 };
