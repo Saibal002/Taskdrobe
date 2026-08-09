@@ -1,3 +1,73 @@
+// ================================
+// Project Carousel
+// ================================
+
+const scrollContainer = document.getElementById("projectsScroll");
+
+const leftBtn = document.getElementById("scrollLeft");
+
+const rightBtn = document.getElementById("scrollRight");
+
+if (scrollContainer && leftBtn && rightBtn) {
+
+    function getCardWidth() {
+
+        const card = scrollContainer.querySelector(".project-card");
+
+        if (!card) return 340;
+
+        const style = window.getComputedStyle(card);
+
+        const gap = 16;
+
+        return card.offsetWidth + gap;
+
+    }
+
+    function updateButtons() {
+
+        leftBtn.disabled = scrollContainer.scrollLeft <= 5;
+
+        rightBtn.disabled =
+            scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+            scrollContainer.scrollWidth - 5;
+
+    }
+
+    leftBtn.addEventListener("click", () => {
+
+        scrollContainer.scrollBy({
+
+            left: -getCardWidth(),
+
+            behavior: "smooth"
+
+        });
+
+    });
+
+    rightBtn.addEventListener("click", () => {
+
+        scrollContainer.scrollBy({
+
+            left: getCardWidth(),
+
+            behavior: "smooth"
+
+        });
+
+    });
+
+    scrollContainer.addEventListener("scroll", updateButtons);
+
+    window.addEventListener("resize", updateButtons);
+
+    updateButtons();
+
+}
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const chartCanvas =

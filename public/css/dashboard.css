@@ -1,0 +1,552 @@
+/* ===========================
+   Dashboard Design System
+=========================== */
+
+:root{
+
+    --primary:#6366F1;
+
+    --success:#22C55E;
+
+    --warning:#F59E0B;
+
+    --danger:#EF4444;
+
+    --surface:#FFFFFF;
+
+    --background:#F8FAFC;
+
+    --border:#E5E7EB;
+
+    --text:#1F2937;
+
+    --muted:#6B7280;
+
+    --radius:18px;
+
+    --shadow:
+        0 8px 30px rgba(15,23,42,.08);
+
+}
+
+body{
+
+    background:var(--background);
+
+}
+
+/* Universal Dashboard Card */
+
+.dashboard-card{
+
+    background:var(--surface);
+
+    border:none;
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    transition:.25s ease;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 20px 45px rgba(15,23,42,.12);
+
+}
+
+/* Dashboard Section */
+
+.dashboard-section{
+
+    margin-top:2rem;
+
+}
+
+/* Dashboard Title */
+
+.dashboard-title{
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+/* Dashboard Subtitle */
+
+.dashboard-subtitle{
+
+    color:var(--muted);
+
+    font-size:.9rem;
+
+}
+
+
+/* ===========================
+   Statistics Cards
+=========================== */
+
+.stats-card{
+
+    padding:1rem;
+
+    min-height:120px;
+
+}
+
+.stats-card h3{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    margin-top:.4rem;
+
+}
+
+.stats-card small{
+
+    color:var(--muted);
+
+}
+
+/* ===========================
+   Chart Cards
+=========================== */
+
+.chart-card{
+
+    min-height:360px;
+
+}
+
+/* ===========================
+   Task Card
+=========================== */
+
+.task-card{
+
+    min-height:420px;
+
+}
+
+/* ===========================
+   Calendar
+=========================== */
+
+.calendar-card{
+
+    position:sticky;
+
+    top:95px;
+
+}
+/* KPI Cards */
+
+.stats-card{
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+.stats-card .card-body{
+
+    padding:1.5rem;
+
+}
+
+.stats-card h2{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+}
+
+.stats-icon{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:.25s ease;
+
+}
+
+.dashboard-card:hover .stats-icon{
+
+    transform:scale(1.08);
+
+}
+/* ======================================================
+   Welcome Hero
+====================================================== */
+
+.welcome-card {
+
+    background: linear-gradient(
+        135deg,
+        #6366F1 0%,
+        #7C3AED 100%
+    );
+
+    color: #fff;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    position: relative;
+
+}
+
+.welcome-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    right: -80px;
+
+    top: -80px;
+
+    width: 220px;
+
+    height: 220px;
+
+    background: rgba(255, 255, 255, .08);
+
+    border-radius: 50%;
+
+}
+
+/* Reduce hero height */
+.welcome-card .card-body {
+
+    padding: 2rem !important;
+
+}
+
+/* Welcome badge */
+
+.welcome-badge {
+
+    display: inline-block;
+
+    padding: .45rem 1rem;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, .15);
+
+    backdrop-filter: blur(10px);
+
+    font-size: .85rem;
+
+    font-weight: 600;
+
+}
+
+/* Hero description */
+
+.welcome-text {
+
+    color: rgba(255, 255, 255, .82);
+
+    max-width: 520px;
+
+    margin-bottom: 0;
+
+}
+
+/* KPI Pills */
+
+.welcome-summary {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 16px;
+
+    margin-top: 2rem;
+
+}
+
+.welcome-pill {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .75rem;
+
+    background: rgba(255, 255, 255, .12);
+
+    border: 1px solid rgba(255, 255, 255, .12);
+
+    padding: .75rem 1rem;
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(8px);
+
+    transition: all .25s ease;
+
+}
+
+.welcome-pill:hover {
+
+    transform: translateY(-3px);
+
+    background: rgba(255, 255, 255, .18);
+
+}
+
+.welcome-pill i {
+
+    font-size: 1.1rem;
+
+}
+
+/* Date Card */
+
+.today-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    width: 180px;
+
+    height: 120px;
+
+    margin-left: auto;
+
+    background: #fff;
+
+    color: #111827;
+
+    border-radius: 18px;
+
+    padding: 1rem;
+
+    text-align: center;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .15);
+
+    transition: .25s ease;
+
+}
+
+.today-card:hover {
+
+    transform: translateY(-3px);
+
+}
+
+.today-card small {
+
+    color: #6B7280;
+
+    font-weight: 600;
+
+    letter-spacing: .5px;
+
+}
+
+.today-card h4 {
+
+    font-weight: 700;
+
+    margin: .4rem 0;
+
+    font-size: 1.25rem;
+
+}
+
+/* /==================================================================================/ */
+.project-card {
+
+    width: 340px;
+
+    min-width: 340px;
+
+    height: 250px;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    position: relative;
+
+    transition: .25s ease;
+
+    flex-shrink: 0;
+
+}
+
+.project-card:hover {
+
+    transform:translateY(-8px) scale(1.02);
+
+    box-shadow: 0 18px 40px rgba(0,0,0,.18);
+
+}
+.project-progress{
+
+    height:10px;
+
+    border-radius:20px;
+
+    background:#E5E7EB;
+
+    overflow:hidden;
+
+}
+
+.project-progress .progress-bar{
+
+    border-radius:20px;
+
+}
+.project-actions{
+
+    position:absolute;
+
+    top:18px;
+
+    right:18px;
+
+    display:flex;
+
+    gap:.5rem;
+
+}
+.project-card .card-body{
+
+    padding:1.75rem;
+
+    display:flex;
+
+    flex-direction:column;
+
+    height:100%;
+
+}
+
+.project-scroll-left{
+
+    left:-18px;
+
+    top:50%;
+
+}
+
+.project-scroll-right{
+
+    right:-18px;
+
+    top:50%;
+
+}
+.project-section{
+
+    padding:.5rem;
+
+}
+
+.project-section .card-body{
+
+    padding:2rem;
+
+}
+.project-scroll-btn{
+
+    position:absolute;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:52px;
+
+    height:52px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    color:#6366F1;
+
+    font-size:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+
+    transition:.25s;
+
+}
+.project-scroll-btn:hover{
+
+    background:#6366F1;
+
+    color:#fff;
+
+    transform:translateY(-50%) scale(1.08);
+
+}
+
+.project-scroll-btn:disabled{
+
+    opacity:.35;
+
+    cursor:not-allowed;
+
+    pointer-events:none;
+
+    transform:translateY(-50%);
+
+}
+
+.project-scroll{
+
+    scrollbar-width:none;
+
+    -ms-overflow-style:none;
+
+}
+
+.project-scroll::-webkit-scrollbar{
+
+    display:none;
+
+}

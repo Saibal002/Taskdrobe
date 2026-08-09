@@ -1,0 +1,131 @@
+<div class="welcome-card dashboard-card mb-4">
+
+    <div class="card-body p-4">
+
+        <div class="row align-items-center">
+
+            <!-- Left -->
+            <div class="col-lg-8">
+
+                <span class="welcome-badge">
+
+                    👋 Welcome Back
+
+                </span>
+
+                <h2 class="mt-3 mb-2 fw-bold">
+
+                    Good
+                    <%= new Date().getHours() < 12 ? "Morning" :
+                        new Date().getHours() < 18 ? "Afternoon" :
+                        "Evening" %>,
+
+                    <span class="text-white">
+
+                        <%= user.full_name %>
+
+                    </span>
+
+                </h2>
+
+                <p class="welcome-text">
+
+                    Stay focused and keep your projects moving forward.
+
+                </p>
+
+                <div class="welcome-summary mt-4">
+
+                    <div class="welcome-pill">
+
+                        <i class="bi bi-folder2-open"></i>
+
+                        <span>
+
+                            <strong><%= stats.totalProjects %></strong>
+
+                            Projects
+
+                        </span>
+
+                    </div>
+
+                    <div class="welcome-pill">
+
+                        <i class="bi bi-list-check"></i>
+
+                        <span>
+
+                            <strong><%= stats.totalTasks %></strong>
+
+                            Tasks
+
+                        </span>
+
+                    </div>
+
+                    <div class="welcome-pill">
+
+                        <i class="bi bi-hourglass-split"></i>
+
+                        <span>
+
+                            <strong><%= stats.pendingTasks %></strong>
+
+                            Pending
+
+                        </span>
+
+                    </div>
+
+                    <div class="welcome-pill">
+
+                        <i class="bi bi-exclamation-circle"></i>
+
+                        <span>
+
+                            <strong><%= stats.overdueTasks %></strong>
+
+                            Overdue
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right -->
+
+            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+
+                <div class="today-card">
+
+                    <small>
+
+                        TODAY
+
+                    </small>
+
+                    <h4 class="mb-1">
+
+                        <%= today %>
+
+                    </h4>
+
+                    <span class="small text-muted">
+
+                        Keep building 🚀
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

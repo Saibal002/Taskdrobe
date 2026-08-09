@@ -160,6 +160,38 @@ const getProjectTaskStats = async (projectId) => {
     };
 
 };
+/**
+ * Get upcoming tasks for dashboard calendar
+ */
+const getUpcomingTasks = async (limit = 10) => {
+
+    const sql = `
+        SELECT
+            t.task_id,
+            t.title,
+            t.description,
+            t.priority,
+            t.status,
+            t.due_date,
+            p.project_name
+        FROM tasks t
+
+        LEFT JOIN projects p
+            ON t.project_id = p.project_id
+
+        WHERE t.due_date IS NOT NULL
+          AND t.due_date >= CURRENT_DATE
+
+        ORDER BY
+            t.due_date ASC
+
+        LIMIT $1;
+    `;
+
+    const result = await query(sql, [limit]);
+
+    return result.rows;
+};
 module.exports = {
   createTask,
   getTasksByProject,
@@ -168,4 +200,5 @@ module.exports = {
   deleteTask,
   toggleTaskStatus,
   getProjectTaskStats,
+  getUpcomingTasks,
 };
