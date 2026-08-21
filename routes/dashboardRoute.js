@@ -32,22 +32,7 @@ router.get(
 
 //     }
 // );
-router.get(
-    "/admin/dashboard",
-    authMiddleware,
-    requireRole("admin"),
-    dashboardController.adminDashboard
-);
-router.get(
 
-    "/manager/dashboard",
 
-    authMiddleware,
-
-    requireRole("manager"),
-
-    dashboardController.managerDashboard
-
-);
 
 module.exports = router;

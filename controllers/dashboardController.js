@@ -33,15 +33,23 @@ const dashboard = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
+/**
+ * Admin Dashboard
+ */
 const adminDashboard = async (req, res, next) => {
 
     try {
+
+        const user = req.user;
 
         res.render("admin/dashboard", {
 
             title: "Admin Dashboard",
 
-            user: req.user,
+            user,
 
         });
 
@@ -52,18 +60,24 @@ const adminDashboard = async (req, res, next) => {
     }
 
 };
+
+
+
 /**
  * Manager Dashboard
  */
+
 const managerDashboard = async (req, res, next) => {
 
     try {
+
+        const user = req.user;
 
         res.render("manager/dashboard", {
 
             title: "Manager Dashboard",
 
-            user: req.user,
+            user,
 
         });
 

@@ -11,6 +11,8 @@ const errorHandler = require("./middleware/errorHandler");
 const homeRoute = require('./routes/homeRoute');
 const authRoute = require("./routes/authRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
+const adminRoute = require("./routes/adminRoutes");
+const managerRoute = require("./routes/managerRoutes");
 const projectRoute = require("./routes/projectRoute");
 const taskRoute = require("./routes/taskRoute");
 const searchRoute = require("./routes/searchRoute");
@@ -86,9 +88,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ======================
 // Routes
 // ======================
-app.use('/', homeRoute);
-app.use('/auth', authRoute);
-app.use('/',dashboardRoute);
+app.use('/', homeRoute); //landing page route
+app.use('/auth', authRoute);  //authentication routes
+//RBAC routes
+app.use('/',dashboardRoute); //Employee
+app.use('/admin', adminRoute); //Admin
+app.use('/manager', managerRoute); //Manager
+
 app.use('/projects', projectRoute);
 app.use('/tasks', taskRoute);
 app.use("/search", searchRoute);
