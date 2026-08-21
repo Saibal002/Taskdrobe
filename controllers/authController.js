@@ -39,32 +39,70 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  try {
-    const result = await authService.loginUser(req.body);
 
-    const rememberMe = req.body.rememberMe === "on";
+    try {
 
-    res.cookie("token", result.token, {
-      httpOnly: true,
+        const result =
+            await authService.loginUser(req.body);
 
-      sameSite: "lax",
+        const rememberMe =
+            req.body.rememberMe === "on";
 
-      secure: false,
+        res.cookie("token", result.token, {
 
-      maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : undefined,
-    });
-    req.session.success = "Welcome back!";
+            httpOnly: true,
 
-    return res.redirect("/dashboard");
-  } catch (err) {
-    if ([400, 401, 403].includes(err.statusCode)) {
-      req.session.error = err.message;
+            sameSite: "lax",
 
-      return res.redirect("/login");
+            secure: false,
+
+            maxAge:
+                rememberMe
+                    ? 30 * 24 * 60 * 60 * 1000
+                    : undefined,
+
+        });
+
+
+        req.session.success = "Welcome back!";
+
+
+        switch (result.user.role_name) {
+
+            case "admin":
+                return res.redirect("/admin/dashboard");
+
+            case "manager":
+                return res.redirect("/manager/dashboard");
+
+            case "employee":
+                return res.redirect("/dashboard");
+
+            default:
+
+                req.session.error =
+                    "Invalid user role.";
+
+                return res.redirect("/login");
+
+        }
+
+
+    } catch (err) {
+
+        if ([400, 401, 403].includes(err.statusCode)) {
+
+            req.session.error =
+                err.message;
+
+            return res.redirect("/login");
+
+        }
+
+        next(err);
+
     }
 
-    next(err);
-  }
 };
 
 /**

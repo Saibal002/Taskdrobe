@@ -33,7 +33,50 @@ const dashboard = async (req, res, next) => {
     next(err);
   }
 };
+const adminDashboard = async (req, res, next) => {
+
+    try {
+
+        res.render("admin/dashboard", {
+
+            title: "Admin Dashboard",
+
+            user: req.user,
+
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
+};
+/**
+ * Manager Dashboard
+ */
+const managerDashboard = async (req, res, next) => {
+
+    try {
+
+        res.render("manager/dashboard", {
+
+            title: "Manager Dashboard",
+
+            user: req.user,
+
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
+};
 
 module.exports = {
   dashboard,
+  adminDashboard,
+  managerDashboard,
 };
