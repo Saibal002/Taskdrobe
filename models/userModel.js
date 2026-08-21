@@ -79,19 +79,27 @@ WHERE u.email = $1;
 };
 
 /**
- * Find user by ID
+ * Find User By ID
  */
 const findUserById = async (userId) => {
-  const params = [userId];
-  const sql = `
-        SELECT *
-        FROM users
-        WHERE user_id = $1;
+
+    const sql = `
+        SELECT
+            u.*,
+            r.role_name,
+            r.description AS role_description
+
+        FROM users u
+
+        INNER JOIN roles r
+            ON u.role_id = r.role_id
+
+        WHERE u.user_id = $1;
     `;
 
-  const { rows } = await query(sql, params);
+    const { rows } = await query(sql, [userId]);
 
-  return rows[0];
+    return rows[0];
 };
 
 /**
