@@ -105,6 +105,14 @@ const updateProjectProgress = async (projectId) => {
 
 };
 
+/**
+ * Get Manager Project Statistics
+ */
+const getManagerProjectStats = async (managerId) => {
+
+    return await projectModel.getManagerProjectStats(managerId);
+
+};
 
 module.exports = {
     createProject,
@@ -113,4 +121,5 @@ module.exports = {
     deleteProject,
     getProjectById,
     updateProjectProgress,
+    getManagerProjectStats,
 };

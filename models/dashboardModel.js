@@ -97,8 +97,41 @@ const getProjectChartData = async () => {
 
 };
 
+/**
+ * Get Admin User Statistics
+ */
+const getAdminUserStats = async () => {
+
+    const sql = `
+        SELECT
+            COUNT(*) AS total_users,
+
+            COUNT(
+                CASE
+                    WHEN is_active = TRUE
+                    THEN 1
+                END
+            ) AS active_users,
+
+            COUNT(
+                CASE
+                    WHEN is_active = FALSE
+                    THEN 1
+                END
+            ) AS inactive_users
+
+        FROM users;
+    `;
+
+    const { rows } = await query(sql);
+
+    return rows[0];
+};
+
 module.exports = {
     getDashboardStats,
     getTaskChartData,
-    getProjectChartData
+    getProjectChartData,
+    getAdminUserStats,
+
 };

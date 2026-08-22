@@ -3,7 +3,7 @@ const dashboardService = require("../services/dashboardService");
 const taskModel = require("../models/taskModel");
 
 /**
- * Dashboard
+ * Employee Dashboard
  */
 const dashboard = async (req, res, next) => {
   try {
@@ -43,13 +43,29 @@ const adminDashboard = async (req, res, next) => {
 
     try {
 
-        const user = req.user;
+        const userStats =
+            await dashboardService.getAdminUserStats();
+
+        const stats =
+            await dashboardService.getDashboardStats();
+
+        const chartData =
+            await dashboardService.getTaskChartData();
+        const projectChartData =
+            await dashboardService.getProjectChartData();
+                     
 
         res.render("admin/dashboard", {
 
             title: "Admin Dashboard",
 
-            user,
+            user: req.user,
+
+            userStats,
+
+            stats,
+            chartData,
+            projectChartData,
 
         });
 
@@ -67,17 +83,25 @@ const adminDashboard = async (req, res, next) => {
  * Manager Dashboard
  */
 
+/**
+ * Manager Dashboard
+ */
 const managerDashboard = async (req, res, next) => {
 
     try {
 
-        const user = req.user;
+        const projectStats =
+            await dashboardService.getManagerProjectStats(
+                req.user.user_id
+            );
 
         res.render("manager/dashboard", {
 
             title: "Manager Dashboard",
 
-            user,
+            user: req.user,
+
+            projectStats,
 
         });
 

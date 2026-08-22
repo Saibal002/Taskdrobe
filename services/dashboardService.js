@@ -1,5 +1,7 @@
 const dashboardModel = require("../models/dashboardModel");
 const taskModel = require("../models/taskModel");
+const projectModel =
+    require("../models/projectModel");
 
 /**
  * Get Dashboard Statistics
@@ -82,9 +84,31 @@ const getUpcomingTasks = async (limit = 10) => {
     return await taskModel.getUpcomingTasks(limit);
 
 };
+/**
+ * Get Admin User Statistics
+ */
+const getAdminUserStats = async () => {
+
+    const stats =
+        await dashboardModel.getAdminUserStats();
+
+    return {
+        totalUsers: Number(stats.total_users),
+        activeUsers: Number(stats.active_users),
+        inactiveUsers: Number(stats.inactive_users),
+    };
+
+};
+const getManagerProjectStats = async (managerId) => {
+
+    return await projectModel.getManagerProjectStats(managerId);
+
+};
 module.exports = {
     getDashboardStats,
     getTaskChartData,
     getProjectChartData,
     getUpcomingTasks,
+    getAdminUserStats,
+    getManagerProjectStats,
 };

@@ -197,6 +197,50 @@ const searchProjects = async (searchTerm) => {
 
     return rows;
 };
+/**
+ * Get Manager Project Statistics
+ */
+const getManagerProjectStats = async (managerId) => {
+
+    const sql = `
+        SELECT
+
+            COUNT(*) AS total_projects,
+
+            COUNT(
+                CASE
+                    WHEN status = 'In Progress'
+                    THEN 1
+                END
+            ) AS active_projects,
+
+            COUNT(
+                CASE
+                    WHEN status = 'Completed'
+                    THEN 1
+                END
+            ) AS completed_projects,
+
+            COALESCE(
+                ROUND(AVG(progress), 0),
+                0
+            ) AS average_progress
+
+        FROM projects
+
+        WHERE created_by = $1;
+    `;
+
+    const { rows } = await query(sql, [managerId]);
+
+    return {
+        totalProjects: Number(rows[0].total_projects),
+        activeProjects: Number(rows[0].active_projects),
+        completedProjects: Number(rows[0].completed_projects),
+        averageProgress: Number(rows[0].average_progress),
+    };
+
+};
 
 module.exports = {
     createProject,
@@ -206,4 +250,5 @@ module.exports = {
     getProjectById,
     updateProjectProgress,
     searchProjects,
+    getManagerProjectStats,
 };

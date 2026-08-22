@@ -6,14 +6,24 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- bootstrap icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
 
     <title>
         <%= title %>
     </title>
+    
 
 </head>
 
@@ -30,7 +40,321 @@
     <p>
         Role: <%= user.role_name %>
     </p>
+    <div class="container mt-4">
+
+        <h3 class="mb-4">
+            User Statistics
+        </h3>
+
+        <div class="row g-4">
+
+            <!-- Total Users -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Total Users
+                        </h6>
+
+                        <h2 class="fw-bold">
+                            <%= userStats.totalUsers %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Active Users -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Active Users
+                        </h6>
+
+                        <h2 class="fw-bold">
+                            <%= userStats.activeUsers %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Inactive Users -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Inactive Users
+                        </h6>
+
+                        <h2 class="fw-bold">
+                            <%= userStats.inactiveUsers %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- System Statistics -->
+    <div class="container mt-5">
+
+        <h3 class="mb-4">
+            System Statistics
+        </h3>
+
+        <div class="row g-4">
+
+            <!-- Total Projects -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Total Projects
+                        </h6>
+
+                        <h2 class="fw-bold">
+                            <%= stats.totalProjects %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Active Projects -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Active Projects
+                        </h6>
+
+                        <h2 class="fw-bold text-primary">
+                            <%= stats.activeProjects %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Completed Projects -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Completed Projects
+                        </h6>
+
+                        <h2 class="fw-bold text-success">
+                            <%= stats.completedProjects %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Total Tasks -->
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Total Tasks
+                        </h6>
+
+                        <h2 class="fw-bold">
+                            <%= stats.totalTasks %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Completed Tasks -->
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Completed Tasks
+                        </h6>
+
+                        <h2 class="fw-bold text-success">
+                            <%= stats.completedTasks %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Pending Tasks -->
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Pending Tasks
+                        </h6>
+
+                        <h2 class="fw-bold text-warning">
+                            <%= stats.pendingTasks %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Overdue Tasks -->
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Overdue Tasks
+                        </h6>
+
+                        <h2 class="fw-bold text-danger">
+                            <%= stats.overdueTasks %>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Overall Completion -->
+        <div class="mt-4">
+
+            <h6 class="fw-bold">
+                Overall Task Completion
+            </h6>
+
+            <div class="progress" style="height: 12px;">
+
+                <div class="progress-bar bg-success" role="progressbar" style="width: <%= stats.completionRate %>%">
+                </div>
+
+            </div>
+
+            <small class="text-muted">
+                <%= stats.completionRate %>% completed
+            </small>
+
+        </div>
+
+    </div>
+
+  <!-- Admin Charts -->
+<div class="container mt-5 mb-5">
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+
+        <div>
+            <h3 class="fw-bold mb-1">
+                Analytics
+            </h3>
+
+            <p class="text-muted mb-0">
+                Overview of task and project status
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Charts -->
+    <div class="row g-4">
+
+        <div class="col-12">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <%- include("../layout/charts") %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
+
 
 </html>
