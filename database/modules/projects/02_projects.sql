@@ -29,5 +29,6 @@ CREATE TABLE IF NOT EXISTS projects
     CONSTRAINT fk_project_creator
         FOREIGN KEY (created_by)
         REFERENCES users(user_id)
+        ON UPDATE CASCADE
         ON DELETE RESTRICT
 );

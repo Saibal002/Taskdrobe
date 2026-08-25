@@ -25,19 +25,11 @@
 
             <div class="d-flex gap-2">
 
-                <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+              
 
-                    <i class="bi bi-plus-lg me-2"></i>
-
-                    New Project
-
-                </button>
-
-                <a href="/projects" class="btn btn-outline-secondary rounded-pill ">
-
-                    View All
-
-                </a>
+                        <a href="/projects" class="btn btn-outline-secondary rounded-pill">
+                            View All
+                        </a>
 
             </div>
 
@@ -74,82 +66,62 @@
 
                                     <!-- Action Buttons -->
 
-                                    <div class="project-actions">
+                                    
 
-                                        <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="modal"
-                                            data-bs-target="#editProjectModal-<%= project.project_id %>">
+                                            <div class="card-body">
 
-                                            <i class="bi bi-pencil"></i>
+                                                <!-- Title -->
 
-                                        </button>
+                                                <div class="mb-3">
 
-                                        <form action="/projects/<%= project.project_id %>/delete" method="POST"
-                                            class="d-inline" onsubmit="return confirm('Delete this project?')">
+                                                    <h5 class="fw-bold mb-2 text-white">
 
-                                            <button class="btn btn-light btn-sm rounded-circle text-danger">
+                                                        <%= project.project_name %>
 
-                                                <i class="bi bi-trash"></i>
+                                                    </h5>
 
-                                            </button>
+                                                    <p class="small text-white-50 mb-0">
 
-                                        </form>
+                                                        <%= project.description || "No description available." %>
 
-                                    </div>
+                                                    </p>
 
-                                    <div class="card-body">
+                                                </div>
 
-                                        <!-- Title -->
+                                                <!-- Progress -->
 
-                                        <div class="mb-3">
+                                                <div class="mb-2 d-flex justify-content-between text-white-50">
 
-                                            <h5 class="fw-bold mb-2 text-white">
+                                                    <small>Progress</small>
 
-                                                <%= project.project_name %>
+                                                    <small>
 
-                                            </h5>
+                                                        <%= project.progress %>%
 
-                                            <p class="small text-white-50 mb-0">
+                                                    </small>
 
-                                                <%= project.description || "No description available." %>
+                                                </div>
 
-                                            </p>
+                                                <div class="progress project-progress mb-4">
 
-                                        </div>
-
-                                        <!-- Progress -->
-
-                                        <div class="mb-2 d-flex justify-content-between text-white-50">
-
-                                            <small>Progress</small>
-
-                                            <small>
-
-                                                <%= project.progress %>%
-
-                                            </small>
-
-                                        </div>
-
-                                        <div class="progress project-progress mb-4">
-
-                                            <div class="progress-bar
+                                                    <div class="progress-bar
                                         <%= project.progress < 30
                                             ? 'bg-danger'
                                             : project.progress < 70
                                             ? 'bg-warning'
                                             : 'bg-success' %>" style="width:<%= project.progress %>%">
 
-                                            </div>
+                                                    </div>
 
-                                        </div>
+                                                </div>
 
-                                        <!-- Footer -->
+                                                <!-- Footer -->
 
-                                        <div class="project-footer">
+                                                <div class="project-footer">
 
-                                            <div class="d-flex justify-content-between mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
 
-                                                <span class="badge rounded-pill
+                                                        <span class="badge rounded-pill
                                             <%= project.status === 'Completed'
                                                 ? 'bg-success'
                                                 : project.status === 'In Progress'
@@ -160,38 +132,39 @@
                                                 ? 'bg-dark'
                                                 : 'bg-light text-dark' %>">
 
-                                                    <%= project.status %>
+                                                            <%= project.status %>
 
-                                                </span>
+                                                        </span>
 
-                                                <small class="text-white-50">
+                                                        <small class="text-white-50">
 
-                                                    <i class="bi bi-calendar-event"></i>
+                                                            <i class="bi bi-calendar-event"></i>
 
-                                                    <%= project.deadline ? new
-                                                        Date(project.deadline).toLocaleDateString() : "No Deadline" %>
+                                                            <%= project.deadline ? new
+                                                                Date(project.deadline).toLocaleDateString()
+                                                                : "No Deadline" %>
 
-                                                </small>
+                                                        </small>
+
+                                                    </div>
+
+                                                    <small class="text-white-50">
+
+                                                        <i class="bi bi-person-circle"></i>
+
+                                                        <%= project.full_name %>
+
+                                                    </small>
+
+                                                </div>
 
                                             </div>
-
-                                            <small class="text-white-50">
-
-                                                <i class="bi bi-person-circle"></i>
-
-                                                <%= project.full_name %>
-
-                                            </small>
-
-                                        </div>
-
-                                    </div>
 
                                 </div>
 
                             </a>
 
-                            <%- include("./editProjectModal",{project}) %>
+                            
 
                                 <% }) %>
 

@@ -14,6 +14,8 @@ const dashboardRoute = require("./routes/dashboardRoute");
 const adminRoute = require("./routes/adminRoutes");
 const managerRoute = require("./routes/managerRoutes");
 const projectRoute = require("./routes/projectRoute");
+const projectMemberRoutes =
+    require("./routes/projectMemberRoutes");
 const taskRoute = require("./routes/taskRoute");
 const searchRoute = require("./routes/searchRoute");
 
@@ -96,6 +98,7 @@ app.use('/admin', adminRoute); //Admin
 app.use('/manager', managerRoute); //Manager
 
 app.use('/projects', projectRoute);
+app.use("/", projectMemberRoutes);
 app.use('/tasks', taskRoute);
 app.use("/search", searchRoute);
 

@@ -113,6 +113,14 @@ const getManagerProjectStats = async (managerId) => {
     return await projectModel.getManagerProjectStats(managerId);
 
 };
+/**
+ * Get Projects Assigned To Employee
+ */
+const getProjectsByMember = async (userId) => {
+
+    return await projectModel.getProjectsByMember(userId);
+
+};
 
 module.exports = {
     createProject,
@@ -122,4 +130,5 @@ module.exports = {
     getProjectById,
     updateProjectProgress,
     getManagerProjectStats,
+    getProjectsByMember
 };

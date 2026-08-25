@@ -7,7 +7,13 @@ const taskModel = require("../models/taskModel");
  */
 const dashboard = async (req, res, next) => {
   try {
-    const projects = await projectService.getAllProjects();
+    let projects;
+
+    if (req.user.role_name === "employee") {
+      projects = await projectService.getProjectsByMember(req.user.user_id);
+    } else {
+      projects = await projectService.getAllProjects();
+    }
 
     const stats = await dashboardService.getDashboardStats();
     const chartData = await dashboardService.getTaskChartData();
@@ -34,50 +40,33 @@ const dashboard = async (req, res, next) => {
   }
 };
 
-
-
 /**
  * Admin Dashboard
  */
 const adminDashboard = async (req, res, next) => {
+  try {
+    const userStats = await dashboardService.getAdminUserStats();
 
-    try {
+    const stats = await dashboardService.getDashboardStats();
 
-        const userStats =
-            await dashboardService.getAdminUserStats();
+    const chartData = await dashboardService.getTaskChartData();
+    const projectChartData = await dashboardService.getProjectChartData();
 
-        const stats =
-            await dashboardService.getDashboardStats();
+    res.render("admin/dashboard", {
+      title: "Admin Dashboard",
 
-        const chartData =
-            await dashboardService.getTaskChartData();
-        const projectChartData =
-            await dashboardService.getProjectChartData();
-                     
+      user: req.user,
 
-        res.render("admin/dashboard", {
+      userStats,
 
-            title: "Admin Dashboard",
-
-            user: req.user,
-
-            userStats,
-
-            stats,
-            chartData,
-            projectChartData,
-
-        });
-
-    } catch (err) {
-
-        next(err);
-
-    }
-
+      stats,
+      chartData,
+      projectChartData,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
-
-
 
 /**
  * Manager Dashboard
@@ -87,30 +76,21 @@ const adminDashboard = async (req, res, next) => {
  * Manager Dashboard
  */
 const managerDashboard = async (req, res, next) => {
+  try {
+    const projectStats = await dashboardService.getManagerProjectStats(
+      req.user.user_id,
+    );
 
-    try {
+    res.render("manager/dashboard", {
+      title: "Manager Dashboard",
 
-        const projectStats =
-            await dashboardService.getManagerProjectStats(
-                req.user.user_id
-            );
+      user: req.user,
 
-        res.render("manager/dashboard", {
-
-            title: "Manager Dashboard",
-
-            user: req.user,
-
-            projectStats,
-
-        });
-
-    } catch (err) {
-
-        next(err);
-
-    }
-
+      projectStats,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {

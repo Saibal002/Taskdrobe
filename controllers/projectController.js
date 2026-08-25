@@ -1,5 +1,7 @@
 const projectService = require("../services/projectService");
+const projectMemberService = require("../services/projectMemberService");
 const taskService = require("../services/taskService");
+const AppError = require("../utils/AppError");
 
 /**
  * Create Project
@@ -60,26 +62,41 @@ const deleteProject = async (req, res, next) => {
     }
 
 };
+
 const viewProject = async (req, res, next) => {
 
     try {
 
-        const project = await projectService.getProjectById(req.params.id);
+        const projectId = req.params.id;
 
-        const tasks = await taskService.getTasksByProject(
-            req.params.id
-        );
+        const project =
+            await projectService.getProjectById(projectId);
+
+        if (req.user.role_name === "employee") {
+
+            const isMember =
+                await projectMemberService.isMember(
+                    projectId,
+                    req.user.user_id
+                );
+
+           if (!isMember) {
+                throw new AppError(
+                    "You do not have access to this project.",
+                    403
+                );
+
+            }
+        }
+
+        const tasks =
+            await taskService.getTasksByProject(projectId);
 
         return res.render("project", {
-
             title: project.project_name,
-
             project,
-
             tasks,
-
             user: req.user,
-
         });
 
     } catch (err) {
@@ -87,9 +104,40 @@ const viewProject = async (req, res, next) => {
         next(err);
 
     }
-
 };
 
+/**
+ * Get Projects For Current User
+ */
+const getProjects = async (req, res, next) => {
+    try {
+
+        let projects;
+
+        if (req.user.role_name === "employee") {
+
+            projects =
+                await projectService.getProjectsByMember(
+                    req.user.user_id
+                );
+
+        } else {
+
+            projects =
+                await projectService.getAllProjects();
+
+        }
+
+        return res.render("dashboard", {
+            title: "Dashboard",
+            projects,
+            user: req.user,
+        });
+
+    } catch (err) {
+        next(err);
+    }
+};
 
 
 
@@ -98,4 +146,5 @@ module.exports = {
     updateProject,
     deleteProject,
     viewProject,
+    getProjects,
 };

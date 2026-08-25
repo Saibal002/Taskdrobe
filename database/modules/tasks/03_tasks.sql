@@ -33,10 +33,13 @@ CREATE TABLE IF NOT EXISTS tasks
 
     CONSTRAINT fk_task_creator
         FOREIGN KEY (created_by)
-        REFERENCES users(user_id),
+        REFERENCES users(user_id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
 
     CONSTRAINT fk_task_assignee
         FOREIGN KEY (assigned_to)
         REFERENCES users(user_id)
+        ON UPDATE CASCADE
         ON DELETE SET NULL
 );
