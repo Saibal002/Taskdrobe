@@ -44,31 +44,53 @@ const getAllProjects = async () => {
 /**
  * Update Project
  */
-const updateProject = async (projectId, projectData) => {
+const updateProject = async (
+    projectId,
+    managerId,
+    projectData
+) => {
 
     const project = await projectModel.updateProject(
         projectId,
+        managerId,
         projectData
     );
 
     if (!project) {
-        throw new AppError("Project not found.", 404);
+        throw new AppError(
+            "Project not found or you do not have permission to modify it.",
+            404
+        );
     }
 
     return project;
-
 };
-const deleteProject = async (projectId) => {
 
-    const project = await projectModel.deleteProject(projectId);
+
+/**
+ * Delete Project
+ */
+const deleteProject = async (
+    projectId,
+    managerId
+) => {
+
+    const project = await projectModel.deleteProject(
+        projectId,
+        managerId
+    );
 
     if (!project) {
-        throw new AppError("Project not found.", 404);
+        throw new AppError(
+            "Project not found or you do not have permission to delete it.",
+            404
+        );
     }
 
     return project;
-
 };
+
+
 const getProjectById = async (projectId) => {
 
     const project = await projectModel.getProjectById(projectId);

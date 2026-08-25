@@ -73,6 +73,7 @@ const getAllProjects = async () => {
  */
 const updateProject = async (
     projectId,
+    managerId,
     {
         projectName,
         description,
@@ -83,7 +84,7 @@ const updateProject = async (
 ) => {
 
     const sql = `
-        UPDATE projects
+       UPDATE projects
         SET
             project_name = $1,
             description = $2,
@@ -92,6 +93,7 @@ const updateProject = async (
             deadline = $5,
             updated_at = CURRENT_TIMESTAMP
         WHERE project_id = $6
+          AND created_by = $7
         RETURNING *;
     `;
 
@@ -102,6 +104,7 @@ const updateProject = async (
         progress,
         deadline,
         projectId,
+        managerId,
     ];
 
     const { rows } = await query(sql, values);
@@ -110,18 +113,24 @@ const updateProject = async (
     
 
 };
-const deleteProject = async (projectId) => {
+/**
+ * Delete Project
+ */
+const deleteProject = async (projectId, managerId) => {
 
     const sql = `
         DELETE FROM projects
         WHERE project_id = $1
+          AND created_by = $2
         RETURNING *;
     `;
 
-    const { rows } = await query(sql, [projectId]);
+    const { rows } = await query(sql, [
+        projectId,
+        managerId,
+    ]);
 
     return rows[0];
-
 };
 /**
  * Get Project By ID
