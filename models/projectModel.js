@@ -268,6 +268,27 @@ const getProjectsByMember = async (userId) => {
     return rows;
 };
 
+/**
+ * Get Projects Created By Manager
+ */
+const getProjectsByManager = async (managerId) => {
+
+    const sql = `
+        SELECT
+            p.*,
+            u.full_name
+        FROM projects p
+        INNER JOIN users u
+            ON p.created_by = u.user_id
+        WHERE p.created_by = $1
+        ORDER BY p.created_at DESC;
+    `;
+
+    const { rows } = await query(sql, [managerId]);
+
+    return rows;
+};
+
 module.exports = {
     createProject,
     getAllProjects,
@@ -277,5 +298,6 @@ module.exports = {
     updateProjectProgress,
     searchProjects,
     getManagerProjectStats,
-    getProjectsByMember
+    getProjectsByMember,
+    getProjectsByManager,
 };

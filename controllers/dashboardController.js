@@ -40,6 +40,8 @@ const dashboard = async (req, res, next) => {
   }
 };
 
+
+
 /**
  * Admin Dashboard
  */
@@ -68,25 +70,29 @@ const adminDashboard = async (req, res, next) => {
   }
 };
 
-/**
- * Manager Dashboard
- */
+
+
 
 /**
  * Manager Dashboard
  */
 const managerDashboard = async (req, res, next) => {
   try {
+    const managerId = req.user.user_id;
     const projectStats = await dashboardService.getManagerProjectStats(
-      req.user.user_id,
+      managerId,
     );
-
+     const projects =
+            await projectService.getProjectsByManager(
+                managerId
+            );
     res.render("manager/dashboard", {
       title: "Manager Dashboard",
 
       user: req.user,
 
       projectStats,
+      projects, //that the manager has created
     });
   } catch (err) {
     next(err);
