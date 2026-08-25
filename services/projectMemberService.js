@@ -4,25 +4,49 @@ const projectModel = require("../models/projectModel");
 const AppError = require("../utils/AppError");
 
 /**
- * Add Employee To Project
+ * Verify Manager Owns Project
  */
-const addMember = async (projectId, userId) => {
+const verifyProjectOwner = async (projectId, managerId) => {
 
-    // Check project exists
-    const project = await projectModel.getProjectById(projectId);
+    const project =
+        await projectModel.getProjectById(projectId);
 
     if (!project) {
         throw new AppError("Project not found.", 404);
     }
 
-    // Check user exists
-    const user = await userModel.findUserById(userId);
+    if (String(project.created_by) !== String(managerId)) {
+        throw new AppError(
+            "You do not have permission to manage this project.",
+            403
+        );
+    }
+
+    return project;
+};
+
+
+/**
+ * Add Employee To Project
+ */
+const addMember = async (
+    projectId,
+    userId,
+    managerId
+) => {
+
+    await verifyProjectOwner(
+        projectId,
+        managerId
+    );
+
+    const user =
+        await userModel.findUserById(userId);
 
     if (!user) {
         throw new AppError("User not found.", 404);
     }
 
-    // Only employees can be assigned as project members
     if (user.role_name !== "employee") {
         throw new AppError(
             "Only employees can be assigned to projects.",
@@ -30,7 +54,6 @@ const addMember = async (projectId, userId) => {
         );
     }
 
-    // Don't allow inactive employees
     if (!user.is_active) {
         throw new AppError(
             "Cannot assign an inactive user to a project.",
@@ -38,7 +61,6 @@ const addMember = async (projectId, userId) => {
         );
     }
 
-    // Check existing membership
     const alreadyMember =
         await projectMemberModel.isProjectMember(
             projectId,
@@ -62,7 +84,16 @@ const addMember = async (projectId, userId) => {
 /**
  * Remove Employee From Project
  */
-const removeMember = async (projectId, userId) => {
+const removeMember = async (
+    projectId,
+    userId,
+    managerId
+) => {
+
+    await verifyProjectOwner(
+        projectId,
+        managerId
+    );
 
     const membership =
         await projectMemberModel.removeProjectMember(
@@ -84,17 +115,15 @@ const removeMember = async (projectId, userId) => {
 /**
  * Get Project Members
  */
-const getMembers = async (projectId) => {
+const getMembers = async (
+    projectId,
+    managerId
+) => {
 
-    const project =
-        await projectModel.getProjectById(projectId);
-
-    if (!project) {
-        throw new AppError(
-            "Project not found.",
-            404
-        );
-    }
+    await verifyProjectOwner(
+        projectId,
+        managerId
+    );
 
     return await projectMemberModel.getProjectMembers(
         projectId
@@ -105,7 +134,10 @@ const getMembers = async (projectId) => {
 /**
  * Check Project Membership
  */
-const isMember = async (projectId, userId) => {
+const isMember = async (
+    projectId,
+    userId
+) => {
 
     return await projectMemberModel.isProjectMember(
         projectId,

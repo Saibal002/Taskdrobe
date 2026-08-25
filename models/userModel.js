@@ -116,9 +116,36 @@ const updateLastLogin = async (userId) => {
   await query(sql, params);
 };
 
+/**
+ * Get All Active Employees
+ */
+const getAllEmployees = async () => {
+
+    const sql = `
+        SELECT
+            u.user_id,
+            u.full_name,
+            u.email,
+            u.phone,
+            u.profile_image,
+            u.is_active
+        FROM users u
+        INNER JOIN roles r
+            ON u.role_id = r.role_id
+        WHERE r.role_name = 'employee'
+          AND u.is_active = TRUE
+        ORDER BY u.full_name;
+    `;
+
+    const { rows } = await query(sql);
+
+    return rows;
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
   findUserById,
   updateLastLogin,
+  getAllEmployees,
 };
