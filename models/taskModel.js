@@ -226,11 +226,37 @@ const searchTasks = async (searchTerm) => {
 
     return rows;
 };
+/**
+ * Update Task Assignment
+ * Manager only
+ */
+const updateTaskAssignment = async (
+    taskId,
+    assignedTo
+) => {
+
+    const sql = `
+        UPDATE tasks
+        SET
+            assigned_to = $1,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE task_id = $2
+        RETURNING *;
+    `;
+
+    const { rows } = await query(sql, [
+        assignedTo,
+        taskId,
+    ]);
+
+    return rows[0];
+};
 module.exports = {
   createTask,
   getTasksByProject,
   getTaskById,
   updateTask,
+  updateTaskAssignment,
   deleteTask,
   toggleTaskStatus,
   getProjectTaskStats,

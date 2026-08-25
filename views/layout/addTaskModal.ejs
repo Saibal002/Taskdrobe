@@ -28,6 +28,7 @@
 
             </div>
 
+
             <form
                 action="/tasks"
                 method="POST">
@@ -39,6 +40,7 @@
                         type="hidden"
                         name="projectId"
                         value="<%= project.project_id %>">
+
 
                     <!-- Task Title -->
                     <div class="mb-3">
@@ -56,6 +58,7 @@
 
                     </div>
 
+
                     <!-- Description -->
                     <div class="mb-3">
 
@@ -71,6 +74,7 @@
 
                     </div>
 
+
                     <!-- Priority -->
                     <div class="mb-3">
 
@@ -82,7 +86,9 @@
                             class="form-select"
                             name="priority">
 
-                            <option value="Low">Low</option>
+                            <option value="Low">
+                                Low
+                            </option>
 
                             <option value="Medium" selected>
                                 Medium
@@ -99,6 +105,7 @@
                         </select>
 
                     </div>
+
 
                     <!-- Status -->
                     <div class="mb-3">
@@ -135,6 +142,7 @@
 
                     </div>
 
+
                     <!-- Due Date -->
                     <div class="mb-3">
 
@@ -149,7 +157,57 @@
 
                     </div>
 
+
+                    <!-- Assign Employee -->
+                    <% if (user.role_name === "manager") { %>
+
+                        <div class="mb-3">
+
+                            <label
+                                for="assignedTo"
+                                class="form-label">
+
+                                Assign To
+
+                            </label>
+
+                            <select
+                                class="form-select"
+                                id="assignedTo"
+                                name="assignedTo">
+
+                                <option value="">
+                                    Unassigned
+                                </option>
+
+                                <% if (projectMembers && projectMembers.length > 0) { %>
+
+                                    <% projectMembers.forEach(member => { %>
+
+                                        <option
+                                            value="<%= member.user_id %>">
+
+                                            <%= member.full_name %>
+
+                                        </option>
+
+                                    <% }) %>
+
+                                <% } %>
+
+                            </select>
+
+                            <div class="form-text">
+                                Only employees assigned to this project can be selected.
+                            </div>
+
+                        </div>
+
+                    <% } %>
+
+
                 </div>
+
 
                 <div class="modal-footer">
 
@@ -166,6 +224,7 @@
                         type="submit"
                         class="btn btn-primary">
 
+                        <i class="bi bi-plus-lg me-1"></i>
                         Create Task
 
                     </button>
@@ -177,6 +236,5 @@
         </div>
 
     </div>
-    
 
 </div>

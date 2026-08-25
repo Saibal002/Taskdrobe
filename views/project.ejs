@@ -87,104 +87,202 @@
 
                             <% tasks.forEach(task=> { %>
 
-                                <div class="col-md-6">
+                                <% const isManager=user.role_name==="manager" ; const
+                                    isTaskCreator=String(task.created_by)===String(user.user_id); const
+                                    isTaskAssignee=task.assigned_to && String(task.assigned_to)===String(user.user_id);
+                                    const canEdit=isManager || isTaskCreator; const canDelete=isManager ||
+                                    isTaskCreator; const canChangeStatus=isManager || isTaskCreator || isTaskAssignee;
+                                    %>
 
-                                    <div class="card border-0 shadow-sm h-100">
 
-                                        <div class="card-body">
+                                    <div class="col-md-6">
 
-                                            <div class="d-flex justify-content-between">
+                                        <div class="card border-0 shadow-sm h-100">
 
-                                                <div>
+                                            <div class="card-body">
 
-                                                    <h5 class="fw-bold mb-1">
+                                                <!-- ========================= -->
+                                                <!-- Task Header -->
+                                                <!-- ========================= -->
 
-                                                        <%= task.title %>
+                                                <div class="d-flex justify-content-between">
 
-                                                    </h5>
+                                                    <div>
 
-                                                    <p class="text-muted mb-3">
+                                                        <h5 class="fw-bold mb-1">
+                                                            <%= task.title %>
+                                                        </h5>
 
-                                                        <%= task.description || "No description" %>
+                                                        <p class="text-muted mb-3">
+                                                            <%= task.description || "No description" %>
+                                                        </p>
 
-                                                    </p>
+                                                    </div>
+
+
+                                                    <!-- Status Toggle -->
+
+                                                    <% if (canChangeStatus) { %>
+
+                                                        <div>
+
+                                                            <form action="/tasks/<%= task.task_id %>/toggle"
+                                                                method="POST">
+
+                                                                <button type="submit" class="btn btn-sm
+                                    <%= task.status === 'Completed'
+                                        ? 'btn-success'
+                                        : 'btn-outline-success' %>">
+
+                                                                    <%= task.status==="Completed" ? "✔" : "○" %>
+
+                                                                </button>
+
+                                                            </form>
+
+                                                        </div>
+
+                                                        <% } %>
 
                                                 </div>
 
-                                                <div>
 
-                                                    <form action="/tasks/<%= task.task_id %>/toggle" method="POST">
+                                                <!-- ========================= -->
+                                                <!-- Priority + Status -->
+                                                <!-- ========================= -->
 
-                                                        <button class="btn btn-sm
-<%= task.status ===" Completed" ? "btn-success" : "btn-outline-success" %>">
+                                                <div class="mb-3">
 
-                                                            <%= task.status==="Completed" ? "✔" : "○" %>
+                                                    <span class="badge
+                        <%= task.priority === 'Critical'
+                            ? 'bg-danger'
+                            : task.priority === 'High'
+                            ? 'bg-warning text-dark'
+                            : task.priority === 'Medium'
+                            ? 'bg-primary'
+                            : 'bg-secondary' %>">
+
+                                                        <%= task.priority %>
+
+                                                    </span>
+
+
+                                                    <span class="badge bg-dark">
+
+                                                        <%= task.status %>
+
+                                                    </span>
+
+                                                </div>
+
+
+                                                <!-- ========================= -->
+                                                <!-- Due Date -->
+                                                <!-- ========================= -->
+
+                                                <small class="text-muted d-block mb-2">
+
+                                                    <i class="fas fa-calendar me-2"></i>
+
+                                                    <%= task.due_date ? new Date(task.due_date) .toLocaleDateString()
+                                                        : "No Due Date" %>
+
+                                                </small>
+
+
+                                                <!-- ========================= -->
+                                                <!-- Assignment -->
+                                                <!-- ========================= -->
+
+                                                <small class="text-muted d-block mb-3">
+
+                                                    <i class="fas fa-user me-2"></i>
+
+                                                    <% if (task.assigned_user) { %>
+
+                                                        Assigned to:
+                                                        <strong>
+                                                            <%= task.assigned_user %>
+                                                        </strong>
+
+                                                        <% } else { %>
+
+                                                            <span class="text-muted">
+                                                                Unassigned
+                                                            </span>
+
+                                                            <% } %>
+
+                                                </small>
+
+
+                                                <!-- ========================= -->
+                                                <!-- Actions -->
+                                                <!-- ========================= -->
+
+                                                <div class="d-flex justify-content-end gap-2">
+
+
+                                                    <!-- Manager Assignment -->
+
+                                                    <% if (isManager) { %>
+
+                                                        <button type="button" class="btn btn-primary btn-sm"
+                                                            data-bs-toggle="modal" data-bs-target="#assignTaskModal"
+                                                            data-task-id="<%= task.task_id %>"
+                                                            data-assigned-to="<%= task.assigned_to || '' %>">
+
+                                                            <i class="fas fa-user-plus"></i>
 
                                                         </button>
 
-                                                    </form>
+                                                        <% } %>
+
+
+                                                            <!-- Edit -->
+
+                                                            <% if (canEdit) { %>
+
+                                                                <button type="button"
+                                                                    class="btn btn-warning btn-sm editTaskBtn"
+                                                                    data-id="<%= task.task_id %>"
+                                                                    data-title="<%= task.title %>"
+                                                                    data-description="<%= task.description || '' %>"
+                                                                    data-priority="<%= task.priority %>"
+                                                                    data-status="<%= task.status %>" data-due-date="<%= task.due_date
+                                ? new Date(task.due_date)
+                                    .toISOString()
+                                    .split('T')[0]
+                                : '' %>" data-bs-toggle="modal" data-bs-target="#editTaskModal">
+
+                                                                    <i class="fas fa-pencil"></i>
+
+                                                                </button>
+
+                                                                <% } %>
+
+
+                                                                    <!-- Delete -->
+
+                                                                    <% if (canDelete) { %>
+
+                                                                        <form action="/tasks/<%= task.task_id %>/delete"
+                                                                            method="POST"
+                                                                            onsubmit="return confirm('Delete this task?')">
+
+                                                                            <button type="submit"
+                                                                                class="btn btn-danger btn-sm">
+
+                                                                                <i class="fas fa-trash"></i>
+
+                                                                            </button>
+
+                                                                        </form>
+
+                                                                        <% } %>
+
 
                                                 </div>
-
-                                            </div>
-
-                                            <div class="mb-3">
-
-                                                <span class="badge
-<%= task.priority===" Critical" ? "bg-danger" : task.priority ==="High" ? "bg-warning text-dark" :
-                                                    task.priority ==="Medium" ? "bg-primary" : "bg-secondary" %>">
-
-                                                    <%= task.priority %>
-
-                                                </span>
-
-                                                <span class="badge bg-dark">
-
-                                                    <%= task.status %>
-
-                                                </span>
-
-                                            </div>
-
-                                            <small class="text-muted d-block mb-3">
-
-                                                <i class="fas fa-calendar me-2"></i>
-
-                                                <%= task.due_date ? new Date(task.due_date).toLocaleDateString()
-                                                    : "No Due Date" %>
-
-                                            </small>
-
-                                            <div class="d-flex justify-content-end gap-2">
-
-                                                <button
-    type="button"
-    class="btn btn-warning btn-sm editTaskBtn"
-
-    data-id="<%= task.task_id %>"
-    data-title="<%= task.title %>"
-    data-description="<%= task.description || '' %>"
-    data-priority="<%= task.priority %>"
-    data-status="<%= task.status %>"
-    data-due-date="<%= task.due_date ? new Date(task.due_date).toISOString().split('T')[0] : '' %>"
-
-    data-bs-toggle="modal"
-    data-bs-target="#editTaskModal">
-
-    <i class="fas fa-pencil"></i>
-
-</button>
-
-                                                <form action="/tasks/<%= task.task_id %>/delete" method="POST"
-                                                    onsubmit="return confirm('Delete this task?')">
-
-                                                    <button class="btn btn-danger btn-sm">
-
-                                                        <i class="fas fa-trash"></i>
-
-                                                    </button>
-
-                                                </form>
 
                                             </div>
 
@@ -192,17 +290,14 @@
 
                                     </div>
 
-                                </div>
+                                    <% }) %>
 
-
-                                <% }) %>
-                                
                         </div>
-                        
+
 
                         <% } %>
 
-                        
+
 
 
 
@@ -218,38 +313,65 @@
         </div>
 
     </div>
-   <%- include("layout/addTaskModal") %>
+    <%- include("layout/addTaskModal") %>
 
-<%- include("layout/editTaskModal") %>
+        <%- include("layout/editTaskModal") %>
 
-<script>
+            <%- include("layout/assignTaskModal") %>
 
-document.querySelectorAll(".editTaskBtn").forEach(button => {
+                <script>
 
-    button.addEventListener("click", function () {
+                    document.querySelectorAll(".editTaskBtn").forEach(button => {
 
-        document.getElementById("editTitle").value =
-            this.dataset.title;
+                        button.addEventListener("click", function () {
 
-        document.getElementById("editDescription").value =
-            this.dataset.description;
+                            document.getElementById("editTitle").value =
+                                this.dataset.title;
 
-        document.getElementById("editPriority").value =
-            this.dataset.priority;
+                            document.getElementById("editDescription").value =
+                                this.dataset.description;
 
-        document.getElementById("editStatus").value =
-            this.dataset.status;
+                            document.getElementById("editPriority").value =
+                                this.dataset.priority;
 
-        document.getElementById("editDueDate").value =
-            this.dataset.dueDate;
+                            document.getElementById("editStatus").value =
+                                this.dataset.status;
 
-        document.getElementById("editTaskForm").action =
-            `/tasks/${this.dataset.id}/update`;
+                            document.getElementById("editDueDate").value =
+                                this.dataset.dueDate;
 
-    });
+                            document.getElementById("editTaskForm").action =
+                                `/tasks/${this.dataset.id}/update`;
 
-});
+                        });
 
-</script>
+                    });
+                    document
+                        .querySelectorAll("[data-bs-target='#assignTaskModal']")
+                        .forEach(button => {
 
-<%- include("layout/footer") %>
+                            button.addEventListener("click", function () {
+
+                                const taskId =
+                                    this.dataset.taskId;
+
+                                const assignedTo =
+                                    this.dataset.assignedTo || "";
+
+                                document.getElementById(
+                                    "assignTaskForm"
+                                ).action =
+                                    `/tasks/${taskId}/assign`;
+
+                                document.getElementById(
+                                    "assignedTo"
+                                ).value =
+                                    assignedTo;
+
+                            });
+
+                        });
+
+                </script>
+
+                <%- include("layout/footer") %>
