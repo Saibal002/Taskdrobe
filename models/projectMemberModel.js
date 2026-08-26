@@ -4,8 +4,7 @@ const query = require("../plugins/query");
  * Add User To Project
  */
 const addProjectMember = async (projectId, userId) => {
-
-    const sql = `
+  const sql = `
         INSERT INTO project_members
         (
             project_id,
@@ -21,45 +20,32 @@ const addProjectMember = async (projectId, userId) => {
         RETURNING *;
     `;
 
-    const { rows } = await query(sql, [
-        projectId,
-        userId,
-    ]);
+  const { rows } = await query(sql, [projectId, userId]);
 
-    return rows[0];
+  return rows[0];
 };
-
 
 /**
  * Remove User From Project
  */
-const removeProjectMember = async (
-    projectId,
-    userId
-) => {
-
-    const sql = `
+const removeProjectMember = async (projectId, userId) => {
+  const sql = `
         DELETE FROM project_members
         WHERE project_id = $1
           AND user_id = $2
         RETURNING *;
     `;
 
-    const { rows } = await query(sql, [
-        projectId,
-        userId,
-    ]);
+  const { rows } = await query(sql, [projectId, userId]);
 
-    return rows[0];
+  return rows[0];
 };
-
 
 /**
  * Get Project Members
  */
 const getProjectMembers = async (projectId) => {
-
-    const sql = `
+  const sql = `
         SELECT
             u.user_id,
             u.full_name,
@@ -77,25 +63,22 @@ const getProjectMembers = async (projectId) => {
             ON u.role_id = r.role_id
 
         WHERE pm.project_id = $1
+  AND u.is_active = TRUE
+  AND r.role_name = 'employee'
 
         ORDER BY u.full_name;
     `;
 
-    const { rows } = await query(sql, [projectId]);
+  const { rows } = await query(sql, [projectId]);
 
-    return rows;
+  return rows;
 };
-
 
 /**
  * Check Project Membership
  */
-const isProjectMember = async (
-    projectId,
-    userId
-) => {
-
-    const sql = `
+const isProjectMember = async (projectId, userId) => {
+  const sql = `
         SELECT 1
         FROM project_members
         WHERE project_id = $1
@@ -103,18 +86,14 @@ const isProjectMember = async (
         LIMIT 1;
     `;
 
-    const { rows } = await query(sql, [
-        projectId,
-        userId,
-    ]);
+  const { rows } = await query(sql, [projectId, userId]);
 
-    return rows.length > 0;
+  return rows.length > 0;
 };
 
-
 module.exports = {
-    addProjectMember,
-    removeProjectMember,
-    getProjectMembers,
-    isProjectMember,
+  addProjectMember,
+  removeProjectMember,
+  getProjectMembers,
+  isProjectMember,
 };

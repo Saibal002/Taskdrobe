@@ -319,59 +319,106 @@
 
             <%- include("layout/assignTaskModal") %>
 
-                <script>
+          <script>
 
-                    document.querySelectorAll(".editTaskBtn").forEach(button => {
+    // =========================
+    // Edit Task Modal
+    // =========================
 
-                        button.addEventListener("click", function () {
+    document
+        .querySelectorAll(".editTaskBtn")
+        .forEach(button => {
 
-                            document.getElementById("editTitle").value =
-                                this.dataset.title;
+            button.addEventListener("click", function () {
 
-                            document.getElementById("editDescription").value =
-                                this.dataset.description;
+                document.getElementById("editTitle").value =
+                    this.dataset.title;
 
-                            document.getElementById("editPriority").value =
-                                this.dataset.priority;
+                document.getElementById("editDescription").value =
+                    this.dataset.description;
 
-                            document.getElementById("editStatus").value =
-                                this.dataset.status;
+                document.getElementById("editPriority").value =
+                    this.dataset.priority;
 
-                            document.getElementById("editDueDate").value =
-                                this.dataset.dueDate;
+                document.getElementById("editStatus").value =
+                    this.dataset.status;
 
-                            document.getElementById("editTaskForm").action =
-                                `/tasks/${this.dataset.id}/update`;
+                document.getElementById("editDueDate").value =
+                    this.dataset.dueDate;
 
-                        });
+                document.getElementById("editTaskForm").action =
+                    `/tasks/${this.dataset.id}/update`;
 
-                    });
-                    document
-                        .querySelectorAll("[data-bs-target='#assignTaskModal']")
-                        .forEach(button => {
+            });
 
-                            button.addEventListener("click", function () {
+        });
 
-                                const taskId =
-                                    this.dataset.taskId;
 
-                                const assignedTo =
-                                    this.dataset.assignedTo || "";
+    // =========================
+    // Assign / Reassign Task
+    // =========================
 
-                                document.getElementById(
-                                    "assignTaskForm"
-                                ).action =
-                                    `/tasks/${taskId}/assign`;
+    const assignTaskModal =
+        document.getElementById("assignTaskModal");
 
-                                document.getElementById(
-                                    "assignedTo"
-                                ).value =
-                                    assignedTo;
+    if (assignTaskModal) {
 
-                            });
+        assignTaskModal.addEventListener(
+            "shown.bs.modal",
+            function (event) {
 
-                        });
+                const button = event.relatedTarget;
 
-                </script>
+                if (!button) {
+                    return;
+                }
+
+                const taskId =
+                    button.getAttribute("data-task-id");
+
+                const assignedTo =
+                    button.getAttribute("data-assigned-to") || "";
+
+                const form =
+                    assignTaskModal.querySelector(
+                        "#assignTaskForm"
+                    );
+
+                const select =
+                    assignTaskModal.querySelector(
+                        "#assignedTo"
+                    );
+
+                if (!form || !select) {
+                    return;
+                }
+
+                // Set the task-specific assignment URL.
+                form.action =
+                    `/tasks/${taskId}/assign`;
+
+                // Select the current assignee.
+                // Empty string means the task is unassigned.
+                select.value =
+                    String(assignedTo);
+
+                // Explicitly select the matching option.
+                const selectedOption =
+                    Array.from(select.options).find(
+                        option =>
+                            String(option.value) ===
+                            String(assignedTo)
+                    );
+
+                if (selectedOption) {
+                    selectedOption.selected = true;
+                }
+
+            }
+        );
+
+    }
+
+</script>
 
                 <%- include("layout/footer") %>

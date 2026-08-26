@@ -1,4 +1,4 @@
-# Taskdrobe
+# File Tree: TaskDrobe
 
 ```
 ├── 📁 config
@@ -7,6 +7,7 @@
 │   ├── 📄 authController.js
 │   ├── 📄 dashboardController.js
 │   ├── 📄 projectController.js
+│   ├── 📄 projectMemberController.js
 │   ├── 📄 searchController.js
 │   └── 📄 taskController.js
 ├── 📁 database
@@ -19,7 +20,8 @@
 │   │   │   └── 📄 04_sessions.sql
 │   │   ├── 📁 projects
 │   │   │   ├── 📄 01_project_status.sql
-│   │   │   └── 📄 02_projects.sql
+│   │   │   ├── 📄 02_projects.sql
+│   │   │   └── 📄 03_project_members.sql
 │   │   └── 📁 tasks
 │   │       ├── 📄 01_task_status.sql
 │   │       ├── 📄 02_task_priority.sql
@@ -32,6 +34,7 @@
 │   └── 📄 roleMiddleware.js
 ├── 📁 models
 │   ├── 📄 dashboardModel.js
+│   ├── 📄 projectMemberModel.js
 │   ├── 📄 projectModel.js
 │   ├── 📄 roleModel.js
 │   ├── 📄 taskModel.js
@@ -57,6 +60,7 @@
 │   ├── 📄 dashboardRoute.js
 │   ├── 📄 homeRoute.js
 │   ├── 📄 managerRoutes.js
+│   ├── 📄 projectMemberRoutes.js
 │   ├── 📄 projectRoute.js
 │   ├── 📄 searchRoute.js
 │   └── 📄 taskRoute.js
@@ -64,6 +68,7 @@
 ├── 📁 services
 │   ├── 📄 authService.js
 │   ├── 📄 dashboardService.js
+│   ├── 📄 projectMemberService.js
 │   ├── 📄 projectService.js
 │   ├── 📄 searchService.js
 │   └── 📄 taskService.js
@@ -81,6 +86,7 @@
 │   ├── 📁 layout
 │   │   ├── 📄 addProjectModal.ejs
 │   │   ├── 📄 addTaskModal.ejs
+│   │   ├── 📄 assignTaskModal.ejs
 │   │   ├── 📄 calendarSidebar.ejs
 │   │   ├── 📄 charts.ejs
 │   │   ├── 📄 editProjectModal.ejs
@@ -95,7 +101,8 @@
 │   │   ├── 📄 task.ejs
 │   │   └── 📄 welcome.ejs
 │   ├── 📁 manager
-│   │   └── 📄 dashboard.ejs
+│   │   ├── 📄 dashboard.ejs
+│   │   └── 📄 projectMembers.ejs
 │   ├── 📄 dashboard.ejs
 │   ├── 📄 landing.ejs
 │   ├── 📄 login.ejs
@@ -109,4 +116,4 @@
 └── ⚙️ package.json
 ```
 
-
+---
