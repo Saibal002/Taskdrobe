@@ -1064,6 +1064,9 @@ body{
     transition: width .4s ease;
 }
 
+
+
+
 @media (max-width: 991.98px) {
     .project-overview-top {
         flex-direction: column;
@@ -1106,4 +1109,259 @@ body{
     .project-progress-section {
         padding: 1rem;
     }
+}
+
+
+
+
+/* ======================================================
+   Project Members Page/* ======================================================
+   Project Members - Section 2
+====================================================== */
+
+.project-members-section {
+    width: 100%;
+}
+
+.project-members-card {
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.07);
+}
+
+.project-members-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.project-members-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.project-section-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 15px;
+
+    color: #4f46e5;
+    background: #eef2ff;
+
+    font-size: 1.05rem;
+}
+
+.project-section-eyebrow {
+    margin-bottom: 0.15rem;
+
+    color: #94a3b8;
+
+    font-size: 0.68rem;
+    font-weight: 800;
+
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.project-section-title {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.project-section-subtitle {
+    margin: 0.15rem 0 0;
+
+    color: #94a3b8;
+
+    font-size: 0.78rem;
+}
+
+.project-members-loading {
+    min-height: 120px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.6rem;
+
+    color: #94a3b8;
+
+    font-size: 0.85rem;
+}
+
+.project-member-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 0.85rem 0;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+.project-member-row:last-child {
+    border-bottom: 0;
+}
+
+.project-member-identity {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.8rem;
+}
+
+.project-member-avatar {
+    width: 44px;
+    height: 44px;
+
+    flex: 0 0 44px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+}
+
+.project-member-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #4f46e5;
+    background: #eef2ff;
+
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.project-member-details {
+    min-width: 0;
+}
+
+.project-member-details strong,
+.project-member-details span {
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.project-member-details strong {
+    color: #1e293b;
+
+    font-size: 0.9rem;
+}
+
+.project-member-details span {
+    margin-top: 0.15rem;
+
+    color: #94a3b8;
+
+    font-size: 0.75rem;
+}
+
+.project-member-role {
+    flex-shrink: 0;
+
+    padding: 0.35rem 0.65rem;
+
+    border-radius: 999px;
+
+    color: #64748b;
+    background: #f8fafc;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.project-members-empty {
+    min-height: 160px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 1.5rem;
+
+    text-align: center;
+
+    color: #94a3b8;
+}
+
+.project-members-empty-icon {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 0.75rem;
+
+    border-radius: 15px;
+
+    color: #94a3b8;
+    background: #f8fafc;
+}
+
+.project-members-empty h5 {
+    margin-bottom: 0.3rem;
+
+    color: #475569;
+
+    font-size: 0.9rem;
+    font-weight: 750;
+}
+
+.project-members-empty p {
+    margin: 0;
+
+    font-size: 0.76rem;
+}
+.project-remove-member-btn {
+    white-space: nowrap;
+}
+
+.project-remove-member-btn .spinner-border {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+@media (max-width: 575.98px) {
+
+    .project-members-card {
+        padding: 1rem;
+    }
+
+    .project-member-row {
+        align-items: flex-start;
+    }
+
+    .project-member-role {
+        margin-top: 0.25rem;
+    }
+
 }

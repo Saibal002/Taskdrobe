@@ -87,8 +87,43 @@ const availableEmployees = employees.filter(
     }
 };
 
+/**
+ * AJAX: Get Project Members
+ *
+ * Manager:
+ *   Can view their own project.
+ *
+ * Admin:
+ *   Can view any project.
+ */
+const getMembersData = async (req, res, next) => {
+    try {
+
+        const { projectId } = req.params;
+
+        const {
+            members,
+            availableEmployees
+        } = await projectMemberService.getMembersForView(
+            projectId,
+            req.user
+        );
+
+        return res.json({
+            success: true,
+            members,
+            availableEmployees
+        });
+
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
   addMember,
   removeMember,
   getMembers,
+  getMembersData
+
 };

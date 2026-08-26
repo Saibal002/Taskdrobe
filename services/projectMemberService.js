@@ -146,10 +146,103 @@ const isMember = async (
 
 };
 
+/**
+ * Get project members for AJAX view.
+ *
+ * Manager:
+ *   Can view their own project.
+ *
+ * Admin:
+ *   Can view any project.
+ */
+const getMembersForView = async (
+    projectId,
+    user
+) => {
+
+    const project =
+        await projectModel.getProjectById(
+            projectId
+        );
+
+    if (!project) {
+        throw new AppError(
+            "Project not found.",
+            404
+        );
+    }
+
+
+    // Manager can only view their own project.
+    if (user.role_name === "manager") {
+
+        if (
+            String(project.created_by) !==
+            String(user.user_id)
+        ) {
+            throw new AppError(
+                "You do not have permission to view this project.",
+                403
+            );
+        }
+
+    }
+
+    // Admin can view any existing project.
+    else if (user.role_name !== "admin") {
+
+        throw new AppError(
+            "You do not have permission to view project members.",
+            403
+        );
+    }
+
+
+    const members =
+        await projectMemberModel.getProjectMembers(
+            projectId
+        );
+
+
+    let availableEmployees = [];
+
+
+    // Only managers need the available employee list.
+    if (user.role_name === "manager") {
+
+        const employees =
+            await userModel.getAllEmployees();
+
+
+        const memberIds =
+            new Set(
+                members.map(
+                    member =>
+                        String(member.user_id)
+                )
+            );
+
+
+        availableEmployees =
+            employees.filter(
+                employee =>
+                    !memberIds.has(
+                        String(employee.user_id)
+                    )
+            );
+    }
+
+
+    return {
+        members,
+        availableEmployees
+    };
+};
 
 module.exports = {
     addMember,
     removeMember,
     getMembers,
     isMember,
+    getMembersForView,
 };

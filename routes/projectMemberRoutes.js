@@ -26,6 +26,14 @@ router.get(
     projectMemberController.getMembers
 );
 
+// AJAX: Get project members as JSON
+router.get(
+    "/projects/:projectId/members/data",
+    authMiddleware,
+    requireRole(["manager", "admin"]),
+    projectMemberController.getMembersData
+);
+
 
 // Remove employee from project
 router.delete(
