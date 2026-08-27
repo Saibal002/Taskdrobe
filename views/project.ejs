@@ -198,7 +198,43 @@
 
             </section>
 
+            <!-- =================================================
+     PROJECT PROGRESS
+================================================== -->
 
+<div class="project-progress-section">
+
+    <div class="project-progress-header">
+
+        <div>
+
+            <span class="project-progress-label">
+                Project Progress
+            </span>
+
+            <span class="project-progress-caption">
+                Overall completion
+            </span>
+
+        </div>
+
+        <strong>
+            <%= Number(project.progress || 0) %>%
+        </strong>
+
+    </div>
+
+
+    <div class="project-progress-track">
+
+        <div
+            class="project-progress-fill"
+            style="width: <%= Number(project.progress || 0) %>%;">
+        </div>
+
+    </div>
+
+</div>
             <!-- =====================================================
              PROJECT MEMBERS
              New design + jQuery AJAX
