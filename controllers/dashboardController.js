@@ -90,8 +90,9 @@ const managerDashboard = async (req, res, next) => {
       title: "Manager Dashboard",
 
       user: req.user,
-
+      
       projectStats,
+      today: new Date().toDateString(),
       projects, //that the manager has created
     });
   } catch (err) {

@@ -37,13 +37,35 @@ const updateProject = async (req, res, next) => {
   }
 };
 const deleteProject = async (req, res, next) => {
-  try {
-    await projectService.deleteProject(req.params.id, req.user.user_id);
-    req.session.success = "Project deleted successfully.";
-    return res.redirect("/manager/dashboard");
-  } catch (err) {
-    next(err);
-  }
+
+    try {
+
+        await projectService.deleteProject(
+            req.params.id,
+            req.user.user_id
+        );
+
+        req.session.success = "Project deleted successfully.";
+
+        // AJAX request
+        if (req.xhr) {
+
+            return res.json({
+                success: true,
+                message: "Project deleted successfully."
+            });
+
+        }
+
+        // Normal form submission
+        return res.redirect("/manager/dashboard");
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
 };
 
 const viewProject = async (req, res, next) => {

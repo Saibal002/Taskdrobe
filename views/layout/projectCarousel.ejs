@@ -2,187 +2,296 @@
 
     <div class="card-body">
 
-        <!-- Header -->
+        <!-- HEADER -->
+
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
             <div>
 
                 <h4 class="fw-bold mb-1">
-
                     <i class="bi bi-folder2-open text-primary me-2"></i>
-
                     My Projects
-
                 </h4>
 
                 <p class="text-muted mb-0">
-
                     Manage and track your active projects
-
                 </p>
 
             </div>
 
+
             <div class="d-flex gap-2">
 
-              
+                <% if (user && user.role_name === "manager") { %>
 
-                        <a href="/projects" class="btn btn-outline-secondary rounded-pill">
-                            View All
-                        </a>
+                    <button
+                        type="button"
+                        class="btn btn-primary rounded-pill"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addProjectModal">
+
+                        <i class="bi bi-plus-lg me-1"></i>
+                        Add Project
+
+                    </button>
+
+                <% } %>
+
+
+                <a
+                    href="/projects"
+                    class="btn btn-outline-secondary rounded-pill">
+
+                    View All
+
+                </a>
 
             </div>
 
         </div>
 
-        <!-- Carousel -->
+
+        <!-- PROJECT CAROUSEL -->
 
         <div class="position-relative">
 
-            <div id="projectsScroll" class="d-flex gap-4 overflow-auto flex-nowrap project-scroll px-5">
+            <div
+                id="projectScrollContainer"
+                class="d-flex gap-4 overflow-auto flex-nowrap project-scroll px-5">
 
-                <% if(projects.length===0){ %>
+
+                <% if (!projects || projects.length === 0) { %>
 
                     <div class="text-center text-muted w-100 py-5">
 
                         <i class="bi bi-folder-x display-5 d-block mb-3"></i>
 
-                        No projects yet.
+                        <h5 class="mb-1">
+                            No projects yet.
+                        </h5>
+
+                        <% if (user && user.role_name === "manager") { %>
+
+                            <p class="mb-0">
+                                Create your first project to get started.
+                            </p>
+
+                        <% } %>
 
                     </div>
 
-                    <% } else { %>
 
-                        <% projects.forEach((project,index)=>{ %>
+                <% } else { %>
 
-                            <a href="/projects/<%= project.project_id %>" class="text-decoration-none">
 
-                                <div class="project-card
-                            <%= index % 3 === 0
-                                ? 'purple-gradient'
-                                : index % 3 === 1
-                                ? 'teal-gradient'
-                                : 'orange-gradient' %>">
+                    <% projects.forEach((project, index) => { %>
 
-                                    <!-- Action Buttons -->
+                        <!-- PROJECT CARD -->
 
-                                    
+                        <div
+                            class="project-card-link"
+                            role="link"
+                            tabindex="0"
+                            data-project-url="/projects/<%= project.project_id %>">
 
-                                            <div class="card-body">
 
-                                                <!-- Title -->
+                            <div
+                                class="project-card
+                                    <%= index % 3 === 0
+                                        ? 'purple-gradient'
+                                        : index % 3 === 1
+                                        ? 'teal-gradient'
+                                        : 'orange-gradient' %>">
 
-                                                <div class="mb-3">
 
-                                                    <h5 class="fw-bold mb-2 text-white">
+                                <div class="card-body">
 
-                                                        <%= project.project_name %>
 
-                                                    </h5>
+                                    <!-- TITLE -->
 
-                                                    <p class="small text-white-50 mb-0">
+                                    <div class="mb-3">
 
-                                                        <%= project.description || "No description available." %>
+                                        <h5 class="fw-bold mb-2 text-white">
 
-                                                    </p>
+                                            <%= project.project_name %>
+
+                                        </h5>
+
+                                        <p class="small text-white-50 mb-0">
+
+                                            <%= project.description ||
+                                                "No description available." %>
+
+                                        </p>
+
+                                    </div>
+
+
+                                    <!-- PROGRESS -->
+
+                                    <div class="mb-2 d-flex justify-content-between text-white-50">
+
+                                        <small>
+                                            Progress
+                                        </small>
+
+                                        <small>
+                                            <%= Number(project.progress || 0) %>%
+                                        </small>
+
+                                    </div>
+
+
+                                    <div class="progress project-progress mb-4">
+
+                                        <div
+                                            class="progress-bar
+                                                <%= Number(project.progress || 0) < 30
+                                                    ? 'bg-danger'
+                                                    : Number(project.progress || 0) < 70
+                                                    ? 'bg-warning'
+                                                    : 'bg-success' %>"
+                                            style="width:<%= Math.min(
+                                                100,
+                                                Math.max(
+                                                    0,
+                                                    Number(project.progress || 0)
+                                                )
+                                            ) %>%">
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- FOOTER -->
+
+                                    <div class="project-footer">
+
+
+                                        <div class="d-flex justify-content-between mb-2">
+
+                                            <span
+                                                class="badge rounded-pill
+                                                    <%= project.status === 'Completed'
+                                                        ? 'bg-success'
+                                                        : project.status === 'In Progress'
+                                                        ? 'bg-primary'
+                                                        : project.status === 'On Hold'
+                                                        ? 'bg-warning text-dark'
+                                                        : project.status === 'Archived'
+                                                        ? 'bg-dark'
+                                                        : 'bg-light text-dark' %>">
+
+                                                <%= project.status %>
+
+                                            </span>
+
+
+                                            <small class="text-white-50">
+
+                                                <i class="bi bi-calendar-event"></i>
+
+                                                <%= project.deadline
+                                                    ? new Date(
+                                                        project.deadline
+                                                    ).toLocaleDateString()
+                                                    : "No Deadline" %>
+
+                                            </small>
+
+                                        </div>
+
+
+                                        <div class="d-flex justify-content-between align-items-center">
+
+
+                                            <small class="text-white-50">
+
+                                                <i class="bi bi-person-circle"></i>
+
+                                                <%= project.full_name %>
+
+                                            </small>
+
+
+                                            <% if (
+                                                user &&
+                                                user.role_name === "manager"
+                                            ) { %>
+
+                                                <div class="d-flex gap-2">
+
+
+                                                    <!-- EDIT -->
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-sm btn-light project-edit-btn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editProjectModal-<%= project.project_id %>">
+
+                                                        <i class="bi bi-pencil me-1"></i>
+
+                                                        Edit
+
+                                                    </button>
+
+
+                                                    <!-- DELETE -->
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-sm btn-danger project-delete-btn"
+                                                        data-project-id="<%= project.project_id %>">
+
+                                                        <i class="bi bi-trash me-1"></i>
+
+                                                        Delete
+
+                                                    </button>
+
 
                                                 </div>
 
-                                                <!-- Progress -->
+                                            <% } %>
 
-                                                <div class="mb-2 d-flex justify-content-between text-white-50">
 
-                                                    <small>Progress</small>
+                                        </div>
 
-                                                    <small>
-
-                                                        <%= project.progress %>%
-
-                                                    </small>
-
-                                                </div>
-
-                                                <div class="progress project-progress mb-4">
-
-                                                    <div class="progress-bar
-                                        <%= project.progress < 30
-                                            ? 'bg-danger'
-                                            : project.progress < 70
-                                            ? 'bg-warning'
-                                            : 'bg-success' %>" style="width:<%= project.progress %>%">
-
-                                                    </div>
-
-                                                </div>
-
-                                                <!-- Footer -->
-
-                                                <div class="project-footer">
-
-                                                    <div class="d-flex justify-content-between mb-2">
-
-                                                        <span class="badge rounded-pill
-                                            <%= project.status === 'Completed'
-                                                ? 'bg-success'
-                                                : project.status === 'In Progress'
-                                                ? 'bg-primary'
-                                                : project.status === 'On Hold'
-                                                ? 'bg-warning text-dark'
-                                                : project.status === 'Archived'
-                                                ? 'bg-dark'
-                                                : 'bg-light text-dark' %>">
-
-                                                            <%= project.status %>
-
-                                                        </span>
-
-                                                        <small class="text-white-50">
-
-                                                            <i class="bi bi-calendar-event"></i>
-
-                                                            <%= project.deadline ? new
-                                                                Date(project.deadline).toLocaleDateString()
-                                                                : "No Deadline" %>
-
-                                                        </small>
-
-                                                    </div>
-
-                                                    <small class="text-white-50">
-
-                                                        <i class="bi bi-person-circle"></i>
-
-                                                        <%= project.full_name %>
-
-                                                    </small>
-
-                                                </div>
-
-                                            </div>
+                                    </div>
 
                                 </div>
 
-                            </a>
+                            </div>
 
-                            
+                        </div>
 
-                                <% }) %>
+                    <% }) %>
 
-                                    <% } %>
+
+                <% } %>
 
             </div>
 
-            <!-- Left -->
 
-            <button class="project-scroll-btn project-scroll-left" id="scrollLeft">
+            <!-- CAROUSEL CONTROLS -->
+
+            <button
+                type="button"
+                class="project-scroll-btn project-scroll-left"
+                id="scrollLeftBtn"
+                aria-label="Previous projects">
 
                 <i class="bi bi-chevron-left"></i>
 
             </button>
 
-            <!-- Right -->
 
-            <button class="project-scroll-btn project-scroll-right" id="scrollRight">
+            <button
+                type="button"
+                class="project-scroll-btn project-scroll-right"
+                id="scrollRightBtn"
+                aria-label="Next projects">
 
                 <i class="bi bi-chevron-right"></i>
 
