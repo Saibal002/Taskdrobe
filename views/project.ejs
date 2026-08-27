@@ -1,74 +1,71 @@
 <%- include("layout/header", { title: project.project_name }) %>
 
-<div class="container mt-5">
+    <div class="container mt-5">
 
-    <div class="project-page-shell">
+        <div class="project-page-shell">
 
-        <!-- =====================================================
+            <!-- =====================================================
              PROJECT OVERVIEW
         ====================================================== -->
 
-        <section class="project-overview-card">
+            <section class="project-overview-card">
 
-            <div class="project-overview-top">
+                <div class="project-overview-top">
 
-                <div class="project-overview-heading">
+                    <div class="project-overview-heading">
 
-                    <a
-                        href="/dashboard"
-                        class="project-back-link">
+                        <a href="/dashboard" class="project-back-link">
 
-                        <i class="fas fa-arrow-left"></i>
+                            <i class="fas fa-arrow-left"></i>
 
-                        <span>
-                            Back to Dashboard
-                        </span>
+                            <span>
+                                Back to Dashboard
+                            </span>
 
-                    </a>
+                        </a>
 
 
-                    <div class="project-title-row">
+                        <div class="project-title-row">
 
-                        <div class="project-title-icon">
+                            <div class="project-title-icon">
 
-                            <i class="fas fa-folder-open"></i>
+                                <i class="fas fa-folder-open"></i>
 
-                        </div>
-
-
-                        <div>
-
-                            <div class="project-eyebrow">
-                                Project Overview
                             </div>
 
-                            <h1 class="project-page-title">
-                                <%= project.project_name %>
-                            </h1>
+
+                            <div>
+
+                                <div class="project-eyebrow">
+                                    Project Overview
+                                </div>
+
+                                <h1 class="project-page-title">
+                                    <%= project.project_name %>
+                                </h1>
+
+                            </div>
 
                         </div>
+
+
+                        <p class="project-page-description">
+
+                            <%= project.description || "No description has been added for this project yet." %>
+
+                        </p>
 
                     </div>
 
 
-                    <p class="project-page-description">
+                    <div class="project-status-panel">
 
-                        <%= project.description ||
-                            "No description has been added for this project yet." %>
-
-                    </p>
-
-                </div>
+                        <span class="project-status-label">
+                            Current Status
+                        </span>
 
 
-                <div class="project-status-panel">
-
-                    <span class="project-status-label">
-                        Current Status
-                    </span>
-
-
-                    <span class="project-status-badge
+                        <span class="project-status-badge
                         <%= project.status === 'Completed'
                             ? 'project-status-completed'
                             : project.status === 'In Progress'
@@ -77,537 +74,495 @@
                             ? 'project-status-cancelled'
                             : 'project-status-default' %>">
 
-                        <span class="project-status-dot"></span>
-
-                        <%= project.status %>
-
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 PROJECT KPI CARDS
-            ================================================== -->
-
-            <div class="project-kpi-grid">
-
-                <div class="project-kpi-card project-kpi-progress">
-
-                    <div class="project-kpi-icon">
-
-                        <i class="fas fa-chart-line"></i>
-
-                    </div>
-
-
-                    <div class="project-kpi-content">
-
-                        <span class="project-kpi-label">
-                            Progress
-                        </span>
-
-                        <strong class="project-kpi-value">
-
-                            <%= Number(project.progress || 0) %>%
-
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="project-kpi-card project-kpi-status">
-
-                    <div class="project-kpi-icon">
-
-                        <i class="fas fa-layer-group"></i>
-
-                    </div>
-
-
-                    <div class="project-kpi-content">
-
-                        <span class="project-kpi-label">
-                            Status
-                        </span>
-
-                        <strong
-                            class="project-kpi-value project-kpi-value-small">
+                            <span class="project-status-dot"></span>
 
                             <%= project.status %>
 
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="project-kpi-card project-kpi-deadline">
-
-                    <div class="project-kpi-icon">
-
-                        <i class="fas fa-calendar-days"></i>
-
-                    </div>
-
-
-                    <div class="project-kpi-content">
-
-                        <span class="project-kpi-label">
-                            Deadline
                         </span>
 
-                        <strong
-                            class="project-kpi-value project-kpi-value-small">
-
-                            <%= project.deadline
-                                ? new Date(project.deadline)
-                                    .toLocaleDateString()
-                                : "Not Set" %>
-
-                        </strong>
-
                     </div>
 
                 </div>
 
 
-                <div class="project-kpi-card project-kpi-owner">
+                <!-- =================================================
+                 PROJECT KPI CARDS
+            ================================================== -->
 
-                    <div class="project-kpi-icon">
+                <div class="project-kpi-grid">
 
-                        <i class="fas fa-user"></i>
+                    <div class="project-kpi-card project-kpi-progress">
+
+                        <div class="project-kpi-icon">
+
+                            <i class="fas fa-chart-line"></i>
+
+                        </div>
+
+
+                        <div class="project-kpi-content">
+
+                            <span class="project-kpi-label">
+                                Progress
+                            </span>
+
+                            <strong class="project-kpi-value">
+
+                                <%= Number(project.progress || 0) %>%
+
+                            </strong>
+
+                        </div>
 
                     </div>
 
 
-                    <div class="project-kpi-content">
+                    <div class="project-kpi-card project-kpi-status">
 
-                        <span class="project-kpi-label">
-                            Created By
-                        </span>
+                        <div class="project-kpi-icon">
 
-                        <strong
-                            class="project-kpi-value project-kpi-value-small">
+                            <i class="fas fa-layer-group"></i>
 
-                            <%= project.full_name %>
+                        </div>
 
-                        </strong>
+
+                        <div class="project-kpi-content">
+
+                            <span class="project-kpi-label">
+                                Status
+                            </span>
+
+                            <strong class="project-kpi-value project-kpi-value-small">
+
+                                <%= project.status %>
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="project-kpi-card project-kpi-deadline">
+
+                        <div class="project-kpi-icon">
+
+                            <i class="fas fa-calendar-days"></i>
+
+                        </div>
+
+
+                        <div class="project-kpi-content">
+
+                            <span class="project-kpi-label">
+                                Deadline
+                            </span>
+
+                            <strong class="project-kpi-value project-kpi-value-small">
+
+                                <%= project.deadline ? new Date(project.deadline) .toLocaleDateString() : "Not Set" %>
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="project-kpi-card project-kpi-owner">
+
+                        <div class="project-kpi-icon">
+
+                            <i class="fas fa-user"></i>
+
+                        </div>
+
+
+                        <div class="project-kpi-content">
+
+                            <span class="project-kpi-label">
+                                Created By
+                            </span>
+
+                            <strong class="project-kpi-value project-kpi-value-small">
+
+                                <%= project.full_name %>
+
+                            </strong>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-        <!-- =====================================================
+            <!-- =====================================================
              PROJECT MEMBERS
              New design + jQuery AJAX
         ====================================================== -->
 
-        <section
-            class="project-members-section mt-4"
-            id="projectMembersSection"
-
-            data-members-url="/projects/<%= project.project_id %>/members/data"
-
-            data-add-url="/projects/<%= project.project_id %>/members"
-
-            data-remove-url="/projects/<%= project.project_id %>/members"
-
-            data-role="<%= user.role_name %>">
+            <section class="project-members-section mt-4" id="projectMembersSection"
+                data-members-url="/projects/<%= project.project_id %>/members/data"
+                data-add-url="/projects/<%= project.project_id %>/members"
+                data-remove-url="/projects/<%= project.project_id %>/members" data-role="<%= user.role_name %>">
 
 
-            <div class="project-members-card">
+                <div class="project-members-card">
 
 
-                <!-- ===============================
+                    <!-- ===============================
                      HEADER
                 ================================ -->
 
-                <div class="project-members-header">
+                    <div class="project-members-header">
 
-                    <div class="project-members-heading">
+                        <div class="project-members-heading">
 
-                        <div class="project-section-icon">
+                            <div class="project-section-icon">
 
-                            <i class="fas fa-users"></i>
+                                <i class="fas fa-users"></i>
 
-                        </div>
-
-
-                        <div>
-
-                            <div class="project-section-eyebrow">
-                                Collaboration
                             </div>
 
-                            <h3 class="project-section-title">
-                                Project Members
-                            </h3>
 
-                            <p class="project-section-subtitle">
-                                People currently working on this project.
-                            </p>
+                            <div>
+
+                                <div class="project-section-eyebrow">
+                                    Collaboration
+                                </div>
+
+                                <h3 class="project-section-title">
+                                    Project Members
+                                </h3>
+
+                                <p class="project-section-subtitle">
+                                    People currently working on this project.
+                                </p>
+
+                            </div>
 
                         </div>
+
+
+                        <% if (user.role_name==="manager" ) { %>
+
+                            <span class="project-members-permission-badge">
+
+                                <i class="fas fa-user-shield me-1"></i>
+
+                                Manager
+
+                            </span>
+
+                            <% } else if (user.role_name==="admin" ) { %>
+
+                                <span class="project-members-permission-badge">
+
+                                    <i class="fas fa-eye me-1"></i>
+
+                                    Read only
+
+                                </span>
+
+                                <% } %>
 
                     </div>
 
 
-                    <% if (user.role_name === "manager") { %>
-
-                        <span class="project-members-permission-badge">
-
-                            <i class="fas fa-user-shield me-1"></i>
-
-                            Manager
-
-                        </span>
-
-                    <% } else if (user.role_name === "admin") { %>
-
-                        <span class="project-members-permission-badge">
-
-                            <i class="fas fa-eye me-1"></i>
-
-                            Read only
-
-                        </span>
-
-                    <% } %>
-
-                </div>
-
-
-                <!-- ===============================
+                    <!-- ===============================
                      AJAX MESSAGE
                 ================================ -->
 
-                <div
-                    id="projectMembersMessage"
-                    class="project-members-message alert d-none"
-                    role="alert">
-                </div>
+                    <div id="projectMembersMessage" class="project-members-message alert d-none" role="alert">
+                    </div>
 
 
-                <div class="row g-4">
+                    <div class="row g-4">
 
 
-                    <!-- ===============================
+                        <!-- ===============================
                          CURRENT MEMBERS
                     ================================ -->
 
-                    <div
-                        class="<%= user.role_name === 'manager'
+                        <div class="<%= user.role_name === 'manager'
                             ? 'col-lg-7'
                             : 'col-12' %>">
 
 
-                        <div
-                            id="projectMembersList"
-                            class="project-members-list"
-                            aria-live="polite">
+                            <div id="projectMembersList" class="project-members-list" aria-live="polite">
 
 
-                            <div class="project-members-loading">
+                                <div class="project-members-loading">
 
-                                <span
-                                    class="spinner-border spinner-border-sm"
-                                    aria-hidden="true">
-                                </span>
+                                    <span class="spinner-border spinner-border-sm" aria-hidden="true">
+                                    </span>
 
-                                <span>
-                                    Loading members...
-                                </span>
+                                    <span>
+                                        Loading members...
+                                    </span>
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                    </div>
 
-
-                    <!-- ===============================
+                        <!-- ===============================
                          ADD MEMBER - MANAGER ONLY
                     ================================ -->
 
-                    <% if (user.role_name === "manager") { %>
+                        <% if (user.role_name==="manager" ) { %>
 
-                        <div class="col-lg-5">
+                            <div class="col-lg-5">
 
-                            <div class="project-add-member-panel">
-
-
-                                <div
-                                    class="project-add-member-heading">
+                                <div class="project-add-member-panel">
 
 
-                                    <div
-                                        class="project-add-member-icon">
-
-                                        <i
-                                            class="fas fa-user-plus">
-                                        </i>
-
-                                    </div>
+                                    <div class="project-add-member-heading">
 
 
-                                    <div>
+                                        <div class="project-add-member-icon">
 
-                                        <h4>
-                                            Add Employee
-                                        </h4>
+                                            <i class="fas fa-user-plus">
+                                            </i>
 
-                                        <p>
-                                            Assign an active employee to this project.
-                                        </p>
-
-                                    </div>
-
-                                </div>
+                                        </div>
 
 
-                                <form
-                                    id="addProjectMemberForm"
-                                    novalidate>
+                                        <div>
 
+                                            <h4>
+                                                Add Employee
+                                            </h4>
 
-                                    <div class="mb-3">
-
-
-                                        <label
-                                            for="projectMemberUserId"
-                                            class="form-label fw-semibold">
-
-                                            Employee
-
-                                        </label>
-
-
-                                        <select
-                                            class="form-select"
-                                            id="projectMemberUserId"
-                                            name="userId"
-                                            required>
-
-                                            <option value="">
-                                                Select an employee
-                                            </option>
-
-                                        </select>
-
-
-                                        <div
-                                            class="invalid-feedback"
-                                            id="projectMemberUserIdError">
-
-                                            Please select an employee.
+                                            <p>
+                                                Assign an active employee to this project.
+                                            </p>
 
                                         </div>
 
                                     </div>
 
 
-                                    <button
-                                        type="submit"
-                                        id="addProjectMemberBtn"
-                                        class="btn btn-primary w-100">
+                                    <form id="addProjectMemberForm" novalidate>
 
-                                        <i
-                                            class="fas fa-user-plus me-2">
-                                        </i>
 
-                                        Add Employee
+                                        <div class="mb-3">
 
-                                    </button>
 
-                                </form>
+                                            <label for="projectMemberUserId" class="form-label fw-semibold">
+
+                                                Employee
+
+                                            </label>
+
+
+                                            <select class="form-select" id="projectMemberUserId" name="userId" required>
+
+                                                <option value="">
+                                                    Select an employee
+                                                </option>
+
+                                            </select>
+
+
+                                            <div class="invalid-feedback" id="projectMemberUserIdError">
+
+                                                Please select an employee.
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <button type="submit" id="addProjectMemberBtn" class="btn btn-primary w-100">
+
+                                            <i class="fas fa-user-plus me-2">
+                                            </i>
+
+                                            Add Employee
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                            <% } %>
 
-                    <% } %>
+                    </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-        <!-- =====================================================
+            <!-- =====================================================
              TASKS
              Task UI + Task AJAX stay in projectTasks.ejs
         ====================================================== -->
 
-        <hr>
+            <hr>
 
-        <%- include("manager/partials/projectTasks", {
-            project: project,
-            user: user
-        }) %>
-        <%- include("layout/addTaskModal") %>
-<%- include("layout/editTaskModal") %>
-<%- include("layout/assignTaskModal") %>
+            <%- include("manager/partials/projectTasks", { project: project, user: user }) %>
+                <%- include("layout/addTaskModal") %>
+                    <%- include("layout/editTaskModal") %>
+                        <%- include("layout/assignTaskModal") %>
 
+
+        </div>
 
     </div>
 
-</div>
 
-
-<!-- =========================================================
+    <!-- =========================================================
      PROJECT MEMBERS AJAX
 ========================================================= -->
 
-<script>
+    <script>
 
-$(document).ready(function () {
-
-
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
-
-    const $section =
-        $("#projectMembersSection");
+        $(document).ready(function () {
 
 
-    if (!$section.length) {
-        return;
-    }
+            /* =========================================================
+               ELEMENTS
+            ========================================================= */
+
+            const $section =
+                $("#projectMembersSection");
 
 
-    const $membersList =
-        $("#projectMembersList");
+            if (!$section.length) {
+                return;
+            }
 
 
-    const $messageBox =
-        $("#projectMembersMessage");
+            const $membersList =
+                $("#projectMembersList");
 
 
-    const $addForm =
-        $("#addProjectMemberForm");
+            const $messageBox =
+                $("#projectMembersMessage");
 
 
-    const $employeeSelect =
-        $("#projectMemberUserId");
+            const $addForm =
+                $("#addProjectMemberForm");
 
 
-    const $addButton =
-        $("#addProjectMemberBtn");
+            const $employeeSelect =
+                $("#projectMemberUserId");
 
 
-    /* =========================================================
-       URLS
-    ========================================================= */
-
-    const membersUrl =
-        $section.attr("data-members-url");
+            const $addButton =
+                $("#addProjectMemberBtn");
 
 
-    const addUrl =
-        $section.attr("data-add-url");
+            /* =========================================================
+               URLS
+            ========================================================= */
+
+            const membersUrl =
+                $section.attr("data-members-url");
 
 
-    const removeBaseUrl =
-        $section.attr("data-remove-url");
+            const addUrl =
+                $section.attr("data-add-url");
 
 
-    const role =
-        $section.attr("data-role");
+            const removeBaseUrl =
+                $section.attr("data-remove-url");
 
 
-    /* =========================================================
-       ESCAPE HTML
-    ========================================================= */
-
-    function escapeHtml(value) {
-
-        return $("<div>")
-            .text(
-                value == null
-                    ? ""
-                    : String(value)
-            )
-            .html();
-
-    }
+            const role =
+                $section.attr("data-role");
 
 
-    /* =========================================================
-       MESSAGE
-    ========================================================= */
+            /* =========================================================
+               ESCAPE HTML
+            ========================================================= */
 
-    function showMessage(
-        message,
-        type = "success"
-    ) {
+            function escapeHtml(value) {
 
-        $messageBox
-            .removeClass(
-                "d-none alert-success alert-danger alert-warning alert-info"
-            )
-            .addClass(
-                "alert-" + type
-            )
-            .text(message);
+                return $("<div>")
+                    .text(
+                        value == null
+                            ? ""
+                            : String(value)
+                    )
+                    .html();
 
-    }
+            }
 
 
-    function clearMessage() {
+            /* =========================================================
+               MESSAGE
+            ========================================================= */
 
-        $messageBox
-            .addClass("d-none")
-            .removeClass(
-                "alert-success alert-danger alert-warning alert-info"
-            )
-            .text("");
+            function showMessage(
+                message,
+                type = "success"
+            ) {
 
-    }
+                $messageBox
+                    .removeClass(
+                        "d-none alert-success alert-danger alert-warning alert-info"
+                    )
+                    .addClass(
+                        "alert-" + type
+                    )
+                    .text(message);
 
-
-    /* =========================================================
-       ERROR MESSAGE
-    ========================================================= */
-
-    function getErrorMessage(
-        xhr,
-        fallback
-    ) {
-
-        if (
-            xhr.responseJSON &&
-            xhr.responseJSON.message
-        ) {
-
-            return xhr.responseJSON.message;
-
-        }
-
-        return fallback;
-
-    }
+            }
 
 
-    /* =========================================================
-       LOADING
-    ========================================================= */
+            function clearMessage() {
 
-    function showLoading() {
+                $messageBox
+                    .addClass("d-none")
+                    .removeClass(
+                        "alert-success alert-danger alert-warning alert-info"
+                    )
+                    .text("");
 
-        $membersList.html(`
+            }
+
+
+            /* =========================================================
+               ERROR MESSAGE
+            ========================================================= */
+
+            function getErrorMessage(
+                xhr,
+                fallback
+            ) {
+
+                if (
+                    xhr.responseJSON &&
+                    xhr.responseJSON.message
+                ) {
+
+                    return xhr.responseJSON.message;
+
+                }
+
+                return fallback;
+
+            }
+
+
+            /* =========================================================
+               LOADING
+            ========================================================= */
+
+            function showLoading() {
+
+                $membersList.html(`
 
             <div class="project-members-loading">
 
@@ -624,16 +579,16 @@ $(document).ready(function () {
 
         `);
 
-    }
+            }
 
 
-    /* =========================================================
-       ERROR STATE
-    ========================================================= */
+            /* =========================================================
+               ERROR STATE
+            ========================================================= */
 
-    function showError(message) {
+            function showError(message) {
 
-        $membersList.html(`
+                $membersList.html(`
 
             <div
                 class="
@@ -678,23 +633,23 @@ $(document).ready(function () {
 
         `);
 
-    }
+            }
 
 
-    /* =========================================================
-       RENDER MEMBERS
-    ========================================================= */
+            /* =========================================================
+               RENDER MEMBERS
+            ========================================================= */
 
-    function renderMembers(
-        members
-    ) {
+            function renderMembers(
+                members
+            ) {
 
-        if (
-            !Array.isArray(members) ||
-            members.length === 0
-        ) {
+                if (
+                    !Array.isArray(members) ||
+                    members.length === 0
+                ) {
 
-            $membersList.html(`
+                    $membersList.html(`
 
                 <div class="project-members-empty">
 
@@ -721,51 +676,51 @@ $(document).ready(function () {
 
             `);
 
-            return;
-        }
+                    return;
+                }
 
 
-        const html =
-            members
-                .map(function (member) {
+                const html =
+                    members
+                        .map(function (member) {
 
 
-                    const fullName =
-                        String(
-                            member.full_name || "Unknown User"
-                        ).trim();
+                            const fullName =
+                                String(
+                                    member.full_name || "Unknown User"
+                                ).trim();
 
 
-                    const email =
-                        String(
-                            member.email || "No email"
-                        ).trim();
+                            const email =
+                                String(
+                                    member.email || "No email"
+                                ).trim();
 
 
-                    const roleName =
-                        String(
-                            member.role_name || "User"
-                        ).trim();
+                            const roleName =
+                                String(
+                                    member.role_name || "User"
+                                ).trim();
 
 
-                    const initials =
-                        fullName
-                            .split(/\s+/)
-                            .slice(0, 2)
-                            .map(
-                                name =>
-                                    name.charAt(0)
-                            )
-                            .join("")
-                            .toUpperCase();
+                            const initials =
+                                fullName
+                                    .split(/\s+/)
+                                    .slice(0, 2)
+                                    .map(
+                                        name =>
+                                            name.charAt(0)
+                                    )
+                                    .join("")
+                                    .toUpperCase();
 
 
-                    let avatar;
+                            let avatar;
 
 
-                    if (member.profile_image) {
+                            if (member.profile_image) {
 
-                        avatar = `
+                                avatar = `
 
                             <img
                                 src="${escapeHtml(
@@ -780,9 +735,9 @@ $(document).ready(function () {
 
                         `;
 
-                    } else {
+                            } else {
 
-                        avatar = `
+                                avatar = `
 
                             <div
                                 class="
@@ -798,22 +753,22 @@ $(document).ready(function () {
 
                         `;
 
-                    }
+                            }
 
 
-                    let removeButton = "";
+                            let removeButton = "";
 
 
-                    /*
-                     * Only manager gets Remove.
-                     * Backend remains the authority.
-                     */
+                            /*
+                             * Only manager gets Remove.
+                             * Backend remains the authority.
+                             */
 
-                    if (
-                        role === "manager"
-                    ) {
+                            if (
+                                role === "manager"
+                            ) {
 
-                        removeButton = `
+                                removeButton = `
 
                             <button
                                 type="button"
@@ -843,10 +798,10 @@ $(document).ready(function () {
 
                         `;
 
-                    }
+                            }
 
 
-                    return `
+                            return `
 
                         <div
                             class="project-member-row"
@@ -866,15 +821,15 @@ $(document).ready(function () {
 
                                     <strong>
                                         ${escapeHtml(
-                                            fullName
-                                        )}
+                                fullName
+                            )}
                                     </strong>
 
 
                                     <span>
                                         ${escapeHtml(
-                                            email
-                                        )}
+                                email
+                            )}
                                     </span>
 
                                 </div>
@@ -894,8 +849,8 @@ $(document).ready(function () {
                                     </i>
 
                                     ${escapeHtml(
-                                        roleName
-                                    )}
+                                roleName
+                            )}
 
                                 </span>
 
@@ -908,285 +863,285 @@ $(document).ready(function () {
 
                     `;
 
-                })
-                .join("");
+                        })
+                        .join("");
 
 
-        $membersList.html(
-            html
-        );
-
-    }
-
-
-    /* =========================================================
-       RENDER AVAILABLE EMPLOYEES
-    ========================================================= */
-
-    function renderAvailableEmployees(
-        employees
-    ) {
-
-        if (!$employeeSelect.length) {
-            return;
-        }
-
-
-        $employeeSelect.empty();
-
-
-        $employeeSelect.append(
-            $("<option>", {
-                value: "",
-                text: "Select an employee"
-            })
-        );
-
-
-        if (
-            !Array.isArray(employees) ||
-            employees.length === 0
-        ) {
-
-            $employeeSelect.append(
-                $("<option>", {
-
-                    value: "",
-
-                    text:
-                        "No employees available",
-
-                    disabled:
-                        true
-
-                })
-            );
-
-            return;
-        }
-
-
-        $.each(
-            employees,
-            function (
-                index,
-                employee
-            ) {
-
-                $employeeSelect.append(
-                    $("<option>", {
-
-                        value:
-                            employee.user_id,
-
-                        text:
-                            `${String(
-                                employee.full_name || ""
-                            ).trim()} — ${String(
-                                employee.email || ""
-                            ).trim()}`
-                    })
+                $membersList.html(
+                    html
                 );
 
             }
-        );
-
-    }
 
 
-    /* =========================================================
-       LOAD MEMBERS
-    ========================================================= */
+            /* =========================================================
+               RENDER AVAILABLE EMPLOYEES
+            ========================================================= */
 
-    function loadMembers() {
-
-        clearMessage();
-
-        showLoading();
-
-
-        $.ajax({
-
-            url:
-                membersUrl,
-
-            type:
-                "GET",
-
-            dataType:
-                "json",
-
-            cache:
-                false,
-
-            headers: {
-
-                "Accept":
-                    "application/json",
-
-                "X-Requested-With":
-                    "XMLHttpRequest"
-
-            },
-
-
-            success: function (
-                response
+            function renderAvailableEmployees(
+                employees
             ) {
+
+                if (!$employeeSelect.length) {
+                    return;
+                }
+
+
+                $employeeSelect.empty();
+
+
+                $employeeSelect.append(
+                    $("<option>", {
+                        value: "",
+                        text: "Select an employee"
+                    })
+                );
 
 
                 if (
-                    !response ||
-                    response.success !== true
+                    !Array.isArray(employees) ||
+                    employees.length === 0
                 ) {
 
-                    showError(
-                        response &&
-                        response.message
-                            ? response.message
-                            : "Unable to load project members."
+                    $employeeSelect.append(
+                        $("<option>", {
+
+                            value: "",
+
+                            text:
+                                "No employees available",
+
+                            disabled:
+                                true
+
+                        })
                     );
 
                     return;
                 }
 
 
-                renderMembers(
-                    response.members
-                );
+                $.each(
+                    employees,
+                    function (
+                        index,
+                        employee
+                    ) {
 
+                        $employeeSelect.append(
+                            $("<option>", {
 
-                /*
-                 * The backend returns this only for managers.
-                 */
-                renderAvailableEmployees(
-                    response.availableEmployees || []
-                );
+                                value:
+                                    employee.user_id,
 
-            },
+                                text:
+                                    `${String(
+                                        employee.full_name || ""
+                                    ).trim()} — ${String(
+                                        employee.email || ""
+                                    ).trim()}`
+                            })
+                        );
 
-
-            error: function (
-                xhr
-            ) {
-
-                console.error(
-                    "Project members AJAX error:",
-                    xhr
-                );
-
-
-                showError(
-                    getErrorMessage(
-                        xhr,
-                        "Unable to load project members."
-                    )
+                    }
                 );
 
             }
 
-        });
 
-    }
+            /* =========================================================
+               LOAD MEMBERS
+            ========================================================= */
 
+            function loadMembers() {
 
-    /* =========================================================
-       VALIDATE ADD MEMBER
-    ========================================================= */
+                clearMessage();
 
-    function validateAddMember() {
-
-        if (!$employeeSelect.length) {
-            return false;
-        }
+                showLoading();
 
 
-        $employeeSelect.removeClass(
-            "is-invalid"
-        );
+                $.ajax({
+
+                    url:
+                        membersUrl,
+
+                    type:
+                        "GET",
+
+                    dataType:
+                        "json",
+
+                    cache:
+                        false,
+
+                    headers: {
+
+                        "Accept":
+                            "application/json",
+
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+
+                    },
 
 
-        if (!$employeeSelect.val()) {
-
-            $employeeSelect.addClass(
-                "is-invalid"
-            );
+                    success: function (
+                        response
+                    ) {
 
 
-            $("#projectMemberUserIdError")
-                .text(
-                    "Please select an employee."
-                );
+                        if (
+                            !response ||
+                            response.success !== true
+                        ) {
+
+                            showError(
+                                response &&
+                                    response.message
+                                    ? response.message
+                                    : "Unable to load project members."
+                            );
+
+                            return;
+                        }
 
 
-            $employeeSelect.focus();
+                        renderMembers(
+                            response.members
+                        );
 
 
-            return false;
-        }
+                        /*
+                         * The backend returns this only for managers.
+                         */
+                        renderAvailableEmployees(
+                            response.availableEmployees || []
+                        );
+
+                    },
 
 
-        return true;
+                    error: function (
+                        xhr
+                    ) {
 
-    }
+                        console.error(
+                            "Project members AJAX error:",
+                            xhr
+                        );
 
 
-    /* =========================================================
-       REMOVE SELECT ERROR WHEN CHANGED
-    ========================================================= */
+                        showError(
+                            getErrorMessage(
+                                xhr,
+                                "Unable to load project members."
+                            )
+                        );
 
-    $employeeSelect.on(
-        "change",
-        function () {
+                    }
 
-            if ($(this).val()) {
+                });
 
-                $(this).removeClass(
+            }
+
+
+            /* =========================================================
+               VALIDATE ADD MEMBER
+            ========================================================= */
+
+            function validateAddMember() {
+
+                if (!$employeeSelect.length) {
+                    return false;
+                }
+
+
+                $employeeSelect.removeClass(
                     "is-invalid"
                 );
 
-                $("#projectMemberUserIdError")
-                    .text("");
+
+                if (!$employeeSelect.val()) {
+
+                    $employeeSelect.addClass(
+                        "is-invalid"
+                    );
+
+
+                    $("#projectMemberUserIdError")
+                        .text(
+                            "Please select an employee."
+                        );
+
+
+                    $employeeSelect.focus();
+
+
+                    return false;
+                }
+
+
+                return true;
 
             }
 
-        }
-    );
+
+            /* =========================================================
+               REMOVE SELECT ERROR WHEN CHANGED
+            ========================================================= */
+
+            $employeeSelect.on(
+                "change",
+                function () {
+
+                    if ($(this).val()) {
+
+                        $(this).removeClass(
+                            "is-invalid"
+                        );
+
+                        $("#projectMemberUserIdError")
+                            .text("");
+
+                    }
+
+                }
+            );
 
 
-    /* =========================================================
-       ADD MEMBER
-    ========================================================= */
+            /* =========================================================
+               ADD MEMBER
+            ========================================================= */
 
-    $addForm.on(
-        "submit",
-        function (event) {
+            $addForm.on(
+                "submit",
+                function (event) {
 
-            event.preventDefault();
-
-
-            if (
-                !validateAddMember()
-            ) {
-
-                return;
-
-            }
+                    event.preventDefault();
 
 
-            clearMessage();
+                    if (
+                        !validateAddMember()
+                    ) {
+
+                        return;
+
+                    }
 
 
-            const originalHtml =
-                $addButton.html();
+                    clearMessage();
 
 
-            $addButton
-                .prop(
-                    "disabled",
-                    true
-                )
-                .html(`
+                    const originalHtml =
+                        $addButton.html();
+
+
+                    $addButton
+                        .prop(
+                            "disabled",
+                            true
+                        )
+                        .html(`
 
                     <span
                         class="
@@ -1202,199 +1157,199 @@ $(document).ready(function () {
                 `);
 
 
-            $.ajax({
+                    $.ajax({
 
-                url:
-                    addUrl,
+                        url:
+                            addUrl,
 
-                type:
-                    "POST",
+                        type:
+                            "POST",
 
-                data:
-                    $addForm.serialize(),
+                        data:
+                            $addForm.serialize(),
 
-                dataType:
-                    "json",
+                        dataType:
+                            "json",
 
-                headers: {
+                        headers: {
 
-                    "Accept":
-                        "application/json",
+                            "Accept":
+                                "application/json",
 
-                    "X-Requested-With":
-                        "XMLHttpRequest"
+                            "X-Requested-With":
+                                "XMLHttpRequest"
 
-                },
-
-
-                success: function (
-                    response
-                ) {
+                        },
 
 
-                    if (
-                        !response ||
-                        response.success !== true
-                    ) {
+                        success: function (
+                            response
+                        ) {
+
+
+                            if (
+                                !response ||
+                                response.success !== true
+                            ) {
+
+                                showMessage(
+
+                                    response &&
+                                        response.message
+                                        ? response.message
+                                        : "Unable to add employee.",
+
+                                    "danger"
+
+                                );
+
+                                return;
+                            }
+
+
+                            /*
+                             * Clear form after successful add.
+                             */
+                            $addForm[0].reset();
+
+
+                            $employeeSelect
+                                .removeClass(
+                                    "is-invalid"
+                                );
+
+
+                            $("#projectMemberUserIdError")
+                                .text("");
+
+
+                            showMessage(
+
+                                response.message ||
+                                "Employee added successfully.",
+
+                                "success"
+
+                            );
+
+
+                            /*
+                             * IMPORTANT:
+                             *
+                             * Don't manually append the employee.
+                             *
+                             * Get the newest database state.
+                             */
+                            loadMembers();
+
+                        },
+
+
+                        error: function (
+                            xhr
+                        ) {
+
+                            console.error(
+                                "Add member AJAX error:",
+                                xhr
+                            );
+
+
+                            showMessage(
+
+                                getErrorMessage(
+                                    xhr,
+                                    "Unable to add employee."
+                                ),
+
+                                "danger"
+
+                            );
+
+                        },
+
+
+                        complete: function () {
+
+                            $addButton
+                                .prop(
+                                    "disabled",
+                                    false
+                                )
+                                .html(
+                                    originalHtml
+                                );
+
+                        }
+
+                    });
+
+                }
+            );
+
+
+            /* =========================================================
+               REMOVE MEMBER
+            ========================================================= */
+
+            $(document).on(
+                "click",
+                ".project-remove-member-btn",
+                function () {
+
+
+                    const $button =
+                        $(this);
+
+
+                    const userId =
+                        $button.attr(
+                            "data-user-id"
+                        );
+
+
+                    const userName =
+                        $button.attr(
+                            "data-user-name"
+                        ) ||
+                        "this employee";
+
+
+                    if (!userId) {
 
                         showMessage(
-
-                            response &&
-                            response.message
-                                ? response.message
-                                : "Unable to add employee.",
-
+                            "Invalid employee.",
                             "danger"
-
                         );
 
                         return;
                     }
 
 
-                    /*
-                     * Clear form after successful add.
-                     */
-                    $addForm[0].reset();
+                    if (
+                        !window.confirm(
+                            `Remove ${userName} from this project?`
+                        )
+                    ) {
+
+                        return;
+
+                    }
 
 
-                    $employeeSelect
-                        .removeClass(
-                            "is-invalid"
-                        );
+                    clearMessage();
 
 
-                    $("#projectMemberUserIdError")
-                        .text("");
+                    const originalHtml =
+                        $button.html();
 
 
-                    showMessage(
-
-                        response.message ||
-                        "Employee added successfully.",
-
-                        "success"
-
-                    );
-
-
-                    /*
-                     * IMPORTANT:
-                     *
-                     * Don't manually append the employee.
-                     *
-                     * Get the newest database state.
-                     */
-                    loadMembers();
-
-                },
-
-
-                error: function (
-                    xhr
-                ) {
-
-                    console.error(
-                        "Add member AJAX error:",
-                        xhr
-                    );
-
-
-                    showMessage(
-
-                        getErrorMessage(
-                            xhr,
-                            "Unable to add employee."
-                        ),
-
-                        "danger"
-
-                    );
-
-                },
-
-
-                complete: function () {
-
-                    $addButton
+                    $button
                         .prop(
                             "disabled",
-                            false
+                            true
                         )
-                        .html(
-                            originalHtml
-                        );
-
-                }
-
-            });
-
-        }
-    );
-
-
-    /* =========================================================
-       REMOVE MEMBER
-    ========================================================= */
-
-    $(document).on(
-        "click",
-        ".project-remove-member-btn",
-        function () {
-
-
-            const $button =
-                $(this);
-
-
-            const userId =
-                $button.attr(
-                    "data-user-id"
-                );
-
-
-            const userName =
-                $button.attr(
-                    "data-user-name"
-                ) ||
-                "this employee";
-
-
-            if (!userId) {
-
-                showMessage(
-                    "Invalid employee.",
-                    "danger"
-                );
-
-                return;
-            }
-
-
-            if (
-                !window.confirm(
-                    `Remove ${userName} from this project?`
-                )
-            ) {
-
-                return;
-
-            }
-
-
-            clearMessage();
-
-
-            const originalHtml =
-                $button.html();
-
-
-            $button
-                .prop(
-                    "disabled",
-                    true
-                )
-                .html(`
+                        .html(`
 
                     <span
                         class="
@@ -1410,154 +1365,154 @@ $(document).ready(function () {
                 `);
 
 
-            const removeUrl =
-                `${removeBaseUrl}/${encodeURIComponent(
-                    userId
-                )}`;
+                    const removeUrl =
+                        `${removeBaseUrl}/${encodeURIComponent(
+                            userId
+                        )}`;
 
 
-            $.ajax({
+                    $.ajax({
 
-                url:
-                    removeUrl,
+                        url:
+                            removeUrl,
 
-                type:
-                    "DELETE",
+                        type:
+                            "DELETE",
 
-                dataType:
-                    "json",
+                        dataType:
+                            "json",
 
-                headers: {
+                        headers: {
 
-                    "Accept":
-                        "application/json",
+                            "Accept":
+                                "application/json",
 
-                    "X-Requested-With":
-                        "XMLHttpRequest"
+                            "X-Requested-With":
+                                "XMLHttpRequest"
 
-                },
-
-
-                success: function (
-                    response
-                ) {
+                        },
 
 
-                    if (
-                        !response ||
-                        response.success !== true
-                    ) {
-
-                        showMessage(
-
-                            response &&
-                            response.message
-                                ? response.message
-                                : "Unable to remove employee.",
-
-                            "danger"
-
-                        );
+                        success: function (
+                            response
+                        ) {
 
 
-                        $button
-                            .prop(
-                                "disabled",
-                                false
-                            )
-                            .html(
-                                originalHtml
+                            if (
+                                !response ||
+                                response.success !== true
+                            ) {
+
+                                showMessage(
+
+                                    response &&
+                                        response.message
+                                        ? response.message
+                                        : "Unable to remove employee.",
+
+                                    "danger"
+
+                                );
+
+
+                                $button
+                                    .prop(
+                                        "disabled",
+                                        false
+                                    )
+                                    .html(
+                                        originalHtml
+                                    );
+
+
+                                return;
+                            }
+
+
+                            showMessage(
+
+                                response.message ||
+                                "Employee removed successfully.",
+
+                                "success"
+
                             );
 
 
-                        return;
-                    }
+                            /*
+                             * Reload from DB.
+                             *
+                             * This updates:
+                             * - Current Members
+                             * - Available Employees
+                             */
+                            loadMembers();
+
+                        },
 
 
-                    showMessage(
+                        error: function (
+                            xhr
+                        ) {
 
-                        response.message ||
-                        "Employee removed successfully.",
-
-                        "success"
-
-                    );
-
-
-                    /*
-                     * Reload from DB.
-                     *
-                     * This updates:
-                     * - Current Members
-                     * - Available Employees
-                     */
-                    loadMembers();
-
-                },
+                            console.error(
+                                "Remove member AJAX error:",
+                                xhr
+                            );
 
 
-                error: function (
-                    xhr
-                ) {
+                            showMessage(
 
-                    console.error(
-                        "Remove member AJAX error:",
-                        xhr
-                    );
+                                getErrorMessage(
+                                    xhr,
+                                    "Unable to remove employee."
+                                ),
 
+                                "danger"
 
-                    showMessage(
-
-                        getErrorMessage(
-                            xhr,
-                            "Unable to remove employee."
-                        ),
-
-                        "danger"
-
-                    );
+                            );
 
 
-                    $button
-                        .prop(
-                            "disabled",
-                            false
-                        )
-                        .html(
-                            originalHtml
-                        );
+                            $button
+                                .prop(
+                                    "disabled",
+                                    false
+                                )
+                                .html(
+                                    originalHtml
+                                );
+
+                        }
+
+                    });
 
                 }
-
-            });
-
-        }
-    );
+            );
 
 
-    /* =========================================================
-       RETRY
-    ========================================================= */
+            /* =========================================================
+               RETRY
+            ========================================================= */
 
-    $(document).on(
-        "click",
-        "#retryProjectMembers",
-        function () {
+            $(document).on(
+                "click",
+                "#retryProjectMembers",
+                function () {
+
+                    loadMembers();
+
+                }
+            );
+
+
+            /* =========================================================
+               INITIAL LOAD
+            ========================================================= */
 
             loadMembers();
 
-        }
-    );
+        });
+    </script>
 
 
-    /* =========================================================
-       INITIAL LOAD
-    ========================================================= */
-
-    loadMembers();
-
-});
-</script>
-
-
-<%- include("layout/footer") %>
+    <%- include("layout/footer") %>
