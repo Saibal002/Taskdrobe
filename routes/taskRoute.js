@@ -42,4 +42,11 @@ router.post(
     taskController.updateTaskAssignment
 );
 
+// AJAX: Get tasks for a project
+router.get(
+    "/project/:projectId/data",
+    authMiddleware,
+    taskController.getProjectTasksData
+);
+
 module.exports = router;

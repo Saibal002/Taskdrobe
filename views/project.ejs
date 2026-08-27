@@ -1,242 +1,334 @@
 <%- include("layout/header", { title: project.project_name }) %>
 
-    <div class="container mt-5">
+<div class="container mt-5">
 
-        <div class="project-page-shell">
+    <div class="project-page-shell">
 
-            <!-- ========================= -->
-            <!-- Project Overview -->
-            <!-- ========================= -->
+        <!-- =====================================================
+             PROJECT OVERVIEW
+        ====================================================== -->
 
-            <section class="project-overview-card">
+        <section class="project-overview-card">
 
-                <div class="project-overview-top">
+            <div class="project-overview-top">
 
-                    <div class="project-overview-heading">
+                <div class="project-overview-heading">
 
-                        <a href="/dashboard" class="project-back-link">
+                    <a
+                        href="/dashboard"
+                        class="project-back-link">
 
-                            <i class="fas fa-arrow-left"></i>
+                        <i class="fas fa-arrow-left"></i>
 
-                            <span>Back to Dashboard</span>
-
-                        </a>
-
-                        <div class="project-title-row">
-
-                            <div class="project-title-icon">
-                                <i class="fas fa-folder-open"></i>
-                            </div>
-
-                            <div>
-
-                                <div class="project-eyebrow">
-                                    Project Overview
-                                </div>
-
-                                <h1 class="project-page-title">
-                                    <%= project.project_name %>
-                                </h1>
-
-                            </div>
-
-                        </div>
-
-                        <p class="project-page-description">
-                            <%= project.description || "No description has been added for this project yet." %>
-                        </p>
-
-                    </div>
-
-                    <div class="project-status-panel">
-
-                        <span class="project-status-label">
-                            Current Status
+                        <span>
+                            Back to Dashboard
                         </span>
 
-                        <span class="project-status-badge
-                            <%= project.status === 'Completed'
-                                ? 'project-status-completed'
-                                : project.status === 'In Progress'
-                                ? 'project-status-progress'
-                                : project.status === 'Cancelled'
-                                ? 'project-status-cancelled'
-                                : 'project-status-default' %>">
-
-                            <span class="project-status-dot"></span>
-
-                            <%= project.status %>
-
-                        </span>
-
-                    </div>
-
-                </div>
+                    </a>
 
 
-                <!-- ========================= -->
-                <!-- Project KPI Cards -->
-                <!-- ========================= -->
+                    <div class="project-title-row">
 
-                <div class="project-kpi-grid">
+                        <div class="project-title-icon">
 
-                    <div class="project-kpi-card project-kpi-progress">
-
-                        <div class="project-kpi-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Progress
-                            </span>
-
-                            <strong class="project-kpi-value">
-                                <%= Number(project.progress || 0) %>%
-                            </strong>
+                            <i class="fas fa-folder-open"></i>
 
                         </div>
 
-                    </div>
-
-
-                    <div class="project-kpi-card project-kpi-status">
-
-                        <div class="project-kpi-icon">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Status
-                            </span>
-
-                            <strong class="project-kpi-value project-kpi-value-small">
-                                <%= project.status %>
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-kpi-card project-kpi-deadline">
-
-                        <div class="project-kpi-icon">
-                            <i class="fas fa-calendar-days"></i>
-                        </div>
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Deadline
-                            </span>
-
-                            <strong class="project-kpi-value project-kpi-value-small">
-
-                                <%= project.deadline ? new Date(project.deadline).toLocaleDateString() : "Not Set" %>
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-kpi-card project-kpi-owner">
-
-                        <div class="project-kpi-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Created By
-                            </span>
-
-                            <strong class="project-kpi-value project-kpi-value-small">
-                                <%= project.full_name %>
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ========================= -->
-                <!-- Progress -->
-                <!-- ========================= -->
-
-                <div class="project-progress-section">
-
-                    <div class="project-progress-header">
 
                         <div>
 
-                            <span class="project-progress-label">
-                                Project Progress
-                            </span>
+                            <div class="project-eyebrow">
+                                Project Overview
+                            </div>
 
-                            <span class="project-progress-caption">
-                                Overall completion
-                            </span>
+                            <h1 class="project-page-title">
+                                <%= project.project_name %>
+                            </h1>
 
                         </div>
 
-                        <strong>
+                    </div>
+
+
+                    <p class="project-page-description">
+
+                        <%= project.description ||
+                            "No description has been added for this project yet." %>
+
+                    </p>
+
+                </div>
+
+
+                <div class="project-status-panel">
+
+                    <span class="project-status-label">
+                        Current Status
+                    </span>
+
+
+                    <span class="project-status-badge
+                        <%= project.status === 'Completed'
+                            ? 'project-status-completed'
+                            : project.status === 'In Progress'
+                            ? 'project-status-progress'
+                            : project.status === 'Cancelled'
+                            ? 'project-status-cancelled'
+                            : 'project-status-default' %>">
+
+                        <span class="project-status-dot"></span>
+
+                        <%= project.status %>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PROJECT KPI CARDS
+            ================================================== -->
+
+            <div class="project-kpi-grid">
+
+                <div class="project-kpi-card project-kpi-progress">
+
+                    <div class="project-kpi-icon">
+
+                        <i class="fas fa-chart-line"></i>
+
+                    </div>
+
+
+                    <div class="project-kpi-content">
+
+                        <span class="project-kpi-label">
+                            Progress
+                        </span>
+
+                        <strong class="project-kpi-value">
+
                             <%= Number(project.progress || 0) %>%
+
                         </strong>
 
                     </div>
 
-                    <div class="project-progress-track" role="progressbar"
-                        aria-valuenow="<%= Number(project.progress || 0) %>" aria-valuemin="0" aria-valuemax="100">
+                </div>
 
-                        <div class="project-progress-fill"
-                            style="width: <%= Math.min(100, Math.max(0, Number(project.progress || 0))) %>%;">
-                        </div>
+
+                <div class="project-kpi-card project-kpi-status">
+
+                    <div class="project-kpi-icon">
+
+                        <i class="fas fa-layer-group"></i>
+
+                    </div>
+
+
+                    <div class="project-kpi-content">
+
+                        <span class="project-kpi-label">
+                            Status
+                        </span>
+
+                        <strong
+                            class="project-kpi-value project-kpi-value-small">
+
+                            <%= project.status %>
+
+                        </strong>
 
                     </div>
 
                 </div>
 
-            </section>
 
-            <!-- ========================= -->
-            <!-- Project Members -->
-            <!-- ========================= -->
+                <div class="project-kpi-card project-kpi-deadline">
 
-            <section class="project-members-section mt-4" id="projectMembersSection"
-                data-members-url="/projects/<%= project.project_id %>/members/data"
-                data-add-url="/projects/<%= project.project_id %>/members">
+                    <div class="project-kpi-icon">
 
-                <div class="project-members-card">
+                        <i class="fas fa-calendar-days"></i>
 
-                    <div class="project-members-header">
+                    </div>
 
-                        <div class="project-members-heading">
 
-                            <div class="project-section-icon">
-                                <i class="fas fa-users"></i>
+                    <div class="project-kpi-content">
+
+                        <span class="project-kpi-label">
+                            Deadline
+                        </span>
+
+                        <strong
+                            class="project-kpi-value project-kpi-value-small">
+
+                            <%= project.deadline
+                                ? new Date(project.deadline)
+                                    .toLocaleDateString()
+                                : "Not Set" %>
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="project-kpi-card project-kpi-owner">
+
+                    <div class="project-kpi-icon">
+
+                        <i class="fas fa-user"></i>
+
+                    </div>
+
+
+                    <div class="project-kpi-content">
+
+                        <span class="project-kpi-label">
+                            Created By
+                        </span>
+
+                        <strong
+                            class="project-kpi-value project-kpi-value-small">
+
+                            <%= project.full_name %>
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PROJECT MEMBERS
+             New design + jQuery AJAX
+        ====================================================== -->
+
+        <section
+            class="project-members-section mt-4"
+            id="projectMembersSection"
+
+            data-members-url="/projects/<%= project.project_id %>/members/data"
+
+            data-add-url="/projects/<%= project.project_id %>/members"
+
+            data-remove-url="/projects/<%= project.project_id %>/members"
+
+            data-role="<%= user.role_name %>">
+
+
+            <div class="project-members-card">
+
+
+                <!-- ===============================
+                     HEADER
+                ================================ -->
+
+                <div class="project-members-header">
+
+                    <div class="project-members-heading">
+
+                        <div class="project-section-icon">
+
+                            <i class="fas fa-users"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="project-section-eyebrow">
+                                Collaboration
                             </div>
 
-                            <div>
-                                <div class="project-section-eyebrow">
-                                    Collaboration
-                                </div>
+                            <h3 class="project-section-title">
+                                Project Members
+                            </h3>
 
-                                <h3 class="project-section-title">
-                                    Project Members
-                                </h3>
+                            <p class="project-section-subtitle">
+                                People currently working on this project.
+                            </p>
 
-                                <p class="project-section-subtitle">
-                                    People currently working on this project.
-                                </p>
+                        </div>
+
+                    </div>
+
+
+                    <% if (user.role_name === "manager") { %>
+
+                        <span class="project-members-permission-badge">
+
+                            <i class="fas fa-user-shield me-1"></i>
+
+                            Manager
+
+                        </span>
+
+                    <% } else if (user.role_name === "admin") { %>
+
+                        <span class="project-members-permission-badge">
+
+                            <i class="fas fa-eye me-1"></i>
+
+                            Read only
+
+                        </span>
+
+                    <% } %>
+
+                </div>
+
+
+                <!-- ===============================
+                     AJAX MESSAGE
+                ================================ -->
+
+                <div
+                    id="projectMembersMessage"
+                    class="project-members-message alert d-none"
+                    role="alert">
+                </div>
+
+
+                <div class="row g-4">
+
+
+                    <!-- ===============================
+                         CURRENT MEMBERS
+                    ================================ -->
+
+                    <div
+                        class="<%= user.role_name === 'manager'
+                            ? 'col-lg-7'
+                            : 'col-12' %>">
+
+
+                        <div
+                            id="projectMembersList"
+                            class="project-members-list"
+                            aria-live="polite">
+
+
+                            <div class="project-members-loading">
+
+                                <span
+                                    class="spinner-border spinner-border-sm"
+                                    aria-hidden="true">
+                                </span>
+
+                                <span>
+                                    Loading members...
+                                </span>
+
                             </div>
 
                         </div>
@@ -244,475 +336,279 @@
                     </div>
 
 
-                    <!-- AJAX message -->
-                    <div id="projectMembersMessage" class="alert d-none" role="alert">
-                    </div>
+                    <!-- ===============================
+                         ADD MEMBER - MANAGER ONLY
+                    ================================ -->
+
+                    <% if (user.role_name === "manager") { %>
+
+                        <div class="col-lg-5">
+
+                            <div class="project-add-member-panel">
 
 
-                    <!-- Members loaded here -->
-                    <div id="projectMembersList" aria-live="polite">
-
-                        <div class="project-members-loading">
-
-                            <span class="spinner-border spinner-border-sm" aria-hidden="true">
-                            </span>
-
-                            Loading members...
-
-                        </div>
-
-                    </div>
-                    <% if (user.role_name==="manager" ) { %>
-
-                        <div class="project-add-member-box mt-4">
-
-                            <div class="project-add-member-title">
-
-                                <div class="project-add-member-icon">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-
-                                <div>
-                                    <h5>
-                                        Add Employee
-                                    </h5>
-
-                                    <p>
-                                        Add an active employee to this project.
-                                    </p>
-                                </div>
-
-                            </div>
+                                <div
+                                    class="project-add-member-heading">
 
 
-                            <form id="addProjectMemberForm" novalidate>
+                                    <div
+                                        class="project-add-member-icon">
 
-                                <div class="mb-3">
+                                        <i
+                                            class="fas fa-user-plus">
+                                        </i>
 
-                                    <label for="projectMemberSelect" class="form-label fw-semibold">
+                                    </div>
 
-                                        Employee
 
-                                    </label>
+                                    <div>
 
-                                    <select id="projectMemberSelect" name="userId" class="form-select" required>
+                                        <h4>
+                                            Add Employee
+                                        </h4>
 
-                                        <option value="">
-                                            Select an employee
-                                        </option>
-
-                                    </select>
-
-                                    <div id="projectMemberSelectError" class="invalid-feedback">
-
-                                        Please select an employee.
+                                        <p>
+                                            Assign an active employee to this project.
+                                        </p>
 
                                     </div>
 
                                 </div>
 
 
-                                <button type="submit" id="addProjectMemberButton" class="btn btn-primary">
+                                <form
+                                    id="addProjectMemberForm"
+                                    novalidate>
 
-                                    <i class="fas fa-user-plus me-2"></i>
 
-                                    Add Employee
+                                    <div class="mb-3">
 
-                                </button>
 
-                            </form>
+                                        <label
+                                            for="projectMemberUserId"
+                                            class="form-label fw-semibold">
 
-                        </div>
+                                            Employee
 
-                        <% } %>
+                                        </label>
 
-                </div>
 
-            </section>
+                                        <select
+                                            class="form-select"
+                                            id="projectMemberUserId"
+                                            name="userId"
+                                            required>
 
+                                            <option value="">
+                                                Select an employee
+                                            </option>
 
-            <!-- ========================= -->
-            <!-- Tasks -->
-            <!-- ========================= -->
+                                        </select>
 
-            <hr>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div
+                                            class="invalid-feedback"
+                                            id="projectMemberUserIdError">
 
-                <h3 class="mb-0">
-                    Tasks
-                </h3>
-
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-
-                    <i class="fas fa-plus me-2"></i>
-
-                    Add Task
-
-                </button>
-
-            </div>
-
-            <% if(tasks.length===0){ %>
-
-                <div class="card shadow-sm">
-
-                    <div class="card-body text-center text-muted py-5">
-
-                        No tasks available.
-
-                    </div>
-
-                </div>
-
-                <% } else { %>
-
-                    <div class="row g-3">
-
-                        <% tasks.forEach(task=> { %>
-
-                            <% const isManager=user.role_name==="manager" ; const
-                                isTaskCreator=String(task.created_by)===String(user.user_id); const
-                                isTaskAssignee=task.assigned_to && String(task.assigned_to)===String(user.user_id);
-                                const canEdit=isManager || isTaskCreator; const canDelete=isManager || isTaskCreator;
-                                const canChangeStatus=isManager || isTaskCreator || isTaskAssignee; %>
-
-
-                                <div class="col-md-6">
-
-                                    <div class="card border-0 shadow-sm h-100">
-
-                                        <div class="card-body">
-
-                                            <!-- ========================= -->
-                                            <!-- Task Header -->
-                                            <!-- ========================= -->
-
-                                            <div class="d-flex justify-content-between">
-
-                                                <div>
-
-                                                    <h5 class="fw-bold mb-1">
-                                                        <%= task.title %>
-                                                    </h5>
-
-                                                    <p class="text-muted mb-3">
-                                                        <%= task.description || "No description" %>
-                                                    </p>
-
-                                                </div>
-
-
-                                                <!-- Status Toggle -->
-
-                                                <% if (canChangeStatus) { %>
-
-                                                    <div>
-
-                                                        <form action="/tasks/<%= task.task_id %>/toggle" method="POST">
-
-                                                            <button type="submit" class="btn btn-sm
-                                    <%= task.status === 'Completed'
-                                        ? 'btn-success'
-                                        : 'btn-outline-success' %>">
-
-                                                                <%= task.status==="Completed" ? "✔" : "○" %>
-
-                                                            </button>
-
-                                                        </form>
-
-                                                    </div>
-
-                                                    <% } %>
-
-                                            </div>
-
-
-                                            <!-- ========================= -->
-                                            <!-- Priority + Status -->
-                                            <!-- ========================= -->
-
-                                            <div class="mb-3">
-
-                                                <span class="badge
-                        <%= task.priority === 'Critical'
-                            ? 'bg-danger'
-                            : task.priority === 'High'
-                            ? 'bg-warning text-dark'
-                            : task.priority === 'Medium'
-                            ? 'bg-primary'
-                            : 'bg-secondary' %>">
-
-                                                    <%= task.priority %>
-
-                                                </span>
-
-
-                                                <span class="badge bg-dark">
-
-                                                    <%= task.status %>
-
-                                                </span>
-
-                                            </div>
-
-
-                                            <!-- ========================= -->
-                                            <!-- Due Date -->
-                                            <!-- ========================= -->
-
-                                            <small class="text-muted d-block mb-2">
-
-                                                <i class="fas fa-calendar me-2"></i>
-
-                                                <%= task.due_date ? new Date(task.due_date) .toLocaleDateString()
-                                                    : "No Due Date" %>
-
-                                            </small>
-
-
-                                            <!-- ========================= -->
-                                            <!-- Assignment -->
-                                            <!-- ========================= -->
-
-                                            <small class="text-muted d-block mb-3">
-
-                                                <i class="fas fa-user me-2"></i>
-
-                                                <% if (task.assigned_user) { %>
-
-                                                    Assigned to:
-                                                    <strong>
-                                                        <%= task.assigned_user %>
-                                                    </strong>
-
-                                                    <% } else { %>
-
-                                                        <span class="text-muted">
-                                                            Unassigned
-                                                        </span>
-
-                                                        <% } %>
-
-                                            </small>
-
-
-                                            <!-- ========================= -->
-                                            <!-- Actions -->
-                                            <!-- ========================= -->
-
-                                            <div class="d-flex justify-content-end gap-2">
-
-
-                                                <!-- Manager Assignment -->
-
-                                                <% if (isManager) { %>
-
-                                                    <button type="button" class="btn btn-primary btn-sm"
-                                                        data-bs-toggle="modal" data-bs-target="#assignTaskModal"
-                                                        data-task-id="<%= task.task_id %>"
-                                                        data-assigned-to="<%= task.assigned_to || '' %>">
-
-                                                        <i class="fas fa-user-plus"></i>
-
-                                                    </button>
-
-                                                    <% } %>
-
-
-                                                        <!-- Edit -->
-
-                                                        <% if (canEdit) { %>
-
-                                                            <button type="button"
-                                                                class="btn btn-warning btn-sm editTaskBtn"
-                                                                data-id="<%= task.task_id %>"
-                                                                data-title="<%= task.title %>"
-                                                                data-description="<%= task.description || '' %>"
-                                                                data-priority="<%= task.priority %>"
-                                                                data-status="<%= task.status %>" data-due-date="<%= task.due_date
-                                ? new Date(task.due_date)
-                                    .toISOString()
-                                    .split('T')[0]
-                                : '' %>" data-bs-toggle="modal" data-bs-target="#editTaskModal">
-
-                                                                <i class="fas fa-pencil"></i>
-
-                                                            </button>
-
-                                                            <% } %>
-
-
-                                                                <!-- Delete -->
-
-                                                                <% if (canDelete) { %>
-
-                                                                    <form action="/tasks/<%= task.task_id %>/delete"
-                                                                        method="POST"
-                                                                        onsubmit="return confirm('Delete this task?')">
-
-                                                                        <button type="submit"
-                                                                            class="btn btn-danger btn-sm">
-
-                                                                            <i class="fas fa-trash"></i>
-
-                                                                        </button>
-
-                                                                    </form>
-
-                                                                    <% } %>
-
-
-                                            </div>
+                                            Please select an employee.
 
                                         </div>
 
                                     </div>
 
-                                </div>
 
-                                <% }) %>
+                                    <button
+                                        type="submit"
+                                        id="addProjectMemberBtn"
+                                        class="btn btn-primary w-100">
 
-                    </div>
+                                        <i
+                                            class="fas fa-user-plus me-2">
+                                        </i>
 
+                                        Add Employee
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
 
                     <% } %>
 
+                </div>
+
+            </div>
+
+        </section>
 
 
+        <!-- =====================================================
+             TASKS
+             Task UI + Task AJAX stay in projectTasks.ejs
+        ====================================================== -->
 
+        <hr>
 
+        <%- include("manager/partials/projectTasks", {
+            project: project,
+            user: user
+        }) %>
+        <%- include("layout/addTaskModal") %>
+<%- include("layout/editTaskModal") %>
+<%- include("layout/assignTaskModal") %>
 
-        </div>
 
     </div>
 
-    </div>
-    <%- include("layout/addTaskModal") %>
+</div>
 
-        <%- include("layout/editTaskModal") %>
 
-            <%- include("layout/assignTaskModal") %>
+<!-- =========================================================
+     PROJECT MEMBERS AJAX
+========================================================= -->
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    /* =====================================================
-       PROJECT MEMBERS
-    ===================================================== */
+$(document).ready(function () {
 
-    const membersSection =
-        document.getElementById("projectMembersSection");
 
-    if (!membersSection) {
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    const $section =
+        $("#projectMembersSection");
+
+
+    if (!$section.length) {
         return;
     }
 
 
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const membersList =
-        document.getElementById("projectMembersList");
-
-    const messageBox =
-        document.getElementById("projectMembersMessage");
-
-    const addMemberForm =
-        document.getElementById("addProjectMemberForm");
-
-    const memberSelect =
-        document.getElementById("projectMemberSelect");
-
-    const addMemberButton =
-        document.getElementById("addProjectMemberButton");
+    const $membersList =
+        $("#projectMembersList");
 
 
-    /* =====================================================
+    const $messageBox =
+        $("#projectMembersMessage");
+
+
+    const $addForm =
+        $("#addProjectMemberForm");
+
+
+    const $employeeSelect =
+        $("#projectMemberUserId");
+
+
+    const $addButton =
+        $("#addProjectMemberBtn");
+
+
+    /* =========================================================
        URLS
-    ===================================================== */
+    ========================================================= */
 
     const membersUrl =
-        membersSection.dataset.membersUrl;
-
-    const addMemberUrl =
-        membersSection.dataset.addUrl;
+        $section.attr("data-members-url");
 
 
-    /* =====================================================
+    const addUrl =
+        $section.attr("data-add-url");
+
+
+    const removeBaseUrl =
+        $section.attr("data-remove-url");
+
+
+    const role =
+        $section.attr("data-role");
+
+
+    /* =========================================================
        ESCAPE HTML
-    ===================================================== */
+    ========================================================= */
 
-    const escapeHtml = (value) => {
+    function escapeHtml(value) {
 
-        const div =
-            document.createElement("div");
+        return $("<div>")
+            .text(
+                value == null
+                    ? ""
+                    : String(value)
+            )
+            .html();
 
-        div.textContent =
-            value == null
-                ? ""
-                : String(value);
-
-        return div.innerHTML;
-    };
+    }
 
 
-    /* =====================================================
-       SHOW MESSAGE
-    ===================================================== */
+    /* =========================================================
+       MESSAGE
+    ========================================================= */
 
-    const showMessage = (
+    function showMessage(
         message,
         type = "success"
-    ) => {
+    ) {
 
-        if (!messageBox) {
-            return;
+        $messageBox
+            .removeClass(
+                "d-none alert-success alert-danger alert-warning alert-info"
+            )
+            .addClass(
+                "alert-" + type
+            )
+            .text(message);
+
+    }
+
+
+    function clearMessage() {
+
+        $messageBox
+            .addClass("d-none")
+            .removeClass(
+                "alert-success alert-danger alert-warning alert-info"
+            )
+            .text("");
+
+    }
+
+
+    /* =========================================================
+       ERROR MESSAGE
+    ========================================================= */
+
+    function getErrorMessage(
+        xhr,
+        fallback
+    ) {
+
+        if (
+            xhr.responseJSON &&
+            xhr.responseJSON.message
+        ) {
+
+            return xhr.responseJSON.message;
+
         }
 
-        messageBox.className =
-            `alert alert-${type}`;
+        return fallback;
 
-        messageBox.textContent =
-            message;
-
-        messageBox.classList.remove(
-            "d-none"
-        );
-    };
+    }
 
 
-    /* =====================================================
-       CLEAR MESSAGE
-    ===================================================== */
+    /* =========================================================
+       LOADING
+    ========================================================= */
 
-    const clearMessage = () => {
+    function showLoading() {
 
-        if (!messageBox) {
-            return;
-        }
+        $membersList.html(`
 
-        messageBox.classList.add(
-            "d-none"
-        );
-
-        messageBox.textContent = "";
-    };
-
-
-    /* =====================================================
-       LOADING STATE
-    ===================================================== */
-
-    const showLoading = () => {
-
-        if (!membersList) {
-            return;
-        }
-
-        membersList.innerHTML = `
             <div class="project-members-loading">
 
                 <span
@@ -720,262 +616,331 @@ document.addEventListener("DOMContentLoaded", () => {
                     aria-hidden="true">
                 </span>
 
-                Loading members...
+                <span>
+                    Loading latest members...
+                </span>
 
             </div>
-        `;
-    };
+
+        `);
+
+    }
 
 
-    /* =====================================================
+    /* =========================================================
        ERROR STATE
-    ===================================================== */
+    ========================================================= */
 
-    const showError = (message) => {
+    function showError(message) {
 
-        if (!membersList) {
-            showMessage(
-                message,
-                "danger"
-            );
+        $membersList.html(`
 
-            return;
-        }
+            <div
+                class="
+                    project-members-empty
+                    project-members-error
+                ">
 
+                <div
+                    class="project-members-empty-icon">
 
-        membersList.innerHTML = `
-            <div class="project-members-empty">
+                    <i
+                        class="fas fa-triangle-exclamation">
+                    </i>
 
-                <div class="project-members-empty-icon">
-                    <i class="fas fa-triangle-exclamation"></i>
                 </div>
+
 
                 <h5>
                     Could not load members
                 </h5>
 
+
                 <p>
                     ${escapeHtml(message)}
                 </p>
+
 
                 <button
                     type="button"
                     class="btn btn-outline-primary btn-sm"
                     id="retryProjectMembers">
 
-                    <i class="fas fa-rotate-right me-1"></i>
+                    <i
+                        class="fas fa-rotate-right me-1">
+                    </i>
 
                     Try Again
 
                 </button>
 
             </div>
-        `;
 
+        `);
 
-        const retryButton =
-            document.getElementById(
-                "retryProjectMembers"
-            );
-
-
-        if (retryButton) {
-
-            retryButton.addEventListener(
-                "click",
-                loadMembers
-            );
-
-        }
-    };
-
-
-    /* =====================================================
-       RENDER MEMBERS
-    ===================================================== */
-
-   const renderMembers = (members) => {
-
-    if (
-        !Array.isArray(members) ||
-        members.length === 0
-    ) {
-
-        membersList.innerHTML = `
-            <div class="project-members-empty">
-
-                <div class="project-members-empty-icon">
-                    <i class="fas fa-user-slash"></i>
-                </div>
-
-                <h5>
-                    No employees assigned
-                </h5>
-
-                <p>
-                    No employees are currently assigned
-                    to this project.
-                </p>
-
-            </div>
-        `;
-
-        return;
     }
 
 
-    membersList.innerHTML =
-        members.map(member => {
+    /* =========================================================
+       RENDER MEMBERS
+    ========================================================= */
 
-            const fullName =
-                member.full_name ||
-                "Unknown User";
+    function renderMembers(
+        members
+    ) {
 
-            const email =
-                member.email ||
-                "No email";
+        if (
+            !Array.isArray(members) ||
+            members.length === 0
+        ) {
 
-            const role =
-                member.role_name ||
-                "User";
+            $membersList.html(`
 
-            const initials =
-                fullName
-                    .trim()
-                    .split(/\s+/)
-                    .slice(0, 2)
-                    .map(
-                        name =>
-                            name.charAt(0)
-                    )
-                    .join("")
-                    .toUpperCase();
-
-
-            const avatar =
-                member.profile_image
-                    ? `
-                        <img
-                            src="${escapeHtml(
-                                member.profile_image
-                            )}"
-                            alt="${escapeHtml(
-                                fullName
-                            )}"
-                            class="project-member-avatar">
-                      `
-                    : `
-                        <div
-                            class="
-                                project-member-avatar
-                                project-member-avatar-placeholder
-                            ">
-
-                            ${escapeHtml(
-                                initials
-                            )}
-
-                        </div>
-                      `;
-
-
-            /*
-             * Only managers get the Remove button.
-             */
-            const removeButton =
-                `<% if (user.role_name === "manager") { %>
-
-                    <button
-                        type="button"
-                        class="btn btn-outline-danger btn-sm project-remove-member-btn"
-                        data-user-id="${escapeHtml(
-                            member.user_id
-                        )}"
-                        data-user-name="${escapeHtml(
-                            fullName
-                        )}">
-
-                        <i class="fas fa-user-minus me-1"></i>
-
-                        Remove
-
-                    </button>
-
-                <% } %>`;
-
-
-            return `
-                <div
-                    class="project-member-row">
+                <div class="project-members-empty">
 
                     <div
-                        class="project-member-identity">
+                        class="project-members-empty-icon">
 
-                        ${avatar}
-
-                        <div
-                            class="project-member-details">
-
-                            <strong>
-                                ${escapeHtml(
-                                    fullName
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHtml(
-                                    email
-                                )}
-                            </span>
-
-                        </div>
+                        <i
+                            class="fas fa-user-slash">
+                        </i>
 
                     </div>
 
 
-                    <div
-                        class="d-flex align-items-center gap-2">
+                    <h5>
+                        No employees assigned
+                    </h5>
 
-                        <span
-                            class="project-member-role">
 
-                            <i
-                                class="fas fa-user me-1">
-                            </i>
-
-                            ${escapeHtml(
-                                role
-                            )}
-
-                        </span>
-
-                        ${removeButton}
-
-                    </div>
+                    <p>
+                        Add an employee to start collaborating.
+                    </p>
 
                 </div>
-            `;
 
-        }).join("");
-};
-    /* =====================================================
-       RENDER AVAILABLE EMPLOYEES
-    ===================================================== */
+            `);
 
-    const renderAvailableEmployees = (
-        employees
-    ) => {
-
-        if (!memberSelect) {
             return;
         }
 
 
-        memberSelect.innerHTML = `
-            <option value="">
-                Select an employee
-            </option>
-        `;
+        const html =
+            members
+                .map(function (member) {
+
+
+                    const fullName =
+                        String(
+                            member.full_name || "Unknown User"
+                        ).trim();
+
+
+                    const email =
+                        String(
+                            member.email || "No email"
+                        ).trim();
+
+
+                    const roleName =
+                        String(
+                            member.role_name || "User"
+                        ).trim();
+
+
+                    const initials =
+                        fullName
+                            .split(/\s+/)
+                            .slice(0, 2)
+                            .map(
+                                name =>
+                                    name.charAt(0)
+                            )
+                            .join("")
+                            .toUpperCase();
+
+
+                    let avatar;
+
+
+                    if (member.profile_image) {
+
+                        avatar = `
+
+                            <img
+                                src="${escapeHtml(
+                                    member.profile_image
+                                )}"
+
+                                alt="${escapeHtml(
+                                    fullName
+                                )}"
+
+                                class="project-member-avatar">
+
+                        `;
+
+                    } else {
+
+                        avatar = `
+
+                            <div
+                                class="
+                                    project-member-avatar
+                                    project-member-avatar-placeholder
+                                ">
+
+                                ${escapeHtml(
+                                    initials
+                                )}
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    let removeButton = "";
+
+
+                    /*
+                     * Only manager gets Remove.
+                     * Backend remains the authority.
+                     */
+
+                    if (
+                        role === "manager"
+                    ) {
+
+                        removeButton = `
+
+                            <button
+                                type="button"
+
+                                class="
+                                    btn
+                                    btn-outline-danger
+                                    btn-sm
+                                    project-remove-member-btn
+                                "
+
+                                data-user-id="${escapeHtml(
+                                    member.user_id
+                                )}"
+
+                                data-user-name="${escapeHtml(
+                                    fullName
+                                )}">
+
+                                <i
+                                    class="fas fa-user-minus me-1">
+                                </i>
+
+                                Remove
+
+                            </button>
+
+                        `;
+
+                    }
+
+
+                    return `
+
+                        <div
+                            class="project-member-row"
+                            data-user-id="${escapeHtml(
+                                member.user_id
+                            )}">
+
+
+                            <div
+                                class="project-member-identity">
+
+                                ${avatar}
+
+
+                                <div
+                                    class="project-member-details">
+
+                                    <strong>
+                                        ${escapeHtml(
+                                            fullName
+                                        )}
+                                    </strong>
+
+
+                                    <span>
+                                        ${escapeHtml(
+                                            email
+                                        )}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="project-member-actions">
+
+
+                                <span
+                                    class="project-member-role">
+
+                                    <i
+                                        class="fas fa-user me-1">
+                                    </i>
+
+                                    ${escapeHtml(
+                                        roleName
+                                    )}
+
+                                </span>
+
+
+                                ${removeButton}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                })
+                .join("");
+
+
+        $membersList.html(
+            html
+        );
+
+    }
+
+
+    /* =========================================================
+       RENDER AVAILABLE EMPLOYEES
+    ========================================================= */
+
+    function renderAvailableEmployees(
+        employees
+    ) {
+
+        if (!$employeeSelect.length) {
+            return;
+        }
+
+
+        $employeeSelect.empty();
+
+
+        $employeeSelect.append(
+            $("<option>", {
+                value: "",
+                text: "Select an employee"
+            })
+        );
 
 
         if (
@@ -983,553 +948,616 @@ document.addEventListener("DOMContentLoaded", () => {
             employees.length === 0
         ) {
 
-            memberSelect.innerHTML += `
-                <option
-                    value=""
-                    disabled>
+            $employeeSelect.append(
+                $("<option>", {
 
-                    No employees available
+                    value: "",
 
-                </option>
-            `;
+                    text:
+                        "No employees available",
+
+                    disabled:
+                        true
+
+                })
+            );
 
             return;
         }
 
 
-        employees.forEach(
-            employee => {
+        $.each(
+            employees,
+            function (
+                index,
+                employee
+            ) {
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
+                $employeeSelect.append(
+                    $("<option>", {
 
+                        value:
+                            employee.user_id,
 
-                option.value =
-                    employee.user_id;
-
-
-                option.textContent =
-                    `${employee.full_name} — ${employee.email}`;
-
-
-                memberSelect.appendChild(
-                    option
+                        text:
+                            `${String(
+                                employee.full_name || ""
+                            ).trim()} — ${String(
+                                employee.email || ""
+                            ).trim()}`
+                    })
                 );
 
             }
         );
-    };
+
+    }
 
 
-    /* =====================================================
-       VALIDATE ADD MEMBER FORM
-    ===================================================== */
+    /* =========================================================
+       LOAD MEMBERS
+    ========================================================= */
 
-    const validateAddMember = () => {
-
-        if (!memberSelect) {
-            return false;
-        }
-
-
-        memberSelect.classList.remove(
-            "is-invalid"
-        );
-
-
-        if (!memberSelect.value) {
-
-            memberSelect.classList.add(
-                "is-invalid"
-            );
-
-            memberSelect.focus();
-
-            return false;
-        }
-
-
-        return true;
-    };
-
-
-    /* =====================================================
-       LOAD MEMBERS - AJAX GET
-    ===================================================== */
-
-    async function loadMembers() {
+    function loadMembers() {
 
         clearMessage();
 
         showLoading();
 
 
-        try {
+        $.ajax({
 
-            const response =
-                await fetch(
-                    membersUrl,
-                    {
-                        method: "GET",
+            url:
+                membersUrl,
 
-                        headers: {
-                            "Accept":
-                                "application/json"
-                        },
+            type:
+                "GET",
 
-                        credentials:
-                            "same-origin"
-                    }
-                );
+            dataType:
+                "json",
+
+            cache:
+                false,
+
+            headers: {
+
+                "Accept":
+                    "application/json",
+
+                "X-Requested-With":
+                    "XMLHttpRequest"
+
+            },
 
 
-            const contentType =
-                response.headers.get(
-                    "content-type"
-                ) || "";
-
-
-            if (
-                !contentType.includes(
-                    "application/json"
-                )
+            success: function (
+                response
             ) {
 
-                throw new Error(
-                    "The server returned an unexpected response."
-                );
-            }
 
+                if (
+                    !response ||
+                    response.success !== true
+                ) {
 
-            const data =
-                await response.json();
+                    showError(
+                        response &&
+                        response.message
+                            ? response.message
+                            : "Unable to load project members."
+                    );
 
-
-            if (
-                !response.ok ||
-                data.success === false
-            ) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to load project members."
-                );
-            }
-
-
-            /* Render current members */
-            renderMembers(
-                data.members
-            );
-
-
-            /* Render available employees */
-            renderAvailableEmployees(
-                data.availableEmployees
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Project members AJAX error:",
-                error
-            );
-
-
-            showError(
-                error.message ||
-                "Unable to load project members."
-            );
-        }
-    }
-
-
-    /* =====================================================
-       ADD MEMBER - AJAX POST
-    ===================================================== */
-
-    const addProjectMember = async () => {
-
-    if (!validateAddMember()) {
-        return;
-    }
-
-
-    const userId =
-        memberSelect.value;
-
-
-    if (!addMemberButton) {
-        return;
-    }
-
-
-    clearMessage();
-
-
-    addMemberButton.disabled =
-        true;
-
-
-    addMemberButton.innerHTML = `
-        <span
-            class="spinner-border spinner-border-sm me-2"
-            aria-hidden="true">
-        </span>
-
-        Adding...
-    `;
-
-
-    try {
-
-        /*
-         * Use URL-encoded data because the
-         * existing Express application already
-         * handles normal HTML form submissions.
-         */
-        const body =
-            new URLSearchParams();
-
-
-        body.append(
-            "userId",
-            userId
-        );
-
-
-        const response =
-            await fetch(
-                addMemberUrl,
-                {
-                    method: "POST",
-
-                    body: body,
-
-                    headers: {
-                        "Accept":
-                            "application/json",
-
-                        "Content-Type":
-                            "application/x-www-form-urlencoded; charset=UTF-8"
-                    },
-
-                    credentials:
-                        "same-origin"
+                    return;
                 }
-            );
 
 
-        const contentType =
-            response.headers.get(
-                "content-type"
-            ) || "";
+                renderMembers(
+                    response.members
+                );
 
 
-        if (
-            !contentType.includes(
-                "application/json"
-            )
-        ) {
+                /*
+                 * The backend returns this only for managers.
+                 */
+                renderAvailableEmployees(
+                    response.availableEmployees || []
+                );
 
-            throw new Error(
-                "The server returned an unexpected response."
-            );
+            },
+
+
+            error: function (
+                xhr
+            ) {
+
+                console.error(
+                    "Project members AJAX error:",
+                    xhr
+                );
+
+
+                showError(
+                    getErrorMessage(
+                        xhr,
+                        "Unable to load project members."
+                    )
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /* =========================================================
+       VALIDATE ADD MEMBER
+    ========================================================= */
+
+    function validateAddMember() {
+
+        if (!$employeeSelect.length) {
+            return false;
         }
 
 
-        const data =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            data.success === false
-        ) {
-
-            throw new Error(
-                data.message ||
-                "Unable to add employee."
-            );
-        }
-
-
-        /*
-         * Successfully added.
-         */
-        memberSelect.value = "";
-
-
-        memberSelect.classList.remove(
+        $employeeSelect.removeClass(
             "is-invalid"
         );
 
 
-        showMessage(
-            data.message ||
-            "Employee added successfully.",
-            "success"
-        );
+        if (!$employeeSelect.val()) {
 
-
-        /*
-         * Get the newest database state.
-         *
-         * This refreshes:
-         * - members
-         * - available employees
-         */
-        await loadMembers();
-
-
-    } catch (error) {
-
-        console.error(
-            "Add member AJAX error:",
-            error
-        );
-
-
-        showMessage(
-            error.message ||
-            "Unable to add employee.",
-            "danger"
-        );
-
-
-    } finally {
-
-        addMemberButton.disabled =
-            false;
-
-
-        addMemberButton.innerHTML = `
-            <i class="fas fa-user-plus me-2"></i>
-
-            Add Employee
-        `;
-    }
-};
-
-
-
-    /* =====================================================
-       ADD MEMBER - AJAX POST
-    ===================================================== */
-const removeProjectMember = async (
-    userId,
-    userName,
-    button
-) => {
-
-    if (!userId) {
-        return;
-    }
-
-
-    const confirmed =
-        window.confirm(
-            `Remove ${userName} from this project?`
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    clearMessage();
-
-
-    /*
-     * Prevent double-clicking.
-     */
-    button.disabled = true;
-
-
-    const originalContent =
-        button.innerHTML;
-
-
-    button.innerHTML = `
-        <span
-            class="spinner-border spinner-border-sm me-1"
-            aria-hidden="true">
-        </span>
-
-        Removing...
-    `;
-
-
-    try {
-
-        /*
-         * The route is:
-         *
-         * DELETE
-         * /projects/:projectId/members/:userId
-         */
-
-        const removeUrl =
-            `${membersSection.dataset.membersUrl
-                .replace("/data", "")
-            }/${encodeURIComponent(userId)}`;
-
-
-        const response =
-            await fetch(
-                removeUrl,
-                {
-                    method: "DELETE",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    },
-
-                    credentials:
-                        "same-origin"
-                }
+            $employeeSelect.addClass(
+                "is-invalid"
             );
 
 
-        const contentType =
-            response.headers.get(
-                "content-type"
-            ) || "";
+            $("#projectMemberUserIdError")
+                .text(
+                    "Please select an employee."
+                );
 
 
-        if (
-            !contentType.includes(
-                "application/json"
-            )
-        ) {
+            $employeeSelect.focus();
 
-            throw new Error(
-                "The server returned an unexpected response."
-            );
+
+            return false;
         }
 
 
-        const data =
-            await response.json();
+        return true;
 
-
-        if (
-            !response.ok ||
-            data.success === false
-        ) {
-
-            throw new Error(
-                data.message ||
-                "Unable to remove employee."
-            );
-        }
-
-
-        /*
-         * Success.
-         */
-        showMessage(
-            data.message ||
-            "Employee removed successfully.",
-            "success"
-        );
-
-
-        /*
-         * Reload only the members section.
-         *
-         * This also puts the removed employee
-         * back into the available employee
-         * dropdown.
-         */
-        await loadMembers();
-
-
-    } catch (error) {
-
-        console.error(
-            "Remove member AJAX error:",
-            error
-        );
-
-
-        showMessage(
-            error.message ||
-            "Unable to remove employee.",
-            "danger"
-        );
-
-
-        /*
-         * Restore button if the request failed.
-         */
-        button.disabled = false;
-
-        button.innerHTML =
-            originalContent;
     }
-};
-membersList.addEventListener(
-    "click",
-    (event) => {
-
-        const button =
-            event.target.closest(
-                ".project-remove-member-btn"
-            );
 
 
-        if (!button) {
-            return;
-        }
+    /* =========================================================
+       REMOVE SELECT ERROR WHEN CHANGED
+    ========================================================= */
 
+    $employeeSelect.on(
+        "change",
+        function () {
 
-        const userId =
-            button.dataset.userId;
+            if ($(this).val()) {
 
+                $(this).removeClass(
+                    "is-invalid"
+                );
 
-        const userName =
-            button.dataset.userName;
-
-
-        removeProjectMember(
-            userId,
-            userName,
-            button
-        );
-    }
-);
-    /* =====================================================
-       ADD MEMBER FORM SUBMIT
-    ===================================================== */
-
-    if (addMemberForm) {
-
-        addMemberForm.addEventListener(
-            "submit",
-            (event) => {
-
-                event.preventDefault();
-
-                addProjectMember();
+                $("#projectMemberUserIdError")
+                    .text("");
 
             }
-        );
-    }
+
+        }
+    );
 
 
-    /* =====================================================
+    /* =========================================================
+       ADD MEMBER
+    ========================================================= */
+
+    $addForm.on(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+
+            if (
+                !validateAddMember()
+            ) {
+
+                return;
+
+            }
+
+
+            clearMessage();
+
+
+            const originalHtml =
+                $addButton.html();
+
+
+            $addButton
+                .prop(
+                    "disabled",
+                    true
+                )
+                .html(`
+
+                    <span
+                        class="
+                            spinner-border
+                            spinner-border-sm
+                            me-2
+                        "
+                        aria-hidden="true">
+                    </span>
+
+                    Adding...
+
+                `);
+
+
+            $.ajax({
+
+                url:
+                    addUrl,
+
+                type:
+                    "POST",
+
+                data:
+                    $addForm.serialize(),
+
+                dataType:
+                    "json",
+
+                headers: {
+
+                    "Accept":
+                        "application/json",
+
+                    "X-Requested-With":
+                        "XMLHttpRequest"
+
+                },
+
+
+                success: function (
+                    response
+                ) {
+
+
+                    if (
+                        !response ||
+                        response.success !== true
+                    ) {
+
+                        showMessage(
+
+                            response &&
+                            response.message
+                                ? response.message
+                                : "Unable to add employee.",
+
+                            "danger"
+
+                        );
+
+                        return;
+                    }
+
+
+                    /*
+                     * Clear form after successful add.
+                     */
+                    $addForm[0].reset();
+
+
+                    $employeeSelect
+                        .removeClass(
+                            "is-invalid"
+                        );
+
+
+                    $("#projectMemberUserIdError")
+                        .text("");
+
+
+                    showMessage(
+
+                        response.message ||
+                        "Employee added successfully.",
+
+                        "success"
+
+                    );
+
+
+                    /*
+                     * IMPORTANT:
+                     *
+                     * Don't manually append the employee.
+                     *
+                     * Get the newest database state.
+                     */
+                    loadMembers();
+
+                },
+
+
+                error: function (
+                    xhr
+                ) {
+
+                    console.error(
+                        "Add member AJAX error:",
+                        xhr
+                    );
+
+
+                    showMessage(
+
+                        getErrorMessage(
+                            xhr,
+                            "Unable to add employee."
+                        ),
+
+                        "danger"
+
+                    );
+
+                },
+
+
+                complete: function () {
+
+                    $addButton
+                        .prop(
+                            "disabled",
+                            false
+                        )
+                        .html(
+                            originalHtml
+                        );
+
+                }
+
+            });
+
+        }
+    );
+
+
+    /* =========================================================
+       REMOVE MEMBER
+    ========================================================= */
+
+    $(document).on(
+        "click",
+        ".project-remove-member-btn",
+        function () {
+
+
+            const $button =
+                $(this);
+
+
+            const userId =
+                $button.attr(
+                    "data-user-id"
+                );
+
+
+            const userName =
+                $button.attr(
+                    "data-user-name"
+                ) ||
+                "this employee";
+
+
+            if (!userId) {
+
+                showMessage(
+                    "Invalid employee.",
+                    "danger"
+                );
+
+                return;
+            }
+
+
+            if (
+                !window.confirm(
+                    `Remove ${userName} from this project?`
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            clearMessage();
+
+
+            const originalHtml =
+                $button.html();
+
+
+            $button
+                .prop(
+                    "disabled",
+                    true
+                )
+                .html(`
+
+                    <span
+                        class="
+                            spinner-border
+                            spinner-border-sm
+                            me-1
+                        "
+                        aria-hidden="true">
+                    </span>
+
+                    Removing...
+
+                `);
+
+
+            const removeUrl =
+                `${removeBaseUrl}/${encodeURIComponent(
+                    userId
+                )}`;
+
+
+            $.ajax({
+
+                url:
+                    removeUrl,
+
+                type:
+                    "DELETE",
+
+                dataType:
+                    "json",
+
+                headers: {
+
+                    "Accept":
+                        "application/json",
+
+                    "X-Requested-With":
+                        "XMLHttpRequest"
+
+                },
+
+
+                success: function (
+                    response
+                ) {
+
+
+                    if (
+                        !response ||
+                        response.success !== true
+                    ) {
+
+                        showMessage(
+
+                            response &&
+                            response.message
+                                ? response.message
+                                : "Unable to remove employee.",
+
+                            "danger"
+
+                        );
+
+
+                        $button
+                            .prop(
+                                "disabled",
+                                false
+                            )
+                            .html(
+                                originalHtml
+                            );
+
+
+                        return;
+                    }
+
+
+                    showMessage(
+
+                        response.message ||
+                        "Employee removed successfully.",
+
+                        "success"
+
+                    );
+
+
+                    /*
+                     * Reload from DB.
+                     *
+                     * This updates:
+                     * - Current Members
+                     * - Available Employees
+                     */
+                    loadMembers();
+
+                },
+
+
+                error: function (
+                    xhr
+                ) {
+
+                    console.error(
+                        "Remove member AJAX error:",
+                        xhr
+                    );
+
+
+                    showMessage(
+
+                        getErrorMessage(
+                            xhr,
+                            "Unable to remove employee."
+                        ),
+
+                        "danger"
+
+                    );
+
+
+                    $button
+                        .prop(
+                            "disabled",
+                            false
+                        )
+                        .html(
+                            originalHtml
+                        );
+
+                }
+
+            });
+
+        }
+    );
+
+
+    /* =========================================================
+       RETRY
+    ========================================================= */
+
+    $(document).on(
+        "click",
+        "#retryProjectMembers",
+        function () {
+
+            loadMembers();
+
+        }
+    );
+
+
+    /* =========================================================
        INITIAL LOAD
-    ===================================================== */
+    ========================================================= */
 
     loadMembers();
 
 });
 </script>
 
-                <%- include("layout/footer") %>
+
+<%- include("layout/footer") %>

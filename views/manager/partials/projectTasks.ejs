@@ -1,0 +1,1450 @@
+<!-- =========================================================
+     PROJECT TASKS
+========================================================= -->
+
+<section
+    id="projectTasksSection"
+    data-tasks-url="/tasks/project/<%= project.project_id %>/data"
+    data-project-id="<%= project.project_id %>"
+    data-user-id="<%= user.user_id %>"
+    data-user-role="<%= user.role_name %>">
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <div
+        class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3 class="mb-0">
+            Tasks
+        </h3>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#addTaskModal">
+
+            <i class="fas fa-plus me-2"></i>
+
+            Add Task
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         AJAX MESSAGE
+    ===================================================== -->
+
+    <div
+        id="projectTasksMessage"
+        class="alert d-none"
+        role="alert">
+    </div>
+
+
+    <!-- =====================================================
+         TASK LIST
+    ===================================================== -->
+
+    <div
+        id="projectTasksList"
+        class="row g-3"
+        aria-live="polite">
+
+        <!-- AJAX will populate this -->
+
+        <div class="col-12">
+
+            <div class="text-center py-5">
+
+                <div
+                    class="spinner-border text-primary"
+                    role="status">
+
+                    <span class="visually-hidden">
+                        Loading tasks...
+                    </span>
+
+                </div>
+
+                <p class="text-muted mt-2 mb-0">
+                    Loading tasks...
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TASK AJAX
+========================================================= -->
+
+<script>
+$(document).ready(function () {
+
+    /* =========================================================
+       PROJECT TASKS - jQuery AJAX
+    ========================================================= */
+
+    const $section =
+        $("#projectTasksSection");
+
+    if (!$section.length) {
+        return;
+    }
+
+
+    const $taskList =
+        $("#projectTasksList");
+
+    const $message =
+        $("#projectTasksMessage");
+
+
+    const tasksUrl =
+        $section.attr("data-tasks-url");
+
+
+    const projectId =
+        String(
+            $section.attr("data-project-id")
+        );
+
+
+    const currentUserId =
+        String(
+            $section.attr("data-user-id")
+        );
+
+
+    const currentUserRole =
+        $section.attr("data-user-role");
+
+
+    const isManager =
+        currentUserRole === "manager";
+
+
+    /* =========================================================
+       HELPERS
+    ========================================================= */
+
+    function escapeHtml(value) {
+
+        return $("<div>")
+            .text(
+                value == null
+                    ? ""
+                    : String(value)
+            )
+            .html();
+    }
+
+
+    function getErrorMessage(
+        xhr,
+        fallback
+    ) {
+
+        if (
+            xhr.responseJSON &&
+            xhr.responseJSON.message
+        ) {
+            return xhr.responseJSON.message;
+        }
+
+        return fallback;
+    }
+
+
+    function showMessage(
+        message,
+        type = "success"
+    ) {
+
+        $message
+            .removeClass(
+                "d-none alert-success alert-danger alert-warning alert-info"
+            )
+            .addClass(
+                "alert-" + type
+            )
+            .text(message);
+    }
+
+
+    function clearMessage() {
+
+        $message
+            .addClass("d-none")
+            .removeClass(
+                "alert-success alert-danger alert-warning alert-info"
+            )
+            .text("");
+    }
+
+
+    function showLoading() {
+
+        $taskList.html(`
+            <div class="col-12">
+
+                <div class="text-center py-5">
+
+                    <div
+                        class="spinner-border text-primary"
+                        role="status">
+
+                        <span class="visually-hidden">
+                            Loading tasks...
+                        </span>
+
+                    </div>
+
+                    <p class="text-muted mt-2 mb-0">
+                        Loading tasks...
+                    </p>
+
+                </div>
+
+            </div>
+        `);
+    }
+
+
+    function showTaskError(message) {
+
+        $taskList.html(`
+            <div class="col-12">
+
+                <div class="text-center py-5">
+
+                    <i
+                        class="fas fa-triangle-exclamation
+                               fa-2x
+                               text-danger
+                               mb-3">
+                    </i>
+
+                    <h5>
+                        Unable to load tasks
+                    </h5>
+
+                    <p class="text-muted">
+                        ${escapeHtml(message)}
+                    </p>
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        id="retryTasksBtn">
+
+                        <i class="fas fa-rotate-right me-1"></i>
+                        Try Again
+
+                    </button>
+
+                </div>
+
+            </div>
+        `);
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "No Due Date";
+        }
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "No Due Date";
+        }
+
+        return date.toLocaleDateString();
+    }
+
+
+    function formatDateForInput(value) {
+
+        if (!value) {
+            return "";
+        }
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "";
+        }
+
+        return date.toISOString().split("T")[0];
+    }
+
+
+    function getPriorityClass(priority) {
+
+        switch (priority) {
+
+            case "Critical":
+                return "bg-danger";
+
+            case "High":
+                return "bg-warning text-dark";
+
+            case "Medium":
+                return "bg-primary";
+
+            default:
+                return "bg-secondary";
+        }
+    }
+
+
+    /*
+     * Controllers that still return a redirect/HTML can be
+     * tolerated here. JSON is preferred, but the DB operation
+     * has already happened, so we refresh the task list.
+     */
+    function normalizeMutationResponse(response) {
+
+        if (
+            response &&
+            typeof response === "object"
+        ) {
+            return response;
+        }
+
+        if (typeof response === "string") {
+
+            try {
+                return JSON.parse(response);
+            } catch (error) {
+
+                return {
+                    success: true,
+                    legacyHtmlResponse: true
+                };
+            }
+        }
+
+        return {};
+    }
+
+
+    /* =========================================================
+       RENDER TASKS
+    ========================================================= */
+
+    function renderTasks(tasks) {
+
+        if (
+            !Array.isArray(tasks) ||
+            tasks.length === 0
+        ) {
+
+            $taskList.html(`
+                <div class="col-12">
+
+                    <div
+                        class="card border-0 shadow-sm">
+
+                        <div
+                            class="card-body
+                                   text-center
+                                   text-muted
+                                   py-5">
+
+                            <i
+                                class="fas fa-clipboard-list
+                                       fa-2x
+                                       mb-3">
+                            </i>
+
+                            <h5>
+                                No tasks available.
+                            </h5>
+
+                            <p class="mb-0">
+                                There are no tasks
+                                in this project yet.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            `);
+
+            return;
+        }
+
+
+        let html = "";
+
+
+        $.each(
+            tasks,
+            function (index, task) {
+
+                const taskId =
+                    String(task.task_id);
+
+
+                /*
+                 * Keep the same client-side visibility
+                 * rules already used by the project page.
+                 *
+                 * Server-side authorization remains authoritative.
+                 */
+                const isTaskCreator =
+                    String(task.created_by) ===
+                    currentUserId;
+
+
+                const isTaskAssignee =
+                    task.assigned_to &&
+                    String(task.assigned_to) ===
+                    currentUserId;
+
+
+                const canEdit =
+                    isManager ||
+                    isTaskCreator;
+
+
+                const canDelete =
+                    isManager ||
+                    isTaskCreator;
+
+
+                const canChangeStatus =
+                    isManager ||
+                    isTaskCreator ||
+                    isTaskAssignee;
+
+
+                const title =
+                    escapeHtml(
+                        task.title || ""
+                    );
+
+
+                const description =
+                    escapeHtml(
+                        task.description ||
+                        "No description"
+                    );
+
+
+                const priority =
+                    escapeHtml(
+                        task.priority || ""
+                    );
+
+
+                const status =
+                    escapeHtml(
+                        task.status || ""
+                    );
+
+
+                const assignedUser =
+                    task.assigned_user
+                        ? escapeHtml(
+                            String(
+                                task.assigned_user
+                            ).trim()
+                        )
+                        : "";
+
+
+                const assignedTo =
+                    task.assigned_to
+                        ? String(task.assigned_to)
+                        : "";
+
+
+                const dueDate =
+                    formatDate(task.due_date);
+
+
+                const editDueDate =
+                    formatDateForInput(
+                        task.due_date
+                    );
+
+
+                let statusHtml = "";
+
+
+                if (canChangeStatus) {
+
+                    statusHtml = `
+                        <button
+                            type="button"
+                            class="btn btn-sm
+                                ${
+                                    task.status === "Completed"
+                                        ? "btn-success"
+                                        : "btn-outline-success"
+                                }
+                                task-toggle-btn"
+                            data-task-id="${escapeHtml(taskId)}"
+                            title="Change task status">
+
+                            ${
+                                task.status === "Completed"
+                                    ? "✔"
+                                    : "○"
+                            }
+
+                        </button>
+                    `;
+                }
+
+
+                let assignHtml = "";
+
+
+                if (isManager) {
+
+                    assignHtml = `
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-sm assignTaskBtn"
+
+                            data-task-id="${escapeHtml(taskId)}"
+                            data-assigned-to="${escapeHtml(assignedTo)}"
+
+                            data-bs-toggle="modal"
+                            data-bs-target="#assignTaskModal">
+
+                            <i class="fas fa-user-plus"></i>
+
+                        </button>
+                    `;
+                }
+
+
+                let editHtml = "";
+
+
+                if (canEdit) {
+
+                    editHtml = `
+                        <button
+                            type="button"
+                            class="btn btn-warning btn-sm editTaskBtn"
+
+                            data-id="${escapeHtml(taskId)}"
+                            data-title="${escapeHtml(task.title || "")}"
+                            data-description="${escapeHtml(task.description || "")}"
+                            data-priority="${escapeHtml(task.priority || "")}"
+                            data-status="${escapeHtml(task.status || "")}"
+                            data-due-date="${escapeHtml(editDueDate)}"
+
+                            data-bs-toggle="modal"
+                            data-bs-target="#editTaskModal">
+
+                            <i class="fas fa-pencil"></i>
+
+                        </button>
+                    `;
+                }
+
+
+                let deleteHtml = "";
+
+
+                if (canDelete) {
+
+                    deleteHtml = `
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-sm deleteTaskBtn"
+
+                            data-task-id="${escapeHtml(taskId)}"
+                            data-task-title="${escapeHtml(task.title || "")}">
+
+                            <i class="fas fa-trash"></i>
+
+                        </button>
+                    `;
+                }
+
+
+                const assignmentHtml =
+                    assignedUser
+                        ? `
+                            Assigned to:
+                            <strong>
+                                ${assignedUser}
+                            </strong>
+                          `
+                        : `
+                            <span class="text-muted">
+                                Unassigned
+                            </span>
+                          `;
+
+
+                html += `
+                    <div
+                        class="col-md-6"
+                        data-task-id="${escapeHtml(taskId)}">
+
+                        <div
+                            class="card border-0 shadow-sm h-100">
+
+                            <div class="card-body">
+
+                                <div
+                                    class="d-flex
+                                           justify-content-between">
+
+                                    <div>
+
+                                        <h5 class="fw-bold mb-1">
+                                            ${title}
+                                        </h5>
+
+                                        <p class="text-muted mb-3">
+                                            ${description}
+                                        </p>
+
+                                    </div>
+
+                                    ${statusHtml}
+
+                                </div>
+
+
+                                <div class="mb-3">
+
+                                    <span
+                                        class="badge
+                                               ${getPriorityClass(task.priority)}">
+
+                                        ${priority}
+
+                                    </span>
+
+                                    <span
+                                        class="badge bg-dark">
+
+                                        ${status}
+
+                                    </span>
+
+                                </div>
+
+
+                                <small
+                                    class="text-muted
+                                           d-block
+                                           mb-2">
+
+                                    <i
+                                        class="fas fa-calendar me-2">
+                                    </i>
+
+                                    ${escapeHtml(dueDate)}
+
+                                </small>
+
+
+                                <small
+                                    class="text-muted
+                                           d-block
+                                           mb-3">
+
+                                    <i
+                                        class="fas fa-user me-2">
+                                    </i>
+
+                                    ${assignmentHtml}
+
+                                </small>
+
+
+                                <div
+                                    class="d-flex
+                                           justify-content-end
+                                           gap-2">
+
+                                    ${assignHtml}
+                                    ${editHtml}
+                                    ${deleteHtml}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        );
+
+
+        $taskList.html(html);
+    }
+
+
+    /* =========================================================
+       GET TASKS
+    ========================================================= */
+
+    function loadProjectTasks() {
+
+        clearMessage();
+        showLoading();
+
+
+        $.ajax({
+
+            url: tasksUrl,
+
+            type: "GET",
+
+            dataType: "json",
+
+            cache: false,
+
+            headers: {
+                "Accept": "application/json",
+                "X-Requested-With":
+                    "XMLHttpRequest"
+            },
+
+            success: function (response) {
+
+                console.log(
+                    "Tasks loaded:",
+                    response
+                );
+
+
+                if (
+                    !response ||
+                    response.success !== true
+                ) {
+
+                    showTaskError(
+                        response && response.message
+                            ? response.message
+                            : "Unable to load tasks."
+                    );
+
+                    return;
+                }
+
+
+                renderTasks(
+                    response.tasks
+                );
+            },
+
+            error: function (xhr) {
+
+                console.error(
+                    "Task GET error:",
+                    xhr
+                );
+
+
+                showTaskError(
+                    getErrorMessage(
+                        xhr,
+                        "Unable to load project tasks."
+                    )
+                );
+            }
+        });
+    }
+
+
+    /* =========================================================
+       AJAX MUTATION HELPER
+    ========================================================= */
+
+    function runTaskMutation({
+        url,
+        data = null,
+        button = null,
+        loadingHtml = null,
+        successFallback,
+        errorFallback,
+        onSuccess = null
+    }) {
+
+        let originalHtml = null;
+
+
+        if (button) {
+
+            originalHtml =
+                button.html();
+
+            button
+                .prop("disabled", true);
+
+
+            if (loadingHtml) {
+                button.html(loadingHtml);
+            }
+        }
+
+
+        clearMessage();
+
+
+        $.ajax({
+
+            url: url,
+
+            type: "POST",
+
+            data: data,
+
+            /*
+             * Do not force dataType here.
+             *
+             * This lets us safely tolerate either:
+             * JSON from the updated controller, or
+             * the old redirect/HTML response.
+             */
+            headers: {
+                "Accept": "application/json",
+                "X-Requested-With":
+                    "XMLHttpRequest"
+            },
+
+            success: function (response) {
+
+                const result =
+                    normalizeMutationResponse(
+                        response
+                    );
+
+
+                /*
+                 * Explicit JSON failure.
+                 */
+                if (
+                    result &&
+                    result.success === false
+                ) {
+
+                    showMessage(
+                        result.message ||
+                        errorFallback,
+                        "danger"
+                    );
+
+                    return;
+                }
+
+
+                if (typeof onSuccess === "function") {
+                    onSuccess(result);
+                }
+
+
+                showMessage(
+                    result.message ||
+                    successFallback,
+                    "success"
+                );
+
+
+                /*
+                 * Always fetch the newest DB state.
+                 */
+                loadProjectTasks();
+            },
+
+            error: function (xhr) {
+
+                console.error(
+                    "Task mutation error:",
+                    xhr
+                );
+
+
+                showMessage(
+                    getErrorMessage(
+                        xhr,
+                        errorFallback
+                    ),
+                    "danger"
+                );
+            },
+
+            complete: function () {
+
+                if (button) {
+
+                    button
+                        .prop("disabled", false)
+                        .html(originalHtml);
+                }
+            }
+        });
+    }
+
+
+    /* =========================================================
+       CREATE TASK
+    ========================================================= */
+
+    $(document).on(
+        "submit",
+        "#addTaskForm",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+            const $form = $(form);
+
+
+            if (!form.checkValidity()) {
+
+                form.classList.add(
+                    "was-validated"
+                );
+
+                return;
+            }
+
+
+            const $button =
+                $form.find(
+                    '[type="submit"]'
+                );
+
+
+            runTaskMutation({
+
+                url:
+                    $form.attr("action") ||
+                    "/tasks",
+
+                data:
+                    $form.serialize(),
+
+                button:
+                    $button,
+
+                loadingHtml: `
+                    <span
+                        class="spinner-border
+                               spinner-border-sm
+                               me-2"
+                        aria-hidden="true">
+                    </span>
+                    Creating...
+                `,
+
+                successFallback:
+                    "Task created successfully.",
+
+                errorFallback:
+                    "Unable to create task.",
+
+                onSuccess: function () {
+
+                    /*
+                     * Close modal only after successful request.
+                     */
+                    const modalElement =
+                        document.getElementById(
+                            "addTaskModal"
+                        );
+
+
+                    if (
+                        modalElement &&
+                        window.bootstrap
+                    ) {
+
+                        const modal =
+                            bootstrap.Modal
+                                .getInstance(
+                                    modalElement
+                                );
+
+
+                        if (modal) {
+                            modal.hide();
+                        }
+                    }
+
+
+                    form.reset();
+
+                    form.classList.remove(
+                        "was-validated"
+                    );
+                }
+            });
+        }
+    );
+
+
+    /* =========================================================
+       OPEN EDIT MODAL
+    ========================================================= */
+
+    $(document).on(
+        "click",
+        ".editTaskBtn",
+        function () {
+
+            const $button =
+                $(this);
+
+
+            $("#editTitle").val(
+                $button.attr("data-title") || ""
+            );
+
+
+            $("#editDescription").val(
+                $button.attr("data-description") || ""
+            );
+
+
+            $("#editPriority").val(
+                $button.attr("data-priority") || ""
+            );
+
+
+            $("#editStatus").val(
+                $button.attr("data-status") || ""
+            );
+
+
+            $("#editDueDate").val(
+                $button.attr("data-due-date") || ""
+            );
+
+
+            $("#editTaskForm").attr(
+                "action",
+                `/tasks/${encodeURIComponent(
+                    $button.attr("data-id")
+                )}/update`
+            );
+
+
+            $("#editTaskForm")
+                .removeClass(
+                    "was-validated"
+                );
+        }
+    );
+
+
+    /* =========================================================
+       UPDATE TASK
+    ========================================================= */
+
+    $(document).on(
+        "submit",
+        "#editTaskForm",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+            const $form = $(form);
+
+
+            if (!form.checkValidity()) {
+
+                form.classList.add(
+                    "was-validated"
+                );
+
+                return;
+            }
+
+
+            const $button =
+                $form.find(
+                    '[type="submit"]'
+                );
+
+
+            runTaskMutation({
+
+                url:
+                    $form.attr("action"),
+
+                data:
+                    $form.serialize(),
+
+                button:
+                    $button,
+
+                loadingHtml: `
+                    <span
+                        class="spinner-border
+                               spinner-border-sm
+                               me-2"
+                        aria-hidden="true">
+                    </span>
+                    Saving...
+                `,
+
+                successFallback:
+                    "Task updated successfully.",
+
+                errorFallback:
+                    "Unable to update task.",
+
+                onSuccess: function () {
+
+                    const modalElement =
+                        document.getElementById(
+                            "editTaskModal"
+                        );
+
+
+                    if (
+                        modalElement &&
+                        window.bootstrap
+                    ) {
+
+                        const modal =
+                            bootstrap.Modal
+                                .getInstance(
+                                    modalElement
+                                );
+
+
+                        if (modal) {
+                            modal.hide();
+                        }
+                    }
+                }
+            });
+        }
+    );
+
+
+    /* =========================================================
+       DELETE TASK
+    ========================================================= */
+
+    $(document).on(
+        "click",
+        ".deleteTaskBtn",
+        function () {
+
+            const $button =
+                $(this);
+
+
+            const taskId =
+                $button.attr(
+                    "data-task-id"
+                );
+
+
+            const title =
+                $button.attr(
+                    "data-task-title"
+                ) ||
+                "this task";
+
+
+            if (!taskId) {
+                return;
+            }
+
+
+            if (
+                !window.confirm(
+                    `Delete "${title}"?`
+                )
+            ) {
+                return;
+            }
+
+
+            runTaskMutation({
+
+                url:
+                    `/tasks/${encodeURIComponent(
+                        taskId
+                    )}/delete`,
+
+                button:
+                    $button,
+
+                loadingHtml: `
+                    <span
+                        class="spinner-border
+                               spinner-border-sm"
+                        aria-hidden="true">
+                    </span>
+                `,
+
+                successFallback:
+                    "Task deleted successfully.",
+
+                errorFallback:
+                    "Unable to delete task."
+            });
+        }
+    );
+
+
+    /* =========================================================
+       TOGGLE TASK STATUS
+    ========================================================= */
+
+    $(document).on(
+        "click",
+        ".task-toggle-btn",
+        function () {
+
+            const $button =
+                $(this);
+
+
+            const taskId =
+                $button.attr(
+                    "data-task-id"
+                );
+
+
+            if (!taskId) {
+                return;
+            }
+
+
+            runTaskMutation({
+
+                url:
+                    `/tasks/${encodeURIComponent(
+                        taskId
+                    )}/toggle`,
+
+                button:
+                    $button,
+
+                loadingHtml: `
+                    <span
+                        class="spinner-border
+                               spinner-border-sm"
+                        aria-hidden="true">
+                    </span>
+                `,
+
+                successFallback:
+                    "Task status updated successfully.",
+
+                errorFallback:
+                    "Unable to update task status."
+            });
+        }
+    );
+
+
+    /* =========================================================
+       ASSIGN MODAL OPEN
+    ========================================================= */
+
+    const assignTaskModal =
+        document.getElementById(
+            "assignTaskModal"
+        );
+
+
+    if (assignTaskModal) {
+
+        assignTaskModal.addEventListener(
+            "show.bs.modal",
+            function (event) {
+
+                const button =
+                    event.relatedTarget;
+
+
+                if (!button) {
+                    return;
+                }
+
+
+                const taskId =
+                    button.getAttribute(
+                        "data-task-id"
+                    );
+
+
+                const assignedTo =
+                    button.getAttribute(
+                        "data-assigned-to"
+                    ) || "";
+
+
+                const form =
+                    assignTaskModal.querySelector(
+                        "#assignTaskForm"
+                    );
+
+
+                const select =
+                    assignTaskModal.querySelector(
+                        "#assignedTo"
+                    );
+
+
+                if (
+                    !form ||
+                    !select
+                ) {
+                    return;
+                }
+
+
+                form.action =
+                    `/tasks/${encodeURIComponent(
+                        taskId
+                    )}/assign`;
+
+
+                select.value =
+                    String(assignedTo);
+            }
+        );
+    }
+
+
+    /* =========================================================
+       ASSIGN / REASSIGN TASK
+    ========================================================= */
+
+    $(document).on(
+        "submit",
+        "#assignTaskForm",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const form = this;
+            const $form = $(form);
+
+
+            /*
+             * Assignment may be empty if your modal allows
+             * making the task unassigned.
+             */
+            const $button =
+                $form.find(
+                    '[type="submit"]'
+                );
+
+
+            runTaskMutation({
+
+                url:
+                    $form.attr("action"),
+
+                data:
+                    $form.serialize(),
+
+                button:
+                    $button,
+
+                loadingHtml: `
+                    <span
+                        class="spinner-border
+                               spinner-border-sm
+                               me-2"
+                        aria-hidden="true">
+                    </span>
+                    Saving...
+                `,
+
+                successFallback:
+                    "Task assignment updated successfully.",
+
+                errorFallback:
+                    "Unable to update task assignment.",
+
+                onSuccess: function () {
+
+                    const modalElement =
+                        document.getElementById(
+                            "assignTaskModal"
+                        );
+
+
+                    if (
+                        modalElement &&
+                        window.bootstrap
+                    ) {
+
+                        const modal =
+                            bootstrap.Modal
+                                .getInstance(
+                                    modalElement
+                                );
+
+
+                        if (modal) {
+                            modal.hide();
+                        }
+                    }
+                }
+            });
+        }
+    );
+
+
+    /* =========================================================
+       RETRY
+    ========================================================= */
+
+    $(document).on(
+        "click",
+        "#retryTasksBtn",
+        function () {
+
+            loadProjectTasks();
+
+        }
+    );
+
+
+    /* =========================================================
+       INITIAL LOAD
+    ========================================================= */
+
+    loadProjectTasks();
+
+});
+</script>
+
+
