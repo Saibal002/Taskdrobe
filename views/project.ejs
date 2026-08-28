@@ -1,5 +1,5 @@
 <%- include("layout/header", { title: project.project_name }   ) %>
-
+<link rel="stylesheet" href="/css/project.css">
     <div class="container mt-5">
 
         <div class="project-page-shell">
@@ -8,7 +8,7 @@
              PROJECT OVERVIEW
         ====================================================== -->
 
-            <section class="project-overview-card">
+            <section class="project-overview-card ">
 
                 <div class="project-overview-top">
 
@@ -240,42 +240,132 @@
              New design + jQuery AJAX
         ====================================================== -->
 
-            <section class="project-members-section mt-4" id="projectMembersSection"
-                data-members-url="/projects/<%= project.project_id %>/members/data"
-                data-add-url="/projects/<%= project.project_id %>/members"
-                data-remove-url="/projects/<%= project.project_id %>/members" data-role="<%= user.role_name %>">
+            <% if (user && user.role_name === "manager") { %>
+
+    <!-- =====================================================
+         PROJECT MEMBERS
+         MANAGER ONLY
+    ====================================================== -->
+
+    <section
+        class="project-members-section mt-4"
+        id="projectMembersSection"
+        data-members-url="/projects/<%= project.project_id %>/members/data"
+        data-add-url="/projects/<%= project.project_id %>/members"
+        data-remove-url="/projects/<%= project.project_id %>/members"
+        data-role="<%= user.role_name %>">
 
 
-                <div class="project-members-card">
+        <div class="project-members-card">
 
 
-                    <!-- ===============================
-                     HEADER
-                ================================ -->
+            <!-- HEADER -->
 
-                    <div class="project-members-header">
+            <div class="project-members-header">
 
-                        <div class="project-members-heading">
+                <div class="project-members-heading">
 
-                            <div class="project-section-icon">
+                    <div class="project-section-icon">
 
-                                <i class="fas fa-users"></i>
+                        <i class="fas fa-users"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="project-section-eyebrow">
+                            Collaboration
+                        </div>
+
+                        <h3 class="project-section-title">
+                            Project Members
+                        </h3>
+
+                        <p class="project-section-subtitle">
+                            People currently working on this project.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <span class="project-members-permission-badge">
+
+                    <i class="fas fa-user-shield me-1"></i>
+
+                    Manager
+
+                </span>
+
+            </div>
+
+
+            <!-- AJAX MESSAGE -->
+
+            <div
+                id="projectMembersMessage"
+                class="project-members-message alert d-none"
+                role="alert">
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- CURRENT MEMBERS -->
+
+                <div class="col-lg-7">
+
+                    <div
+                        id="projectMembersList"
+                        class="project-members-list"
+                        aria-live="polite">
+
+                        <div class="project-members-loading">
+
+                            <span
+                                class="spinner-border spinner-border-sm"
+                                aria-hidden="true">
+                            </span>
+
+                            <span>
+                                Loading members...
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ADD MEMBER -->
+
+                <div class="col-lg-5">
+
+                    <div class="project-add-member-panel">
+
+
+                        <div class="project-add-member-heading">
+
+
+                            <div class="project-add-member-icon">
+
+                                <i class="fas fa-user-plus"></i>
 
                             </div>
 
 
                             <div>
 
-                                <div class="project-section-eyebrow">
-                                    Collaboration
-                                </div>
+                                <h4>
+                                    Add Employee
+                                </h4>
 
-                                <h3 class="project-section-title">
-                                    Project Members
-                                </h3>
-
-                                <p class="project-section-subtitle">
-                                    People currently working on this project.
+                                <p>
+                                    Assign an active employee to this project.
                                 </p>
 
                             </div>
@@ -283,160 +373,71 @@
                         </div>
 
 
-                        <% if (user.role_name==="manager" ) { %>
-
-                            <span class="project-members-permission-badge">
-
-                                <i class="fas fa-user-shield me-1"></i>
-
-                                Manager
-
-                            </span>
-
-                            <% } else if (user.role_name==="admin" ) { %>
-
-                                <span class="project-members-permission-badge">
-
-                                    <i class="fas fa-eye me-1"></i>
-
-                                    Read only
-
-                                </span>
-
-                                <% } %>
-
-                    </div>
+                        <form
+                            id="addProjectMemberForm"
+                            novalidate>
 
 
-                    <!-- ===============================
-                     AJAX MESSAGE
-                ================================ -->
-
-                    <div id="projectMembersMessage" class="project-members-message alert d-none" role="alert">
-                    </div>
+                            <div class="mb-3">
 
 
-                    <div class="row g-4">
+                                <label
+                                    for="projectMemberUserId"
+                                    class="form-label fw-semibold">
+
+                                    Employee
+
+                                </label>
 
 
-                        <!-- ===============================
-                         CURRENT MEMBERS
-                    ================================ -->
+                                <select
+                                    class="form-select"
+                                    id="projectMemberUserId"
+                                    name="userId"
+                                    required>
 
-                        <div class="<%= user.role_name === 'manager'
-                            ? 'col-lg-7'
-                            : 'col-12' %>">
+                                    <option value="">
+                                        Select an employee
+                                    </option>
+
+                                </select>
 
 
-                            <div id="projectMembersList" class="project-members-list" aria-live="polite">
+                                <div
+                                    class="invalid-feedback"
+                                    id="projectMemberUserIdError">
 
-
-                                <div class="project-members-loading">
-
-                                    <span class="spinner-border spinner-border-sm" aria-hidden="true">
-                                    </span>
-
-                                    <span>
-                                        Loading members...
-                                    </span>
+                                    Please select an employee.
 
                                 </div>
 
                             </div>
 
-                        </div>
 
+                            <button
+                                type="submit"
+                                id="addProjectMemberBtn"
+                                class="btn btn-primary w-100">
 
-                        <!-- ===============================
-                         ADD MEMBER - MANAGER ONLY
-                    ================================ -->
+                                <i class="fas fa-user-plus me-2"></i>
 
-                        <% if (user.role_name==="manager" ) { %>
+                                Add Employee
 
-                            <div class="col-lg-5">
+                            </button>
 
-                                <div class="project-add-member-panel">
-
-
-                                    <div class="project-add-member-heading">
-
-
-                                        <div class="project-add-member-icon">
-
-                                            <i class="fas fa-user-plus">
-                                            </i>
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <h4>
-                                                Add Employee
-                                            </h4>
-
-                                            <p>
-                                                Assign an active employee to this project.
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <form id="addProjectMemberForm" novalidate>
-
-
-                                        <div class="mb-3">
-
-
-                                            <label for="projectMemberUserId" class="form-label fw-semibold">
-
-                                                Employee
-
-                                            </label>
-
-
-                                            <select class="form-select" id="projectMemberUserId" name="userId" required>
-
-                                                <option value="">
-                                                    Select an employee
-                                                </option>
-
-                                            </select>
-
-
-                                            <div class="invalid-feedback" id="projectMemberUserIdError">
-
-                                                Please select an employee.
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <button type="submit" id="addProjectMemberBtn" class="btn btn-primary w-100">
-
-                                            <i class="fas fa-user-plus me-2">
-                                            </i>
-
-                                            Add Employee
-
-                                        </button>
-
-                                    </form>
-
-                                </div>
-
-                            </div>
-
-                            <% } %>
+                        </form>
 
                     </div>
 
                 </div>
 
-            </section>
+            </div>
+
+        </div>
+
+    </section>
+
+<% } %>
 
 
             <!-- =====================================================
