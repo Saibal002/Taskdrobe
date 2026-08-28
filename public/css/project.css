@@ -1,739 +1,563 @@
 /* =========================================================
-   TASKDROBE PROJECT PAGE
+   TASKDROBE PROJECT PAGE STYLES
    ========================================================= */
+
+
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #f8fafc;
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 .project-page-shell {
     max-width: 1180px;
     margin: 2rem auto 4rem;
 }
 
-
 /* =========================================================
    PROJECT OVERVIEW / HERO
    ========================================================= */
-
 .project-overview-card {
     position: relative;
     overflow: hidden;
-    padding: 2rem;
+    padding: 3rem;
     border: 0;
-    border-radius: 24px;
-
-    background: linear-gradient(
-        135deg,
-        #6366f1 0%,
-        #7c3aed 100%
-    );
-
+    border-radius: 28px;
+    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
     color: #fff;
-
-    box-shadow:
-        0 18px 50px rgba(15, 23, 42, .14);
+    box-shadow: 0 20px 50px rgba(99, 102, 241, 0.2);
 }
 
-
-/* Decorative circles */
-
-.project-overview-card::before {
+.project-overview-card::before, .project-overview-card::after {
     content: "";
     position: absolute;
-
-    width: 300px;
-    height: 300px;
-
-    right: -120px;
-    top: -150px;
-
     border-radius: 50%;
-
-    background: rgba(255, 255, 255, .08);
-
     pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    backdrop-filter: blur(10px);
+}
+
+.project-overview-card::before {
+    width: 400px; height: 400px;
+    right: -100px; top: -150px;
 }
 
 .project-overview-card::after {
-    content: "";
-    position: absolute;
-
-    width: 180px;
-    height: 180px;
-
-    left: -100px;
-    bottom: -110px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 255, 255, .05);
-
-    pointer-events: none;
+    width: 200px; height: 200px;
+    left: -80px; bottom: -80px;
 }
-
-
-/* =========================================================
-   OVERVIEW HEADER
-   ========================================================= */
 
 .project-overview-top {
     position: relative;
-    z-index: 1;
-
+    z-index: 2;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-
     gap: 2rem;
 }
-
-
-.project-overview-heading {
-    min-width: 0;
-}
-
-
-/* Back link */
 
 .project-back-link {
     display: inline-flex;
     align-items: center;
-
-    gap: .5rem;
-
-    margin-bottom: 1.25rem;
-
-    color: rgba(255, 255, 255, .78);
-
-    font-size: .88rem;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
     font-weight: 600;
-
     text-decoration: none;
-
-    transition:
-        color .2s ease,
-        transform .2s ease;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
 }
 
 .project-back-link:hover {
     color: #fff;
-    transform: translateX(-3px);
+    background: rgba(255,255,255,0.2);
+    transform: translateX(-5px);
 }
 
-
-/* Title */
-
-.project-title-row {
-    display: flex;
-    align-items: center;
-
-    gap: 1rem;
-}
-
+.project-title-row { display: flex; align-items: center; gap: 1.25rem; }
 
 .project-title-icon {
-    width: 58px;
-    height: 58px;
-
-    flex: 0 0 58px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 18px;
-
+    width: 64px; height: 64px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 20px;
     color: #6366f1;
-
-    background: rgba(255, 255, 255, .95);
-
-    box-shadow:
-        0 12px 28px rgba(15, 23, 42, .18);
-
-    font-size: 1.25rem;
+    background: #ffffff;
+    font-size: 1.5rem;
 }
-
 
 .project-eyebrow {
-    margin-bottom: .2rem;
-
-    color: rgba(255, 255, 255, .65);
-
-    font-size: .72rem;
+    color: #e0e7ff;
+    font-size: 0.75rem;
     font-weight: 800;
-
-    letter-spacing: .12em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
+    margin-bottom: 0.3rem;
 }
-
 
 .project-page-title {
-    margin: 0;
-
-    color: #fff;
-
-    font-size: clamp(1.7rem, 3vw, 2.45rem);
-
-    font-weight: 800;
-    line-height: 1.15;
-
-    overflow-wrap: anywhere;
+    margin: 0; color: #fff;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.1;
 }
-
 
 .project-page-description {
-    max-width: 720px;
-
-    margin: 1.25rem 0 0;
-
-    color: rgba(255, 255, 255, .82);
-
-    font-size: .98rem;
-    line-height: 1.7;
+    max-width: 600px; margin: 1.5rem 0 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.05rem; line-height: 1.6;
 }
-
 
 /* =========================================================
-   PROJECT STATUS
+   STATUS & KPIS
    ========================================================= */
-
 .project-status-panel {
-    position: relative;
-    z-index: 1;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-
-    gap: .55rem;
-
-    min-width: 145px;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem;
 }
-
 
 .project-status-label {
-    color: rgba(255, 255, 255, .62);
-
-    font-size: .72rem;
-    font-weight: 800;
-
-    letter-spacing: .08em;
-    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.75rem; font-weight: 800;
+    letter-spacing: 0.1em; text-transform: uppercase;
 }
 
-
 .project-status-badge {
-    display: inline-flex;
-    align-items: center;
-
-    gap: .5rem;
-
-    padding: .55rem .85rem;
-
-    border: 1px solid rgba(255, 255, 255, .25);
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 999px;
-
-    font-size: .82rem;
-    font-weight: 700;
-
-    white-space: nowrap;
-
+    font-size: 0.85rem; font-weight: 700;
     backdrop-filter: blur(10px);
 }
 
+.project-status-completed { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
+.project-status-progress { color: #3730a3; background: #e0e7ff; border-color: #c7d2fe; }
+.project-status-cancelled { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
 
-.project-status-dot {
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: currentColor;
-}
-
-
-/* Status variants */
-
-.project-status-completed {
-    color: #166534;
-    background: #dcfce7;
-    border-color: #bbf7d0;
-}
-
-
-.project-status-progress {
-    color: #3730a3;
-    background: #e0e7ff;
-    border-color: #c7d2fe;
-}
-
-
-.project-status-cancelled {
-    color: #991b1b;
-    background: #fee2e2;
-    border-color: #fecaca;
-}
-
-
-.project-status-default {
-    color: #475569;
-    background: #f8fafc;
-    border-color: #e2e8f0;
-}
-
-
-/* =========================================================
-   KPI CARDS
-   ========================================================= */
+.project-status-dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
 
 .project-kpi-grid {
-    position: relative;
-    z-index: 1;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-    gap: 1rem;
-
-    margin-top: 2rem;
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem; margin-top: 3rem;
 }
-
 
 .project-kpi-card {
-    display: flex;
-    align-items: center;
-
-    gap: .9rem;
-
-    min-width: 0;
-
-    padding: 1rem;
-
-    border: 1px solid rgba(255, 255, 255, .16);
-    border-radius: 18px;
-
-    background: rgba(255, 255, 255, .12);
-
-    backdrop-filter: blur(12px);
-
-    box-shadow:
-        0 8px 25px rgba(15, 23, 42, .08);
-
-    transition:
-        transform .2s ease,
-        background .2s ease;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
-
 
 .project-kpi-card:hover {
-    transform: translateY(-3px);
-
-    background: rgba(255, 255, 255, .17);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
-
 
 .project-kpi-icon {
-    width: 44px;
-    height: 44px;
-
-    flex: 0 0 44px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
     border-radius: 14px;
-
-    color: #fff;
-
-    background: rgba(255, 255, 255, .18);
-
-    font-size: 1rem;
+    color: #fff; background: rgba(255, 255, 255, 0.2);
+    font-size: 1.2rem;
 }
-
-
-.project-kpi-content {
-    min-width: 0;
-}
-
 
 .project-kpi-label {
-    display: block;
-
-    margin-bottom: .15rem;
-
-    color: rgba(255, 255, 255, .68);
-
-    font-size: .7rem;
-    font-weight: 700;
-
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    display: block; margin-bottom: 0.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
 }
-
 
 .project-kpi-value {
-    display: block;
-
-    color: #fff;
-
-    font-size: 1.35rem;
-    font-weight: 800;
-
-    line-height: 1.2;
-
-    overflow-wrap: anywhere;
+    display: block; color: #fff;
+    font-size: 1.5rem; font-weight: 800; line-height: 1.1;
 }
-
-
-.project-kpi-value-small {
-    font-size: 1rem;
-}
-
 
 /* =========================================================
-   PROJECT PROGRESS
+   PROGRESS BAR & MEMBERS SECTION
    ========================================================= */
-
 .project-progress-section {
-    position: relative;
-
-    margin-top: 1.5rem;
-
-    padding: 1.5rem;
-
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-
-    background: #fff;
-
-    box-shadow:
-        0 12px 35px rgba(15, 23, 42, .06);
+    margin-top: -2rem; position: relative; z-index: 3;
+    padding: 2rem; border-radius: 24px;
+    background: #fff; box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
 }
-
 
 .project-progress-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 1rem;
-
-    margin-bottom: .9rem;
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
 }
 
-
-.project-progress-title {
-    margin: 0;
-
-    color: #0f172a;
-
-    font-size: 1rem;
-    font-weight: 800;
-}
-
-
-.project-progress-value {
-    color: #6366f1;
-
-    font-size: .95rem;
-    font-weight: 800;
-}
-
+.project-progress-title { color: #0f172a; font-size: 1.1rem; font-weight: 800; }
+.project-progress-value { color: #6366f1; font-size: 1.1rem; font-weight: 800; }
 
 .project-progress-bar {
-    height: 11px;
-
-    overflow: hidden;
-
-    border-radius: 999px;
-
-    background: #eef2ff;
+    height: 14px; border-radius: 999px; background: #f1f5f9; overflow: hidden;
 }
-
 
 .project-progress-bar > div {
-    height: 100%;
-
-    border-radius: inherit;
-
-    background: linear-gradient(
-        90deg,
-        #6366f1 0%,
-        #8b5cf6 100%
-    );
-
-    transition: width .4s ease;
+    height: 100%; border-radius: inherit;
+    background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-
-/* =========================================================
-   PROJECT MEMBERS
-   ========================================================= */
 
 .project-members-card {
-    position: relative;
-
-    padding: 1.5rem;
-
-    border: 1px solid #e2e8f0;
-    border-radius: 22px;
-
-    background: #fff;
-
-    box-shadow:
-        0 14px 40px rgba(15, 23, 42, .07);
+    padding: 2rem; border-radius: 24px; background: #fff;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.05);
 }
 
+.project-section-icon {
+    width: 52px; height: 52px; border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+}
+
+.project-members-permission-badge {
+    padding: 0.6rem 1.2rem; border-radius: 999px; color: #4338ca;
+    background: #eef2ff; font-size: 0.85rem; font-weight: 700;
+}
+
+.project-member-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem; margin-bottom: 0.5rem;
+    border-radius: 16px; transition: background 0.2s;
+}
+
+.project-member-row:hover { background: #f8fafc; }
+
+.project-member-identity { display: flex; gap: 1rem; align-items: center; }
+
+.project-member-avatar {
+    width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+}
+
+.project-member-avatar-placeholder {
+    background: #eef2ff; color: #4f46e5; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.hover-lift { transition: transform 0.2s, box-shadow 0.2s; }
+.hover-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3) !important; }
+
+@media (max-width: 768px) {
+    .project-overview-top { flex-direction: column; align-items: flex-start; }
+    .project-status-panel { align-items: flex-start; margin-top: 1rem; }
+    .project-members-header { flex-direction: column; align-items: flex-start; gap: 1rem;}
+}
+
+/* =========================================================
+   MEMBER LIST ALIGNMENT & STYLING
+   ========================================================= */
 
 .project-members-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-
+    flex-wrap: wrap;
     gap: 1rem;
-
-    margin-bottom: 1.5rem;
 }
 
+.project-member-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+}
 
-.project-members-heading {
+.project-member-row:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    border-color: #cbd5e1;
+}
+
+.project-member-identity {
     display: flex;
     align-items: center;
-
-    gap: .9rem;
+    gap: 1rem;
 }
 
-
-.project-section-icon {
-    width: 46px;
-    height: 46px;
-
+/* Force the placeholder to be a perfect circle */
+.project-member-avatar-placeholder {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    color: #4338ca;
+    font-size: 0.9rem;
+    font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    flex: 0 0 46px;
-
-    border-radius: 14px;
-
-    color: #fff;
-
-    background: linear-gradient(
-        135deg,
-        #6366f1,
-        #7c3aed
-    );
-
-    box-shadow:
-        0 8px 20px rgba(99, 102, 241, .2);
+    letter-spacing: 1px;
 }
 
+/* Stack the name and email vertically */
+.project-member-details {
+    display: flex;
+    flex-direction: column;
+}
 
-.project-section-eyebrow {
-    color: #94a3b8;
+.project-member-details strong {
+    color: #0f172a;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
 
-    font-size: .68rem;
+.project-member-details span {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+}
+
+.project-member-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.project-member-role {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Softer remove button */
+.project-remove-member-btn {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: none;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.project-remove-member-btn:hover {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+/* =========================================================
+   THEME BUTTON (Replaces standard primary blue)
+   ========================================================= */
+.btn-theme {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+}
+
+.btn-theme:hover {
+    background: linear-gradient(135deg, #4f46e5, #6d28d9);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    transform: translateY(-1px);
+}
+/* =========================================================
+   TASK SECTION CONTAINER
+   ========================================================= */
+#projectTasksSection {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 2.5rem;
+    border-radius: 28px;
+    border: 1px solid #e2e8f0;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+/* =========================================================
+   PREMIUM SAAS TASK CARDS
+   ========================================================= */
+
+.task-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+    overflow: hidden;
+    gap: 1.15rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* Ambient corner glow */
+.task-card::before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    right: 0;
+    width: 200px; 
+    height: 200px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+    pointer-events: none;
+    z-index: -1;
+    transition: background 0.3s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 16px 40px rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.task-card:hover::before {
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(255,255,255,0) 70%);
+}
+
+/* Header & Typography */
+.task-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.task-title {
+    color: #0f172a;
+    font-size: 1.15rem;
     font-weight: 800;
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
 
-    letter-spacing: .1em;
+.task-desc {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Check Button */
+.task-toggle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    color: #cbd5e1;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.task-toggle-btn:hover {
+    border-color: #10b981;
+    background: #ecfdf5;
+    color: #10b981;
+}
+
+.task-toggle-btn.is-completed {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+/* Badges */
+.task-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.task-badge {
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
+.priority-critical { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+.priority-high { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
+.priority-medium { background: #eef2ff; color: #4f46e5; border: 1px solid #e0e7ff; }
+.priority-default { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+.status-badge { background: #0f172a; color: #ffffff; }
 
-.project-section-title {
-    margin: .15rem 0 0;
-
-    color: #0f172a;
-
-    font-size: 1.15rem;
-    font-weight: 800;
-}
-
-
-.project-section-subtitle {
-    margin: .25rem 0 0;
-
-    color: #64748b;
-
-    font-size: .86rem;
-}
-
-
-.project-members-permission-badge {
-    padding: .5rem .8rem;
-
-    border-radius: 999px;
-
-    color: #4338ca;
-
-    background: #eef2ff;
-
-    font-size: .78rem;
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   MEMBERS LIST
-   ========================================================= */
-
-.project-members-list {
-    min-height: 80px;
-}
-
-
-.project-members-loading {
+/* Metadata Chips (Replaces plain text) */
+.task-meta-row {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.meta-chip {
+    display: inline-flex;
     align-items: center;
-
-    gap: .6rem;
-
-    padding: 1.25rem;
-
-    border-radius: 14px;
-
-    color: #64748b;
-
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
     background: #f8fafc;
-
-    font-size: .9rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: #475569;
+    font-weight: 600;
 }
 
-
-/* =========================================================
-   ADD MEMBER
-   ========================================================= */
-
-.project-add-member-panel {
-    height: 100%;
-
-    padding: 1.25rem;
-
-    border: 1px solid #e0e7ff;
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #f8faff 0%,
-            #ffffff 100%
-        );
+.meta-chip i {
+    color: #94a3b8;
+    font-size: 0.85rem;
 }
 
-
-.project-add-member-heading {
+/* Integrated Action Dock */
+.task-action-dock {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-
-    gap: .75rem;
-
-    margin-bottom: 1.25rem;
+    gap: 0.5rem;
+    margin-top: auto; 
+    padding-top: 0.5rem;
 }
 
-
-.project-add-member-icon {
-    width: 42px;
-    height: 42px;
-
+.task-btn-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    flex: 0 0 42px;
-
-    border-radius: 13px;
-
-    color: #4f46e5;
-
-    background: #eef2ff;
+    border: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
 
-
-.project-add-member-heading h4 {
-    margin: 0;
-
-    color: #0f172a;
-
-    font-size: .98rem;
-    font-weight: 800;
-}
-
-
-.project-add-member-heading p {
-    margin: .2rem 0 0;
-
-    color: #64748b;
-
-    font-size: .78rem;
-}
-
-
-/* =========================================================
-   MEMBERS MESSAGE
-   ========================================================= */
-
-.project-members-message {
-    margin-bottom: 1rem;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 992px) {
-
-    .project-overview-top {
-        flex-direction: column;
-    }
-
-    .project-status-panel {
-        align-items: flex-start;
-    }
-
-    .project-kpi-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-}
-
-
-@media (max-width: 576px) {
-
-    .project-page-shell {
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-    }
-
-    .project-overview-card {
-        padding: 1.25rem;
-        border-radius: 20px;
-    }
-
-    .project-title-row {
-        align-items: flex-start;
-    }
-
-    .project-title-icon {
-        width: 48px;
-        height: 48px;
-        flex-basis: 48px;
-
-        border-radius: 14px;
-    }
-
-    .project-kpi-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .project-members-card {
-        padding: 1.15rem;
-    }
-
-    .project-members-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-}
+.task-btn-assign { background: #f1f5f9; color: #475569; }
+.task-btn-assign:hover { background: #eef2ff; color: #4f46e5; }
+.task-btn-edit { background: #f1f5f9; color: #475569; }
+.task-btn-edit:hover { background: #fffbeb; color: #d97706; }
+.task-btn-delete { background: #f1f5f9; color: #475569; }
+.task-btn-delete:hover { background: #fef2f2; color: #dc2626; }

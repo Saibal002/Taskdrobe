@@ -1,461 +1,175 @@
-<%- include("layout/header", { title: project.project_name }   ) %>
+<%- include("layout/header", { title: project.project_name }) %>
 <link rel="stylesheet" href="/css/project.css">
-    <div class="container mt-5">
+<div class="container mt-5 fade-in">
+    <div class="project-page-shell">
 
-        <div class="project-page-shell">
-
-            <!-- =====================================================
+        <!-- =====================================================
              PROJECT OVERVIEW
         ====================================================== -->
+        <section class="project-overview-card">
+            <div class="project-overview-top">
+                <div class="project-overview-heading">
+                    <a href="/dashboard" class="project-back-link">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
 
-            <section class="project-overview-card ">
-
-                <div class="project-overview-top">
-
-                    <div class="project-overview-heading">
-
-                        <a href="/dashboard" class="project-back-link">
-
-                            <i class="fas fa-arrow-left"></i>
-
-                            <span>
-                                Back to Dashboard
-                            </span>
-
-                        </a>
-
-
-                        <div class="project-title-row">
-
-                            <div class="project-title-icon">
-
-                                <i class="fas fa-folder-open"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <div class="project-eyebrow">
-                                    Project Overview
-                                </div>
-
-                                <h1 class="project-page-title">
-                                    <%= project.project_name %>
-                                </h1>
-
-                            </div>
-
+                    <div class="project-title-row">
+                        <div class="project-title-icon shadow-sm">
+                            <i class="fas fa-folder-open"></i>
                         </div>
-
-
-                        <p class="project-page-description">
-
-                            <%= project.description || "No description has been added for this project yet." %>
-
-                        </p>
-
+                        <div>
+                            <div class="project-eyebrow">TaskDrobe Project Overview</div>
+                            <h1 class="project-page-title"><%= project.project_name %></h1>
+                        </div>
                     </div>
 
-
-                    <div class="project-status-panel">
-
-                        <span class="project-status-label">
-                            Current Status
-                        </span>
-
-
-                        <span class="project-status-badge
-                        <%= project.status === 'Completed'
-                            ? 'project-status-completed'
-                            : project.status === 'In Progress'
-                            ? 'project-status-progress'
-                            : project.status === 'Cancelled'
-                            ? 'project-status-cancelled'
-                            : 'project-status-default' %>">
-
-                            <span class="project-status-dot"></span>
-
-                            <%= project.status %>
-
-                        </span>
-
-                    </div>
-
+                    <p class="project-page-description">
+                        <%= project.description || "No description has been added for this project yet." %>
+                    </p>
                 </div>
 
-
-                <!-- =================================================
-                 PROJECT KPI CARDS
-            ================================================== -->
-
-                <div class="project-kpi-grid">
-
-                    <div class="project-kpi-card project-kpi-progress">
-
-                        <div class="project-kpi-icon">
-
-                            <i class="fas fa-chart-line"></i>
-
-                        </div>
-
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Progress
-                            </span>
-
-                            <strong class="project-kpi-value">
-
-                                <%= Number(project.progress || 0) %>%
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-kpi-card project-kpi-status">
-
-                        <div class="project-kpi-icon">
-
-                            <i class="fas fa-layer-group"></i>
-
-                        </div>
-
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Status
-                            </span>
-
-                            <strong class="project-kpi-value project-kpi-value-small">
-
-                                <%= project.status %>
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-kpi-card project-kpi-deadline">
-
-                        <div class="project-kpi-icon">
-
-                            <i class="fas fa-calendar-days"></i>
-
-                        </div>
-
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Deadline
-                            </span>
-
-                            <strong class="project-kpi-value project-kpi-value-small">
-
-                                <%= project.deadline ? new Date(project.deadline) .toLocaleDateString() : "Not Set" %>
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-kpi-card project-kpi-owner">
-
-                        <div class="project-kpi-icon">
-
-                            <i class="fas fa-user"></i>
-
-                        </div>
-
-
-                        <div class="project-kpi-content">
-
-                            <span class="project-kpi-label">
-                                Created By
-                            </span>
-
-                            <strong class="project-kpi-value project-kpi-value-small">
-
-                                <%= project.full_name %>
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
+                <div class="project-status-panel">
+                    <span class="project-status-label">Current Status</span>
+                    <span class="project-status-badge shadow-sm
+                        <%= project.status === 'Completed' ? 'project-status-completed' : 
+                            project.status === 'In Progress' ? 'project-status-progress' : 
+                            project.status === 'Cancelled' ? 'project-status-cancelled' : 'project-status-default' %>">
+                        <span class="project-status-dot"></span>
+                        <%= project.status %>
+                    </span>
                 </div>
-
-            </section>
+            </div>
 
             <!-- =================================================
-     PROJECT PROGRESS
-================================================== -->
+                 PROJECT KPI CARDS
+            ================================================== -->
+            <div class="project-kpi-grid">
+                <div class="project-kpi-card">
+                    <div class="project-kpi-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="project-kpi-content">
+                        <span class="project-kpi-label">Progress</span>
+                        <strong class="project-kpi-value"><%= Number(project.progress || 0) %>%</strong>
+                    </div>
+                </div>
 
-<div class="project-progress-section">
+                <div class="project-kpi-card">
+                    <div class="project-kpi-icon"><i class="fas fa-layer-group"></i></div>
+                    <div class="project-kpi-content">
+                        <span class="project-kpi-label">Status</span>
+                        <strong class="project-kpi-value project-kpi-value-small"><%= project.status %></strong>
+                    </div>
+                </div>
 
-    <div class="project-progress-header">
+                <div class="project-kpi-card">
+                    <div class="project-kpi-icon"><i class="fas fa-calendar-days"></i></div>
+                    <div class="project-kpi-content">
+                        <span class="project-kpi-label">Deadline</span>
+                        <strong class="project-kpi-value project-kpi-value-small">
+                            <%= project.deadline ? new Date(project.deadline).toLocaleDateString() : "Not Set" %>
+                        </strong>
+                    </div>
+                </div>
 
-        <div>
+                <div class="project-kpi-card">
+                    <div class="project-kpi-icon"><i class="fas fa-user"></i></div>
+                    <div class="project-kpi-content">
+                        <span class="project-kpi-label">Created By</span>
+                        <strong class="project-kpi-value project-kpi-value-small"><%= project.full_name %></strong>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-            <span class="project-progress-label">
-                Project Progress
-            </span>
-
-            <span class="project-progress-caption">
-                Overall completion
-            </span>
-
+        <!-- =================================================
+             PROJECT PROGRESS
+        ================================================== -->
+        <div class="project-progress-section">
+            <div class="project-progress-header">
+                <div>
+                    <span class="project-progress-title">Project Progress</span>
+                    <span class="text-muted small ms-2">Overall completion</span>
+                </div>
+                <strong class="project-progress-value"><%= Number(project.progress || 0) %>%</strong>
+            </div>
+            <div class="project-progress-bar shadow-inner">
+                <div style="width: <%= Number(project.progress || 0) %>%;"></div>
+            </div>
         </div>
 
-        <strong>
-            <%= Number(project.progress || 0) %>%
-        </strong>
-
-    </div>
-
-
-    <div class="project-progress-track">
-
-        <div
-            class="project-progress-fill"
-            style="width: <%= Number(project.progress || 0) %>%;">
-        </div>
-
-    </div>
-
-</div>
-            <!-- =====================================================
-             PROJECT MEMBERS
-             New design + jQuery AJAX
+        <!-- =====================================================
+             PROJECT MEMBERS (MANAGER ONLY)
         ====================================================== -->
+        <% if (user && user.role_name === "manager") { %>
+        <section class="project-members-section mt-5" id="projectMembersSection"
+            data-members-url="/projects/<%= project.project_id %>/members/data"
+            data-add-url="/projects/<%= project.project_id %>/members"
+            data-remove-url="/projects/<%= project.project_id %>/members"
+            data-role="<%= user.role_name %>">
 
-            <% if (user && user.role_name === "manager") { %>
-
-    <!-- =====================================================
-         PROJECT MEMBERS
-         MANAGER ONLY
-    ====================================================== -->
-
-    <section
-        class="project-members-section mt-4"
-        id="projectMembersSection"
-        data-members-url="/projects/<%= project.project_id %>/members/data"
-        data-add-url="/projects/<%= project.project_id %>/members"
-        data-remove-url="/projects/<%= project.project_id %>/members"
-        data-role="<%= user.role_name %>">
-
-
-        <div class="project-members-card">
-
-
-            <!-- HEADER -->
-
-            <div class="project-members-header">
-
-                <div class="project-members-heading">
-
-                    <div class="project-section-icon">
-
-                        <i class="fas fa-users"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="project-section-eyebrow">
-                            Collaboration
+            <div class="project-members-card">
+                <div class="project-members-header border-bottom pb-4 mb-4">
+                    <div class="project-members-heading">
+                        <div class="project-section-icon shadow-sm"><i class="fas fa-users"></i></div>
+                        <div>
+                            <div class="project-section-eyebrow">Collaboration</div>
+                            <h3 class="project-section-title">Project Members</h3>
+                            <p class="project-section-subtitle mb-0">People currently assigned to this project.</p>
                         </div>
-
-                        <h3 class="project-section-title">
-                            Project Members
-                        </h3>
-
-                        <p class="project-section-subtitle">
-                            People currently working on this project.
-                        </p>
-
                     </div>
-
+                    <span class="project-members-permission-badge shadow-sm">
+                        <i class="fas fa-user-shield me-1"></i> Manager Access
+                    </span>
                 </div>
 
+                <div id="projectMembersMessage" class="project-members-message alert d-none rounded-pill text-center shadow-sm" role="alert"></div>
 
-                <span class="project-members-permission-badge">
-
-                    <i class="fas fa-user-shield me-1"></i>
-
-                    Manager
-
-                </span>
-
-            </div>
-
-
-            <!-- AJAX MESSAGE -->
-
-            <div
-                id="projectMembersMessage"
-                class="project-members-message alert d-none"
-                role="alert">
-            </div>
-
-
-            <div class="row g-4">
-
-
-                <!-- CURRENT MEMBERS -->
-
-                <div class="col-lg-7">
-
-                    <div
-                        id="projectMembersList"
-                        class="project-members-list"
-                        aria-live="polite">
-
-                        <div class="project-members-loading">
-
-                            <span
-                                class="spinner-border spinner-border-sm"
-                                aria-hidden="true">
-                            </span>
-
-                            <span>
-                                Loading members...
-                            </span>
-
+                <div class="row g-4">
+                    <div class="col-lg-7">
+                        <div id="projectMembersList" class="project-members-list pe-lg-3" aria-live="polite">
+                            <div class="project-members-loading">
+                                <span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span>
+                                <span class="ms-2">Loading members...</span>
+                            </div>
                         </div>
-
                     </div>
 
-                </div>
-
-
-                <!-- ADD MEMBER -->
-
-                <div class="col-lg-5">
-
-                    <div class="project-add-member-panel">
-
-
-                        <div class="project-add-member-heading">
-
-
-                            <div class="project-add-member-icon">
-
-                                <i class="fas fa-user-plus"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h4>
-                                    Add Employee
-                                </h4>
-
-                                <p>
-                                    Assign an active employee to this project.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <form
-                            id="addProjectMemberForm"
-                            novalidate>
-
-
-                            <div class="mb-3">
-
-
-                                <label
-                                    for="projectMemberUserId"
-                                    class="form-label fw-semibold">
-
-                                    Employee
-
-                                </label>
-
-
-                                <select
-                                    class="form-select"
-                                    id="projectMemberUserId"
-                                    name="userId"
-                                    required>
-
-                                    <option value="">
-                                        Select an employee
-                                    </option>
-
-                                </select>
-
-
-                                <div
-                                    class="invalid-feedback"
-                                    id="projectMemberUserIdError">
-
-                                    Please select an employee.
-
+                    <div class="col-lg-5 border-start">
+                        <div class="project-add-member-panel border-0 bg-transparent p-0 ps-lg-3">
+                            <div class="project-add-member-heading mb-4">
+                                <div class="project-add-member-icon shadow-sm"><i class="fas fa-user-plus"></i></div>
+                                <div>
+                                    <h4 class="mb-1">Add Employee</h4>
+                                    <p class="text-muted small mb-0">Select an active team member.</p>
                                 </div>
-
                             </div>
 
-
-                            <button
-                                type="submit"
-                                id="addProjectMemberBtn"
-                                class="btn btn-primary w-100">
-
-                                <i class="fas fa-user-plus me-2"></i>
-
-                                Add Employee
-
-                            </button>
-
-                        </form>
-
+                            <form id="addProjectMemberForm" novalidate>
+                                <div class="mb-4">
+                                    <label for="projectMemberUserId" class="form-label fw-bold text-secondary small text-uppercase tracking-wide">Select Employee</label>
+                                    <select class="form-select form-select-lg shadow-sm border-0 bg-light" id="projectMemberUserId" name="userId" required>
+                                        <option value="">Choose...</option>
+                                    </select>
+                                    <div class="invalid-feedback fw-bold mt-2" id="projectMemberUserIdError">Please select an employee.</div>
+                                </div>
+                                <button type="submit" id="addProjectMemberBtn" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm hover-lift">
+                                    <i class="fas fa-user-plus me-2"></i> Add to Project
+                                </button>
+                            </form>
+                        </div>
                     </div>
-
                 </div>
-
             </div>
+        </section>
+        <% } %>
 
-        </div>
-
-    </section>
-
-<% } %>
-
-
-            <!-- =====================================================
-             TASKS
-             Task UI + Task AJAX stay in projectTasks.ejs
-        ====================================================== -->
-
-            <hr>
-
-            <%- include("manager/partials/projectTasks", { project: project, user: user }) %>
-                <%- include("layout/addTaskModal") %>
-                    <%- include("layout/editTaskModal") %>
-                        <%- include("layout/assignTaskModal") %>
-
-
-        </div>
-
+        <hr class="my-5 border-light">
+        <%- include("manager/partials/projectTasks", { project: project, user: user }) %>
+        <%- include("layout/addTaskModal") %>
+        <%- include("layout/editTaskModal") %>
+        <%- include("layout/assignTaskModal") %>
     </div>
+</div>
 
 
     <!-- =========================================================

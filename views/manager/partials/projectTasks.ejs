@@ -1,86 +1,49 @@
 <!-- =========================================================
      PROJECT TASKS
 ========================================================= -->
-
 <section
     id="projectTasksSection"
     data-tasks-url="/tasks/project/<%= project.project_id %>/data"
     data-project-id="<%= project.project_id %>"
     data-user-id="<%= user.user_id %>"
-    data-user-role="<%= user.role_name %>">
+    data-user-role="<%= user.role_name %>"
+    class="mt-5 pt-3">
 
     <!-- =====================================================
          HEADER
     ===================================================== -->
-
-    <div
-        class="d-flex justify-content-between align-items-center mb-4">
-
-        <h3 class="mb-0">
-            Tasks
-        </h3>
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+        <div>
+            <div class="project-section-eyebrow mb-1">Execution</div>
+            <h3 class="project-section-title mb-0">Project Tasks</h3>
+        </div>
 
         <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-theme rounded-pill px-4"
             data-bs-toggle="modal"
             data-bs-target="#addTaskModal">
-
-            <i class="fas fa-plus me-2"></i>
-
-            Add Task
-
+            <i class="fas fa-plus me-2"></i> Add New Task
         </button>
-
     </div>
-
 
     <!-- =====================================================
          AJAX MESSAGE
     ===================================================== -->
-
-    <div
-        id="projectTasksMessage"
-        class="alert d-none"
-        role="alert">
-    </div>
-
+    <div id="projectTasksMessage" class="alert d-none rounded-pill text-center shadow-sm" role="alert"></div>
 
     <!-- =====================================================
          TASK LIST
     ===================================================== -->
-
-    <div
-        id="projectTasksList"
-        class="row g-3"
-        aria-live="polite">
-
-        <!-- AJAX will populate this -->
-
+    <div id="projectTasksList" class="row g-4" aria-live="polite">
         <div class="col-12">
-
             <div class="text-center py-5">
-
-                <div
-                    class="spinner-border text-primary"
-                    role="status">
-
-                    <span class="visually-hidden">
-                        Loading tasks...
-                    </span>
-
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading tasks...</span>
                 </div>
-
-                <p class="text-muted mt-2 mb-0">
-                    Loading tasks...
-                </p>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
 
@@ -291,22 +254,12 @@ $(document).ready(function () {
         return date.toISOString().split("T")[0];
     }
 
-
-    function getPriorityClass(priority) {
-
+function getPriorityClass(priority) {
         switch (priority) {
-
-            case "Critical":
-                return "bg-danger";
-
-            case "High":
-                return "bg-warning text-dark";
-
-            case "Medium":
-                return "bg-primary";
-
-            default:
-                return "bg-secondary";
+            case "Critical": return "priority-critical";
+            case "High": return "priority-high";
+            case "Medium": return "priority-medium";
+            default: return "priority-default";
         }
     }
 
@@ -342,367 +295,132 @@ $(document).ready(function () {
     }
 
 
-    /* =========================================================
-       RENDER TASKS
+   /* =========================================================
+       RENDER TASKS (Premium Look)
     ========================================================= */
-
     function renderTasks(tasks) {
-
-        if (
-            !Array.isArray(tasks) ||
-            tasks.length === 0
-        ) {
-
+        if (!Array.isArray(tasks) || tasks.length === 0) {
             $taskList.html(`
                 <div class="col-12">
-
-                    <div
-                        class="card border-0 shadow-sm">
-
-                        <div
-                            class="card-body
-                                   text-center
-                                   text-muted
-                                   py-5">
-
-                            <i
-                                class="fas fa-clipboard-list
-                                       fa-2x
-                                       mb-3">
-                            </i>
-
-                            <h5>
-                                No tasks available.
-                            </h5>
-
-                            <p class="mb-0">
-                                There are no tasks
-                                in this project yet.
-                            </p>
-
-                        </div>
-
+                    <div class="text-center text-muted py-5 rounded-4" style="background: #ffffff; border: 1px solid rgba(99, 102, 241, 0.2);">
+                        <div class="mb-3"><i class="fas fa-layer-group fa-3x" style="color: #e0e7ff;"></i></div>
+                        <h5 class="fw-bold" style="color: #1e293b;">No tasks available</h5>
+                        <p class="mb-0 text-slate-500">Your workspace is clear. Add a task to get started.</p>
                     </div>
-
                 </div>
             `);
-
             return;
         }
 
-
         let html = "";
 
-
-        $.each(
-            tasks,
-            function (index, task) {
-
-                const taskId =
-                    String(task.task_id);
-
-
-                /*
-                 * Keep the same client-side visibility
-                 * rules already used by the project page.
-                 *
-                 * Server-side authorization remains authoritative.
-                 */
-                const isTaskCreator =
-                    String(task.created_by) ===
-                    currentUserId;
-
-
-                const isTaskAssignee =
-                    task.assigned_to &&
-                    String(task.assigned_to) ===
-                    currentUserId;
-
-
-                const canEdit =
-                    isManager ||
-                    isTaskCreator;
-
-
-                const canDelete =
-                    isManager ||
-                    isTaskCreator;
-
-
-                const canChangeStatus =
-                    isManager ||
-                    isTaskCreator ||
-                    isTaskAssignee;
-
-
-                const title =
-                    escapeHtml(
-                        task.title || ""
-                    );
-
-
-                const description =
-                    escapeHtml(
-                        task.description ||
-                        "No description"
-                    );
-
-
-                const priority =
-                    escapeHtml(
-                        task.priority || ""
-                    );
-
-
-                const status =
-                    escapeHtml(
-                        task.status || ""
-                    );
-
-
-                const assignedUser =
-                    task.assigned_user
-                        ? escapeHtml(
-                            String(
-                                task.assigned_user
-                            ).trim()
-                        )
-                        : "";
-
-
-                const assignedTo =
-                    task.assigned_to
-                        ? String(task.assigned_to)
-                        : "";
-
-
-                const dueDate =
-                    formatDate(task.due_date);
-
-
-                const editDueDate =
-                    formatDateForInput(
-                        task.due_date
-                    );
-
-
-                let statusHtml = "";
-
-
-                if (canChangeStatus) {
-
-                    statusHtml = `
-                        <button
-                            type="button"
-                            class="btn btn-sm
-                                ${
-                                    task.status === "Completed"
-                                        ? "btn-success"
-                                        : "btn-outline-success"
-                                }
-                                task-toggle-btn"
-                            data-task-id="${escapeHtml(taskId)}"
-                            title="Change task status">
-
-                            ${
-                                task.status === "Completed"
-                                    ? "✔"
-                                    : "○"
-                            }
-
-                        </button>
-                    `;
-                }
-
-
-                let assignHtml = "";
-
-
-                if (isManager) {
-
-                    assignHtml = `
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-sm assignTaskBtn"
-
-                            data-task-id="${escapeHtml(taskId)}"
-                            data-assigned-to="${escapeHtml(assignedTo)}"
-
-                            data-bs-toggle="modal"
-                            data-bs-target="#assignTaskModal">
-
-                            <i class="fas fa-user-plus"></i>
-
-                        </button>
-                    `;
-                }
-
-
-                let editHtml = "";
-
-
-                if (canEdit) {
-
-                    editHtml = `
-                        <button
-                            type="button"
-                            class="btn btn-warning btn-sm editTaskBtn"
-
-                            data-id="${escapeHtml(taskId)}"
-                            data-title="${escapeHtml(task.title || "")}"
-                            data-description="${escapeHtml(task.description || "")}"
-                            data-priority="${escapeHtml(task.priority || "")}"
-                            data-status="${escapeHtml(task.status || "")}"
-                            data-due-date="${escapeHtml(editDueDate)}"
-
-                            data-bs-toggle="modal"
-                            data-bs-target="#editTaskModal">
-
-                            <i class="fas fa-pencil"></i>
-
-                        </button>
-                    `;
-                }
-
-
-                let deleteHtml = "";
-
-
-                if (canDelete) {
-
-                    deleteHtml = `
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-sm deleteTaskBtn"
-
-                            data-task-id="${escapeHtml(taskId)}"
-                            data-task-title="${escapeHtml(task.title || "")}">
-
-                            <i class="fas fa-trash"></i>
-
-                        </button>
-                    `;
-                }
-
-
-                const assignmentHtml =
-                    assignedUser
-                        ? `
-                            Assigned to:
-                            <strong>
-                                ${assignedUser}
-                            </strong>
-                          `
-                        : `
-                            <span class="text-muted">
-                                Unassigned
-                            </span>
-                          `;
-
-
-                html += `
-                    <div
-                        class="col-md-6"
-                        data-task-id="${escapeHtml(taskId)}">
-
-                        <div
-                            class="card border-0 shadow-sm h-100">
-
-                            <div class="card-body">
-
-                                <div
-                                    class="d-flex
-                                           justify-content-between">
-
-                                    <div>
-
-                                        <h5 class="fw-bold mb-1">
-                                            ${title}
-                                        </h5>
-
-                                        <p class="text-muted mb-3">
-                                            ${description}
-                                        </p>
-
-                                    </div>
-
-                                    ${statusHtml}
-
-                                </div>
-
-
-                                <div class="mb-3">
-
-                                    <span
-                                        class="badge
-                                               ${getPriorityClass(task.priority)}">
-
-                                        ${priority}
-
-                                    </span>
-
-                                    <span
-                                        class="badge bg-dark">
-
-                                        ${status}
-
-                                    </span>
-
-                                </div>
-
-
-                                <small
-                                    class="text-muted
-                                           d-block
-                                           mb-2">
-
-                                    <i
-                                        class="fas fa-calendar me-2">
-                                    </i>
-
-                                    ${escapeHtml(dueDate)}
-
-                                </small>
-
-
-                                <small
-                                    class="text-muted
-                                           d-block
-                                           mb-3">
-
-                                    <i
-                                        class="fas fa-user me-2">
-                                    </i>
-
-                                    ${assignmentHtml}
-
-                                </small>
-
-
-                                <div
-                                    class="d-flex
-                                           justify-content-end
-                                           gap-2">
-
-                                    ${assignHtml}
-                                    ${editHtml}
-                                    ${deleteHtml}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+        $.each(tasks, function (index, task) {
+            const taskId = String(task.task_id);
+            const isTaskCreator = String(task.created_by) === currentUserId;
+            const isTaskAssignee = task.assigned_to && String(task.assigned_to) === currentUserId;
+            const canEdit = isManager || isTaskCreator;
+            const canDelete = isManager || isTaskCreator;
+            const canChangeStatus = isManager || isTaskCreator || isTaskAssignee;
+
+            const title = escapeHtml(task.title || "");
+            const description = escapeHtml(task.description || "No description");
+            const priority = escapeHtml(task.priority || "");
+            const status = escapeHtml(task.status || "");
+            
+            const assignedUser = task.assigned_user ? escapeHtml(String(task.assigned_user).trim()) : "";
+            const assignedTo = task.assigned_to ? String(task.assigned_to) : "";
+            const dueDate = formatDate(task.due_date);
+            const editDueDate = formatDateForInput(task.due_date);
+
+            let statusHtml = "";
+            if (canChangeStatus) {
+                const isCompleted = task.status === "Completed";
+                statusHtml = `
+                    <button type="button" 
+                        class="task-toggle-btn ${isCompleted ? 'is-completed' : ''}" 
+                        data-task-id="${escapeHtml(taskId)}" 
+                        title="${isCompleted ? 'Mark as Incomplete' : 'Mark as Completed'}">
+                        <i class="fas fa-check"></i>
+                    </button>
                 `;
             }
-        );
 
+            let assignHtml = "";
+            if (isManager) {
+                assignHtml = `
+                    <button type="button" class="task-btn-icon task-btn-assign assignTaskBtn"
+                        data-task-id="${escapeHtml(taskId)}" data-assigned-to="${escapeHtml(assignedTo)}"
+                        data-bs-toggle="modal" data-bs-target="#assignTaskModal" title="Assign User">
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                `;
+            }
+
+            let editHtml = "";
+            if (canEdit) {
+                editHtml = `
+                    <button type="button" class="task-btn-icon task-btn-edit editTaskBtn"
+                        data-id="${escapeHtml(taskId)}" data-title="${escapeHtml(task.title || "")}"
+                        data-description="${escapeHtml(task.description || "")}" data-priority="${escapeHtml(task.priority || "")}"
+                        data-status="${escapeHtml(task.status || "")}" data-due-date="${escapeHtml(editDueDate)}"
+                        data-bs-toggle="modal" data-bs-target="#editTaskModal" title="Edit Task">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                `;
+            }
+
+            let deleteHtml = "";
+            if (canDelete) {
+                deleteHtml = `
+                    <button type="button" class="task-btn-icon task-btn-delete deleteTaskBtn"
+                        data-task-id="${escapeHtml(taskId)}" data-task-title="${escapeHtml(task.title || "")}" title="Delete Task">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+            }
+
+            const assignmentText = assignedUser ? assignedUser : "Unassigned";
+
+            html += `
+                <div class="col-md-6 col-lg-4" data-task-id="${escapeHtml(taskId)}">
+                    <div class="task-card h-100">
+                        
+                        <div class="task-header-row">
+                            <div class="task-badges">
+                                <span class="task-badge ${getPriorityClass(task.priority)}">${priority}</span>
+                                <span class="task-badge status-badge">${status}</span>
+                            </div>
+                            ${statusHtml}
+                        </div>
+
+                        <div>
+                            <h5 class="task-title">${title}</h5>
+                            <p class="task-desc">${description}</p>
+                        </div>
+
+                        <div class="task-meta-row">
+                            <div class="meta-chip">
+                                <i class="fas fa-calendar-day"></i>
+                                <span>${escapeHtml(dueDate)}</span>
+                            </div>
+                            <div class="meta-chip">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="${!assignedUser ? 'text-muted fst-italic' : ''}">${assignmentText}</span>
+                            </div>
+                        </div>
+
+                        <div class="task-action-dock">
+                            ${assignHtml}
+                            ${editHtml}
+                            ${deleteHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
 
         $taskList.html(html);
     }
-
 
     /* =========================================================
        GET TASKS
