@@ -209,47 +209,168 @@ const searchProjects = async (searchTerm) => {
 /**
  * Get Manager Project Statistics
  */
+// const getManagerProjectStats = async (managerId) => {
+
+//     const sql = `
+//         SELECT
+
+//             COUNT(*) AS total_projects,
+
+//             COUNT(
+//                 CASE
+//                     WHEN status = 'In Progress'
+//                     THEN 1
+//                 END
+//             ) AS active_projects,
+
+//             COUNT(
+//                 CASE
+//                     WHEN status = 'Completed'
+//                     THEN 1
+//                 END
+//             ) AS completed_projects,
+
+//             COALESCE(
+//                 ROUND(AVG(progress), 0),
+//                 0
+//             ) AS average_progress
+
+//         FROM projects
+
+//         WHERE created_by = $1;
+//     `;
+
+//     const { rows } = await query(sql, [managerId]);
+
+//     return {
+//         totalProjects: Number(rows[0].total_projects),
+//         activeProjects: Number(rows[0].active_projects),
+//         completedProjects: Number(rows[0].completed_projects),
+//         averageProgress: Number(rows[0].average_progress),
+//     };
+
+// };
 const getManagerProjectStats = async (managerId) => {
 
     const sql = `
         SELECT
 
-            COUNT(*) AS total_projects,
+            /* =====================================================
+               PROJECTS
+            ===================================================== */
+
+            COUNT(DISTINCT p.project_id) AS total_projects,
 
             COUNT(
-                CASE
-                    WHEN status = 'In Progress'
-                    THEN 1
+                DISTINCT CASE
+                    WHEN p.status = 'In Progress'
+                    THEN p.project_id
                 END
             ) AS active_projects,
 
             COUNT(
-                CASE
-                    WHEN status = 'Completed'
-                    THEN 1
+                DISTINCT CASE
+                    WHEN p.status = 'Completed'
+                    THEN p.project_id
                 END
             ) AS completed_projects,
 
+
+            /* =====================================================
+               TASKS
+            ===================================================== */
+
+            COUNT(DISTINCT t.task_id) AS total_tasks,
+
+            COUNT(
+                DISTINCT CASE
+                    WHEN t.status = 'Completed'
+                    THEN t.task_id
+                END
+            ) AS completed_tasks,
+
+            COUNT(
+                DISTINCT CASE
+                    WHEN t.status <> 'Completed'
+                    THEN t.task_id
+                END
+            ) AS pending_tasks,
+
+            COUNT(
+                DISTINCT CASE
+                    WHEN t.due_date < CURRENT_DATE
+                    AND t.status <> 'Completed'
+                    THEN t.task_id
+                END
+            ) AS overdue_tasks,
+
+
+            /* =====================================================
+               PROJECT PROGRESS
+            ===================================================== */
+
             COALESCE(
-                ROUND(AVG(progress), 0),
+                ROUND(AVG(p.progress), 0),
                 0
             ) AS average_progress
 
-        FROM projects
 
-        WHERE created_by = $1;
+        FROM projects p
+
+        LEFT JOIN tasks t
+            ON t.project_id = p.project_id
+
+        WHERE p.created_by = $1;
     `;
+
 
     const { rows } = await query(sql, [managerId]);
 
-    return {
-        totalProjects: Number(rows[0].total_projects),
-        activeProjects: Number(rows[0].active_projects),
-        completedProjects: Number(rows[0].completed_projects),
-        averageProgress: Number(rows[0].average_progress),
-    };
 
+    const totalTasks =
+        Number(rows[0].total_tasks);
+
+    const completedTasks =
+        Number(rows[0].completed_tasks);
+
+
+    const completionRate =
+        totalTasks === 0
+            ? 0
+            : Math.round(
+                (completedTasks / totalTasks) * 100
+            );
+
+
+    return {
+
+        totalProjects:
+            Number(rows[0].total_projects),
+
+        activeProjects:
+            Number(rows[0].active_projects),
+
+        completedProjects:
+            Number(rows[0].completed_projects),
+
+        totalTasks,
+
+        completedTasks,
+
+        pendingTasks:
+            Number(rows[0].pending_tasks),
+
+        overdueTasks:
+            Number(rows[0].overdue_tasks),
+
+        completionRate,
+
+        averageProgress:
+            Number(rows[0].average_progress),
+
+    };
 };
+
 /**
  * Get Projects Assigned To Employee
  */
