@@ -559,6 +559,26 @@ function getPriorityClass(priority) {
             renderTable();
         }
     });
+
+    /* =========================================================
+       UPDATE PROJECT PROGRESS UI
+    ========================================================= */
+    function updateProgressUI(tasks) {
+        let progressPercentage = 0;
+
+        if (tasks && tasks.length > 0) {
+            const totalTasks = tasks.length;
+            const completedTasks = tasks.filter(t => t.status === 'Completed').length;
+            progressPercentage = Math.round((completedTasks / totalTasks) * 100);
+        }
+
+        // Update the text values
+        $("#kpiProgressValue").text(progressPercentage + "%");
+        $("#barProgressValue").text(progressPercentage + "%");
+        
+        // Animate the progress bar fill
+        $("#progressBarFill").css("width", progressPercentage + "%");
+    }
     /* =========================================================
        GET TASKS
     ========================================================= */
@@ -591,7 +611,11 @@ function getPriorityClass(priority) {
             return;
         }
         allProjectTasks = response.tasks; // Store fetched data
-        renderTable(); // Build the filtered, sorted, paginated table
+        // 1. Update the table
+        renderTable(); 
+        
+        // 2. Update the progress stats immediately 
+        updateProgressUI(allProjectTasks);
     },
             error: function (xhr) {
 
