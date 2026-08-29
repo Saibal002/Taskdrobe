@@ -45,6 +45,7 @@
 ├── 📁 public
 │   ├── 📁 css
 │   │   ├── 🎨 dashboard.css
+│   │   ├── 🎨 project.css
 │   │   └── 🎨 style.css
 │   ├── 📁 images
 │   │   └── 🖼️ logo.png
@@ -101,6 +102,8 @@
 │   │   ├── 📄 task.ejs
 │   │   └── 📄 welcome.ejs
 │   ├── 📁 manager
+│   │   ├── 📁 partials
+│   │   │   └── 📄 projectTasks.ejs
 │   │   ├── 📄 dashboard.ejs
 │   │   └── 📄 projectMembers.ejs
 │   ├── 📄 dashboard.ejs
