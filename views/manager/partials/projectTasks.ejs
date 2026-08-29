@@ -35,15 +35,62 @@
     <!-- =====================================================
          TASK LIST
     ===================================================== -->
-    <div id="projectTasksList" class="row g-4" aria-live="polite">
-        <div class="col-12">
-            <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading tasks...</span>
-                </div>
-            </div>
-        </div>
+    <!-- TASK CONTROLS TOOLBAR -->
+<div class="task-toolbar d-flex flex-wrap align-items-center gap-3 mb-4 p-3 rounded-4 shadow-sm">
+    <div class="input-group flex-grow-1" style="min-width: 250px;">
+        <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-search"></i></span>
+        <input type="text" id="taskSearchInput" class="form-control border-start-0" placeholder="Search tasks by title...">
     </div>
+    
+    <select id="taskStatusFilter" class="form-select flex-grow-0 w-auto">
+        <option value="all">All Statuses</option>
+        <option value="To Do">To Do</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select>
+
+    <select id="taskPriorityFilter" class="form-select flex-grow-0 w-auto">
+        <option value="all">All Priorities</option>
+        <option value="Critical">Critical</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+    </select>
+
+    <button id="taskSortBtn" class="btn btn-outline-theme d-flex align-items-center gap-2">
+        <i class="fas fa-calendar-day"></i> 
+        <span>Due Date</span>
+        <i class="fas fa-sort" id="sortIcon"></i>
+    </button>
+</div>
+
+<!-- SLICK TABLE LAYOUT -->
+<div class="table-responsive task-table-wrapper rounded-4 shadow-sm mb-4">
+    <table class="table custom-slick-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th scope="col" style="width: 5%;">Status</th>
+                <th scope="col" style="width: 35%;">Task Details</th>
+                <th scope="col" style="width: 15%;">Priority</th>
+                <th scope="col" style="width: 15%;">Assignee</th>
+                <th scope="col" style="width: 15%;">Due Date</th>
+                <th scope="col" style="width: 15%; text-align: right;">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="projectTasksTbody" aria-live="polite">
+            <tr>
+                <td colspan="6" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading tasks...</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- PAGINATION -->
+<div id="taskPagination" class="d-flex justify-content-end"></div>
 </section>
 
 
@@ -298,23 +345,72 @@ function getPriorityClass(priority) {
    /* =========================================================
        RENDER TASKS (Premium Look)
     ========================================================= */
-    function renderTasks(tasks) {
-        if (!Array.isArray(tasks) || tasks.length === 0) {
-            $taskList.html(`
-                <div class="col-12">
-                    <div class="text-center text-muted py-5 rounded-4" style="background: #ffffff; border: 1px solid rgba(99, 102, 241, 0.2);">
-                        <div class="mb-3"><i class="fas fa-layer-group fa-3x" style="color: #e0e7ff;"></i></div>
-                        <h5 class="fw-bold" style="color: #1e293b;">No tasks available</h5>
-                        <p class="mb-0 text-slate-500">Your workspace is clear. Add a task to get started.</p>
-                    </div>
-                </div>
+   /* =========================================================
+       STATE MANAGEMENT
+    ========================================================= */
+  /* =========================================================
+       STATE MANAGEMENT
+    ========================================================= */
+    let allProjectTasks = [];
+    let currentPage = 1;
+    const tasksPerPage = 8;
+    
+    // Filter State
+    let searchFilter = "";
+    let statusFilter = "all";
+    let priorityFilter = "all";
+    let dateSortAsc = true; // true = earliest first, false = latest first
+
+    /* =========================================================
+       RENDER TABLE ENGINE
+    ========================================================= */
+    function renderTable() {
+        const $tbody = $("#projectTasksTbody");
+        const $pagination = $("#taskPagination");
+
+        // 1. Filter
+        let processedTasks = allProjectTasks.filter(task => {
+            const matchesSearch = (task.title || "").toLowerCase().includes(searchFilter) || 
+                                  (task.description || "").toLowerCase().includes(searchFilter);
+            const matchesStatus = statusFilter === "all" || task.status === statusFilter;
+            const matchesPriority = priorityFilter === "all" || task.priority === priorityFilter;
+            
+            return matchesSearch && matchesStatus && matchesPriority;
+        });
+
+        // 2. Sort by Due Date
+        processedTasks.sort((a, b) => {
+            const dateA = a.due_date ? new Date(a.due_date).getTime() : Infinity; // Unset dates go to bottom
+            const dateB = b.due_date ? new Date(b.due_date).getTime() : Infinity;
+            
+            if (dateA === dateB) return 0;
+            return dateSortAsc ? (dateA - dateB) : (dateB - dateA);
+        });
+
+        // 3. Paginate
+        const totalPages = Math.ceil(processedTasks.length / tasksPerPage) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        
+        const startIndex = (currentPage - 1) * tasksPerPage;
+        const endIndex = startIndex + tasksPerPage;
+        const paginatedTasks = processedTasks.slice(startIndex, endIndex);
+
+        // 4. Render Rows
+        if (paginatedTasks.length === 0) {
+            $tbody.html(`
+                <tr>
+                    <td colspan="6" class="text-center py-5">
+                        <div class="mb-3"><i class="fas fa-inbox fa-3x text-muted" style="opacity: 0.3;"></i></div>
+                        <h6 class="fw-bold text-secondary">No tasks match your criteria</h6>
+                    </td>
+                </tr>
             `);
+            $pagination.empty();
             return;
         }
 
         let html = "";
-
-        $.each(tasks, function (index, task) {
+        $.each(paginatedTasks, function (index, task) {
             const taskId = String(task.task_id);
             const isTaskCreator = String(task.created_by) === currentUserId;
             const isTaskAssignee = task.assigned_to && String(task.assigned_to) === currentUserId;
@@ -326,102 +422,143 @@ function getPriorityClass(priority) {
             const description = escapeHtml(task.description || "No description");
             const priority = escapeHtml(task.priority || "");
             const status = escapeHtml(task.status || "");
-            
-            const assignedUser = task.assigned_user ? escapeHtml(String(task.assigned_user).trim()) : "";
-            const assignedTo = task.assigned_to ? String(task.assigned_to) : "";
+            const assignedUser = task.assigned_user ? escapeHtml(String(task.assigned_user).trim()) : "Unassigned";
             const dueDate = formatDate(task.due_date);
+            
+            // Format data specifically for the Edit/Assign Modals
             const editDueDate = formatDateForInput(task.due_date);
+            const assignedToVal = task.assigned_to ? String(task.assigned_to) : "";
 
-            let statusHtml = "";
-            if (canChangeStatus) {
-                const isCompleted = task.status === "Completed";
-                statusHtml = `
-                    <button type="button" 
-                        class="task-toggle-btn ${isCompleted ? 'is-completed' : ''}" 
-                        data-task-id="${escapeHtml(taskId)}" 
-                        title="${isCompleted ? 'Mark as Incomplete' : 'Mark as Completed'}">
-                        <i class="fas fa-check"></i>
-                    </button>
-                `;
-            }
+            let statusHtml = canChangeStatus ? `
+                <button type="button" class="task-toggle-btn m-0 ${task.status === 'Completed' ? 'is-completed' : ''}" 
+                    data-task-id="${taskId}">
+                    <i class="fas fa-check"></i>
+                </button>
+            ` : `<span class="badge bg-secondary">${status}</span>`;
 
-            let assignHtml = "";
+            // Build Actions HTML with full data attributes and lock icon fallback
+            let actionsHtml = `<div class="d-flex justify-content-end align-items-center gap-2">`;
+            
             if (isManager) {
-                assignHtml = `
-                    <button type="button" class="task-btn-icon task-btn-assign assignTaskBtn"
-                        data-task-id="${escapeHtml(taskId)}" data-assigned-to="${escapeHtml(assignedTo)}"
-                        data-bs-toggle="modal" data-bs-target="#assignTaskModal" title="Assign User">
-                        <i class="fas fa-user-plus"></i>
-                    </button>
-                `;
+                actionsHtml += `<button type="button" class="task-btn-icon task-btn-assign assignTaskBtn" 
+                                    data-task-id="${taskId}" 
+                                    data-assigned-to="${escapeHtml(assignedToVal)}" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#assignTaskModal" 
+                                    title="Assign User">
+                                    <i class="fas fa-user-plus"></i>
+                                </button>`;
             }
-
-            let editHtml = "";
+            
             if (canEdit) {
-                editHtml = `
-                    <button type="button" class="task-btn-icon task-btn-edit editTaskBtn"
-                        data-id="${escapeHtml(taskId)}" data-title="${escapeHtml(task.title || "")}"
-                        data-description="${escapeHtml(task.description || "")}" data-priority="${escapeHtml(task.priority || "")}"
-                        data-status="${escapeHtml(task.status || "")}" data-due-date="${escapeHtml(editDueDate)}"
-                        data-bs-toggle="modal" data-bs-target="#editTaskModal" title="Edit Task">
-                        <i class="fas fa-pen"></i>
-                    </button>
-                `;
+                actionsHtml += `<button type="button" class="task-btn-icon task-btn-edit editTaskBtn" 
+                                    data-id="${taskId}" 
+                                    data-title="${title}" 
+                                    data-description="${description}" 
+                                    data-priority="${priority}" 
+                                    data-status="${status}" 
+                                    data-due-date="${editDueDate}" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editTaskModal" 
+                                    title="Edit Task">
+                                    <i class="fas fa-pen"></i>
+                                </button>`;
             }
-
-            let deleteHtml = "";
+            
             if (canDelete) {
-                deleteHtml = `
-                    <button type="button" class="task-btn-icon task-btn-delete deleteTaskBtn"
-                        data-task-id="${escapeHtml(taskId)}" data-task-title="${escapeHtml(task.title || "")}" title="Delete Task">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
+                actionsHtml += `<button type="button" class="task-btn-icon task-btn-delete deleteTaskBtn" 
+                                    data-task-id="${taskId}" 
+                                    data-task-title="${title}" 
+                                    title="Delete Task">
+                                    <i class="fas fa-trash"></i>
+                                </button>`;
             }
 
-            const assignmentText = assignedUser ? assignedUser : "Unassigned";
+            if (!isManager && !canEdit && !canDelete) {
+                actionsHtml += `<span class="text-muted small px-2" title="You can only edit or delete tasks you created">
+                                    <i class="fas fa-lock opacity-50"></i>
+                                </span>`;
+            }
+            
+            actionsHtml += `</div>`;
 
             html += `
-                <div class="col-md-6 col-lg-4" data-task-id="${escapeHtml(taskId)}">
-                    <div class="task-card h-100">
-                        
-                        <div class="task-header-row">
-                            <div class="task-badges">
-                                <span class="task-badge ${getPriorityClass(task.priority)}">${priority}</span>
-                                <span class="task-badge status-badge">${status}</span>
-                            </div>
-                            ${statusHtml}
+                <tr>
+                    <td>${statusHtml}</td>
+                    <td>
+                        <div class="table-task-title">${title}</div>
+                        <div class="table-task-desc">${description}</div>
+                    </td>
+                    <td><span class="task-badge ${getPriorityClass(task.priority)}">${priority}</span></td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-user-circle text-muted"></i>
+                            <span class="small fw-semibold text-dark">${assignedUser}</span>
                         </div>
-
-                        <div>
-                            <h5 class="task-title">${title}</h5>
-                            <p class="task-desc">${description}</p>
+                    </td>
+                    <td>
+                        <div class="meta-chip border-0 bg-transparent p-0">
+                            <i class="fas fa-calendar-day"></i> <span>${dueDate}</span>
                         </div>
-
-                        <div class="task-meta-row">
-                            <div class="meta-chip">
-                                <i class="fas fa-calendar-day"></i>
-                                <span>${escapeHtml(dueDate)}</span>
-                            </div>
-                            <div class="meta-chip">
-                                <i class="fas fa-user-circle"></i>
-                                <span class="${!assignedUser ? 'text-muted fst-italic' : ''}">${assignmentText}</span>
-                            </div>
-                        </div>
-
-                        <div class="task-action-dock">
-                            ${assignHtml}
-                            ${editHtml}
-                            ${deleteHtml}
-                        </div>
-                    </div>
-                </div>
+                    </td>
+                    <td>${actionsHtml}</td>
+                </tr>
             `;
         });
 
-        $taskList.html(html);
-    }
+        $tbody.html(html);
 
+        // 5. Render Pagination Controls
+        if (totalPages > 1) {
+            let pagHtml = `<ul class="pagination pagination-sm shadow-sm m-0">`;
+            pagHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage - 1}"><i class="fas fa-chevron-left"></i></a></li>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                pagHtml += `<li class="page-item ${currentPage === i ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+            }
+            
+            pagHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage + 1}"><i class="fas fa-chevron-right"></i></a></li>`;
+            pagHtml += `</ul>`;
+            $pagination.html(pagHtml);
+        } else {
+            $pagination.empty();
+        }
+    }
+    /* =========================================================
+       EVENT LISTENERS FOR TOOLBAR
+    ========================================================= */
+    $("#taskSearchInput").on("input", function() {
+        searchFilter = $(this).val().toLowerCase();
+        currentPage = 1;
+        renderTable();
+    });
+
+    $("#taskStatusFilter").on("change", function() {
+        statusFilter = $(this).val();
+        currentPage = 1;
+        renderTable();
+    });
+
+    $("#taskPriorityFilter").on("change", function() {
+        priorityFilter = $(this).val();
+        currentPage = 1;
+        renderTable();
+    });
+
+    $("#taskSortBtn").on("click", function() {
+        dateSortAsc = !dateSortAsc;
+        $("#sortIcon").removeClass("fa-sort-up fa-sort-down fa-sort").addClass(dateSortAsc ? "fa-sort-up" : "fa-sort-down");
+        renderTable();
+    });
+
+    $(document).on("click", "#taskPagination .page-link", function(e) {
+        e.preventDefault();
+        const targetPage = parseInt($(this).attr("data-page"));
+        if (!isNaN(targetPage)) {
+            currentPage = targetPage;
+            renderTable();
+        }
+    });
     /* =========================================================
        GET TASKS
     ========================================================= */
@@ -448,34 +585,14 @@ function getPriorityClass(priority) {
                     "XMLHttpRequest"
             },
 
-            success: function (response) {
-
-                console.log(
-                    "Tasks loaded:",
-                    response
-                );
-
-
-                if (
-                    !response ||
-                    response.success !== true
-                ) {
-
-                    showTaskError(
-                        response && response.message
-                            ? response.message
-                            : "Unable to load tasks."
-                    );
-
-                    return;
-                }
-
-
-                renderTasks(
-                    response.tasks
-                );
-            },
-
+           success: function (response) {
+        if (!response || response.success !== true) {
+            showTaskError(response && response.message ? response.message : "Unable to load tasks.");
+            return;
+        }
+        allProjectTasks = response.tasks; // Store fetched data
+        renderTable(); // Build the filtered, sorted, paginated table
+    },
             error: function (xhr) {
 
                 console.error(

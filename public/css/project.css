@@ -561,3 +561,105 @@ body {
 .task-btn-edit:hover { background: #fffbeb; color: #d97706; }
 .task-btn-delete { background: #f1f5f9; color: #475569; }
 .task-btn-delete:hover { background: #fef2f2; color: #dc2626; }
+
+/* =========================================================
+   SLICK TABLE STYLES & TOOLBAR
+   ========================================================= */
+
+.task-toolbar {
+    background: linear-gradient(145deg, #ffffff 0%, #f5f3ff 100%);
+    border: 1px solid rgba(124, 58, 237, 0.15);
+}
+
+.btn-outline-theme {
+    color: #6366f1;
+    border-color: #6366f1;
+    background: transparent;
+}
+
+.btn-outline-theme:hover {
+    background: #6366f1;
+    color: #fff;
+}
+
+.task-table-wrapper {
+    background: #ffffff;
+    border: 1px solid rgba(124, 58, 237, 0.15);
+    overflow: hidden;
+}
+
+.custom-slick-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.custom-slick-table thead {
+    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+    color: #ffffff;
+}
+
+.custom-slick-table th {
+    padding: 1.25rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: none;
+}
+
+.custom-slick-table td {
+    padding: 1.25rem 1rem;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+    background: #ffffff;
+    transition: background 0.2s ease;
+}
+
+.custom-slick-table tbody tr:hover td {
+    background: #f8fafc;
+}
+
+.custom-slick-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Compact versions of existing classes for table rows */
+.table-task-title {
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.table-task-desc {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+/* Table Pagination */
+.pagination .page-link {
+    color: #6366f1;
+    border: none;
+    background: #f8fafc;
+    margin: 0 4px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #cbd5e1;
+    background: transparent;
+    box-shadow: none;
+}
