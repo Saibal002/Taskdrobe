@@ -18,6 +18,8 @@ const projectMemberRoutes =
     require("./routes/projectMemberRoutes");
 const taskRoute = require("./routes/taskRoute");
 const searchRoute = require("./routes/searchRoute");
+const profileRoute = require("./routes/profileRoute");
+
 
 const app = express();
 
@@ -102,6 +104,8 @@ app.use("/", projectMemberRoutes);
 app.use('/tasks', taskRoute);
 app.use("/search", searchRoute);
 
+// Setup routes
+app.use('/', profileRoute);
 
 
 app.use(errorHandler);

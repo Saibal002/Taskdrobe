@@ -50,55 +50,72 @@ const createUser = async ({
 };
 
 /**
- * Find user by email
+ * Find user by email (Updated for Profiles)
  */
 const findUserByEmail = async (email) => {
-  const params = [email];
-
-  const sql = `
-      SELECT
-    u.user_id,
-    u.role_id,
-    u.full_name,
-    u.email,
-    u.password,
-    u.phone,
-    u.profile_image,
-    u.is_active,
-    u.last_login,
-    r.role_name
-FROM users u
-INNER JOIN roles r
-ON u.role_id = r.role_id
-WHERE u.email = $1;
+    const sql = `
+        SELECT
+            u.user_id,
+            u.role_id,
+            u.full_name,
+            u.email,
+            u.password,
+            u.is_active,
+            u.last_login,
+            r.role_name,
+            p.phone,
+            p.profile_image,
+            p.bio
+        FROM users u
+        INNER JOIN roles r ON u.role_id = r.role_id
+        LEFT JOIN user_profiles p ON u.user_id = p.user_id
+        WHERE u.email = $1;
     `;
-
-  const { rows } = await query(sql, params);
-
-  return rows[0];
+    const { rows } = await query(sql, [email]);
+    return rows[0];
 };
 
 /**
- * Find User By ID
+ * Find User By ID (Updated for Profiles)
  */
 const findUserById = async (userId) => {
-
     const sql = `
         SELECT
-            u.*,
+            u.user_id,
+            u.full_name,
+            u.email,
+            u.is_active,
             r.role_name,
-            r.description AS role_description
-
+            r.description AS role_description,
+            p.phone,
+            p.profile_image,
+            p.bio
         FROM users u
-
-        INNER JOIN roles r
-            ON u.role_id = r.role_id
-
+        INNER JOIN roles r ON u.role_id = r.role_id
+        LEFT JOIN user_profiles p ON u.user_id = p.user_id
         WHERE u.user_id = $1;
     `;
-
     const { rows } = await query(sql, [userId]);
+    return rows[0];
+};
 
+/**
+ * Upsert User Profile (Insert if new, Update if exists)
+ */
+const upsertUserProfile = async (userId, { phone, profileImage, bio }) => {
+    const sql = `
+        INSERT INTO user_profiles (user_id, phone, profile_image, bio, updated_at)
+        VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
+        ON CONFLICT (user_id) 
+        DO UPDATE SET 
+            phone = EXCLUDED.phone,
+            profile_image = COALESCE(EXCLUDED.profile_image, user_profiles.profile_image),
+            bio = EXCLUDED.bio,
+            updated_at = CURRENT_TIMESTAMP
+        RETURNING *;
+    `;
+    const values = [userId, phone, profileImage, bio];
+    const { rows } = await query(sql, values);
     return rows[0];
 };
 
@@ -145,6 +162,7 @@ const getAllEmployees = async () => {
 module.exports = {
   createUser,
   findUserByEmail,
+  upsertUserProfile,
   findUserById,
   updateLastLogin,
   getAllEmployees,
