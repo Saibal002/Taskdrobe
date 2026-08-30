@@ -1,5 +1,7 @@
 const taskService = require("../services/taskService");
-
+const taskModel = require("../models/taskModel");
+const attachmentModel = require("../models/attachmentModel");
+const commentModel = require("../models/commentModel");
 /**
  * Create Task
  */
@@ -116,6 +118,29 @@ const getProjectTasksData = async (req, res, next) => {
     next(err);
   }
 };
+const getTaskInsight = async (req, res, next) => {
+    try {
+        const taskId = req.params.id; // Using your existing :id structure
+        
+        const task = await taskModel.getTaskInsightData(taskId);
+        if (!task) {
+            return res.status(404).render("error", { message: "Task not found" });
+        }
+
+        const files = await attachmentModel.getTaskAttachments(taskId);
+        const comments = await commentModel.getTaskComments(taskId);
+
+        res.render("task-insight", {
+            title: `Task Insight: ${task.title}`,
+            task,
+            files,
+            comments,
+            user: req.user
+        });
+    } catch (err) {
+        next(err);
+    }
+};
 
 module.exports = {
   createTask,
@@ -124,4 +149,5 @@ module.exports = {
   toggleTaskStatus,
   updateTaskAssignment,
   getProjectTasksData,
+  getTaskInsight,
 };

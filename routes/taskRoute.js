@@ -7,7 +7,8 @@ const authMiddleware =
 
 const taskController =
     require("../controllers/taskController");
-
+const { uploadProjectDocument } = require("../middleware/documentUploadMiddleware");
+const attachmentController = require("../controllers/attachmentController");
 
 router.post(
     "/",
@@ -48,5 +49,18 @@ router.get(
     authMiddleware,
     taskController.getProjectTasksData
 );
-
+router.get(
+    "/:id/insight",
+    authMiddleware,
+    taskController.getTaskInsight
+);
+// Add this route for file uploads
+router.post(
+    "/:taskId/files", 
+    authMiddleware, 
+    uploadProjectDocument.single("taskFile"), 
+    attachmentController.uploadTaskFile
+);
+// Add this below your POST upload route
+router.delete("/files/:attachmentId", authMiddleware, attachmentController.deleteProjectFile);
 module.exports = router;

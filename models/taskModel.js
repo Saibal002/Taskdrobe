@@ -251,6 +251,22 @@ const updateTaskAssignment = async (
 
     return rows[0];
 };
+const getTaskInsightData = async (taskId) => {
+    const sql = `
+        SELECT 
+            t.*, 
+            p.project_name AS project_title, 
+            u.full_name AS assigned_to_name,
+            creator.full_name AS created_by_name
+        FROM tasks t
+        JOIN projects p ON t.project_id = p.project_id
+        LEFT JOIN users u ON t.assigned_to = u.user_id
+        JOIN users creator ON t.created_by = creator.user_id
+        WHERE t.task_id = $1;
+    `;
+    const { rows } = await query(sql, [taskId]);
+    return rows[0];
+};
 module.exports = {
   createTask,
   getTasksByProject,
@@ -262,4 +278,5 @@ module.exports = {
   getProjectTaskStats,
   getUpcomingTasks,
   searchTasks,
+  getTaskInsightData,
 };

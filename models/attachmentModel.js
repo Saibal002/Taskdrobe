@@ -36,10 +36,23 @@ const getAttachmentById = async (attachmentId) => {
     const { rows } = await query(sql, [attachmentId]);
     return rows[0];
 };
+const getTaskAttachments = async (taskId) => {
+    const sql = `
+        SELECT a.*, u.full_name AS uploaded_by_name
+        FROM attachments a
+        JOIN users u ON a.uploaded_by = u.user_id
+        WHERE a.task_id = $1
+        ORDER BY a.created_at DESC;
+    `;
+    const { rows } = await query(sql, [taskId]);
+    return rows;
+};
+
 
 module.exports = {
     addAttachment,
     getProjectAttachments,
     deleteAttachment,
     getAttachmentById,
+    getTaskAttachments,
 };

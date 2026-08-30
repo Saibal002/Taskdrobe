@@ -74,7 +74,7 @@ const viewProject = async (req, res, next) => {
     const projectId = req.params.id;
 
     const project = await projectService.getProjectById(projectId);
-    const comments = await commentService.fetchProjectComments(req.params.projectId);
+    const comments = await commentService.fetchProjectComments(projectId);
     if (req.user.role_name === "employee") {
       const isMember = await projectMemberService.isMember(
         projectId,

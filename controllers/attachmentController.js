@@ -1,4 +1,5 @@
 const attachmentModel = require("../models/attachmentModel");
+const taskModel = require("../models/taskModel");
 
 const uploadProjectFile = async (req, res, next) => {
     try {
@@ -55,8 +56,34 @@ const deleteProjectFile = async (req, res, next) => {
     }
 };
 
+const uploadTaskFile = async (req, res, next) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: "No file provided." });
+        }
+
+        // We need the project ID to satisfy the attachments table constraint
+        const task = await taskModel.getTaskById(req.params.taskId);
+        if (!task) return res.status(404).json({ success: false, message: "Task not found." });
+
+        const attachment = await attachmentModel.addAttachment({
+            projectId: task.project_id,
+            taskId: req.params.taskId,
+            uploadedBy: req.user.user_id,
+            originalName: req.file.originalname,
+            filePath: `/uploads/projects/${req.file.filename}`, // Resuing the project upload folder
+            fileType: req.file.mimetype,
+            fileSize: req.file.size
+        });
+
+        return res.status(201).json({ success: true, attachment });
+    } catch (err) {
+        next(err);
+    }
+};
 module.exports = {
     uploadProjectFile,
     getProjectFiles,
-    deleteProjectFile
+    deleteProjectFile,
+    uploadTaskFile,
 };
