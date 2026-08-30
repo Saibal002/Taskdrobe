@@ -8,11 +8,12 @@ const authMiddleware = require("../middleware/authMiddleware");
 const requireRole = require("../middleware/roleMiddleware");
 
 const validate = require("../validators/validate");
-
+const attachmentController = require("../controllers/attachmentController");
 const {
-    createProjectSchema,
-} = require("../validators/projectValidator");
+  uploadProjectDocument,
+} = require("../middleware/documentUploadMiddleware");
 
+const { createProjectSchema } = require("../validators/projectValidator");
 
 // ===========================
 // Create Project
@@ -20,13 +21,12 @@ const {
 // ===========================
 
 router.post(
-    "/",
-    authMiddleware,
-    requireRole(["manager", "admin"]),
-    validate(createProjectSchema),
-    projectController.createProject
+  "/",
+  authMiddleware,
+  requireRole(["manager", "admin"]),
+  validate(createProjectSchema),
+  projectController.createProject,
 );
-
 
 // ===========================
 // Update Project
@@ -34,13 +34,12 @@ router.post(
 // ===========================
 
 router.post(
-    "/:id/update",
-    authMiddleware,
-    requireRole(["manager", "admin"]),
-    validate(createProjectSchema),
-    projectController.updateProject
+  "/:id/update",
+  authMiddleware,
+  requireRole(["manager", "admin"]),
+  validate(createProjectSchema),
+  projectController.updateProject,
 );
-
 
 // ===========================
 // Delete Project
@@ -48,23 +47,39 @@ router.post(
 // ===========================
 
 router.post(
-    "/:id/delete",
-    authMiddleware,
-    requireRole(["manager", "admin"]),
-    projectController.deleteProject
+  "/:id/delete",
+  authMiddleware,
+  requireRole(["manager", "admin"]),
+  projectController.deleteProject,
 );
-
 
 // ===========================
 // View Project
 // Authenticated users
 // ===========================
 
+router.get("/:id", authMiddleware, projectController.viewProject);
+
+// Add these to your existing project routes:
 router.get(
-    "/:id",
-    authMiddleware,
-    projectController.viewProject
+  "/:projectId/files/data",
+  authMiddleware,
+  attachmentController.getProjectFiles,
 );
 
+router.post(
+  "/:projectId/files",
+  authMiddleware,
+  requireRole(["manager", "admin"]),
+  uploadProjectDocument.single("projectFile"),
+  attachmentController.uploadProjectFile,
+);
+
+router.delete(
+  "/files/:attachmentId",
+  authMiddleware,
+  requireRole(["manager", "admin"]),
+  attachmentController.deleteProjectFile,
+);
 
 module.exports = router;
