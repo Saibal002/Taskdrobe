@@ -1,6 +1,7 @@
 const projectService = require("../services/projectService");
 const projectMemberService = require("../services/projectMemberService");
 const taskService = require("../services/taskService");
+const commentService = require("../services/commentService");
 const AppError = require("../utils/AppError");
 
 /**
@@ -73,7 +74,7 @@ const viewProject = async (req, res, next) => {
     const projectId = req.params.id;
 
     const project = await projectService.getProjectById(projectId);
-
+    const comments = await commentService.fetchProjectComments(req.params.projectId);
     if (req.user.role_name === "employee") {
       const isMember = await projectMemberService.isMember(
         projectId,
@@ -100,6 +101,7 @@ const viewProject = async (req, res, next) => {
       project,
       tasks,
       projectMembers,
+      comments,
       user: req.user,
     });
   } catch (err) {
