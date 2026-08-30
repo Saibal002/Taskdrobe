@@ -33,7 +33,21 @@ const getProjectFiles = async (req, res, next) => {
 
 const deleteProjectFile = async (req, res, next) => {
     try {
-        // In a production app, you'd also want to use fs.unlink to delete the actual file from the server
+        // 1. Find the file
+        const attachment = await attachmentModel.getAttachmentById(req.params.attachmentId);
+        
+        if (!attachment) {
+            return res.status(404).json({ success: false, message: "File not found." });
+        }
+
+        // 2. Enforce Ownership for Employees
+        if (req.user.role_name === 'employee') {
+            if (String(attachment.uploaded_by) !== String(req.user.user_id)) {
+                return res.status(403).json({ success: false, message: "You can only delete files that you uploaded." });
+            }
+        }
+
+        // 3. Delete the file
         await attachmentModel.deleteAttachment(req.params.attachmentId);
         return res.json({ success: true, message: "File deleted successfully." });
     } catch (err) {

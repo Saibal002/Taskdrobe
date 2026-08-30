@@ -70,7 +70,6 @@ router.get(
 router.post(
   "/:projectId/files",
   authMiddleware,
-  requireRole(["manager", "admin"]),
   uploadProjectDocument.single("projectFile"),
   attachmentController.uploadProjectFile,
 );
@@ -78,7 +77,6 @@ router.post(
 router.delete(
   "/files/:attachmentId",
   authMiddleware,
-  requireRole(["manager", "admin"]),
   attachmentController.deleteProjectFile,
 );
 

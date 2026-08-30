@@ -31,9 +31,15 @@ const deleteAttachment = async (attachmentId) => {
     const { rows } = await query(sql, [attachmentId]);
     return rows[0];
 };
+const getAttachmentById = async (attachmentId) => {
+    const sql = `SELECT * FROM attachments WHERE attachment_id = $1;`;
+    const { rows } = await query(sql, [attachmentId]);
+    return rows[0];
+};
 
 module.exports = {
     addAttachment,
     getProjectAttachments,
-    deleteAttachment
+    deleteAttachment,
+    getAttachmentById,
 };

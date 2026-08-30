@@ -1,220 +1,239 @@
 <%- include("layout/header", { title: project.project_name }) %>
-<link rel="stylesheet" href="/css/project.css">
-<div class="container mt-5 fade-in">
-    <div class="project-page-shell">
+    <link rel="stylesheet" href="/css/project.css">
+    <div class="container mt-5 fade-in">
+        <div class="project-page-shell">
 
-        <!-- =====================================================
+            <!-- =====================================================
              PROJECT OVERVIEW
         ====================================================== -->
-        <section class="project-overview-card">
-            <div class="project-overview-top">
-                <div class="project-overview-heading">
-                    <a href="/dashboard" class="project-back-link">
-                        <i class="fas fa-arrow-left"></i>
-                        <span>Back to Dashboard</span>
-                    </a>
+            <section class="project-overview-card">
+                <div class="project-overview-top">
+                    <div class="project-overview-heading">
+                        <a href="/dashboard" class="project-back-link">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back to Dashboard</span>
+                        </a>
 
-                    <div class="project-title-row">
-                        <div class="project-title-icon shadow-sm">
-                            <i class="fas fa-folder-open"></i>
+                        <div class="project-title-row">
+                            <div class="project-title-icon shadow-sm">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <div>
+                                <div class="project-eyebrow">TaskDrobe Project Overview</div>
+                                <h1 class="project-page-title">
+                                    <%= project.project_name %>
+                                </h1>
+                            </div>
                         </div>
-                        <div>
-                            <div class="project-eyebrow">TaskDrobe Project Overview</div>
-                            <h1 class="project-page-title"><%= project.project_name %></h1>
-                        </div>
+
+                        <p class="project-page-description">
+                            <%= project.description || "No description has been added for this project yet." %>
+                        </p>
                     </div>
 
-                    <p class="project-page-description">
-                        <%= project.description || "No description has been added for this project yet." %>
-                    </p>
-                </div>
-
-                <div class="project-status-panel">
-                    <span class="project-status-label">Current Status</span>
-                    <span class="project-status-badge shadow-sm
+                    <div class="project-status-panel">
+                        <span class="project-status-label">Current Status</span>
+                        <span class="project-status-badge shadow-sm
                         <%= project.status === 'Completed' ? 'project-status-completed' : 
                             project.status === 'In Progress' ? 'project-status-progress' : 
                             project.status === 'Cancelled' ? 'project-status-cancelled' : 'project-status-default' %>">
-                        <span class="project-status-dot"></span>
-                        <%= project.status %>
-                    </span>
+                            <span class="project-status-dot"></span>
+                            <%= project.status %>
+                        </span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- =================================================
+                <!-- =================================================
                  PROJECT KPI CARDS
             ================================================== -->
-            <div class="project-kpi-grid">
-                <div class="project-kpi-card">
-    <div class="project-kpi-icon"><i class="fas fa-chart-line"></i></div>
-    <div class="project-kpi-content">
-        <span class="project-kpi-label">Progress</span>
-        <!-- Added id="kpiProgressValue" -->
-        <strong class="project-kpi-value" id="kpiProgressValue"><%= Number(project.progress || 0) %>%</strong>
-    </div>
-</div>
+                <div class="project-kpi-grid">
+                    <div class="project-kpi-card">
+                        <div class="project-kpi-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="project-kpi-content">
+                            <span class="project-kpi-label">Progress</span>
+                            <!-- Added id="kpiProgressValue" -->
+                            <strong class="project-kpi-value" id="kpiProgressValue">
+                                <%= Number(project.progress || 0) %>%
+                            </strong>
+                        </div>
+                    </div>
 
-                <div class="project-kpi-card">
-                    <div class="project-kpi-icon"><i class="fas fa-layer-group"></i></div>
-                    <div class="project-kpi-content">
-                        <span class="project-kpi-label">Status</span>
-                        <strong class="project-kpi-value project-kpi-value-small"><%= project.status %></strong>
+                    <div class="project-kpi-card">
+                        <div class="project-kpi-icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="project-kpi-content">
+                            <span class="project-kpi-label">Status</span>
+                            <strong class="project-kpi-value project-kpi-value-small">
+                                <%= project.status %>
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="project-kpi-card">
+                        <div class="project-kpi-icon"><i class="fas fa-calendar-days"></i></div>
+                        <div class="project-kpi-content">
+                            <span class="project-kpi-label">Deadline</span>
+                            <strong class="project-kpi-value project-kpi-value-small">
+                                <%= project.deadline ? new Date(project.deadline).toLocaleDateString() : "Not Set" %>
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="project-kpi-card">
+                        <div class="project-kpi-icon"><i class="fas fa-user"></i></div>
+                        <div class="project-kpi-content">
+                            <span class="project-kpi-label">Created By</span>
+                            <strong class="project-kpi-value project-kpi-value-small">
+                                <%= project.full_name %>
+                            </strong>
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="project-kpi-card">
-                    <div class="project-kpi-icon"><i class="fas fa-calendar-days"></i></div>
-                    <div class="project-kpi-content">
-                        <span class="project-kpi-label">Deadline</span>
-                        <strong class="project-kpi-value project-kpi-value-small">
-                            <%= project.deadline ? new Date(project.deadline).toLocaleDateString() : "Not Set" %>
-                        </strong>
-                    </div>
-                </div>
-
-                <div class="project-kpi-card">
-                    <div class="project-kpi-icon"><i class="fas fa-user"></i></div>
-                    <div class="project-kpi-content">
-                        <span class="project-kpi-label">Created By</span>
-                        <strong class="project-kpi-value project-kpi-value-small"><%= project.full_name %></strong>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================
+            <!-- =================================================
              PROJECT PROGRESS
         ================================================== -->
-       <div class="project-progress-section">
-    <div class="project-progress-header">
-        <div>
-            <span class="project-progress-title">Project Progress</span>
-            <span class="text-muted small ms-2">Overall completion</span>
-        </div>
-        <!-- Added id="barProgressValue" -->
-        <strong class="project-progress-value" id="barProgressValue"><%= Number(project.progress || 0) %>%</strong>
-    </div>
-    <div class="project-progress-bar shadow-inner">
-        <!-- Added id="progressBarFill" -->
-        <div id="progressBarFill" style="width: <%= Number(project.progress || 0) %>%;"></div>
-    </div>
-</div>
-
-        <!-- =====================================================
-             PROJECT MEMBERS (MANAGER ONLY)
-        ====================================================== -->
-        <% if (user && user.role_name === "manager") { %>
-        <section class="project-members-section mt-5" id="projectMembersSection"
-            data-members-url="/projects/<%= project.project_id %>/members/data"
-            data-add-url="/projects/<%= project.project_id %>/members"
-            data-remove-url="/projects/<%= project.project_id %>/members"
-            data-role="<%= user.role_name %>">
-
-            <div class="project-members-card">
-                <div class="project-members-header border-bottom pb-4 mb-4">
-                    <div class="project-members-heading">
-                        <div class="project-section-icon shadow-sm"><i class="fas fa-users"></i></div>
-                        <div>
-                            <div class="project-section-eyebrow">Collaboration</div>
-                            <h3 class="project-section-title">Project Members</h3>
-                            <p class="project-section-subtitle mb-0">People currently assigned to this project.</p>
-                        </div>
+            <div class="project-progress-section">
+                <div class="project-progress-header">
+                    <div>
+                        <span class="project-progress-title">Project Progress</span>
+                        <span class="text-muted small ms-2">Overall completion</span>
                     </div>
-                    <span class="project-members-permission-badge shadow-sm">
-                        <i class="fas fa-user-shield me-1"></i> Manager Access
-                    </span>
+                    <!-- Added id="barProgressValue" -->
+                    <strong class="project-progress-value" id="barProgressValue">
+                        <%= Number(project.progress || 0) %>%
+                    </strong>
                 </div>
-
-                <div id="projectMembersMessage" class="project-members-message alert d-none rounded-pill text-center shadow-sm" role="alert"></div>
-
-                <div class="row g-4">
-                    <div class="col-lg-7">
-                        <div id="projectMembersList" class="project-members-list pe-lg-3" aria-live="polite">
-                            <div class="project-members-loading">
-                                <span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span>
-                                <span class="ms-2">Loading members...</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-5 border-start">
-                        <div class="project-add-member-panel border-0 bg-transparent p-0 ps-lg-3">
-                            <div class="project-add-member-heading mb-4">
-                                <div class="project-add-member-icon shadow-sm"><i class="fas fa-user-plus"></i></div>
-                                <div>
-                                    <h4 class="mb-1">Add Employee</h4>
-                                    <p class="text-muted small mb-0">Select an active team member.</p>
-                                </div>
-                            </div>
-
-                            <form id="addProjectMemberForm" novalidate>
-                                <div class="mb-4">
-                                    <label for="projectMemberUserId" class="form-label fw-bold text-secondary small text-uppercase tracking-wide">Select Employee</label>
-                                    <select class="form-select form-select-lg shadow-sm border-0 bg-light" id="projectMemberUserId" name="userId" required>
-                                        <option value="">Choose...</option>
-                                    </select>
-                                    <div class="invalid-feedback fw-bold mt-2" id="projectMemberUserIdError">Please select an employee.</div>
-                                </div>
-                                <button type="submit" id="addProjectMemberBtn" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm hover-lift">
-                                    <i class="fas fa-user-plus me-2"></i> Add to Project
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                <div class="project-progress-bar shadow-inner">
+                    <!-- Added id="progressBarFill" -->
+                    <div id="progressBarFill" style="width: <%= Number(project.progress || 0) %>%;"></div>
                 </div>
             </div>
-        </section>
-        <% } %>
+
+            <!-- =====================================================
+             PROJECT MEMBERS (MANAGER ONLY)
+        ====================================================== -->
+            <% if (user && user.role_name==="manager" ) { %>
+                <section class="project-members-section mt-5" id="projectMembersSection"
+                    data-members-url="/projects/<%= project.project_id %>/members/data"
+                    data-add-url="/projects/<%= project.project_id %>/members"
+                    data-remove-url="/projects/<%= project.project_id %>/members" data-role="<%= user.role_name %>">
+
+                    <div class="project-members-card">
+                        <div class="project-members-header border-bottom pb-4 mb-4">
+                            <div class="project-members-heading">
+                                <div class="project-section-icon shadow-sm"><i class="fas fa-users"></i></div>
+                                <div>
+                                    <div class="project-section-eyebrow">Collaboration</div>
+                                    <h3 class="project-section-title">Project Members</h3>
+                                    <p class="project-section-subtitle mb-0">People currently assigned to this project.
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="project-members-permission-badge shadow-sm">
+                                <i class="fas fa-user-shield me-1"></i> Manager Access
+                            </span>
+                        </div>
+
+                        <div id="projectMembersMessage"
+                            class="project-members-message alert d-none rounded-pill text-center shadow-sm"
+                            role="alert"></div>
+
+                        <div class="row g-4">
+                            <div class="col-lg-7">
+                                <div id="projectMembersList" class="project-members-list pe-lg-3" aria-live="polite">
+                                    <div class="project-members-loading">
+                                        <span class="spinner-border spinner-border-sm text-primary"
+                                            aria-hidden="true"></span>
+                                        <span class="ms-2">Loading members...</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-5 border-start">
+                                <div class="project-add-member-panel border-0 bg-transparent p-0 ps-lg-3">
+                                    <div class="project-add-member-heading mb-4">
+                                        <div class="project-add-member-icon shadow-sm"><i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-1">Add Employee</h4>
+                                            <p class="text-muted small mb-0">Select an active team member.</p>
+                                        </div>
+                                    </div>
+
+                                    <form id="addProjectMemberForm" novalidate>
+                                        <div class="mb-4">
+                                            <label for="projectMemberUserId"
+                                                class="form-label fw-bold text-secondary small text-uppercase tracking-wide">Select
+                                                Employee</label>
+                                            <select class="form-select form-select-lg shadow-sm border-0 bg-light"
+                                                id="projectMemberUserId" name="userId" required>
+                                                <option value="">Choose...</option>
+                                            </select>
+                                            <div class="invalid-feedback fw-bold mt-2" id="projectMemberUserIdError">
+                                                Please select an employee.</div>
+                                        </div>
+                                        <button type="submit" id="addProjectMemberBtn"
+                                            class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm hover-lift">
+                                            <i class="fas fa-user-plus me-2"></i> Add to Project
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <% } %>
 
 
-        <hr class="my-5 border-light">
-        <%- include("manager/partials/projectTasks", { project: project, user: user }) %>
-        <%- include("layout/addTaskModal") %>
-        <%- include("layout/editTaskModal") %>
-        <%- include("layout/assignTaskModal") %>
+                    <hr class="my-5 border-light">
+                    <%- include("manager/partials/projectTasks", { project: project, user: user }) %>
+                        <%- include("layout/addTaskModal") %>
+                            <%- include("layout/editTaskModal") %>
+                                <%- include("layout/assignTaskModal") %>
+        </div>
     </div>
-</div>
 
     <!-- =====================================================
              PROJECT FILES
         ====================================================== -->
-        <section class="project-files-section mt-5" id="projectFilesSection" 
-            data-files-url="/projects/<%= project.project_id %>/files/data"
-            data-upload-url="/projects/<%= project.project_id %>/files"
-            data-user-role="<%= user.role_name %>"> 
-            <div class="project-members-card"> <!-- Reusing this class for the consistent white/glass background -->
-                <!-- Inside your project-files-section header -->
-<div class="d-flex align-items-start justify-content-between border-bottom pb-4 mb-4 flex-wrap gap-3">
-    <div class="d-flex gap-3 align-items-center">
-        <div class="project-section-icon shadow-sm" style="background: linear-gradient(135deg, #10b981, #047857);"><i class="fas fa-folder-open"></i></div>
-        <div>
-            <div class="project-section-eyebrow text-success">Resources</div>
-            <h3 class="project-section-title mb-0">Project Files</h3>
-        </div>
-    </div>
+   <!-- Add data-user-id to the section -->
+<section class="project-files-section mt-5" id="projectFilesSection" 
+    data-files-url="/projects/<%= project.project_id %>/files/data"
+    data-upload-url="/projects/<%= project.project_id %>/files"
+    data-user-role="<%= user.role_name %>"
+    data-user-id="<%= user.user_id %>">
     
-    <!-- Conditionally render the upload form -->
-    <% if (user.role_name === 'admin' || user.role_name === 'manager') { %>
-        <form id="uploadFileForm" class="d-flex gap-2">
-            <input type="file" name="projectFile" id="projectFile" class="form-control form-control-sm border-0 bg-light rounded-pill px-3" required>
-            <button type="submit" id="uploadFileBtn" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift d-flex align-items-center gap-2">
-                <i class="fas fa-cloud-upload-alt"></i> Upload
-            </button>
-        </form>
-    <% } %>
-</div>
-
-                <div id="projectFilesMessage" class="alert d-none rounded-pill text-center shadow-sm"></div>
-
-                <!-- Grid for Files -->
-                <div class="row g-3" id="projectFilesList">
-                    <div class="col-12 text-center py-4">
-                        <span class="spinner-border spinner-border-sm text-success" aria-hidden="true"></span>
-                        <span class="ms-2 text-muted">Loading files...</span>
-                    </div>
+    <div class="project-members-card">
+        <div class="d-flex align-items-start justify-content-between border-bottom pb-4 mb-4 flex-wrap gap-3">
+            <div class="d-flex gap-3 align-items-center">
+                <div class="project-section-icon shadow-sm" style="background: linear-gradient(135deg, #10b981, #047857);"><i class="fas fa-folder-open"></i></div>
+                <div>
+                    <div class="project-section-eyebrow text-success">Resources</div>
+                    <h3 class="project-section-title mb-0">Project Files</h3>
                 </div>
             </div>
-        </section>
+            
+            <!-- Removed the role check wrapper so project members (employees) can upload -->
+            <form id="uploadFileForm" class="d-flex gap-2">
+                <input type="file" name="projectFile" id="projectFile" class="form-control form-control-sm border-0 bg-light rounded-pill px-3" required>
+                <button type="submit" id="uploadFileBtn" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift d-flex align-items-center gap-2">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload
+                </button>
+            </form>
+        </div>
+
+            <div id="projectFilesMessage" class="alert d-none rounded-pill text-center shadow-sm"></div>
+
+            <!-- Grid for Files -->
+            <div class="row g-3" id="projectFilesList">
+                <div class="col-12 text-center py-4">
+                    <span class="spinner-border spinner-border-sm text-success" aria-hidden="true"></span>
+                    <span class="ms-2 text-muted">Loading files...</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- =========================================================
      PROJECT MEMBERS AJAX
@@ -1311,32 +1330,33 @@
         /* =========================================================
        PROJECT FILES AJAX
     ========================================================= */
-    const $filesSection = $("#projectFilesSection");
-    if ($filesSection.length) {
-        const filesUrl = $filesSection.attr("data-files-url");
-        const uploadUrl = $filesSection.attr("data-upload-url");
-        const $filesList = $("#projectFilesList");
-        const $fileMessage = $("#projectFilesMessage");
-        const userRole = $filesSection.attr("data-user-role");
-        const canManageFiles = userRole === 'admin' || userRole === 'manager';
-        // Format bytes to KB/MB
-        const formatBytes = (bytes, decimals = 2) => {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024, dm = decimals < 0 ? 0 : decimals, sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-        };
+        const $filesSection = $("#projectFilesSection");
+        if ($filesSection.length) {
+            const filesUrl = $filesSection.attr("data-files-url");
+            const uploadUrl = $filesSection.attr("data-upload-url");
+            const $filesList = $("#projectFilesList");
+            const $fileMessage = $("#projectFilesMessage");
+           const userRole = $filesSection.attr("data-user-role");
+        const currentUserId = String($filesSection.attr("data-user-id"));
+        const canManageAllFiles = userRole === 'admin' || userRole === 'manager';
+            // Format bytes to KB/MB
+            const formatBytes = (bytes, decimals = 2) => {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024, dm = decimals < 0 ? 0 : decimals, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            };
 
-        // Determine icon based on mimetype
-        const getFileIcon = (mimeType) => {
-            if (mimeType.includes('image')) return '<i class="fas fa-image text-purple"></i>';
-            if (mimeType.includes('pdf')) return '<i class="fas fa-file-pdf text-danger"></i>';
-            if (mimeType.includes('word') || mimeType.includes('document')) return '<i class="fas fa-file-word text-primary"></i>';
-            if (mimeType.includes('excel') || mimeType.includes('sheet')) return '<i class="fas fa-file-excel text-success"></i>';
-            return '<i class="fas fa-file-alt text-secondary"></i>';
-        };
+            // Determine icon based on mimetype
+            const getFileIcon = (mimeType) => {
+                if (mimeType.includes('image')) return '<i class="fas fa-image text-purple"></i>';
+                if (mimeType.includes('pdf')) return '<i class="fas fa-file-pdf text-danger"></i>';
+                if (mimeType.includes('word') || mimeType.includes('document')) return '<i class="fas fa-file-word text-primary"></i>';
+                if (mimeType.includes('excel') || mimeType.includes('sheet')) return '<i class="fas fa-file-excel text-success"></i>';
+                return '<i class="fas fa-file-alt text-secondary"></i>';
+            };
 
-        const loadFiles = () => {
+            const loadFiles = () => {
             $.ajax({
                 url: filesUrl,
                 type: "GET",
@@ -1345,8 +1365,11 @@
                         let html = '';
                         res.files.forEach(file => {
                             
-                            // Conditionally render the delete button based on role
-                            let deleteBtn = canManageFiles ? `
+                            // Check if the current user is the uploader
+                            const isUploader = String(file.uploaded_by) === currentUserId;
+                            
+                            // Render delete button if they have global rights OR own the file
+                            let deleteBtn = (canManageAllFiles || isUploader) ? `
                                 <button type="button" class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle ms-2 delete-file-btn hover-lift" data-id="${file.attachment_id}" title="Delete File" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -1375,68 +1398,69 @@
                 }
             });
         };
-        // Handle File Upload
-        $("#uploadFileForm").on("submit", function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const $btn = $("#uploadFileBtn");
-            const originalBtnHtml = $btn.html();
-            
-            $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span> Uploading...');
-            $fileMessage.addClass("d-none");
+           
+            // Handle File Upload
+            $("#uploadFileForm").on("submit", function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const $btn = $("#uploadFileBtn");
+                const originalBtnHtml = $btn.html();
 
-            $.ajax({
-                url: uploadUrl,
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(res) {
-                    if (res.success) {
-                        $("#uploadFileForm")[0].reset();
-                        loadFiles();
-                    } else {
-                        $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text(res.message);
-                    }
-                },
-                error: function(err) {
-                    $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text("Error uploading file. Check type and size.");
-                },
-                complete: function() {
-                    $btn.prop("disabled", false).html(originalBtnHtml);
-                }
-            });
-        });
-        // Handle File Deletion
-        $(document).on("click", ".delete-file-btn", function() {
-            const attachmentId = $(this).attr("data-id");
-            
-            if (window.confirm("Are you sure you want to delete this file? This cannot be undone.")) {
-                const $btn = $(this);
-                $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
+                $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span> Uploading...');
+                $fileMessage.addClass("d-none");
 
                 $.ajax({
-                    url: `/projects/files/${attachmentId}`,
-                    type: "DELETE",
-                    success: function(res) {
+                    url: uploadUrl,
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
                         if (res.success) {
-                            loadFiles(); // Refresh the list
+                            $("#uploadFileForm")[0].reset();
+                            loadFiles();
                         } else {
-                            alert(res.message || "Unable to delete file.");
-                            $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
+                            $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text(res.message);
                         }
                     },
-                    error: function() {
-                        alert("An error occurred while trying to delete the file.");
-                        $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
+                    error: function (err) {
+                        $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text("Error uploading file. Check type and size.");
+                    },
+                    complete: function () {
+                        $btn.prop("disabled", false).html(originalBtnHtml);
                     }
                 });
-            }
-        });
+            });
+            // Handle File Deletion
+            $(document).on("click", ".delete-file-btn", function () {
+                const attachmentId = $(this).attr("data-id");
 
-        // Init
-        loadFiles();
-    }
+                if (window.confirm("Are you sure you want to delete this file? This cannot be undone.")) {
+                    const $btn = $(this);
+                    $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
+
+                    $.ajax({
+                        url: `/projects/files/${attachmentId}`,
+                        type: "DELETE",
+                        success: function (res) {
+                            if (res.success) {
+                                loadFiles(); // Refresh the list
+                            } else {
+                                alert(res.message || "Unable to delete file.");
+                                $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred while trying to delete the file.");
+                            $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
+                        }
+                    });
+                }
+            });
+
+            // Init
+            loadFiles();
+        }
     </script>
 
 
