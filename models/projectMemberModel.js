@@ -90,10 +90,23 @@ const isProjectMember = async (projectId, userId) => {
 
   return rows.length > 0;
 };
+const getProjectMemberIds = async (projectId) => {
 
+    const sql = `
+        SELECT user_id
+        FROM project_members
+        WHERE project_id = $1;
+    `;
+
+    const { rows } =
+        await query(sql, [projectId]);
+
+    return rows.map(row => row.user_id);
+};
 module.exports = {
   addProjectMember,
   removeProjectMember,
   getProjectMembers,
   isProjectMember,
+  getProjectMemberIds,
 };

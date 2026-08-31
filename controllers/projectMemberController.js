@@ -1,51 +1,128 @@
+
 const projectMemberService = require("../services/projectMemberService");
 const userModel = require("../models/userModel");
+const notificationModel = require("../models/notificationModel");
+const projectModel = require("../models/projectModel");
 
 /**
  * Add Employee To Project
  */
 const addMember = async (req, res, next) => {
-  try {
-    const { projectId } = req.params;
-    const { userId } = req.body;
+    try {
+        const { projectId } = req.params;
+        const { userId } = req.body;
 
-    const member = await projectMemberService.addMember(
-      projectId,
-      userId,
-      req.user.user_id,
-    );
+        // =====================================================
+        // 1. EXISTING FUNCTIONALITY
+        // =====================================================
 
-    return res.status(201).json({
-      success: true,
-      message: "Employee added to project successfully.",
-      member,
-    });
-  } catch (err) {
-    next(err);
-  }
+        const member =
+            await projectMemberService.addMember(
+                projectId,
+                userId,
+                req.user.user_id
+            );
+
+        // =====================================================
+        // 2. GET PROJECT INFORMATION
+        // =====================================================
+
+        const project =
+            await projectModel.getProjectById(projectId);
+
+        // =====================================================
+        // 3. CREATE SYSTEM NOTIFICATION
+        // =====================================================
+
+        const notification =
+            await notificationModel.createNotification({
+                userId,
+                senderId: req.user.user_id,
+                type: "project_member_added",
+                referenceId: projectId,
+                content: project
+                    ? `You were added to project "${project.project_name}".`
+                    : "You were added to a project."
+            });
+
+        // =====================================================
+        // 4. REAL-TIME SYSTEM NOTIFICATION
+        // =====================================================
+
+        const notificationIO =
+            req.app.get("notificationIO");
+
+        if (notificationIO) {
+
+            const unreadCount =
+                await notificationModel.getUnreadCount(userId);
+
+            const room =
+                `notification_user_${userId}`;
+
+            // Send the actual notification record
+            // created in the database.
+            notificationIO
+                .to(room)
+                .emit(
+                    "newSystemNotification",
+                    notification
+                );
+
+            // Update navbar badge count.
+            notificationIO
+                .to(room)
+                .emit(
+                    "notificationCountUpdated",
+                    unreadCount
+                );
+        }
+
+        // =====================================================
+        // 5. EXISTING RESPONSE
+        // =====================================================
+
+        return res.status(201).json({
+            success: true,
+            message:
+                "Employee added to project successfully.",
+            member
+        });
+
+    } catch (err) {
+        next(err);
+    }
 };
+
 
 /**
  * Remove Employee From Project
  */
 const removeMember = async (req, res, next) => {
-  try {
-    const { projectId, userId } = req.params;
+    try {
 
-    await projectMemberService.removeMember(
-      projectId,
-      userId,
-      req.user.user_id,
-    );
+        const {
+            projectId,
+            userId
+        } = req.params;
 
-    return res.json({
-      success: true,
-      message: "Employee removed from project successfully.",
-    });
-  } catch (err) {
-    next(err);
-  }
+        await projectMemberService.removeMember(
+            projectId,
+            userId,
+            req.user.user_id
+        );
+
+        return res.json({
+            success: true,
+            message:
+                "Employee removed from project successfully.",
+        });
+
+    } catch (err) {
+        next(err);
+    }
 };
+
 
 /**
  * Manage Project Members Page
@@ -53,8 +130,12 @@ const removeMember = async (req, res, next) => {
 const getMembers = async (req, res, next) => {
     try {
 
-        const { projectId } = req.params;
-        const managerId = req.user.user_id;
+        const {
+            projectId
+        } = req.params;
+
+        const managerId =
+            req.user.user_id;
 
         const members =
             await projectMemberService.getMembers(
@@ -63,29 +144,40 @@ const getMembers = async (req, res, next) => {
             );
 
         const employees =
-    await userModel.getAllEmployees();
+            await userModel.getAllEmployees();
 
-const memberIds = new Set(
-    members.map(member => String(member.user_id))
-);
+        const memberIds =
+            new Set(
+                members.map(
+                    member =>
+                        String(member.user_id)
+                )
+            );
 
-const availableEmployees = employees.filter(
-    employee =>
-        !memberIds.has(String(employee.user_id))
-);
+        const availableEmployees =
+            employees.filter(
+                employee =>
+                    !memberIds.has(
+                        String(employee.user_id)
+                    )
+            );
 
-        return res.render("manager/projectMembers", {
-            title: "Manage Project Members",
-            user: req.user,
-            projectId,
-            members,
-            employees,
-        });
+        return res.render(
+            "manager/projectMembers",
+            {
+                title: "Manage Project Members",
+                user: req.user,
+                projectId,
+                members,
+                employees,
+            }
+        );
 
     } catch (err) {
         next(err);
     }
 };
+
 
 /**
  * AJAX: Get Project Members
@@ -99,15 +191,18 @@ const availableEmployees = employees.filter(
 const getMembersData = async (req, res, next) => {
     try {
 
-        const { projectId } = req.params;
+        const {
+            projectId
+        } = req.params;
 
         const {
             members,
             availableEmployees
-        } = await projectMemberService.getMembersForView(
-            projectId,
-            req.user
-        );
+        } =
+            await projectMemberService.getMembersForView(
+                projectId,
+                req.user
+            );
 
         return res.json({
             success: true,
@@ -120,10 +215,11 @@ const getMembersData = async (req, res, next) => {
     }
 };
 
-module.exports = {
-  addMember,
-  removeMember,
-  getMembers,
-  getMembersData
 
+module.exports = {
+    addMember,
+    removeMember,
+    getMembers,
+    getMembersData
 };
+

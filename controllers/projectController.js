@@ -3,7 +3,134 @@ const projectMemberService = require("../services/projectMemberService");
 const taskService = require("../services/taskService");
 const commentService = require("../services/commentService");
 const commentModel = require("../models/commentModel");
+
+
+const notificationModel =
+    require("../models/notificationModel");
+    const projectMemberModel =
+    require("../models/projectMemberModel");
 const AppError = require("../utils/AppError");
+
+//HELPERS======================
+
+const sendProjectNotification = async (
+    req,
+    targetUserId,
+    type,
+    referenceId,
+    content
+) => {
+
+    if (
+        !targetUserId ||
+        String(targetUserId) ===
+            String(req.user.user_id)
+    ) {
+        return;
+    }
+
+    try {
+
+        const notification =
+            await notificationModel.createNotification({
+                userId: targetUserId,
+                senderId: req.user.user_id,
+                type,
+                referenceId,
+                content
+            });
+
+        const unreadCount =
+            await notificationModel.getUnreadCount(
+                targetUserId
+            );
+
+        const notificationIO =
+            req.app.get("notificationIO");
+
+        if (!notificationIO) {
+            return;
+        }
+
+        const room =
+            `notification_user_${targetUserId}`;
+
+        notificationIO
+            .to(room)
+            .emit(
+                "newSystemNotification",
+                notification
+            );
+
+        notificationIO
+            .to(room)
+            .emit(
+                "notificationCountUpdated",
+                unreadCount
+            );
+
+    } catch (err) {
+
+        console.error(
+            "Project notification error:",
+            err.message
+        );
+    }
+};
+
+const notifyProjectMembers = async (
+    req,
+    projectId,
+    type,
+    referenceId,
+    content,
+    extraUserIds = []
+) => {
+
+    try {
+
+        const memberIds =
+            await projectMemberModel.getProjectMemberIds(
+                projectId
+            );
+
+        const recipients =
+            [
+                ...memberIds,
+                ...extraUserIds
+            ]
+            .map(id => String(id))
+            .filter(
+                (id, index, array) =>
+                    array.indexOf(id) === index
+            )
+            .filter(
+                id =>
+                    id !==
+                    String(req.user.user_id)
+            );
+
+        for (const userId of recipients) {
+
+            await sendProjectNotification(
+                req,
+                userId,
+                type,
+                referenceId,
+                content
+            );
+        }
+
+    } catch (err) {
+
+        console.error(
+            "Project member notification error:",
+            err.message
+        );
+    }
+};
+//========================
+
 
 /**
  * Create Project
@@ -26,48 +153,101 @@ const createProject = async (req, res, next) => {
  * Update Project
  */
 const updateProject = async (req, res, next) => {
-  try {
-    await projectService.updateProject(
-      req.params.id,
-      req.user.user_id,
-      req.body,
-    );
-    req.session.success = "Project updated successfully.";
-    return res.redirect("/manager/dashboard");
-  } catch (err) {
-    next(err);
-  }
+
+    try {
+
+        const project =
+            await projectService.updateProject(
+                req.params.id,
+                req.user.user_id,
+                req.body
+            );
+
+        await notifyProjectMembers(
+            req,
+            project.project_id,
+            "project_updated",
+            project.project_id,
+            `Project "${project.project_name}" was updated.`
+        );
+
+        req.session.success =
+            "Project updated successfully.";
+
+        return res.redirect(
+            "/manager/dashboard"
+        );
+
+    } catch (err) {
+
+        next(err);
+    }
 };
 const deleteProject = async (req, res, next) => {
 
     try {
 
+        const projectId =
+            req.params.id;
+
+        // Get project before deletion.
+        const project =
+            await projectService.getProjectById(
+                projectId
+            );
+
+        if (!project) {
+            throw new AppError(
+                "Project not found.",
+                404
+            );
+        }
+
+        // Capture members BEFORE deleting project.
+        const memberIds =
+            await projectMemberModel.getProjectMemberIds(
+                projectId
+            );
+
+        // Delete project.
         await projectService.deleteProject(
-            req.params.id,
+            projectId,
             req.user.user_id
         );
 
-        req.session.success = "Project deleted successfully.";
+        // Notify previous members.
+        for (const userId of memberIds) {
 
-        // AJAX request
+            await sendProjectNotification(
+                req,
+                userId,
+                "project_deleted",
+                projectId,
+                `Project "${project.project_name}" was deleted.`
+            );
+        }
+
+        req.session.success =
+            "Project deleted successfully.";
+
         if (req.xhr) {
 
             return res.json({
                 success: true,
-                message: "Project deleted successfully."
+                message:
+                    "Project deleted successfully."
             });
 
         }
 
-        // Normal form submission
-        return res.redirect("/manager/dashboard");
+        return res.redirect(
+            "/manager/dashboard"
+        );
 
     } catch (err) {
 
         next(err);
-
     }
-
 };
 
 const viewProject = async (req, res, next) => {
@@ -135,13 +315,16 @@ const getProjects = async (req, res, next) => {
 
 
 
-const addProjectComment = async (req, res) => {
+const addProjectComment = async (req, res, next) => {
     try {
         const projectId = req.params.projectId;
         const { content, replyToId } = req.body;
 
         if (!content || !content.trim()) {
-            return res.status(400).json({ success: false, message: "Comment cannot be empty." });
+            return res.status(400).json({
+                success: false,
+                message: "Comment cannot be empty."
+            });
         }
 
         const savedComment = await commentModel.addComment({
@@ -152,13 +335,76 @@ const addProjectComment = async (req, res) => {
             replyToId: replyToId || null
         });
 
-        const comments = await commentModel.getProjectComments(projectId);
-        const fullComment = comments.find(c => String(c.comment_id) === String(savedComment.comment_id));
+        const comments =
+            await commentModel.getProjectComments(projectId);
 
-        return res.status(201).json({ success: true, comment: fullComment });
+        const fullComment = comments.find(
+            c =>
+                String(c.comment_id) ===
+                String(savedComment.comment_id)
+        );
+
+        if (!fullComment) {
+            return res.status(500).json({
+                success: false,
+                message: "Comment was saved but could not be loaded."
+            });
+        }
+
+        // =====================================================
+        // SYSTEM NOTIFICATION
+        // =====================================================
+
+        const notificationIO =
+            req.app.get("notificationIO");
+
+        /*
+         * If this is a reply, notify the original commenter.
+         *
+         * Otherwise notify project members.
+         */
+        if (replyToId) {
+
+            const parentComment =
+                comments.find(
+                    c =>
+                        String(c.comment_id) ===
+                        String(replyToId)
+                );
+
+            if (
+                parentComment &&
+                String(parentComment.user_id) !==
+                    String(req.user.user_id)
+            ) {
+
+                await sendProjectNotification(
+                    req,
+                    parentComment.user_id,
+                    "project_comment",
+                    projectId,
+                    `${req.user.full_name} replied to your project comment.`
+                );
+            }
+
+        } else {
+
+            await notifyProjectMembers(
+                req,
+                projectId,
+                "project_comment",
+                projectId,
+                `${req.user.full_name} commented on a project.`
+            );
+        }
+
+        return res.status(201).json({
+            success: true,
+            comment: fullComment
+        });
+
     } catch (err) {
-        console.error("Add Project Comment Error:", err);
-        return res.status(500).json({ success: false, message: "Failed to add comment." });
+        next(err);
     }
 };
 
