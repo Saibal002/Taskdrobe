@@ -1519,79 +1519,101 @@
             loadFiles();
         }
     </script>
-    <!-- Include Socket.IO client library -->
-<script src="/socket.io/socket.io.js"></script>
+<!-- =========================================================
+     PROJECT CHAT AJAX (Replaces Sockets)
+========================================================= -->
+    <script>
+        $(document).ready(function () {
+            const $chatSection = $("#projectCommentsSection");
+            
+            if ($chatSection.length) {
+                const projectId = $chatSection.attr("data-project-id");
+                const currentUserId = $chatSection.attr("data-user-id");
+                const $feed = $("#commentsFeed");
+                
+                const scrollToBottom = () => $feed.scrollTop($feed[0].scrollHeight);
+                scrollToBottom();
 
-<script>
-$(document).ready(function() {
-    /* =========================================================
-       PROJECT CHAT AJAX & SOCKETS
-    ========================================================= */
-    const $chatSection = $("#projectCommentsSection");
-    
-    if ($chatSection.length) {
-        const projectId = $chatSection.attr("data-project-id");
-        const currentUserId = $chatSection.attr("data-user-id");
-        const $feed = $("#commentsFeed");
+                let currentReplyId = null;
 
-        // Scroll chat feed to bottom
-        const scrollToBottom = () => {
-            $feed.scrollTop($feed[0].scrollHeight);
-        };
-        scrollToBottom(); // Fire on initial load
+                // 1. Submit Comment
+                $("#commentForm").on("submit", function (e) {
+                    e.preventDefault();
+                    const content = $("#commentInput").val();
+                    if (!content.trim()) return;
 
-        // Initialize Socket.IO connection
-        const socket = io();
+                    const $btn = $(this).find('button[type="submit"]');
+                    const originalHtml = $btn.html();
+                    $btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i>');
 
-        // Join the specific project room
-        socket.emit("joinProjectRoom", projectId);
+                    $.ajax({
+                        url: `/projects/${projectId}/comments`,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            content,
+                            replyToId: currentReplyId
+                        }),
+                        success: function(res) {
+                            if (res.success) {
+                                renderNewComment(res.comment);
+                                $("#commentInput").val("");
+                                currentReplyId = null; // Clear reply state
+                            } else {
+                                alert(res.message || "Error posting comment.");
+                            }
+                        },
+                        complete: function() {
+                            $btn.prop("disabled", false).html(originalHtml);
+                        }
+                    });
+                });
 
-        // Submit new comment
-        $("#commentForm").on("submit", function(e) {
-            e.preventDefault();
-            const content = $("#commentInput").val();
+                // 2. Delete Comment
+                $(document).on("click", ".delete-msg-btn", function() {
+                    if(window.confirm("Delete this message?")) {
+                        const commentId = $(this).attr("data-id");
+                        
+                        $.ajax({
+                            url: `/projects/comments/${commentId}`,
+                            type: "DELETE",
+                            success: function(res) {
+                                if (res.success) {
+                                    $(`#comment-${commentId}`).fadeOut(300, function() { 
+                                        $(this).remove(); 
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
 
-            if (!content.trim()) return;
+                // 3. Render Helper
+                function renderNewComment(comment) {
+                    $(".no-comments-msg").remove();
+                    const isMe = String(comment.user_id) === String(currentUserId);
+                    
+                    const avatar = comment.profile_image
+                        ? `<img src="${comment.profile_image}" class="rounded-circle shadow-sm" width="40" height="40" style="object-fit: cover; border: 2px solid #fff;">`
+                        : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; border: 2px solid #fff; background: ${isMe ? '#6366f1' : '#e2e8f0'}; color: ${isMe ? '#fff' : '#475569'};">${comment.full_name.charAt(0).toUpperCase()}</div>`;
 
-            // Send via WebSocket instead of standard AJAX
-            socket.emit("sendComment", {
-                projectId,
-                userId: currentUserId,
-                content
-            });
+                    const html = `
+                        <div class="d-flex gap-3 ${isMe ? 'flex-row-reverse text-end' : ''}" id="comment-${comment.comment_id}">
+                            <div>${avatar}</div>
+                            <div class="d-flex flex-column ${isMe ? 'align-items-end' : 'align-items-start'}" style="max-width: 75%;">
+                                <div class="p-3 rounded-4 shadow-sm ${isMe ? 'bg-primary text-white' : 'bg-white text-dark border border-light'}">
+                                    <div class="small fw-bold mb-1 ${isMe ? 'opacity-75' : 'text-muted'}">${comment.full_name}</div>
+                                    <div class="fs-6 lh-sm">${comment.content}</div>
+                                </div>
+                                ${isMe ? `<div class="mt-1"><button type="button" class="btn btn-link text-danger p-0 text-decoration-none delete-msg-btn" style="font-size: 0.75rem;" data-id="${comment.comment_id}">Delete</button></div>` : ''}
+                            </div>
+                        </div>
+                    `;
 
-            // Clear input immediately for UX
-            $("#commentInput").val("");
+                    $feed.append(html);
+                    scrollToBottom();
+                }
+            }
         });
-
-        // Listen for incoming broadcasted comments
-        socket.on("newComment", function(comment) {
-            $(".no-comments-msg").remove(); // Remove empty state if it exists
-
-            const isMe = String(comment.user_id) === String(currentUserId);
-
-            // Construct Avatar
-            const avatar = comment.profile_image 
-                ? `<img src="${comment.profile_image}" class="rounded-circle shadow-sm" width="40" height="40" style="object-fit: cover; border: 2px solid #fff;">`
-                : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; border: 2px solid #fff; background: ${isMe ? '#6366f1' : '#e2e8f0'}; color: ${isMe ? '#fff' : '#475569'};">${comment.full_name.charAt(0).toUpperCase()}</div>`;
-
-            // Construct Message Bubble
-            const html = `
-                <div class="d-flex gap-3 ${isMe ? 'flex-row-reverse text-end' : ''}">
-                    <div>${avatar}</div>
-                    <div class="p-3 rounded-4 shadow-sm ${isMe ? 'bg-primary text-white' : 'bg-white text-dark border border-light'}" style="max-width: 75%;">
-                        <div class="small fw-bold mb-1 ${isMe ? 'opacity-75' : 'text-muted'}">${comment.full_name}</div>
-                        <div class="fs-6 lh-sm">${comment.content}</div>
-                    </div>
-                </div>
-            `;
-
-            $feed.append(html);
-            scrollToBottom();
-        });
-    }
-});
-</script>
-
-
+    </script>
     <%- include("layout/footer") %>

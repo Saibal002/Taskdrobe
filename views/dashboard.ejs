@@ -198,36 +198,42 @@
                    
                     //  Dynamic Task Fields 
 
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const addTaskBtn = document.getElementById("addTaskBtn");
-                        const taskFields = document.getElementById("taskFields");
+                   document.addEventListener("DOMContentLoaded", function () {
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskFields = document.getElementById("taskFields");
 
-                        addTaskBtn.addEventListener("click", function () {
-                            const taskGroup = document.createElement("div");
-                            taskGroup.classList.add("input-group", "mb-2");
-                            taskGroup.innerHTML = `
-        <input type="text" class="form-control" name="tasks[]" placeholder="Enter task">
-        <button type="button" class="btn btn-outline-danger remove-task">✖</button>
-      `;
-                            taskFields.appendChild(taskGroup);
-                        });
+    // Only run this logic if taskFields exists on the current page
+    if (taskFields) {
+        if (addTaskBtn) {
+            addTaskBtn.addEventListener("click", function () {
+                const taskGroup = document.createElement("div");
+                taskGroup.classList.add("input-group", "mb-2");
+                taskGroup.innerHTML = `
+                    <input type="text" class="form-control" name="tasks[]" placeholder="Enter task">
+                    <button type="button" class="btn btn-outline-danger remove-task">✖</button>
+                `;
+                taskFields.appendChild(taskGroup);
+            });
+        }
+       
+        taskFields.addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-task")) {
+                e.target.closest(".input-group").remove();
+            }
+        });
+    }
+});
 
-                        taskFields.addEventListener("click", function (e) {
-                            if (e.target.classList.contains("remove-task")) {
-                                e.target.closest(".input-group").remove();
-                            }
-                        });
-                    });
-
-                    function addTaskField(containerId) {
-                        const container = document.getElementById(containerId);
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.name = 'tasks[]';
-                        input.className = 'form-control mb-2';
-                        input.placeholder = 'Enter task';
-                        container.appendChild(input);
-                    }
+function addTaskField(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'tasks[]';
+    input.className = 'form-control mb-2';
+    input.placeholder = 'Enter task';
+    container.appendChild(input);
+}
 
 
                 </script>

@@ -2,6 +2,7 @@ const projectService = require("../services/projectService");
 const projectMemberService = require("../services/projectMemberService");
 const taskService = require("../services/taskService");
 const commentService = require("../services/commentService");
+const commentModel = require("../models/commentModel");
 const AppError = require("../utils/AppError");
 
 /**
@@ -132,10 +133,57 @@ const getProjects = async (req, res, next) => {
   }
 };
 
+
+
+const addProjectComment = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const { content, replyToId } = req.body;
+
+        if (!content || !content.trim()) {
+            return res.status(400).json({ success: false, message: "Comment cannot be empty." });
+        }
+
+        const savedComment = await commentModel.addComment({
+            projectId,
+            taskId: null,
+            userId: req.user.user_id,
+            content: content.trim(),
+            replyToId: replyToId || null
+        });
+
+        const comments = await commentModel.getProjectComments(projectId);
+        const fullComment = comments.find(c => String(c.comment_id) === String(savedComment.comment_id));
+
+        return res.status(201).json({ success: true, comment: fullComment });
+    } catch (err) {
+        console.error("Add Project Comment Error:", err);
+        return res.status(500).json({ success: false, message: "Failed to add comment." });
+    }
+};
+
+const deleteProjectComment = async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const deleted = await commentModel.deleteComment(commentId, req.user.user_id);
+        
+        if (deleted) {
+            return res.json({ success: true, commentId });
+        } else {
+            return res.status(403).json({ success: false, message: "Unauthorized to delete this comment." });
+        }
+    } catch (err) {
+        return res.status(500).json({ success: false, message: "Failed to delete comment." });
+    }
+};
+
+// Don't forget to export these!
 module.exports = {
   createProject,
   updateProject,
   deleteProject,
   viewProject,
   getProjects,
+  addProjectComment,
+  deleteProjectComment,
 };
