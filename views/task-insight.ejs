@@ -239,16 +239,12 @@
         </div>
     </main>
 
-    <script src="/socket.io/socket.io.js"></script>
     <script>
         $(document).ready(function () {
             const taskId = $("#taskCommentsSection").attr("data-task-id");
             const projectId = $("#taskCommentsSection").attr("data-project-id");
             const currentUserId = $("#taskCommentsSection").attr("data-user-id");
 
-            /* ==========================================
-               FILE UPLOAD AJAX
-            ========================================== */
             /* ==========================================
                FILE UPLOAD AJAX
             ========================================== */
@@ -342,16 +338,11 @@
             });
 
             /* ==========================================
-               SOCKET.IO CHAT
+               AJAX COMMENTS (Replaces Socket.io)
             ========================================== */
-            const socket = io();
             const $feed = $("#taskCommentsFeed");
             const scrollToBottom = () => $feed.scrollTop($feed[0].scrollHeight);
-
             scrollToBottom();
-
-            // Join a specific room for THIS task
-            socket.emit("joinTaskRoom", taskId);
 
             let currentReplyId = null;
 
@@ -370,87 +361,101 @@
                 $("#activeReplyBanner").removeClass("d-flex").addClass("d-none");
             });
 
-            // 3. Submit Task Comment (Now includes replyToId)
+            // 3. Submit Comment (AJAX POST)
             $("#taskCommentForm").on("submit", function (e) {
                 e.preventDefault();
                 const content = $("#taskCommentInput").val();
                 if (!content.trim()) return;
 
-                socket.emit("sendTaskComment", { 
-                    projectId, 
-                    taskId, 
-                    userId: currentUserId, 
-                    content,
-                    replyToId: currentReplyId // Pass the reply ID if active
+                const $btn = $(this).find('button[type="submit"]');
+                $btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i>');
+
+                $.ajax({
+                    url: `/tasks/${taskId}/comments`,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        projectId,
+                        content,
+                        replyToId: currentReplyId
+                    }),
+                    success: function(res) {
+                        if (res.success) {
+                            renderNewComment(res.comment);
+                            $("#taskCommentInput").val("");
+                            $("#cancelReplyBtn").trigger("click");
+                        } else {
+                            alert(res.message || "Error posting comment.");
+                        }
+                    },
+                    error: function() {
+                        alert("An error occurred while posting your comment.");
+                    },
+                    complete: function() {
+                        $btn.prop("disabled", false).html('<i class="fas fa-paper-plane"></i>');
+                    }
                 });
-                
-                $("#taskCommentInput").val("");
-                $("#cancelReplyBtn").trigger("click"); // Clear reply UI
             });
 
-            // 4. Delete Message Click
+            // 4. Delete Comment (AJAX DELETE)
             $(document).on("click", ".delete-msg-btn", function() {
                 if(window.confirm("Delete this message?")) {
                     const commentId = $(this).attr("data-id");
-                    socket.emit("deleteComment", {
-                        commentId,
-                        userId: currentUserId,
-                        room: `task_${taskId}`
+                    
+                    $.ajax({
+                        url: `/tasks/comments/${commentId}`,
+                        type: "DELETE",
+                        success: function(res) {
+                            if (res.success) {
+                                $(`#comment-${commentId}`).fadeOut(300, function() { 
+                                    $(this).remove(); 
+                                });
+                            } else {
+                                alert(res.message || "Error deleting comment.");
+                            }
+                        }
                     });
                 }
             });
 
-            // 5. Receive New Message (with Reply UI & Action Buttons)
-            socket.on("newTaskComment", function (comment) {
+            // 5. Helper Function to Render New Comment Bubble
+            function renderNewComment(comment) {
                 $(".no-comments-msg").remove();
-                const isMe = String(comment.user_id) === String(currentUserId);
-
+                
                 const avatar = comment.profile_image
                     ? `<img src="${comment.profile_image}" class="rounded-circle shadow-sm" width="32" height="32" style="object-fit: cover;">`
-                    : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold small" style="width: 32px; height: 32px; background: ${isMe ? '#be123c' : '#e2e8f0'}; color: ${isMe ? '#fff' : '#475569'};">${comment.full_name.charAt(0).toUpperCase()}</div>`;
+                    : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold small" style="width: 32px; height: 32px; background: #be123c; color: #fff;">${comment.full_name.charAt(0).toUpperCase()}</div>`;
 
-                // Render Reply Quote if it exists
                 let replyHtml = '';
                 if (comment.reply_to_id && comment.reply_user_name) {
                     replyHtml = `
-                        <div class="mb-2 p-2 rounded-3 text-start" style="background: rgba(0,0,0,0.05); font-size: 0.75rem; border-left: 3px solid ${isMe ? '#fff' : '#be123c'};">
+                        <div class="mb-2 p-2 rounded-3 text-start" style="background: rgba(0,0,0,0.05); font-size: 0.75rem; border-left: 3px solid #fff;">
                             <div class="fw-bold opacity-75">${comment.reply_user_name}</div>
                             <div class="text-truncate" style="max-width: 200px; opacity: 0.8;">${comment.reply_content || 'Deleted message'}</div>
                         </div>
                     `;
                 }
 
-                // Render Action Buttons
-                let actionsHtml = `
-                    <div class="d-flex gap-1 align-items-center mt-1 ${isMe ? 'justify-content-end' : ''}" style="font-size: 0.75rem;">
-                        <button type="button" class="btn btn-link text-muted p-0 text-decoration-none reply-msg-btn" data-id="${comment.comment_id}" data-name="${comment.full_name}" data-text="${comment.content}">Reply</button>
-                        ${isMe ? `<span class="text-muted opacity-25">|</span> <button type="button" class="btn btn-link text-danger p-0 text-decoration-none delete-msg-btn" data-id="${comment.comment_id}">Delete</button>` : ''}
-                    </div>
-                `;
-
                 $feed.append(`
-                    <div class="d-flex gap-2 chat-bubble-wrapper ${isMe ? 'flex-row-reverse text-end' : ''}" id="comment-${comment.comment_id}">
+                    <div class="d-flex gap-2 chat-bubble-wrapper flex-row-reverse text-end" id="comment-${comment.comment_id}">
                         <div>${avatar}</div>
-                        <div class="d-flex flex-column ${isMe ? 'align-items-end' : 'align-items-start'}" style="max-width: 80%;">
-                            <div class="p-2 px-3 rounded-4 shadow-sm ${isMe ? 'bg-danger text-white' : 'bg-white text-dark border border-light'}">
+                        <div class="d-flex flex-column align-items-end" style="max-width: 80%;">
+                            <div class="p-2 px-3 rounded-4 shadow-sm bg-danger text-white">
                                 <div class="small fw-bold mb-1" style="font-size: 0.75rem; opacity: 0.8;">${comment.full_name}</div>
                                 ${replyHtml}
                                 <div class="small lh-sm">${comment.content}</div>
                             </div>
-                            ${actionsHtml}
+                            <div class="d-flex gap-1 align-items-center mt-1 justify-content-end" style="font-size: 0.75rem;">
+                                <button type="button" class="btn btn-link text-muted p-0 text-decoration-none reply-msg-btn" data-id="${comment.comment_id}" data-name="${comment.full_name}" data-text="${comment.content}">Reply</button>
+                                <span class="text-muted opacity-25">|</span> 
+                                <button type="button" class="btn btn-link text-danger p-0 text-decoration-none delete-msg-btn" data-id="${comment.comment_id}">Delete</button>
+                            </div>
                         </div>
                     </div>
                 `);
                 scrollToBottom();
-            });
-
-            // 6. Receive Deleted Message Signal
-            socket.on("commentDeleted", function(commentId) {
-                $(`#comment-${commentId}`).fadeOut(300, function() { 
-                    $(this).remove(); 
-                });
-            });
+            }
         });
     </script>
 
-    <%- include('layout/footer') %>
+<%- include('layout/footer') %>

@@ -1,3 +1,6 @@
+<% if (locals.user) { %>
+    <%- include('globalChat') %>
+<% } %>
 </main>
 <footer class="bg-dark text-white text-center py-3 mt-5">
   <p class="mb-0">&copy; <%= new Date().getFullYear() %> MyApp. All rights reserved.</p>

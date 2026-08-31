@@ -22,6 +22,7 @@ const projectMemberRoutes = require("./routes/projectMemberRoutes");
 const taskRoute = require("./routes/taskRoute");
 const searchRoute = require("./routes/searchRoute");
 const profileRoute = require("./routes/profileRoute");
+const chatRoutes = require("./routes/chatRoute");
 const { initializeChatSocket } = require("./controllers/chatSocketController");
 
 const app = express();
@@ -96,6 +97,7 @@ app.use("/", projectMemberRoutes);
 app.use('/tasks', taskRoute);
 app.use("/search", searchRoute);
 app.use('/', profileRoute);
+app.use("/api/chat", chatRoutes);
 
 app.use(errorHandler);
 

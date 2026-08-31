@@ -63,4 +63,11 @@ router.post(
 );
 // Add this below your POST upload route
 router.delete("/files/:attachmentId", authMiddleware, attachmentController.deleteProjectFile);
+
+
+// coomment
+router.post("/:taskId/comments", authMiddleware, taskController.addTaskComment);
+router.delete("/comments/:commentId", authMiddleware, taskController.deleteTaskComment);
+
+
 module.exports = router;

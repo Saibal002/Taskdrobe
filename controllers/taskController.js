@@ -142,6 +142,52 @@ const getTaskInsight = async (req, res, next) => {
     }
 };
 
+const addTaskComment = async (req, res, next) => {
+    try {
+        const taskId = req.params.taskId;
+        const { projectId, content, replyToId } = req.body;
+
+        if (!content || !content.trim()) {
+            return res.status(400).json({ success: false, message: "Comment cannot be empty." });
+        }
+
+        const savedComment = await commentModel.addComment({
+            projectId,
+            taskId,
+            userId: req.user.user_id,
+            content: content.trim(),
+            replyToId: replyToId || null
+        });
+
+        // Fetch the full payload so we get the user's name and avatar for the UI
+        const comments = await commentModel.getTaskComments(taskId);
+        const fullComment = comments.find(c => String(c.comment_id) === String(savedComment.comment_id));
+
+        return res.status(201).json({ success: true, comment: fullComment });
+    } catch (err) {
+        console.error("Add Comment Error:", err);
+        return res.status(500).json({ success: false, message: "Failed to add comment." });
+    }
+};
+
+const deleteTaskComment = async (req, res, next) => {
+    try {
+        const commentId = req.params.commentId;
+        const userId = req.user.user_id;
+
+        const deleted = await commentModel.deleteComment(commentId, userId);
+        
+        if (deleted) {
+            return res.json({ success: true, commentId });
+        } else {
+            return res.status(403).json({ success: false, message: "Unauthorized to delete this comment." });
+        }
+    } catch (err) {
+        console.error("Delete Comment Error:", err);
+        return res.status(500).json({ success: false, message: "Failed to delete comment." });
+    }
+};
+
 module.exports = {
   createTask,
   updateTask,
@@ -150,4 +196,6 @@ module.exports = {
   updateTaskAssignment,
   getProjectTasksData,
   getTaskInsight,
+  addTaskComment,
+  deleteTaskComment,
 };

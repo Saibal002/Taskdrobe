@@ -1,0 +1,306 @@
+<!-- Floating Global Chat Widget -->
+<div id="globalChatContainer" class="position-fixed" data-user-id="<%= user.user_id %>" style="bottom: 30px; right: 30px; z-index: 1050;">
+    
+    <!-- Chat Interface (Hidden by default) -->
+    <div id="globalChatWindow" class="card shadow-lg border-0 rounded-4 mb-3 d-none transition" style="width: 360px; height: 520px; display: flex; flex-direction: column; overflow: hidden; background: #fff;">
+        
+        <!-- Header (Fixed at top) -->
+        <div class="card-header text-white d-flex justify-content-between align-items-center p-3 flex-shrink-0" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); border-bottom: none;">
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm text-white p-0 d-none me-2 shadow-none hover-lift" id="backToContactsBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <i class="fas fa-bolt fs-5" id="chatHeaderIcon"></i>
+                <h6 class="mb-0 fw-bold tracking-wide" id="chatHeaderTitle">Direct Messages</h6>
+            </div>
+            <button type="button" class="btn-close btn-close-white shadow-none" id="closeGlobalChatBtn"></button>
+        </div>
+        
+        <!-- Active Chat Body (Expands to fill remaining space) -->
+        <div class="card-body p-0 d-flex flex-column flex-grow-1" style="min-height: 0;" id="globalChatBody">
+            
+            <!-- 1. Contacts List View -->
+            <div id="contactsListView" class="h-100 w-100 overflow-auto bg-white p-2">
+                <div class="text-center p-4 text-muted d-none" id="noContactsMsg">
+                    <i class="fas fa-user-friends fa-2x mb-2 opacity-50"></i>
+                    <p class="small mb-0">No contacts available.</p>
+                </div>
+            </div>
+
+            <!-- 2. Active Chat Feed View -->
+            <div id="activeChatFeed" class="h-100 w-100 overflow-auto p-3 d-flex flex-column gap-3 d-none" style="background: #fafafa;">
+            </div>
+
+        </div>
+
+        <!-- Chat Input (Locked at bottom) -->
+        <div class="p-3 bg-white border-top d-none flex-shrink-0" id="globalChatInputArea">
+            <form id="globalMessageForm" class="d-flex gap-2 m-0">
+                <input type="text" id="globalMessageInput" class="form-control rounded-pill bg-light border-0 px-3 flex-grow-1" placeholder="Type a message..." autocomplete="off" required>
+                <button type="submit" class="btn rounded-circle shadow-sm d-flex align-items-center justify-content-center flex-shrink-0 text-white" style="width: 42px; height: 42px; background: #8b5cf6;">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="toggleGlobalChatBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center ms-auto transition hover-lift position-relative" style="width: 60px; height: 60px; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; border: none; font-size: 1.5rem;">
+        <i class="fas fa-comment"></i>
+        <!-- Notification Badge -->
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light d-none" id="globalChatBadge" style="font-size: 0.65rem;">
+            0
+        </span>
+    </button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+$(document).ready(function() {
+    const currentUserId = $("#globalChatContainer").attr("data-user-id");
+    const globalSocket = io();
+    let activeTargetId = null;
+
+    // Time Formatter Utility
+    function formatTime(dateInput) {
+        if (!dateInput) return '';
+        const date = new Date(dateInput);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Badge Updater Utility
+    function updateGlobalBadgeUI(count) {
+        const $badge = $("#globalChatBadge");
+        if (count > 0) {
+            $badge.text(count).removeClass("d-none");
+        } else {
+            $badge.text("0").addClass("d-none");
+        }
+    }
+
+    // 1. Initialize Global Room & Fetch Initial Badge Count
+    globalSocket.emit("joinPersonalRoom", currentUserId);
+    fetchGlobalBadgeCount();
+
+    function fetchGlobalBadgeCount() {
+        $.ajax({
+            url: "/api/chat/contacts",
+            type: "GET",
+            success: function(res) {
+                let totalUnread = 0;
+                res.contacts.forEach(contact => {
+                    totalUnread += parseInt(contact.unread_count) || 0;
+                });
+                updateGlobalBadgeUI(totalUnread);
+            }
+        });
+    }
+
+    // 2. UI Toggles
+    $("#toggleGlobalChatBtn, #closeGlobalChatBtn").on("click", function() {
+        const $window = $("#globalChatWindow");
+        $window.toggleClass("d-none");
+        
+        if (!$window.hasClass("d-none") && !activeTargetId) {
+            loadContacts();
+        }
+    });
+
+    $("#backToContactsBtn").on("click", function() {
+        activeTargetId = null;
+        $("#activeChatFeed, #globalChatInputArea, #backToContactsBtn").addClass("d-none");
+        $("#contactsListView").removeClass("d-none");
+        $("#chatHeaderTitle").text("Direct Messages");
+        $("#chatHeaderIcon").removeClass("d-none");
+        loadContacts();
+    });
+
+    // 3. Load Contacts (Calculates Global Badge Automatically)
+    function loadContacts() {
+        $.ajax({
+            url: "/api/chat/contacts",
+            type: "GET",
+            success: function(res) {
+                const $list = $("#contactsListView");
+                $list.empty();
+                let totalUnread = 0; 
+
+                if (res.contacts.length === 0) {
+                    $("#noContactsMsg").removeClass("d-none");
+                    updateGlobalBadgeUI(0);
+                    return;
+                }
+
+                res.contacts.forEach(contact => {
+                    const avatar = contact.profile_image 
+                        ? `<img src="${contact.profile_image}" class="rounded-circle shadow-sm" width="40" height="40" style="object-fit: cover;">`
+                        : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold text-white" style="width: 40px; height: 40px; background: #8b5cf6;">${contact.full_name.charAt(0).toUpperCase()}</div>`;
+                    
+                    const timeStr = contact.last_message_at ? `<small class="text-muted" style="font-size: 0.7rem;">${formatTime(contact.last_message_at)}</small>` : '';
+                    
+                    let previewText = contact.email;
+                    let statusHtml = '';
+                    const unreadCount = parseInt(contact.unread_count) || 0;
+                    totalUnread += unreadCount; 
+                    
+                    if (contact.last_msg_content) {
+                        const isMe = String(contact.last_msg_sender_id) === String(currentUserId);
+                        const prefix = isMe ? 'You: ' : '';
+                        previewText = prefix + contact.last_msg_content;
+                        
+                        if (isMe) {
+                            const tickIcon = contact.last_msg_is_read ? 'fa-check-double text-warning' : 'fa-check text-muted';
+                            statusHtml = `<i class="fas ${tickIcon}" style="font-size: 0.65rem;"></i>`;
+                        }
+                    }
+                    
+                    if (unreadCount > 0) {
+                        statusHtml = `<span class="badge bg-danger rounded-pill shadow-sm" style="font-size: 0.65rem;">${unreadCount}</span>`;
+                    }
+
+                    $list.append(`
+                        <div class="d-flex align-items-center p-3 border-bottom hover-bg-light cursor-pointer contact-row transition" data-id="${contact.user_id}" data-name="${contact.full_name}">
+                            ${avatar}
+                            <div class="ms-3 flex-grow-1 min-w-0">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0 text-dark fw-semibold text-truncate" style="font-size: 0.9rem;">${contact.full_name}</h6>
+                                    ${timeStr}
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="mb-0 text-muted small text-truncate pe-2" style="font-size: 0.75rem; max-width: 85%;">${previewText}</p>
+                                    <div>${statusHtml}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+
+                updateGlobalBadgeUI(totalUnread);
+            }
+        });
+    }
+
+    // 4. Click Contact -> Open Chat & Mark As Read
+    $(document).on("click", ".contact-row", function() {
+        activeTargetId = $(this).attr("data-id");
+        const targetName = $(this).attr("data-name");
+
+        $("#contactsListView, #chatHeaderIcon").addClass("d-none");
+        $("#activeChatFeed, #globalChatInputArea, #backToContactsBtn").removeClass("d-none");
+        $("#chatHeaderTitle").text(targetName);
+        $("#activeChatFeed").empty().append(`<div class="text-center p-3 text-muted"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`);
+
+        $.ajax({
+            url: `/api/chat/history/${activeTargetId}`,
+            type: "GET",
+            success: function(res) {
+                const $feed = $("#activeChatFeed");
+                $feed.empty();
+
+                if (res.messages.length === 0) {
+                    $feed.append(`<div class="text-center text-muted mt-4 small no-history-msg">Say hello to ${targetName}!</div>`);
+                } else {
+                    res.messages.forEach(msg => renderChatBubble(msg));
+                    scrollToBottom();
+                }
+
+                if (res.conversationId) {
+                    globalSocket.emit("markAsRead", {
+                        conversationId: res.conversationId,
+                        senderId: activeTargetId,
+                        receiverId: currentUserId
+                    });
+                    
+                    fetchGlobalBadgeCount();
+                }
+            }
+        });
+    });
+
+    // 5. Send Message
+    $("#globalMessageForm").on("submit", function(e) {
+        e.preventDefault();
+        const content = $("#globalMessageInput").val().trim();
+        if (!content || !activeTargetId) return;
+
+        const optimisticMsg = {
+            sender_id: currentUserId,
+            full_name: "You",
+            content: content,
+            is_read: false,
+            created_at: new Date()
+        };
+        renderChatBubble(optimisticMsg);
+        scrollToBottom();
+
+        globalSocket.emit("sendDirectMessage", {
+            senderId: currentUserId,
+            targetUserId: activeTargetId,
+            content: content
+        });
+
+        $("#globalMessageInput").val("");
+    });
+
+    // 6. Receive Real-Time Message (Increments Badge)
+    globalSocket.on("receiveDirectMessage", function(msg) {
+        if (String(msg.sender_id) === String(activeTargetId)) {
+            renderChatBubble(msg);
+            scrollToBottom();
+            
+            globalSocket.emit("markAsRead", {
+                conversationId: msg.conversationId,
+                senderId: activeTargetId,
+                receiverId: currentUserId
+            });
+        } else {
+            const $badge = $("#globalChatBadge");
+            let currentCount = parseInt($badge.text()) || 0;
+            updateGlobalBadgeUI(currentCount + 1);
+
+            if (!$("#globalChatWindow").hasClass("d-none") && !activeTargetId) {
+                 loadContacts();
+            }
+        }
+    });
+
+    // 7. Listen for Read Receipts
+    globalSocket.on("messagesRead", function(data) {
+        $(".read-tick").removeClass("fa-check text-muted").addClass("fa-check-double text-warning");
+    });
+
+    // Utilities
+    function renderChatBubble(msg) {
+        $(".no-history-msg").remove();
+        const isMe = String(msg.sender_id) === String(currentUserId);
+        const alignmentClass = isMe ? "align-self-end bg-primary text-white" : "align-self-start bg-white text-dark border shadow-sm";
+        const borderRadius = isMe ? "rounded-4 rounded-bottom-0 rounded-start-4" : "rounded-4 rounded-bottom-0 rounded-end-4";
+        const msgTime = formatTime(msg.created_at);
+        
+        let metaHtml = '';
+        if (isMe) {
+            const tickIcon = msg.is_read ? 'fa-check-double text-warning' : 'fa-check text-muted';
+            metaHtml = `<div class="d-flex align-items-center justify-content-end gap-1 mt-1 opacity-75" style="font-size: 0.65rem;">
+                            <span class="text-muted">${msgTime}</span>
+                            <i class="fas ${tickIcon} read-tick"></i>
+                        </div>`;
+        } else {
+            metaHtml = `<div class="mt-1 text-muted opacity-75 ms-1" style="font-size: 0.65rem;">${msgTime}</div>`;
+        }
+
+        $("#activeChatFeed").append(`
+            <div class="d-flex flex-column ${isMe ? 'align-items-end' : 'align-items-start'} mb-2" style="max-width: 85%;">
+                <div class="p-2 px-3 ${alignmentClass} ${borderRadius}" style="${isMe ? 'background: linear-gradient(135deg, #ec4899, #8b5cf6) !important;' : ''}">
+                    <div class="small lh-sm" style="font-size: 0.85rem;">${msg.content}</div>
+                </div>
+                ${metaHtml}
+            </div>
+        `);
+    }
+
+    function scrollToBottom() {
+        const $feed = $("#activeChatFeed");
+        $feed.scrollTop($feed[0].scrollHeight);
+    }
+});
+</script>
