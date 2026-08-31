@@ -4,8 +4,11 @@
 ├── 📁 config
 │   └── 📄 environment.js
 ├── 📁 controllers
+│   ├── 📄 attachmentController.js
 │   ├── 📄 authController.js
+│   ├── 📄 chatSocketController.js
 │   ├── 📄 dashboardController.js
+│   ├── 📄 profileController.js
 │   ├── 📄 projectController.js
 │   ├── 📄 projectMemberController.js
 │   ├── 📄 searchController.js
@@ -17,11 +20,14 @@
 │   │   │   ├── 📄 01_roles.sql
 │   │   │   ├── 📄 02_users.sql
 │   │   │   ├── 📄 03_seed_roles.sql
-│   │   │   └── 📄 04_sessions.sql
+│   │   │   ├── 📄 04_sessions.sql
+│   │   │   └── 📄 05_user_profiles.sql
 │   │   ├── 📁 projects
 │   │   │   ├── 📄 01_project_status.sql
 │   │   │   ├── 📄 02_projects.sql
-│   │   │   └── 📄 03_project_members.sql
+│   │   │   ├── 📄 03_project_members.sql
+│   │   │   ├── 📄 04_attachments.sql
+│   │   │   └── 📄 05_comments.sql
 │   │   └── 📁 tasks
 │   │       ├── 📄 01_task_status.sql
 │   │       ├── 📄 02_task_priority.sql
@@ -30,9 +36,13 @@
 │   └── 📄 dbSetup.js
 ├── 📁 middleware
 │   ├── 📄 authMiddleware.js
+│   ├── 📄 documentUploadMiddleware.js
 │   ├── 📄 errorHandler.js
-│   └── 📄 roleMiddleware.js
+│   ├── 📄 roleMiddleware.js
+│   └── 📄 uploadMiddleware.js
 ├── 📁 models
+│   ├── 📄 attachmentModel.js
+│   ├── 📄 commentModel.js
 │   ├── 📄 dashboardModel.js
 │   ├── 📄 projectMemberModel.js
 │   ├── 📄 projectModel.js
@@ -49,18 +59,18 @@
 │   │   └── 🎨 style.css
 │   ├── 📁 images
 │   │   └── 🖼️ logo.png
-│   ├── 📁 js
-│   │   ├── 📄 auth.js
-│   │   ├── 📄 dashboard.js
-│   │   ├── 📄 project.js
-│   │   └── 📄 task.js
-│   └── 📁 uploads
+│   └── 📁 js
+│       ├── 📄 auth.js
+│       ├── 📄 dashboard.js
+│       ├── 📄 project.js
+│       └── 📄 task.js
 ├── 📁 routes
 │   ├── 📄 adminRoutes.js
 │   ├── 📄 authRoute.js
 │   ├── 📄 dashboardRoute.js
 │   ├── 📄 homeRoute.js
 │   ├── 📄 managerRoutes.js
+│   ├── 📄 profileRoute.js
 │   ├── 📄 projectMemberRoutes.js
 │   ├── 📄 projectRoute.js
 │   ├── 📄 searchRoute.js
@@ -68,6 +78,7 @@
 ├── 📁 scripts
 ├── 📁 services
 │   ├── 📄 authService.js
+│   ├── 📄 commentService.js
 │   ├── 📄 dashboardService.js
 │   ├── 📄 projectMemberService.js
 │   ├── 📄 projectService.js
@@ -109,8 +120,10 @@
 │   ├── 📄 dashboard.ejs
 │   ├── 📄 landing.ejs
 │   ├── 📄 login.ejs
+│   ├── 📄 profile.ejs
 │   ├── 📄 project.ejs
-│   └── 📄 signup.ejs
+│   ├── 📄 signup.ejs
+│   └── 📄 task-insight.ejs
 ├── ⚙️ .gitignore
 ├── 📝 README.md
 ├── 📄 app.js
