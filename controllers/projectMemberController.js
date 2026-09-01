@@ -60,8 +60,6 @@ const addMember = async (req, res, next) => {
             const room =
                 `notification_user_${userId}`;
 
-            // Send the actual notification record
-            // created in the database.
             notificationIO
                 .to(room)
                 .emit(
@@ -69,7 +67,6 @@ const addMember = async (req, res, next) => {
                     notification
                 );
 
-            // Update navbar badge count.
             notificationIO
                 .to(room)
                 .emit(
@@ -106,16 +103,78 @@ const removeMember = async (req, res, next) => {
             userId
         } = req.params;
 
-        await projectMemberService.removeMember(
-            projectId,
-            userId,
-            req.user.user_id
-        );
+        // =====================================================
+        // 1. GET PROJECT INFORMATION BEFORE REMOVAL
+        // =====================================================
+
+        const project =
+            await projectModel.getProjectById(projectId);
+
+        // =====================================================
+        // 2. REMOVE MEMBER
+        // =====================================================
+
+        const removedMember =
+            await projectMemberService.removeMember(
+                projectId,
+                userId,
+                req.user.user_id
+            );
+
+        // =====================================================
+        // 3. CREATE SYSTEM NOTIFICATION
+        // =====================================================
+
+        const notification =
+            await notificationModel.createNotification({
+                userId,
+                senderId: req.user.user_id,
+                type: "project_member_removed",
+                referenceId: projectId,
+                content: project
+                    ? `You were removed from project "${project.project_name}".`
+                    : "You were removed from a project."
+            });
+
+        // =====================================================
+        // 4. REAL-TIME SYSTEM NOTIFICATION
+        // =====================================================
+
+        const notificationIO =
+            req.app.get("notificationIO");
+
+        if (notificationIO) {
+
+            const unreadCount =
+                await notificationModel.getUnreadCount(userId);
+
+            const room =
+                `notification_user_${userId}`;
+
+            notificationIO
+                .to(room)
+                .emit(
+                    "newSystemNotification",
+                    notification
+                );
+
+            notificationIO
+                .to(room)
+                .emit(
+                    "notificationCountUpdated",
+                    unreadCount
+                );
+        }
+
+        // =====================================================
+        // 5. EXISTING RESPONSE
+        // =====================================================
 
         return res.json({
             success: true,
             message:
                 "Employee removed from project successfully.",
+            removedMember
         });
 
     } catch (err) {

@@ -183,18 +183,18 @@ const updateProject = async (req, res, next) => {
         next(err);
     }
 };
-const deleteProject = async (req, res, next) => {
 
+const deleteProject = async (req, res, next) => {
     try {
 
-        const projectId =
-            req.params.id;
+        const projectId = req.params.id;
 
-        // Get project before deletion.
+        // =====================================================
+        // 1. GET PROJECT BEFORE DELETION
+        // =====================================================
+
         const project =
-            await projectService.getProjectById(
-                projectId
-            );
+            await projectService.getProjectById(projectId);
 
         if (!project) {
             throw new AppError(
@@ -203,19 +203,28 @@ const deleteProject = async (req, res, next) => {
             );
         }
 
-        // Capture members BEFORE deleting project.
+        // =====================================================
+        // 2. CAPTURE MEMBERS BEFORE DELETION
+        // =====================================================
+
         const memberIds =
             await projectMemberModel.getProjectMemberIds(
                 projectId
             );
 
-        // Delete project.
+        // =====================================================
+        // 3. DELETE PROJECT
+        // =====================================================
+
         await projectService.deleteProject(
             projectId,
             req.user.user_id
         );
 
-        // Notify previous members.
+        // =====================================================
+        // 4. NOTIFY FORMER PROJECT MEMBERS
+        // =====================================================
+
         for (const userId of memberIds) {
 
             await sendProjectNotification(
@@ -227,8 +236,16 @@ const deleteProject = async (req, res, next) => {
             );
         }
 
+        // =====================================================
+        // 5. EXISTING SUCCESS MESSAGE
+        // =====================================================
+
         req.session.success =
             "Project deleted successfully.";
+
+        // =====================================================
+        // 6. EXISTING AJAX RESPONSE
+        // =====================================================
 
         if (req.xhr) {
 
@@ -237,7 +254,6 @@ const deleteProject = async (req, res, next) => {
                 message:
                     "Project deleted successfully."
             });
-
         }
 
         return res.redirect(
@@ -249,6 +265,7 @@ const deleteProject = async (req, res, next) => {
         next(err);
     }
 };
+
 
 const viewProject = async (req, res, next) => {
   try {
@@ -315,62 +332,88 @@ const getProjects = async (req, res, next) => {
 
 
 
+
 const addProjectComment = async (req, res, next) => {
     try {
+
         const projectId = req.params.projectId;
-        const { content, replyToId } = req.body;
+
+        const {
+            content,
+            replyToId
+        } = req.body;
+
+        // =====================================================
+        // 1. VALIDATE COMMENT
+        // =====================================================
 
         if (!content || !content.trim()) {
+
             return res.status(400).json({
                 success: false,
                 message: "Comment cannot be empty."
             });
         }
 
-        const savedComment = await commentModel.addComment({
-            projectId,
-            taskId: null,
-            userId: req.user.user_id,
-            content: content.trim(),
-            replyToId: replyToId || null
-        });
+
+        // =====================================================
+        // 2. SAVE COMMENT
+        // =====================================================
+
+        const savedComment =
+            await commentModel.addComment({
+                projectId,
+                taskId: null,
+                userId: req.user.user_id,
+                content: content.trim(),
+                replyToId: replyToId || null
+            });
+
+
+        // =====================================================
+        // 3. GET RICH COMMENT DATA
+        // =====================================================
 
         const comments =
-            await commentModel.getProjectComments(projectId);
+            await commentModel.getProjectComments(
+                projectId
+            );
 
-        const fullComment = comments.find(
-            c =>
-                String(c.comment_id) ===
-                String(savedComment.comment_id)
-        );
+        const fullComment =
+            comments.find(
+                comment =>
+                    String(comment.comment_id) ===
+                    String(savedComment.comment_id)
+            );
+
 
         if (!fullComment) {
+
             return res.status(500).json({
                 success: false,
-                message: "Comment was saved but could not be loaded."
+                message:
+                    "Comment was saved but could not be loaded."
             });
         }
 
+
         // =====================================================
-        // SYSTEM NOTIFICATION
+        // 4. SYSTEM NOTIFICATION
         // =====================================================
 
-        const notificationIO =
-            req.app.get("notificationIO");
-
-        /*
-         * If this is a reply, notify the original commenter.
-         *
-         * Otherwise notify project members.
-         */
         if (replyToId) {
+
+            // -------------------------------------------------
+            // REPLY
+            // -------------------------------------------------
 
             const parentComment =
                 comments.find(
-                    c =>
-                        String(c.comment_id) ===
+                    comment =>
+                        String(comment.comment_id) ===
                         String(replyToId)
                 );
+
 
             if (
                 parentComment &&
@@ -389,6 +432,10 @@ const addProjectComment = async (req, res, next) => {
 
         } else {
 
+            // -------------------------------------------------
+            // NORMAL PROJECT COMMENT
+            // -------------------------------------------------
+
             await notifyProjectMembers(
                 req,
                 projectId,
@@ -398,15 +445,23 @@ const addProjectComment = async (req, res, next) => {
             );
         }
 
+
+        // =====================================================
+        // 5. RETURN COMMENT
+        // =====================================================
+
         return res.status(201).json({
             success: true,
             comment: fullComment
         });
 
     } catch (err) {
+
         next(err);
     }
 };
+
+
 
 const deleteProjectComment = async (req, res) => {
     try {
