@@ -1,0 +1,189 @@
+<%
+    /*
+     * Reusable Discussion Comments Component
+     *
+     * Required locals:
+     *
+     * comments
+     * currentUser
+     * contextType
+     * contextId
+     * createUrl
+     * deleteUrl
+     *
+     * contextType:
+     *   "project"
+     *   "task"
+     */
+
+    const discussionComments = comments || [];
+    const discussionUser = currentUser || user;
+%>
+
+<section
+    class="discussion-section mt-5"
+    data-discussion
+    data-context-type="<%= contextType %>"
+    data-context-id="<%= contextId %>"
+    data-create-url="<%= createUrl %>"
+    data-delete-url="<%= deleteUrl %>"
+>
+
+    <!-- ===================================================== -->
+    <!-- HEADER -->
+    <!-- ===================================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex align-items-center mb-4">
+
+                <div class="discussion-header-icon me-3">
+                    <i class="fas fa-comments"></i>
+                </div>
+
+                <div>
+                    <h5 class="mb-1">
+                        <%= contextType === "project"
+                            ? "Project Discussion"
+                            : "Task Discussion"
+                        %>
+                    </h5>
+
+                    <small class="text-muted">
+                        Discuss this
+                        <%= contextType === "project"
+                            ? "project"
+                            : "task"
+                        %>
+                        with your team.
+                    </small>
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- REPLY INDICATOR -->
+            <!-- ================================================= -->
+
+            <div
+                class="discussion-reply-box d-none"
+                data-reply-box
+            >
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div class="min-width-0">
+
+                        <div class="discussion-reply-label">
+                            <i class="fas fa-reply me-1"></i>
+                            Replying to
+                            <strong data-reply-user></strong>
+                        </div>
+
+                        <div
+                            class="discussion-reply-preview text-truncate"
+                            data-reply-content>
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-link text-danger flex-shrink-0"
+                        data-cancel-reply
+                    >
+                        <i class="fas fa-times me-1"></i>
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- COMMENT INPUT -->
+            <!-- ================================================= -->
+
+            <div class="discussion-composer mb-4">
+
+                <textarea
+                    class="form-control discussion-input"
+                    data-comment-input
+                    rows="3"
+                    maxlength="2000"
+                    placeholder="Write a comment..."
+                ></textarea>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+
+                    <small class="text-muted">
+                        <span data-character-count>0</span>/2000
+                    </small>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary discussion-submit-btn"
+                        data-submit-comment
+                    >
+                        <i class="fas fa-paper-plane me-1"></i>
+
+                        <span data-submit-text>
+                            Post Comment
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- COMMENTS LIST -->
+            <!-- ================================================= -->
+
+            <div
+                class="discussion-comments"
+                data-comments-list
+            >
+
+                <% if (discussionComments.length === 0) { %>
+
+                    <div
+                        class="discussion-empty"
+                        data-empty-state
+                    >
+                        <div class="discussion-empty-icon">
+                            <i class="far fa-comments"></i>
+                        </div>
+
+                        <h6>No comments yet</h6>
+
+                        <p class="text-muted mb-0">
+                            Start the discussion.
+                        </p>
+                    </div>
+
+                <% } else { %>
+
+                    <% discussionComments.forEach(comment => { %>
+
+                        <%- include("discussionComment", {
+                            comment,
+                            discussionUser
+                        }) %>
+
+                    <% }) %>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

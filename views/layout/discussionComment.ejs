@@ -1,0 +1,145 @@
+<%
+    const isOwnComment =
+        String(comment.user_id) ===
+        String(discussionUser.user_id);
+
+    const hasReply =
+        comment.reply_to_id &&
+        comment.reply_content;
+%>
+
+<article
+    class="discussion-comment"
+    data-comment-id="<%= comment.comment_id %>"
+    data-comment-user-id="<%= comment.user_id %>"
+>
+
+    <div class="d-flex gap-3">
+
+        <!-- ================================================= -->
+        <!-- AVATAR -->
+        <!-- ================================================= -->
+
+        <div class="discussion-avatar flex-shrink-0">
+
+            <% if (comment.profile_image) { %>
+
+                <img
+                    src="<%= comment.profile_image %>"
+                    alt="<%= comment.full_name %>"
+                >
+
+            <% } else { %>
+
+                <div class="discussion-avatar-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+
+            <% } %>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- COMMENT BODY -->
+        <!-- ================================================= -->
+
+        <div class="discussion-comment-body flex-grow-1">
+
+            <!-- Author / time -->
+
+            <div class="d-flex align-items-center flex-wrap">
+
+                <strong class="discussion-author">
+                    <%= comment.full_name %>
+                </strong>
+
+                <% if (isOwnComment) { %>
+
+                    <span class="discussion-you-badge">
+                        You
+                    </span>
+
+                <% } %>
+
+                <span class="discussion-time">
+                    <%= new Date(comment.created_at).toLocaleString() %>
+                </span>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PARENT COMMENT -->
+            <!-- ================================================= -->
+
+            <% if (hasReply) { %>
+
+                <div class="discussion-parent">
+
+                    <div class="discussion-parent-author">
+                        <i class="fas fa-reply me-1"></i>
+                        Replying to
+                        <strong>
+                            <%= comment.reply_user_name %>
+                        </strong>
+                    </div>
+
+                    <div class="discussion-parent-content">
+                        "<%= comment.reply_content %>"
+                    </div>
+
+                </div>
+
+            <% } %>
+
+
+            <!-- ================================================= -->
+            <!-- COMMENT -->
+            <!-- ================================================= -->
+
+            <div class="discussion-content">
+                <%= comment.content %>
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- ACTIONS -->
+            <!-- ================================================= -->
+
+            <div class="discussion-actions">
+
+                <button
+                    type="button"
+                    class="discussion-action-btn"
+                    data-reply-comment
+                    data-comment-id="<%= comment.comment_id %>"
+                    data-comment-user="<%= comment.full_name %>"
+                    data-comment-content="<%= comment.content %>"
+                >
+                    <i class="fas fa-reply me-1"></i>
+                    Reply
+                </button>
+
+
+                <% if (isOwnComment) { %>
+
+                    <button
+                        type="button"
+                        class="discussion-action-btn discussion-delete-btn"
+                        data-delete-comment
+                        data-comment-id="<%= comment.comment_id %>"
+                    >
+                        <i class="fas fa-trash-alt me-1"></i>
+                        Delete
+                    </button>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</article>
