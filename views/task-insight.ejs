@@ -49,11 +49,11 @@
     <!-- Main Content Grid -->
     <div class="row g-4">
 
-        <!-- Left Column: Details & Files -->
-        <div class="col-lg-7 col-xl-8 d-flex flex-column gap-4">
+       <!-- Left Column: Details & Files -->
+        <div class="col-lg-7 col-xl-8 d-flex flex-column gap-4 align-self-start">
 
             <!-- Metadata Card -->
-            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: #f8fafc;">
+            <div class="card glass-panel border-0 shadow-sm rounded-4 " style="background: linear-gradient(135deg, rgba(76, 29, 149, 0.03), rgba(190, 18, 60, 0.03)); border-left: 4px solid #4c1d95 !important;">
                 <div class="card-body p-4">
 
                     <h5 class="fw-bold mb-4 text-dark border-bottom pb-3">
@@ -64,7 +64,7 @@
 
                         <div class="col-sm-6">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="fs-3 text-primary">
+                                <div class="fs-3" style="color: #4c1d95;">
                                     <i class="fas fa-user-circle"></i>
                                 </div>
 
@@ -82,7 +82,7 @@
 
                         <div class="col-sm-6">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="fs-3 text-danger">
+                                <div class="fs-3" style="color: #be123c;">
                                     <i class="fas fa-flag"></i>
                                 </div>
 
@@ -103,15 +103,13 @@
             </div>
 
             <!-- Task Files Section -->
-            <div class="card border-0 shadow-sm rounded-4"
-                style="background: linear-gradient(to right bottom, #ffffff, #f1f5f9);">
-
+            <div class="card border-0 shadow-sm rounded-4" style="background: linear-gradient(135deg, rgba(76, 29, 149, 0.02), rgba(190, 18, 60, 0.02)); border-left: 4px solid #be123c !important;">
                 <div class="card-body p-4">
 
-                    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                    <div class="d-flex justify-content-between align-items-center border-bottom border-danger border-opacity-10 pb-3 mb-4">
 
                         <h5 class="fw-bold mb-0 text-dark">
-                            <i class="fas fa-paperclip text-success me-2"></i>
+                            <i class="fas fa-paperclip me-2" style="color: #be123c;"></i>
                             Task Attachments
                         </h5>
 
@@ -128,7 +126,8 @@
                             <button
                                 type="submit"
                                 id="uploadTaskFileBtn"
-                                class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm d-flex align-items-center gap-1"
+                                class="btn btn-sm text-white rounded-pill px-3 fw-bold shadow-sm d-flex align-items-center gap-1"
+                                style="background: #be123c; border: none;"
                             >
                                 <i class="fas fa-upload"></i>
                                 Upload
@@ -156,7 +155,7 @@
 
                                 <div class="col-md-6 file-card-<%= file.attachment_id %>">
 
-                                    <div class="d-flex align-items-center justify-content-between p-3 rounded-3 bg-white shadow-sm border-start border-4 border-success">
+                                    <div class="d-flex align-items-center justify-content-between p-3 rounded-3 bg-white shadow-sm border-start border-4" style="border-color: #be123c !important;">
 
                                         <div class="flex-grow-1 min-w-0 me-3">
 
@@ -213,7 +212,7 @@
         </div>
 
         <!-- Right Column: Reusable Task Discussion -->
-        <div class="col-lg-5 col-xl-4">
+        <div class="col-lg-5 col-xl-4 task-insight-discussion">
 
             <%- include("layout/discussionComments", {
                 currentUser: user,

@@ -3,52 +3,47 @@
 =========================== */
 
 :root{
-
-    --primary:#6366F1;
-
-    --success:#22C55E;
-
-    --warning:#F59E0B;
-
-    --danger:#EF4444;
-
-    --surface:#FFFFFF;
-
-    --background:#F8FAFC;
-
-    --border:#E5E7EB;
-
-    --text:#1F2937;
-
-    --muted:#6B7280;
-
-    --radius:18px;
-
-    --shadow:
-        0 8px 30px rgba(15,23,42,.08);
-
+    --primary: #6366F1;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    
+    /* Change surface to default to a semi-transparent glass look if needed */
+    --surface: rgba(255, 255, 255, 0.7); 
+    
+    /* Replace the solid gray with your custom gradient */
+    /* --background: linear-gradient(135deg, #e9d5ff 0%, #ffe4e6 100%);  */
+    /* --background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); */
+    /* --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+    /* --background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); */
+    /* --background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); */
+    /* --background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); */
+    --background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --border: #E5E7EB;
+    --text: #1F2937;
+    --muted: #6B7280;
+    --radius: 18px;
+    --shadow: 0 8px 30px rgba(15,23,42,.08);
 }
+
 
 body{
 
     background:var(--background);
+    background-attachment: fixed;
 
 }
 
 /* Universal Dashboard Card */
-
-.dashboard-card{
-
-    background:var(--surface);
-
-    border:none;
-
-    border-radius:var(--radius);
-
-    box-shadow:var(--shadow);
-
-    transition:.25s ease;
-
+/* Universal Dashboard Card */
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    transition: .25s ease;
 }
 
 .dashboard-card:hover{

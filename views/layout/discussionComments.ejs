@@ -21,7 +21,7 @@
 %>
 
 <section
-    class="discussion-section mt-5"
+    class="discussion-section d-flex flex-column"
     data-discussion
     data-context-type="<%= contextType %>"
     data-context-id="<%= contextId %>"
@@ -35,11 +35,11 @@
     <!-- HEADER -->
     <!-- ===================================================== -->
 
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 d-flex flex-column flex-grow-1" style="min-height: 0;">
 
-        <div class="card-body p-4">
+        <div class="card-body p-4 d-flex flex-column" style="min-height: 0;">
 
-            <div class="d-flex align-items-center mb-4">
+            <div class="d-flex align-items-center mb-4 flex-shrink-0">
 
                 <div class="discussion-header-icon me-3">
                     <i class="fas fa-comments"></i>
@@ -71,7 +71,7 @@
             <!-- ================================================= -->
 
             <div
-                class="discussion-reply-box d-none"
+                class="discussion-reply-box d-none flex-shrink-0"
                 data-reply-box
             >
 
@@ -110,7 +110,7 @@
             <!-- COMMENT INPUT -->
             <!-- ================================================= -->
 
-            <div class="discussion-composer mb-4">
+            <div class="discussion-composer mb-4 flex-shrink-0">
 
                 <textarea
                     class="form-control discussion-input"
@@ -148,7 +148,7 @@
             <!-- ================================================= -->
 
             <div
-                class="discussion-comments"
+                class="discussion-comments flex-grow-1"
                 data-comments-list
             >
 
