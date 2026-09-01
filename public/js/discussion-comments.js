@@ -5,31 +5,28 @@ $(document).ready(function () {
      * REUSABLE DISCUSSION COMMENTS
      * =========================================================
      *
-     * This component is intentionally independent from
-     * Socket.IO / Global Chat.
+     * Used by:
+     *   - Project Discussion
+     *   - Task Discussion
      *
      * Communication:
-     *
      *   GET    -> load comments
-     *   POST   -> create comment / reply
-     *   DELETE -> delete own comment
+     *   POST   -> comment / reply
+     *   DELETE -> own comment
      *
-     * Everything is handled through jQuery AJAX.
-     * No page reloads.
+     * This module uses jQuery AJAX only.
+     *
+     * IMPORTANT:
+     * Global Chat / Socket.IO is completely independent.
      */
 
+
     $("[data-discussion]").each(function () {
-
         initializeDiscussion($(this));
-
     });
 
 
     function initializeDiscussion($discussion) {
-
-        // =====================================================
-        // CONFIGURATION
-        // =====================================================
 
         const listUrl =
             $discussion.data("list-url");
@@ -42,13 +39,9 @@ $(document).ready(function () {
 
         const currentUserId =
             String(
-                $discussion.data("current-user-id")
+                $discussion.data("current-user-id") || ""
             );
 
-
-        // =====================================================
-        // DOM ELEMENTS
-        // =====================================================
 
         const $commentsList =
             $discussion.find("[data-comments-list]");
@@ -75,17 +68,13 @@ $(document).ready(function () {
             $discussion.find("[data-character-count]");
 
 
-        // =====================================================
-        // STATE
-        // =====================================================
-
         let replyToId = null;
 
         let commentsCache = {};
 
 
         // =====================================================
-        // INITIALIZE
+        // INITIAL LOAD
         // =====================================================
 
         loadComments();
@@ -125,16 +114,12 @@ $(document).ready(function () {
 
 
                     const comments =
-                        Array.isArray(
-                            response.comments
-                        )
+                        Array.isArray(response.comments)
                             ? response.comments
                             : [];
 
 
-                    renderComments(
-                        comments
-                    );
+                    renderComments(comments);
 
                 },
 
@@ -144,6 +129,7 @@ $(document).ready(function () {
                         "Load comments error:",
                         xhr.responseText
                     );
+
 
                     showLoadError(
                         "Unable to load comments."
@@ -157,6 +143,83 @@ $(document).ready(function () {
 
 
         // =====================================================
+        // BUILD THREAD TREE
+        // =====================================================
+
+        function buildThreadTree(comments) {
+
+            const commentMap = {};
+
+            const roots = [];
+
+
+            /*
+             * First create a node for every comment.
+             */
+            comments.forEach(function (comment) {
+
+                const id =
+                    String(comment.comment_id);
+
+
+                commentMap[id] = {
+
+                    ...comment,
+
+                    replies: []
+
+                };
+
+            });
+
+
+            /*
+             * Then attach every reply to its parent.
+             */
+            comments.forEach(function (comment) {
+
+                const id =
+                    String(comment.comment_id);
+
+
+                const parentId =
+                    comment.reply_to_id
+                        ? String(comment.reply_to_id)
+                        : null;
+
+
+                if (
+                    parentId &&
+                    commentMap[parentId]
+                ) {
+
+                    commentMap[parentId]
+                        .replies
+                        .push(
+                            commentMap[id]
+                        );
+
+                } else {
+
+                    /*
+                     * No valid parent means this is
+                     * a top-level comment.
+                     */
+                    roots.push(
+                        commentMap[id]
+                    );
+
+                }
+
+            });
+
+
+            return roots;
+
+        }
+
+
+        // =====================================================
         // RENDER ALL COMMENTS
         // =====================================================
 
@@ -165,23 +228,35 @@ $(document).ready(function () {
             commentsCache = {};
 
 
+            comments.forEach(function (comment) {
+
+                commentsCache[
+                    String(comment.comment_id)
+                ] = comment;
+
+            });
+
+
             if (!comments.length) {
 
                 showEmptyState();
 
                 return;
+
             }
+
+
+            const threads =
+                buildThreadTree(comments);
 
 
             $commentsList.empty();
 
 
-            comments.forEach(function (comment) {
-
-                cacheComment(comment);
+            threads.forEach(function (thread) {
 
                 $commentsList.append(
-                    buildCommentHtml(comment)
+                    buildThreadHtml(thread)
                 );
 
             });
@@ -190,26 +265,39 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // CACHE COMMENT
+        // THREAD HTML
         // =====================================================
 
-        function cacheComment(comment) {
+        function buildThreadHtml(comment) {
 
-            commentsCache[
-                String(comment.comment_id)
-            ] = comment;
+            return `
+
+                <div
+                    class="discussion-thread"
+                    data-thread-root="${comment.comment_id}"
+                >
+
+                    ${buildCommentHtml(comment, 0)}
+
+                </div>
+
+            `;
 
         }
 
 
         // =====================================================
-        // BUILD COMMENT HTML
+        // COMMENT HTML
         // =====================================================
 
-        function buildCommentHtml(comment) {
+        function buildCommentHtml(
+            comment,
+            depth
+        ) {
 
             const commentId =
                 String(comment.comment_id);
+
 
             const userId =
                 String(comment.user_id);
@@ -245,6 +333,7 @@ $(document).ready(function () {
             if (comment.profile_image) {
 
                 avatarHtml = `
+
                     <img
                         src="${escapeHtml(
                             comment.profile_image
@@ -253,14 +342,19 @@ $(document).ready(function () {
                             fullName
                         )}"
                     >
+
                 `;
 
             } else {
 
                 avatarHtml = `
+
                     <div class="discussion-avatar-placeholder">
+
                         <i class="fas fa-user"></i>
+
                     </div>
+
                 `;
 
             }
@@ -273,55 +367,13 @@ $(document).ready(function () {
             const youBadge =
                 isOwnComment
                     ? `
+
                         <span class="discussion-you-badge">
                             You
                         </span>
+
                     `
                     : "";
-
-
-            // -------------------------------------------------
-            // REPLY PREVIEW
-            // -------------------------------------------------
-
-            let parentHtml = "";
-
-
-            if (
-                comment.reply_to_id &&
-                comment.reply_content
-            ) {
-
-                parentHtml = `
-                    <div class="discussion-parent">
-
-                        <div class="discussion-parent-author">
-
-                            <i class="fas fa-reply me-1"></i>
-
-                            Replying to
-
-                            <strong>
-                                ${escapeHtml(
-                                    comment.reply_user_name ||
-                                    "User"
-                                )}
-                            </strong>
-
-                        </div>
-
-                        <div class="discussion-parent-content">
-
-                            "${escapeHtml(
-                                comment.reply_content
-                            )}"
-
-                        </div>
-
-                    </div>
-                `;
-
-            }
 
 
             // -------------------------------------------------
@@ -331,34 +383,50 @@ $(document).ready(function () {
             const deleteHtml =
                 isOwnComment
                     ? `
+
                         <button
                             type="button"
                             class="discussion-action-btn discussion-delete-btn"
                             data-delete-comment
                             data-comment-id="${commentId}"
                         >
-                            <i class="fas fa-trash-alt me-1"></i>
+
+                            <i class="fas fa-trash-alt"></i>
+
                             Delete
+
                         </button>
+
                     `
                     : "";
 
 
-            // -------------------------------------------------
-            // COMPLETE COMMENT
-            // -------------------------------------------------
+            /*
+             * We visually cap indentation at level 3.
+             *
+             * The actual thread relationship is still
+             * preserved in the DOM.
+             */
+            const visualDepth =
+                Math.min(depth, 3);
 
-            return `
+
+            let html = `
 
                 <article
-                    class="discussion-comment"
+                    class="
+                        discussion-comment
+                        ${depth > 0
+                            ? "discussion-reply"
+                            : "discussion-root-comment"}
+                    "
                     data-comment-id="${commentId}"
                     data-comment-user-id="${userId}"
+                    data-depth="${visualDepth}"
+                    style="--discussion-depth:${visualDepth};"
                 >
 
-                    <div class="d-flex gap-3">
-
-                        <!-- Avatar -->
+                    <div class="discussion-comment-main">
 
                         <div class="discussion-avatar flex-shrink-0">
 
@@ -367,13 +435,9 @@ $(document).ready(function () {
                         </div>
 
 
-                        <!-- Body -->
+                        <div class="discussion-comment-content">
 
-                        <div class="discussion-comment-body flex-grow-1">
-
-                            <!-- Author -->
-
-                            <div class="d-flex align-items-center flex-wrap">
+                            <div class="discussion-comment-meta">
 
                                 <strong class="discussion-author">
 
@@ -383,7 +447,9 @@ $(document).ready(function () {
 
                                 </strong>
 
+
                                 ${youBadge}
+
 
                                 <span class="discussion-time">
 
@@ -396,14 +462,7 @@ $(document).ready(function () {
                             </div>
 
 
-                            <!-- Parent -->
-
-                            ${parentHtml}
-
-
-                            <!-- Content -->
-
-                            <div class="discussion-content">
+                            <div class="discussion-text">
 
                                 ${escapeHtml(
                                     content
@@ -411,8 +470,6 @@ $(document).ready(function () {
 
                             </div>
 
-
-                            <!-- Actions -->
 
                             <div class="discussion-actions">
 
@@ -423,7 +480,7 @@ $(document).ready(function () {
                                     data-comment-id="${commentId}"
                                 >
 
-                                    <i class="fas fa-reply me-1"></i>
+                                    <i class="fas fa-reply"></i>
 
                                     Reply
 
@@ -438,15 +495,59 @@ $(document).ready(function () {
 
                     </div>
 
+            `;
+
+
+            // -------------------------------------------------
+            // REPLIES
+            // -------------------------------------------------
+
+            if (
+                comment.replies &&
+                comment.replies.length
+            ) {
+
+                html += `
+
+                    <div class="discussion-replies">
+
+                `;
+
+
+                comment.replies.forEach(function (reply) {
+
+                    html +=
+                        buildCommentHtml(
+                            reply,
+                            depth + 1
+                        );
+
+                });
+
+
+                html += `
+
+                    </div>
+
+                `;
+
+            }
+
+
+            html += `
+
                 </article>
 
             `;
+
+
+            return html;
 
         }
 
 
         // =====================================================
-        // CHARACTER COUNTER
+        // CHARACTER COUNT
         // =====================================================
 
         $input.on(
@@ -479,9 +580,7 @@ $(document).ready(function () {
 
 
                 const comment =
-                    commentsCache[
-                        commentId
-                    ];
+                    commentsCache[commentId];
 
 
                 if (!comment) {
@@ -491,6 +590,7 @@ $(document).ready(function () {
                     );
 
                     return;
+
                 }
 
 
@@ -505,7 +605,8 @@ $(document).ready(function () {
 
 
                 $replyContent.text(
-                    `"${comment.content || ""}"`
+                    comment.content ||
+                    ""
                 );
 
 
@@ -522,17 +623,9 @@ $(document).ready(function () {
                 $input
                     .attr(
                         "placeholder",
-                        "Write your reply..."
+                        "Write a reply..."
                     )
                     .focus();
-
-
-                // Scroll to composer.
-
-                $input[0].scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
 
             }
         );
@@ -582,7 +675,7 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // SUBMIT COMMENT
+        // SUBMIT BUTTON
         // =====================================================
 
         $submit.on(
@@ -618,6 +711,10 @@ $(document).ready(function () {
         );
 
 
+        // =====================================================
+        // CREATE COMMENT / REPLY
+        // =====================================================
+
         function submitComment() {
 
             const content =
@@ -635,12 +732,11 @@ $(document).ready(function () {
                 $input.focus();
 
                 return;
+
             }
 
 
-            setSubmitting(
-                true
-            );
+            setSubmitting(true);
 
 
             $.ajax({
@@ -664,9 +760,8 @@ $(document).ready(function () {
 
                 }),
 
-                success: function (
-                    response
-                ) {
+
+                success: function (response) {
 
                     if (
                         !response ||
@@ -679,6 +774,7 @@ $(document).ready(function () {
                         );
 
                         return;
+
                     }
 
 
@@ -686,45 +782,96 @@ $(document).ready(function () {
                         response.comment;
 
 
-                    // Cache it.
-
                     cacheComment(
                         comment
                     );
 
 
-                    // Remove empty state.
+                    // -------------------------------------------------
+                    // REPLY
+                    // -------------------------------------------------
 
-                    $commentsList
-                        .find(
-                            "[data-empty-state]"
-                        )
-                        .remove();
+                    if (replyToId) {
 
-
-                    // Remove loading/error.
-
-                    $commentsList
-                        .find(
-                            "[data-discussion-message]"
-                        )
-                        .remove();
+                        const $parent =
+                            $discussion.find(
+                                `[data-comment-id="${replyToId}"]`
+                            );
 
 
-                    // Append immediately.
-
-                    const $newComment =
-                        $(buildCommentHtml(
-                            comment
-                        ));
+                        let $replies =
+                            $parent.children(
+                                ".discussion-replies"
+                            );
 
 
-                    $commentsList.append(
-                        $newComment
-                    );
+                        if (!$replies.length) {
+
+                            $replies =
+                                $("<div>")
+                                    .addClass(
+                                        "discussion-replies"
+                                    );
 
 
-                    // Clear input.
+                            $parent.append(
+                                $replies
+                            );
+
+                        }
+
+
+                        const parentDepth =
+                            getCommentDepth(
+                                $parent
+                            );
+
+
+                        $replies.append(
+
+                            buildCommentHtml(
+
+                                {
+                                    ...comment,
+                                    replies: []
+                                },
+
+                                parentDepth + 1
+
+                            )
+
+                        );
+
+                    }
+
+                    // -------------------------------------------------
+                    // TOP-LEVEL COMMENT
+                    // -------------------------------------------------
+
+                    else {
+
+                        removeDiscussionMessages();
+
+
+                        $commentsList.append(
+
+                            buildThreadHtml(
+
+                                {
+                                    ...comment,
+                                    replies: []
+                                }
+
+                            )
+
+                        );
+
+                    }
+
+
+                    // -------------------------------------------------
+                    // RESET COMPOSER
+                    // -------------------------------------------------
 
                     $input.val("");
 
@@ -733,20 +880,31 @@ $(document).ready(function () {
                     );
 
 
-                    // Reset reply mode.
-
                     cancelReply();
 
 
-                    // Scroll to new comment.
+                    // -------------------------------------------------
+                    // SCROLL NEW COMMENT INTO VIEW
+                    // -------------------------------------------------
 
-                    $newComment[0]
-                        .scrollIntoView({
-                            behavior: "smooth",
-                            block: "center"
-                        });
+                    const $newComment =
+                        $discussion.find(
+                            `[data-comment-id="${comment.comment_id}"]`
+                        );
+
+
+                    if ($newComment.length) {
+
+                        $newComment[0]
+                            .scrollIntoView({
+                                behavior: "smooth",
+                                block: "nearest"
+                            });
+
+                    }
 
                 },
+
 
                 error: function (xhr) {
 
@@ -759,9 +917,7 @@ $(document).ready(function () {
                     const message =
                         xhr.responseJSON &&
                         xhr.responseJSON.message
-
                             ? xhr.responseJSON.message
-
                             : "Failed to add comment.";
 
 
@@ -771,15 +927,43 @@ $(document).ready(function () {
 
                 },
 
+
                 complete: function () {
 
-                    setSubmitting(
-                        false
-                    );
+                    setSubmitting(false);
 
                 }
 
             });
+
+        }
+
+
+        // =====================================================
+        // CACHE COMMENT
+        // =====================================================
+
+        function cacheComment(comment) {
+
+            commentsCache[
+                String(comment.comment_id)
+            ] = comment;
+
+        }
+
+
+        // =====================================================
+        // GET DEPTH
+        // =====================================================
+
+        function getCommentDepth($comment) {
+
+            return parseInt(
+                $comment.attr(
+                    "data-depth"
+                ),
+                10
+            ) || 0;
 
         }
 
@@ -833,7 +1017,9 @@ $(document).ready(function () {
                         if (
                             !result.isConfirmed
                         ) {
+
                             return;
+
                         }
 
 
@@ -871,9 +1057,8 @@ $(document).ready(function () {
 
                 dataType: "json",
 
-                success: function (
-                    response
-                ) {
+
+                success: function (response) {
 
                     if (
                         !response ||
@@ -885,6 +1070,7 @@ $(document).ready(function () {
                         );
 
                         return;
+
                     }
 
 
@@ -893,6 +1079,12 @@ $(document).ready(function () {
                     ];
 
 
+                    /*
+                     * Remove the complete branch.
+                     *
+                     * This means deleting a parent also
+                     * removes its visible replies.
+                     */
                     $comment
                         .slideUp(
                             180,
@@ -907,6 +1099,7 @@ $(document).ready(function () {
 
                 },
 
+
                 error: function (xhr) {
 
                     console.error(
@@ -918,9 +1111,7 @@ $(document).ready(function () {
                     const message =
                         xhr.responseJSON &&
                         xhr.responseJSON.message
-
                             ? xhr.responseJSON.message
-
                             : "Failed to delete comment.";
 
 
@@ -936,8 +1127,19 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // EMPTY STATE
+        // UI STATES
         // =====================================================
+
+        function removeDiscussionMessages() {
+
+            $commentsList
+                .find(
+                    "[data-empty-state], [data-discussion-message]"
+                )
+                .remove();
+
+        }
+
 
         function showEmptyStateIfNeeded() {
 
@@ -971,9 +1173,11 @@ $(document).ready(function () {
 
                     </div>
 
+
                     <h6>
                         No comments yet
                     </h6>
+
 
                     <p class="text-muted mb-0">
                         Start the discussion.
@@ -985,10 +1189,6 @@ $(document).ready(function () {
 
         }
 
-
-        // =====================================================
-        // LOADING STATE
-        // =====================================================
 
         function showLoadingState() {
 
@@ -1005,6 +1205,7 @@ $(document).ready(function () {
 
                     </div>
 
+
                     <h6>
                         Loading comments...
                     </h6>
@@ -1016,13 +1217,7 @@ $(document).ready(function () {
         }
 
 
-        // =====================================================
-        // LOAD ERROR
-        // =====================================================
-
-        function showLoadError(
-            message
-        ) {
+        function showLoadError(message) {
 
             $commentsList.html(`
 
@@ -1037,9 +1232,11 @@ $(document).ready(function () {
 
                     </div>
 
+
                     <h6>
                         ${escapeHtml(message)}
                     </h6>
+
 
                     <button
                         type="button"
@@ -1056,10 +1253,6 @@ $(document).ready(function () {
         }
 
 
-        // =====================================================
-        // RETRY
-        // =====================================================
-
         $discussion.on(
             "click",
             "[data-retry-comments]",
@@ -1072,7 +1265,7 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // SUBMITTING STATE
+        // SUBMIT STATE
         // =====================================================
 
         function setSubmitting(
@@ -1127,15 +1320,15 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // DATE
+        // DATE FORMAT
         // =====================================================
 
-        function formatDate(
-            value
-        ) {
+        function formatDate(value) {
 
             if (!value) {
+
                 return "";
+
             }
 
 
@@ -1154,38 +1347,47 @@ $(document).ready(function () {
             }
 
 
-            return date.toLocaleString();
+            return date.toLocaleString(
+                undefined,
+                {
+                    dateStyle: "medium",
+                    timeStyle: "short"
+                }
+            );
 
         }
 
 
         // =====================================================
-        // HTML ESCAPING
+        // HTML ESCAPE
         // =====================================================
 
-        function escapeHtml(
-            value
-        ) {
+        function escapeHtml(value) {
 
             return String(
                 value ?? ""
             )
+
                 .replace(
                     /&/g,
                     "&amp;"
                 )
+
                 .replace(
                     /</g,
                     "&lt;"
                 )
+
                 .replace(
                     />/g,
                     "&gt;"
                 )
+
                 .replace(
                     /"/g,
                     "&quot;"
                 )
+
                 .replace(
                     /'/g,
                     "&#039;"
@@ -1195,12 +1397,10 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // WARNINGS
+        // WARNING
         // =====================================================
 
-        function showWarning(
-            message
-        ) {
+        function showWarning(message) {
 
             Swal.fire({
 
@@ -1222,12 +1422,10 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // ERRORS
+        // ERROR
         // =====================================================
 
-        function showError(
-            message
-        ) {
+        function showError(message) {
 
             Swal.fire({
 

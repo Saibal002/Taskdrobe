@@ -1,222 +1,225 @@
 /* =========================================================
-   DISCUSSION COMPONENT
-   ========================================================= */
+   REUSABLE DISCUSSION COMMENTS
+   Compact / Threaded / Reddit-style
+========================================================= */
 
 .discussion-section {
-    width: 100%;
-}
-
-.discussion-header-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #f1f5f9;
-    color: #2563eb;
-
-    font-size: 18px;
-}
-
-.discussion-section .card {
+    background: #fff;
+    border: 1px solid #edf0f4;
     border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
-.discussion-section .card-body {
-    min-height: 300px;
-}
-
-
-/* =========================================================
-   COMPOSER
-   ========================================================= */
-
-.discussion-input {
-    resize: vertical;
-    border-radius: 12px;
-    min-height: 90px;
-}
-
-.discussion-input:focus {
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.12);
-}
-
-.discussion-submit-btn {
-    border-radius: 10px;
-    min-width: 130px;
+.discussion-section > .card-body,
+.discussion-section .discussion-card-body {
+    min-height: 0;
 }
 
 
 /* =========================================================
-   REPLY BOX
-   ========================================================= */
+   HEADER
+========================================================= */
 
-.discussion-reply-box {
-    background: #f8fafc;
-    border-left: 4px solid #2563eb;
-
-    border-radius: 8px;
-
-    padding: 12px 14px;
-    margin-bottom: 12px;
+.discussion-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #eef1f5;
+    flex-shrink: 0;
 }
 
-.discussion-reply-label {
-    font-size: 13px;
-    color: #475569;
+.discussion-header h5,
+.discussion-header h6 {
+    margin-bottom: 2px;
 }
 
-.discussion-reply-preview {
-    margin-top: 4px;
-    color: #64748b;
-    font-size: 13px;
-    max-width: 700px;
+.discussion-header p {
+    font-size: 0.76rem;
+    color: #7b8494;
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   COMMENTS SCROLL AREA
+========================================================= */
+
+.discussion-comments-list,
+[data-comments-list] {
+    max-height: min(58vh, 620px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 14px 14px;
+    scrollbar-width: thin;
+}
+
+[data-comments-list]::-webkit-scrollbar {
+    width: 6px;
+}
+
+[data-comments-list]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+[data-comments-list]::-webkit-scrollbar-thumb {
+    background: #d7dce4;
+    border-radius: 20px;
+}
+
+
+/* =========================================================
+   THREAD
+========================================================= */
+
+.discussion-thread {
+    margin: 0;
 }
 
 
 /* =========================================================
    COMMENT
-   ========================================================= */
+========================================================= */
 
 .discussion-comment {
-    padding: 20px 0;
-
-    border-bottom: 1px solid #e5e7eb;
+    position: relative;
+    padding: 11px 4px 10px;
 }
 
-.discussion-comment:last-child {
-    border-bottom: none;
+.discussion-root-comment {
+    border-bottom: 1px solid #eef1f5;
 }
 
-.discussion-avatar {
-    width: 42px;
-    height: 42px;
-}
-
-.discussion-avatar img,
-.discussion-avatar-placeholder {
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-}
-
-.discussion-avatar img {
-    object-fit: cover;
-}
-
-.discussion-avatar-placeholder {
+.discussion-comment-main {
     display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #e2e8f0;
-    color: #475569;
-}
-
-.discussion-author {
-    font-size: 14px;
-    color: #1e293b;
-}
-
-.discussion-you-badge {
-    margin-left: 7px;
-
-    padding: 2px 7px;
-
-    border-radius: 999px;
-
-    background: #eff6ff;
-    color: #2563eb;
-
-    font-size: 10px;
-    font-weight: 600;
-}
-
-.discussion-time {
-    margin-left: 10px;
-
-    color: #94a3b8;
-
-    font-size: 12px;
+    align-items: flex-start;
+    gap: 9px;
+    min-width: 0;
 }
 
 
 /* =========================================================
-   COMMENT CONTENT
-   ========================================================= */
+   REPLIES
+========================================================= */
 
-.discussion-content {
-    margin-top: 7px;
+.discussion-replies {
+    margin-left: 26px;
+    padding-left: 12px;
+    border-left: 2px solid #e8ecf2;
+}
 
-    color: #334155;
+.discussion-replies .discussion-comment {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
 
-    font-size: 14px;
-    line-height: 1.6;
+.discussion-replies .discussion-replies {
+    margin-left: 20px;
+    padding-left: 10px;
+}
 
+.discussion-replies .discussion-comment-main {
+    gap: 8px;
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.discussion-avatar {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eef2f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 0.72rem;
+}
+
+.discussion-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.discussion-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.discussion-comment-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.discussion-comment-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    line-height: 1.1;
+}
+
+.discussion-author {
+    font-size: 0.78rem;
+    color: #172033;
+}
+
+.discussion-you-badge {
+    font-size: 0.61rem;
+    font-weight: 700;
+    color: #2563eb;
+    background: #eff6ff;
+    border-radius: 999px;
+    padding: 2px 6px;
+}
+
+.discussion-time {
+    font-size: 0.63rem;
+    color: #9aa3b2;
+}
+
+.discussion-text {
+    margin-top: 4px;
+    color: #303949;
+    font-size: 0.78rem;
+    line-height: 1.45;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
 
 /* =========================================================
-   PARENT COMMENT
-   ========================================================= */
-
-.discussion-parent {
-    margin-top: 10px;
-
-    padding: 9px 12px;
-
-    background: #f8fafc;
-
-    border-left: 3px solid #cbd5e1;
-
-    border-radius: 5px;
-}
-
-.discussion-parent-author {
-    font-size: 12px;
-    color: #64748b;
-}
-
-.discussion-parent-content {
-    margin-top: 3px;
-
-    font-size: 12px;
-
-    color: #94a3b8;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-/* =========================================================
    ACTIONS
-   ========================================================= */
+========================================================= */
 
 .discussion-actions {
     display: flex;
-    gap: 16px;
-
-    margin-top: 9px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
 }
 
 .discussion-action-btn {
-    border: none;
+    border: 0;
     background: transparent;
-
-    padding: 0;
-
-    color: #64748b;
-
-    font-size: 12px;
-
+    padding: 1px 0;
+    color: #718096;
+    font-size: 0.66rem;
     cursor: pointer;
 }
 
@@ -230,57 +233,157 @@
 
 
 /* =========================================================
-   EMPTY STATE
-   ========================================================= */
+   COMPOSER
+========================================================= */
+
+.discussion-composer {
+    border-top: 1px solid #eef1f5;
+    padding: 12px 14px 14px;
+    background: #fbfcfe;
+    flex-shrink: 0;
+}
+
+.discussion-composer textarea {
+    min-height: 70px;
+    max-height: 140px;
+    resize: vertical;
+    border-radius: 10px;
+    border: 1px solid #dce2ea;
+    font-size: 0.78rem;
+    box-shadow: none;
+}
+
+.discussion-composer textarea:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.08);
+}
+
+.discussion-composer-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: 7px;
+}
+
+.discussion-character-count {
+    font-size: 0.64rem;
+    color: #8a94a6;
+}
+
+.discussion-submit-btn {
+    border-radius: 9px;
+    font-size: 0.72rem;
+    padding: 6px 10px;
+}
+
+
+/* =========================================================
+   REPLY BANNER
+========================================================= */
+
+[data-reply-box] {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border-left: 3px solid #3b82f6;
+    background: #f5f8ff;
+    border-radius: 7px;
+}
+
+[data-reply-user] {
+    font-size: 0.69rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+[data-reply-content] {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.66rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+[data-cancel-reply] {
+    font-size: 0.64rem;
+}
+
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
 
 .discussion-empty {
+    padding: 28px 12px;
     text-align: center;
-
-    padding: 55px 20px;
-
     color: #64748b;
 }
 
 .discussion-empty-icon {
-    font-size: 32px;
-    margin-bottom: 12px;
-    color: #cbd5e1;
+    width: 38px;
+    height: 38px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .discussion-empty h6 {
-    margin-bottom: 5px;
-    color: #475569;
+    font-size: 0.78rem;
+    margin-bottom: 3px;
+}
+
+.discussion-empty p {
+    font-size: 0.68rem;
+}
+
+
+/* =========================================================
+   TASK INSIGHT DESKTOP LAYOUT
+========================================================= */
+
+@media (min-width: 992px) {
+
+    .task-insight-discussion {
+        position: sticky;
+        top: 78px;
+        align-self: flex-start;
+        max-height: calc(100vh - 96px);
+    }
+
+    .task-insight-discussion .discussion-section {
+        max-height: calc(100vh - 96px);
+    }
+
+    .task-insight-discussion [data-comments-list] {
+        max-height: none;
+        flex: 1 1 auto;
+    }
+
 }
 
 
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
-@media (max-width: 576px) {
+@media (max-width: 991.98px) {
 
-    .discussion-comment {
-        padding: 16px 0;
+    .discussion-section {
+        border-radius: 14px;
     }
 
-    .discussion-avatar,
-    .discussion-avatar img,
-    .discussion-avatar-placeholder {
-        width: 36px;
-        height: 36px;
+    [data-comments-list] {
+        max-height: 55vh;
     }
 
-    .discussion-time {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 2px;
+    .discussion-replies {
+        margin-left: 20px;
+        padding-left: 9px;
     }
 
-    .discussion-actions {
-        gap: 12px;
-    }
-
-    .discussion-submit-btn {
-        min-width: auto;
-    }
 }
