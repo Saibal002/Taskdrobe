@@ -1,13 +1,21 @@
 $(document).ready(function () {
 
     /*
-     * Allow the component to exist on any page.
+     * =========================================================
+     * REUSABLE DISCUSSION COMMENTS
+     * =========================================================
      *
-     * Project:
-     *   /projects/:projectId/comments
+     * This component is intentionally independent from
+     * Socket.IO / Global Chat.
      *
-     * Task:
-     *   /tasks/:taskId/comments
+     * Communication:
+     *
+     *   GET    -> load comments
+     *   POST   -> create comment / reply
+     *   DELETE -> delete own comment
+     *
+     * Everything is handled through jQuery AJAX.
+     * No page reloads.
      */
 
     $("[data-discussion]").each(function () {
@@ -19,11 +27,31 @@ $(document).ready(function () {
 
     function initializeDiscussion($discussion) {
 
+        // =====================================================
+        // CONFIGURATION
+        // =====================================================
+
+        const listUrl =
+            $discussion.data("list-url");
+
         const createUrl =
             $discussion.data("create-url");
 
         const deleteUrl =
             $discussion.data("delete-url");
+
+        const currentUserId =
+            String(
+                $discussion.data("current-user-id")
+            );
+
+
+        // =====================================================
+        // DOM ELEMENTS
+        // =====================================================
+
+        const $commentsList =
+            $discussion.find("[data-comments-list]");
 
         const $input =
             $discussion.find("[data-comment-input]");
@@ -33,9 +61,6 @@ $(document).ready(function () {
 
         const $submitText =
             $discussion.find("[data-submit-text]");
-
-        const $commentsList =
-            $discussion.find("[data-comments-list]");
 
         const $replyBox =
             $discussion.find("[data-reply-box]");
@@ -50,24 +75,394 @@ $(document).ready(function () {
             $discussion.find("[data-character-count]");
 
 
+        // =====================================================
+        // STATE
+        // =====================================================
+
         let replyToId = null;
 
-
-        // =====================================================
-        // CHARACTER COUNT
-        // =====================================================
-
-        $input.on("input", function () {
-
-            $characterCount.text(
-                $(this).val().length
-            );
-
-        });
+        let commentsCache = {};
 
 
         // =====================================================
-        // REPLY
+        // INITIALIZE
+        // =====================================================
+
+        loadComments();
+
+
+        // =====================================================
+        // LOAD COMMENTS
+        // =====================================================
+
+        function loadComments() {
+
+            showLoadingState();
+
+            $.ajax({
+
+                url: listUrl,
+
+                type: "GET",
+
+                dataType: "json",
+
+                cache: false,
+
+                success: function (response) {
+
+                    if (
+                        !response ||
+                        !response.success
+                    ) {
+
+                        showLoadError(
+                            "Unable to load comments."
+                        );
+
+                        return;
+                    }
+
+
+                    const comments =
+                        Array.isArray(
+                            response.comments
+                        )
+                            ? response.comments
+                            : [];
+
+
+                    renderComments(
+                        comments
+                    );
+
+                },
+
+                error: function (xhr) {
+
+                    console.error(
+                        "Load comments error:",
+                        xhr.responseText
+                    );
+
+                    showLoadError(
+                        "Unable to load comments."
+                    );
+
+                }
+
+            });
+
+        }
+
+
+        // =====================================================
+        // RENDER ALL COMMENTS
+        // =====================================================
+
+        function renderComments(comments) {
+
+            commentsCache = {};
+
+
+            if (!comments.length) {
+
+                showEmptyState();
+
+                return;
+            }
+
+
+            $commentsList.empty();
+
+
+            comments.forEach(function (comment) {
+
+                cacheComment(comment);
+
+                $commentsList.append(
+                    buildCommentHtml(comment)
+                );
+
+            });
+
+        }
+
+
+        // =====================================================
+        // CACHE COMMENT
+        // =====================================================
+
+        function cacheComment(comment) {
+
+            commentsCache[
+                String(comment.comment_id)
+            ] = comment;
+
+        }
+
+
+        // =====================================================
+        // BUILD COMMENT HTML
+        // =====================================================
+
+        function buildCommentHtml(comment) {
+
+            const commentId =
+                String(comment.comment_id);
+
+            const userId =
+                String(comment.user_id);
+
+
+            const isOwnComment =
+                userId === currentUserId;
+
+
+            const fullName =
+                comment.full_name ||
+                "Unknown User";
+
+
+            const content =
+                comment.content ||
+                "";
+
+
+            const createdAt =
+                formatDate(
+                    comment.created_at
+                );
+
+
+            // -------------------------------------------------
+            // AVATAR
+            // -------------------------------------------------
+
+            let avatarHtml;
+
+
+            if (comment.profile_image) {
+
+                avatarHtml = `
+                    <img
+                        src="${escapeHtml(
+                            comment.profile_image
+                        )}"
+                        alt="${escapeHtml(
+                            fullName
+                        )}"
+                    >
+                `;
+
+            } else {
+
+                avatarHtml = `
+                    <div class="discussion-avatar-placeholder">
+                        <i class="fas fa-user"></i>
+                    </div>
+                `;
+
+            }
+
+
+            // -------------------------------------------------
+            // YOU BADGE
+            // -------------------------------------------------
+
+            const youBadge =
+                isOwnComment
+                    ? `
+                        <span class="discussion-you-badge">
+                            You
+                        </span>
+                    `
+                    : "";
+
+
+            // -------------------------------------------------
+            // REPLY PREVIEW
+            // -------------------------------------------------
+
+            let parentHtml = "";
+
+
+            if (
+                comment.reply_to_id &&
+                comment.reply_content
+            ) {
+
+                parentHtml = `
+                    <div class="discussion-parent">
+
+                        <div class="discussion-parent-author">
+
+                            <i class="fas fa-reply me-1"></i>
+
+                            Replying to
+
+                            <strong>
+                                ${escapeHtml(
+                                    comment.reply_user_name ||
+                                    "User"
+                                )}
+                            </strong>
+
+                        </div>
+
+                        <div class="discussion-parent-content">
+
+                            "${escapeHtml(
+                                comment.reply_content
+                            )}"
+
+                        </div>
+
+                    </div>
+                `;
+
+            }
+
+
+            // -------------------------------------------------
+            // DELETE
+            // -------------------------------------------------
+
+            const deleteHtml =
+                isOwnComment
+                    ? `
+                        <button
+                            type="button"
+                            class="discussion-action-btn discussion-delete-btn"
+                            data-delete-comment
+                            data-comment-id="${commentId}"
+                        >
+                            <i class="fas fa-trash-alt me-1"></i>
+                            Delete
+                        </button>
+                    `
+                    : "";
+
+
+            // -------------------------------------------------
+            // COMPLETE COMMENT
+            // -------------------------------------------------
+
+            return `
+
+                <article
+                    class="discussion-comment"
+                    data-comment-id="${commentId}"
+                    data-comment-user-id="${userId}"
+                >
+
+                    <div class="d-flex gap-3">
+
+                        <!-- Avatar -->
+
+                        <div class="discussion-avatar flex-shrink-0">
+
+                            ${avatarHtml}
+
+                        </div>
+
+
+                        <!-- Body -->
+
+                        <div class="discussion-comment-body flex-grow-1">
+
+                            <!-- Author -->
+
+                            <div class="d-flex align-items-center flex-wrap">
+
+                                <strong class="discussion-author">
+
+                                    ${escapeHtml(
+                                        fullName
+                                    )}
+
+                                </strong>
+
+                                ${youBadge}
+
+                                <span class="discussion-time">
+
+                                    ${escapeHtml(
+                                        createdAt
+                                    )}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- Parent -->
+
+                            ${parentHtml}
+
+
+                            <!-- Content -->
+
+                            <div class="discussion-content">
+
+                                ${escapeHtml(
+                                    content
+                                )}
+
+                            </div>
+
+
+                            <!-- Actions -->
+
+                            <div class="discussion-actions">
+
+                                <button
+                                    type="button"
+                                    class="discussion-action-btn"
+                                    data-reply-comment
+                                    data-comment-id="${commentId}"
+                                >
+
+                                    <i class="fas fa-reply me-1"></i>
+
+                                    Reply
+
+                                </button>
+
+
+                                ${deleteHtml}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }
+
+
+        // =====================================================
+        // CHARACTER COUNTER
+        // =====================================================
+
+        $input.on(
+            "input",
+            function () {
+
+                $characterCount.text(
+                    $(this).val().length
+                );
+
+            }
+        );
+
+
+        // =====================================================
+        // REPLY BUTTON
         // =====================================================
 
         $discussion.on(
@@ -75,35 +470,65 @@ $(document).ready(function () {
             "[data-reply-comment]",
             function () {
 
+                const commentId =
+                    String(
+                        $(this).data(
+                            "comment-id"
+                        )
+                    );
+
+
+                const comment =
+                    commentsCache[
+                        commentId
+                    ];
+
+
+                if (!comment) {
+
+                    showError(
+                        "Unable to prepare reply."
+                    );
+
+                    return;
+                }
+
+
                 replyToId =
-                    $(this).data("comment-id");
-
-                const commentUser =
-                    $(this).data("comment-user");
-
-                const commentContent =
-                    $(this).data("comment-content");
+                    commentId;
 
 
                 $replyUser.text(
-                    commentUser
+                    comment.full_name ||
+                    "User"
                 );
 
+
                 $replyContent.text(
-                    `"${commentContent}"`
+                    `"${comment.content || ""}"`
                 );
+
 
                 $replyBox.removeClass(
                     "d-none"
                 );
 
+
                 $submitText.text(
                     "Post Reply"
                 );
 
-                $input.focus();
 
-                // Scroll gently to composer.
+                $input
+                    .attr(
+                        "placeholder",
+                        "Write your reply..."
+                    )
+                    .focus();
+
+
+                // Scroll to composer.
+
                 $input[0].scrollIntoView({
                     behavior: "smooth",
                     block: "center"
@@ -132,23 +557,32 @@ $(document).ready(function () {
 
             replyToId = null;
 
+
             $replyBox.addClass(
                 "d-none"
             );
+
 
             $replyUser.empty();
 
             $replyContent.empty();
 
+
             $submitText.text(
                 "Post Comment"
+            );
+
+
+            $input.attr(
+                "placeholder",
+                "Write a comment..."
             );
 
         }
 
 
         // =====================================================
-        // SUBMIT
+        // SUBMIT COMMENT
         // =====================================================
 
         $submit.on(
@@ -161,7 +595,10 @@ $(document).ready(function () {
         );
 
 
-        // Ctrl + Enter
+        // =====================================================
+        // CTRL + ENTER
+        // =====================================================
+
         $input.on(
             "keydown",
             function (event) {
@@ -174,6 +611,7 @@ $(document).ready(function () {
                     event.preventDefault();
 
                     submitComment();
+
                 }
 
             }
@@ -183,26 +621,26 @@ $(document).ready(function () {
         function submitComment() {
 
             const content =
-                $input.val().trim();
+                $input
+                    .val()
+                    .trim();
 
 
             if (!content) {
 
-                Swal.fire({
-                    toast: true,
-                    position: "top-end",
-                    icon: "warning",
-                    title:
-                        "Comment cannot be empty.",
-                    showConfirmButton: false,
-                    timer: 2000
-                });
+                showWarning(
+                    "Comment cannot be empty."
+                );
+
+                $input.focus();
 
                 return;
             }
 
 
-            setSubmitting(true);
+            setSubmitting(
+                true
+            );
 
 
             $.ajax({
@@ -214,16 +652,21 @@ $(document).ready(function () {
                 contentType:
                     "application/json",
 
+                dataType:
+                    "json",
+
                 data: JSON.stringify({
 
-                    content,
+                    content: content,
 
                     replyToId:
                         replyToId || null
 
                 }),
 
-                success: function (response) {
+                success: function (
+                    response
+                ) {
 
                     if (
                         !response ||
@@ -239,54 +682,100 @@ $(document).ready(function () {
                     }
 
 
-                    // Remove empty state.
-                    $commentsList
-                        .find("[data-empty-state]")
-                        .remove();
+                    const comment =
+                        response.comment;
 
 
-                    // Render immediately.
-                    const $comment =
-                        renderComment(
-                            response.comment
-                        );
+                    // Cache it.
 
-                    $commentsList.append(
-                        $comment
+                    cacheComment(
+                        comment
                     );
 
 
-                    // Clear composer.
+                    // Remove empty state.
+
+                    $commentsList
+                        .find(
+                            "[data-empty-state]"
+                        )
+                        .remove();
+
+
+                    // Remove loading/error.
+
+                    $commentsList
+                        .find(
+                            "[data-discussion-message]"
+                        )
+                        .remove();
+
+
+                    // Append immediately.
+
+                    const $newComment =
+                        $(buildCommentHtml(
+                            comment
+                        ));
+
+
+                    $commentsList.append(
+                        $newComment
+                    );
+
+
+                    // Clear input.
+
                     $input.val("");
 
                     $characterCount.text(
                         "0"
                     );
 
+
+                    // Reset reply mode.
+
                     cancelReply();
 
 
                     // Scroll to new comment.
-                    $comment[0].scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                    });
+
+                    $newComment[0]
+                        .scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
 
                 },
 
                 error: function (xhr) {
 
-                    const message =
-                        xhr.responseJSON?.message ||
-                        "Failed to add comment.";
+                    console.error(
+                        "Create comment error:",
+                        xhr.responseText
+                    );
 
-                    showError(message);
+
+                    const message =
+                        xhr.responseJSON &&
+                        xhr.responseJSON.message
+
+                            ? xhr.responseJSON.message
+
+                            : "Failed to add comment.";
+
+
+                    showError(
+                        message
+                    );
 
                 },
 
                 complete: function () {
 
-                    setSubmitting(false);
+                    setSubmitting(
+                        false
+                    );
 
                 }
 
@@ -296,7 +785,7 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // DELETE
+        // DELETE COMMENT
         // =====================================================
 
         $discussion.on(
@@ -305,7 +794,12 @@ $(document).ready(function () {
             function () {
 
                 const commentId =
-                    $(this).data("comment-id");
+                    String(
+                        $(this).data(
+                            "comment-id"
+                        )
+                    );
+
 
                 const $comment =
                     $discussion.find(
@@ -333,21 +827,23 @@ $(document).ready(function () {
                     cancelButtonText:
                         "Cancel"
 
-                }).then(function (result) {
+                }).then(
+                    function (result) {
 
-                    if (
-                        !result.isConfirmed
-                    ) {
-                        return;
+                        if (
+                            !result.isConfirmed
+                        ) {
+                            return;
+                        }
+
+
+                        deleteComment(
+                            commentId,
+                            $comment
+                        );
+
                     }
-
-
-                    deleteComment(
-                        commentId,
-                        $comment
-                    );
-
-                });
+                );
 
             }
         );
@@ -358,16 +854,22 @@ $(document).ready(function () {
             $comment
         ) {
 
+            const url =
+                deleteUrl.replace(
+                    ":commentId",
+                    encodeURIComponent(
+                        commentId
+                    )
+                );
+
+
             $.ajax({
 
-                url:
-                    buildDeleteUrl(
-                        deleteUrl,
-                        commentId
-                    ),
+                url: url,
 
-                type:
-                    "DELETE",
+                type: "DELETE",
+
+                dataType: "json",
 
                 success: function (
                     response
@@ -386,6 +888,11 @@ $(document).ready(function () {
                     }
 
 
+                    delete commentsCache[
+                        commentId
+                    ];
+
+
                     $comment
                         .slideUp(
                             180,
@@ -402,194 +909,28 @@ $(document).ready(function () {
 
                 error: function (xhr) {
 
-                    const message =
-                        xhr.responseJSON?.message ||
-                        "Failed to delete comment.";
+                    console.error(
+                        "Delete comment error:",
+                        xhr.responseText
+                    );
 
-                    showError(message);
+
+                    const message =
+                        xhr.responseJSON &&
+                        xhr.responseJSON.message
+
+                            ? xhr.responseJSON.message
+
+                            : "Failed to delete comment.";
+
+
+                    showError(
+                        message
+                    );
 
                 }
 
             });
-
-        }
-
-
-        // =====================================================
-        // RENDER COMMENT
-        // =====================================================
-
-        function renderComment(comment) {
-
-            const isOwnComment =
-                String(
-                    comment.user_id
-                ) === String(
-                    getCurrentUserId()
-                );
-
-
-            const avatarHtml =
-                comment.profile_image
-
-                    ? `
-                        <img
-                            src="${escapeHtml(comment.profile_image)}"
-                            alt="${escapeHtml(comment.full_name)}"
-                        >
-                    `
-
-                    : `
-                        <div class="discussion-avatar-placeholder">
-                            <i class="fas fa-user"></i>
-                        </div>
-                    `;
-
-
-            const ownBadge =
-                isOwnComment
-                    ? `
-                        <span class="discussion-you-badge">
-                            You
-                        </span>
-                    `
-                    : "";
-
-
-            const parentHtml =
-                comment.reply_to_id &&
-                comment.reply_content
-
-                    ? `
-                        <div class="discussion-parent">
-
-                            <div class="discussion-parent-author">
-                                <i class="fas fa-reply me-1"></i>
-                                Replying to
-                                <strong>
-                                    ${escapeHtml(
-                                        comment.reply_user_name || ""
-                                    )}
-                                </strong>
-                            </div>
-
-                            <div class="discussion-parent-content">
-                                "${escapeHtml(
-                                    comment.reply_content
-                                )}"
-                            </div>
-
-                        </div>
-                    `
-
-                    : "";
-
-
-            const deleteHtml =
-                isOwnComment
-
-                    ? `
-                        <button
-                            type="button"
-                            class="discussion-action-btn discussion-delete-btn"
-                            data-delete-comment
-                            data-comment-id="${comment.comment_id}"
-                        >
-                            <i class="fas fa-trash-alt me-1"></i>
-                            Delete
-                        </button>
-                    `
-
-                    : "";
-
-
-            const createdAt =
-                comment.created_at
-                    ? new Date(
-                        comment.created_at
-                    ).toLocaleString()
-                    : "";
-
-
-            const html = `
-
-                <article
-                    class="discussion-comment"
-                    data-comment-id="${comment.comment_id}"
-                    data-comment-user-id="${comment.user_id}"
-                >
-
-                    <div class="d-flex gap-3">
-
-                        <div class="discussion-avatar flex-shrink-0">
-
-                            ${avatarHtml}
-
-                        </div>
-
-
-                        <div class="discussion-comment-body flex-grow-1">
-
-                            <div class="d-flex align-items-center flex-wrap">
-
-                                <strong class="discussion-author">
-                                    ${escapeHtml(
-                                        comment.full_name || "Unknown User"
-                                    )}
-                                </strong>
-
-                                ${ownBadge}
-
-                                <span class="discussion-time">
-                                    ${escapeHtml(createdAt)}
-                                </span>
-
-                            </div>
-
-
-                            ${parentHtml}
-
-
-                            <div class="discussion-content">
-                                ${escapeHtml(
-                                    comment.content || ""
-                                )}
-                            </div>
-
-
-                            <div class="discussion-actions">
-
-                                <button
-                                    type="button"
-                                    class="discussion-action-btn"
-                                    data-reply-comment
-                                    data-comment-id="${comment.comment_id}"
-                                    data-comment-user="${escapeHtml(
-                                        comment.full_name || ""
-                                    )}"
-                                    data-comment-content="${escapeHtml(
-                                        comment.content || ""
-                                    )}"
-                                >
-
-                                    <i class="fas fa-reply me-1"></i>
-                                    Reply
-
-                                </button>
-
-                                ${deleteHtml}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </article>
-            `;
-
-
-            return $(html);
 
         }
 
@@ -600,14 +941,22 @@ $(document).ready(function () {
 
         function showEmptyStateIfNeeded() {
 
-            if (
+            const count =
                 $commentsList.find(
                     "[data-comment-id]"
-                ).length > 0
-            ) {
-                return;
+                ).length;
+
+
+            if (count === 0) {
+
+                showEmptyState();
+
             }
 
+        }
+
+
+        function showEmptyState() {
 
             $commentsList.html(`
 
@@ -617,10 +966,14 @@ $(document).ready(function () {
                 >
 
                     <div class="discussion-empty-icon">
+
                         <i class="far fa-comments"></i>
+
                     </div>
 
-                    <h6>No comments yet</h6>
+                    <h6>
+                        No comments yet
+                    </h6>
 
                     <p class="text-muted mb-0">
                         Start the discussion.
@@ -631,6 +984,91 @@ $(document).ready(function () {
             `);
 
         }
+
+
+        // =====================================================
+        // LOADING STATE
+        // =====================================================
+
+        function showLoadingState() {
+
+            $commentsList.html(`
+
+                <div
+                    class="discussion-empty"
+                    data-discussion-message
+                >
+
+                    <div class="discussion-empty-icon">
+
+                        <i class="fas fa-spinner fa-spin"></i>
+
+                    </div>
+
+                    <h6>
+                        Loading comments...
+                    </h6>
+
+                </div>
+
+            `);
+
+        }
+
+
+        // =====================================================
+        // LOAD ERROR
+        // =====================================================
+
+        function showLoadError(
+            message
+        ) {
+
+            $commentsList.html(`
+
+                <div
+                    class="discussion-empty"
+                    data-discussion-message
+                >
+
+                    <div class="discussion-empty-icon">
+
+                        <i class="fas fa-exclamation-circle"></i>
+
+                    </div>
+
+                    <h6>
+                        ${escapeHtml(message)}
+                    </h6>
+
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary mt-2"
+                        data-retry-comments
+                    >
+                        Try Again
+                    </button>
+
+                </div>
+
+            `);
+
+        }
+
+
+        // =====================================================
+        // RETRY
+        // =====================================================
+
+        $discussion.on(
+            "click",
+            "[data-retry-comments]",
+            function () {
+
+                loadComments();
+
+            }
+        );
 
 
         // =====================================================
@@ -646,6 +1084,7 @@ $(document).ready(function () {
                 submitting
             );
 
+
             if (submitting) {
 
                 $submitText.text(
@@ -653,6 +1092,7 @@ $(document).ready(function () {
                         ? "Posting Reply..."
                         : "Posting..."
                 );
+
 
                 $submit
                     .find("i")
@@ -671,6 +1111,7 @@ $(document).ready(function () {
                         : "Post Comment"
                 );
 
+
                 $submit
                     .find("i")
                     .removeClass(
@@ -686,44 +1127,107 @@ $(document).ready(function () {
 
 
         // =====================================================
-        // HELPERS
+        // DATE
         // =====================================================
 
-        function buildDeleteUrl(
-            template,
-            commentId
+        function formatDate(
+            value
         ) {
 
-            return template.replace(
-                ":commentId",
-                commentId
-            );
+            if (!value) {
+                return "";
+            }
+
+
+            const date =
+                new Date(value);
+
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return "";
+
+            }
+
+
+            return date.toLocaleString();
 
         }
 
 
-        function getCurrentUserId() {
+        // =====================================================
+        // HTML ESCAPING
+        // =====================================================
 
-            return $discussion.data(
-                "current-user-id"
-            );
+        function escapeHtml(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
 
         }
 
 
-        function escapeHtml(value) {
+        // =====================================================
+        // WARNINGS
+        // =====================================================
 
-            return String(value ?? "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+        function showWarning(
+            message
+        ) {
+
+            Swal.fire({
+
+                toast: true,
+
+                position: "top-end",
+
+                icon: "warning",
+
+                title: message,
+
+                showConfirmButton: false,
+
+                timer: 2200
+
+            });
 
         }
 
 
-        function showError(message) {
+        // =====================================================
+        // ERRORS
+        // =====================================================
+
+        function showError(
+            message
+        ) {
 
             Swal.fire({
 

@@ -331,7 +331,28 @@ const getProjects = async (req, res, next) => {
 };
 
 
+const getProjectComments = async (req, res, next) => {
+    try {
 
+        const projectId =
+            req.params.projectId;
+
+        const comments =
+            await commentModel.getProjectComments(
+                projectId
+            );
+
+        return res.json({
+            success: true,
+            comments
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+};
 
 const addProjectComment = async (req, res, next) => {
     try {
@@ -478,6 +499,7 @@ const deleteProjectComment = async (req, res) => {
     }
 };
 
+
 // Don't forget to export these!
 module.exports = {
   createProject,
@@ -485,6 +507,7 @@ module.exports = {
   deleteProject,
   viewProject,
   getProjects,
+  getProjectComments,
   addProjectComment,
   deleteProjectComment,
 };

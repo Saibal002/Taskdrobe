@@ -1,461 +1,448 @@
 <%- include('layout/header') %>
+<link rel="stylesheet" href="/css/discussion-comments.css">
 
-    <main class="container-fluid px-4 py-5" style="margin-top: 60px;">
+<main class="container-fluid px-4 py-5" style="margin-top: 60px;">
 
-        <!-- Task Header Banner -->
-        <div class="rounded-4 shadow-sm p-4 p-md-5 mb-4 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4"
-            style="background: linear-gradient(135deg, #4c1d95, #be123c);">
-            <div class="d-flex flex-column gap-2">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                    <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-2"><i
-                            class="fas fa-project-diagram me-2"></i>
-                        <%= task.project_title %>
-                    </span>
-                    <span
-                        class="badge <%= task.status === 'Completed' ? 'bg-success' : 'bg-warning text-dark' %> rounded-pill px-3 py-2">
-                        <%= task.status %>
-                    </span>
-                </div>
-                <h1 class="display-6 fw-bold mb-0">
-                    <%= task.title %>
-                </h1>
-                <p class="lead opacity-75 mb-0">
-                    <%= task.description || 'No description provided.' %>
-                </p>
+    <!-- Task Header Banner -->
+    <div class="rounded-4 shadow-sm p-4 p-md-5 mb-4 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4"
+        style="background: linear-gradient(135deg, #4c1d95, #be123c);">
+        <div class="d-flex flex-column gap-2">
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-2">
+                    <i class="fas fa-project-diagram me-2"></i>
+                    <%= task.project_title %>
+                </span>
+                <span class="badge <%= task.status === 'Completed' ? 'bg-success' : 'bg-warning text-dark' %> rounded-pill px-3 py-2">
+                    <%= task.status %>
+                </span>
             </div>
 
-            <div class="bg-white bg-opacity-10 p-3 rounded-4 backdrop-blur shadow-sm text-end"
-                style="min-width: 200px;">
-                <div class="small opacity-75 mb-1 text-uppercase fw-bold tracking-wider">Due Date</div>
-                <div class="fs-4 fw-bold">
-                    <% if (task.due_date) { %>
-                        <%= new Date(task.due_date).toLocaleDateString('en-US', { month: 'short' , day: 'numeric' ,
-                            year: 'numeric' }) %>
-                            <% } else { %>
-                                Not Set
-                                <% } %>
+            <h1 class="display-6 fw-bold mb-0">
+                <%= task.title %>
+            </h1>
+
+            <p class="lead opacity-75 mb-0">
+                <%= task.description || 'No description provided.' %>
+            </p>
+        </div>
+
+        <div class="bg-white bg-opacity-10 p-3 rounded-4 backdrop-blur shadow-sm text-end"
+            style="min-width: 200px;">
+            <div class="small opacity-75 mb-1 text-uppercase fw-bold tracking-wider">
+                Due Date
+            </div>
+
+            <div class="fs-4 fw-bold">
+                <% if (task.due_date) { %>
+                    <%= new Date(task.due_date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }) %>
+                <% } else { %>
+                    Not Set
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="row g-4">
+
+        <!-- Left Column: Details & Files -->
+        <div class="col-lg-7 col-xl-8 d-flex flex-column gap-4">
+
+            <!-- Metadata Card -->
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: #f8fafc;">
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4 text-dark border-bottom pb-3">
+                        Task Overview
+                    </h5>
+
+                    <div class="row g-4">
+
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="fs-3 text-primary">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+
+                                <div>
+                                    <div class="small text-muted fw-bold text-uppercase">
+                                        Assigned To
+                                    </div>
+
+                                    <div class="fs-6 fw-semibold text-dark">
+                                        <%= task.assigned_to_name || 'Unassigned' %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="fs-3 text-danger">
+                                    <i class="fas fa-flag"></i>
+                                </div>
+
+                                <div>
+                                    <div class="small text-muted fw-bold text-uppercase">
+                                        Priority
+                                    </div>
+
+                                    <div class="fs-6 fw-semibold text-dark">
+                                        <%= task.priority %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Files Section -->
+            <div class="card border-0 shadow-sm rounded-4"
+                style="background: linear-gradient(to right bottom, #ffffff, #f1f5f9);">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+
+                        <h5 class="fw-bold mb-0 text-dark">
+                            <i class="fas fa-paperclip text-success me-2"></i>
+                            Task Attachments
+                        </h5>
+
+                        <form id="taskFileUploadForm" class="d-flex gap-2 m-0">
+
+                            <input
+                                type="file"
+                                name="taskFile"
+                                id="taskFile"
+                                class="form-control form-control-sm border-0 bg-white rounded-pill px-3 shadow-sm"
+                                required
+                            >
+
+                            <button
+                                type="submit"
+                                id="uploadTaskFileBtn"
+                                class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm d-flex align-items-center gap-1"
+                            >
+                                <i class="fas fa-upload"></i>
+                                Upload
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <div id="taskFileMessage"
+                        class="alert d-none small py-2 rounded-3">
+                    </div>
+
+                    <div class="row g-3" id="taskFilesList">
+
+                        <% const canManageAllFiles =
+                            user.role_name === 'admin' ||
+                            user.role_name === 'manager'; %>
+
+                        <% if (files && files.length > 0) { %>
+
+                            <% files.forEach(file => { %>
+
+                                <% const isUploader =
+                                    String(file.uploaded_by) === String(user.user_id); %>
+
+                                <div class="col-md-6 file-card-<%= file.attachment_id %>">
+
+                                    <div class="d-flex align-items-center justify-content-between p-3 rounded-3 bg-white shadow-sm border-start border-4 border-success">
+
+                                        <div class="flex-grow-1 min-w-0 me-3">
+
+                                            <a
+                                                href="<%= file.file_path %>"
+                                                target="_blank"
+                                                class="fw-bold text-dark text-decoration-none text-truncate d-block"
+                                            >
+                                                <%= file.original_name %>
+                                            </a>
+
+                                            <div class="small text-muted mt-1">
+                                                By <%= file.uploaded_by_name %>
+                                            </div>
+
+                                        </div>
+
+                                        <% if (canManageAllFiles || isUploader) { %>
+
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle delete-task-file-btn hover-lift"
+                                                data-id="<%= file.attachment_id %>"
+                                                title="Delete File"
+                                                style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;"
+                                            >
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+
+                                        <% } %>
+
+                                    </div>
+                                </div>
+
+                            <% }) %>
+
+                        <% } else { %>
+
+                            <div class="col-12 text-center py-4 text-muted no-files-msg">
+
+                                <i class="fas fa-folder-open fa-2x mb-2 opacity-50"></i>
+
+                                <p class="mb-0 small">
+                                    No files attached to this task.
+                                </p>
+
+                            </div>
+
+                        <% } %>
+
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="row g-4">
+        <!-- Right Column: Reusable Task Discussion -->
+        <div class="col-lg-5 col-xl-4">
 
-            <!-- Left Column: Details & Files -->
-            <div class="col-lg-7 col-xl-8 d-flex flex-column gap-4">
+            <%- include("layout/discussionComments", {
+                currentUser: user,
+                contextType: "task",
+                contextId: task.task_id,
+                listUrl: `/tasks/${task.task_id}/comments`,
+                createUrl: `/tasks/${task.task_id}/comments`,
+                deleteUrl: `/tasks/comments/:commentId`
+            }) %>
 
-                <!-- Metadata Card (Subtle Blue Tint) -->
-                <div class="card border-0 shadow-sm rounded-4 h-100" style="background: #f8fafc;">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4 text-dark border-bottom pb-3">Task Overview</h5>
-
-                        <div class="row g-4">
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="fs-3 text-primary"><i class="fas fa-user-circle"></i></div>
-                                    <div>
-                                        <div class="small text-muted fw-bold text-uppercase">Assigned To</div>
-                                        <div class="fs-6 fw-semibold text-dark">
-                                            <%= task.assigned_to_name || 'Unassigned' %>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="fs-3 text-danger"><i class="fas fa-flag"></i></div>
-                                    <div>
-                                        <div class="small text-muted fw-bold text-uppercase">Priority</div>
-                                        <div class="fs-6 fw-semibold text-dark">
-                                            <%= task.priority %>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Task Files Section -->
-                <div class="card border-0 shadow-sm rounded-4"
-                    style="background: linear-gradient(to right bottom, #ffffff, #f1f5f9);">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
-                            <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-paperclip text-success me-2"></i> Task
-                                Attachments</h5>
-
-                            <form id="taskFileUploadForm" class="d-flex gap-2 m-0">
-                                <input type="file" name="taskFile" id="taskFile"
-                                    class="form-control form-control-sm border-0 bg-white rounded-pill px-3 shadow-sm"
-                                    required>
-                                <button type="submit" id="uploadTaskFileBtn"
-                                    class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm d-flex align-items-center gap-1">
-                                    <i class="fas fa-upload"></i> Upload
-                                </button>
-                            </form>
-                        </div>
-
-                        <div id="taskFileMessage" class="alert d-none small py-2 rounded-3"></div>
-
-                        <div class="row g-3" id="taskFilesList">
-                            <% const canManageAllFiles=user.role_name==='admin' || user.role_name==='manager' ; %>
-
-                                <% if (files && files.length> 0) { %>
-                                    <% files.forEach(file=> { %>
-                                        <% const isUploader=String(file.uploaded_by)===String(user.user_id); %>
-                                            <div class="col-md-6 file-card-<%= file.attachment_id %>">
-                                                <div
-                                                    class="d-flex align-items-center justify-content-between p-3 rounded-3 bg-white shadow-sm border-start border-4 border-success">
-                                                    <div class="flex-grow-1 min-w-0 me-3">
-                                                        <a href="<%= file.file_path %>" target="_blank"
-                                                            class="fw-bold text-dark text-decoration-none text-truncate d-block">
-                                                            <%= file.original_name %>
-                                                        </a>
-                                                        <div class="small text-muted mt-1">By <%= file.uploaded_by_name
-                                                                %>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Conditionally render the delete button -->
-                                                    <% if (canManageAllFiles || isUploader) { %>
-                                                        <button type="button"
-                                                            class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle delete-task-file-btn hover-lift"
-                                                            data-id="<%= file.attachment_id %>" title="Delete File"
-                                                            style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                        <% } %>
-                                                </div>
-                                            </div>
-                                            <% }) %>
-                                                <% } else { %>
-                                                    <div class="col-12 text-center py-4 text-muted no-files-msg">
-                                                        <i class="fas fa-folder-open fa-2x mb-2 opacity-50"></i>
-                                                        <p class="mb-0 small">No files attached to this task.</p>
-                                                    </div>
-                                                    <% } %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Task Chat -->
-            <div class="col-lg-5 col-xl-4" id="taskCommentsSection" data-task-id="<%= task.task_id %>"
-                data-project-id="<%= task.project_id %>" data-user-id="<%= user.user_id %>">
-                <div class="card border-0 shadow-sm rounded-4 h-100 d-flex flex-column"
-                    style="background: #fff; border-top: 5px solid #be123c !important;">
-                    <div class="card-header bg-transparent border-bottom p-4">
-                        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-comments text-danger me-2"></i> Task
-                            Discussion</h5>
-                    </div>
-
-                    <div class="card-body p-0 d-flex flex-column h-100">
-                        <div id="taskCommentsFeed" class="flex-grow-1 p-4 d-flex flex-column gap-3"
-                            style="min-height: 400px; max-height: 500px; overflow-y: auto; background: #fafafa;">
-                            <% if (comments && comments.length> 0) { %>
-                                <% comments.forEach(comment=> { %>
-                                    <% const isMe = String(comment.user_id) === String(user.user_id); %>
-                                    
-                                    <div class="d-flex gap-2 chat-bubble-wrapper <%= isMe ? 'flex-row-reverse text-end' : '' %>" id="comment-<%= comment.comment_id %>">
-                                        <div>
-                                            <% if (comment.profile_image) { %>
-                                                <img src="<%= comment.profile_image %>" class="rounded-circle shadow-sm"
-                                                    width="32" height="32" style="object-fit: cover;">
-                                            <% } else { %>
-                                                <div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold small"
-                                                    style="width: 32px; height: 32px; background: <%= isMe ? '#be123c' : '#e2e8f0' %>; color: <%= isMe ? '#fff' : '#475569' %>;">
-                                                    <%= comment.full_name.charAt(0).toUpperCase() %>
-                                                </div>
-                                            <% } %>
-                                        </div>
-                                        
-                                        <div class="d-flex flex-column <%= isMe ? 'align-items-end' : 'align-items-start' %>" style="max-width: 80%;">
-                                            <div class="p-2 px-3 rounded-4 shadow-sm <%= isMe ? 'bg-danger text-white' : 'bg-white text-dark border border-light' %>">
-                                                <div class="small fw-bold mb-1" style="font-size: 0.75rem; opacity: 0.8;">
-                                                    <%= comment.full_name %>
-                                                </div>
-                                                
-                                                <!-- EJS Reply Quote Block -->
-                                                <% if (comment.reply_to_id && comment.reply_user_name) { %>
-                                                    <div class="mb-2 p-2 rounded-3 text-start" style="background: rgba(0,0,0,0.05); font-size: 0.75rem; border-left: 3px solid <%= isMe ? '#fff' : '#be123c' %>;">
-                                                        <div class="fw-bold opacity-75"><%= comment.reply_user_name %></div>
-                                                        <div class="text-truncate" style="max-width: 200px; opacity: 0.8;"><%= comment.reply_content || 'Deleted message' %></div>
-                                                    </div>
-                                                <% } %>
-
-                                                <div class="small lh-sm">
-                                                    <%= comment.content %>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- EJS Action Buttons -->
-                                            <div class="d-flex gap-1 align-items-center mt-1 <%= isMe ? 'justify-content-end' : '' %>" style="font-size: 0.75rem;">
-                                                <button type="button" class="btn btn-link text-muted p-0 text-decoration-none reply-msg-btn" data-id="<%= comment.comment_id %>" data-name="<%= comment.full_name %>" data-text="<%= comment.content %>">Reply</button>
-                                                <% if (isMe) { %>
-                                                    <span class="text-muted opacity-25">|</span> 
-                                                    <button type="button" class="btn btn-link text-danger p-0 text-decoration-none delete-msg-btn" data-id="<%= comment.comment_id %>">Delete</button>
-                                                <% } %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <% }) %>
-                            <% } else { %>
-                                <div class="text-center py-5 text-muted no-comments-msg">
-                                    <i class="fas fa-comment-dots fa-3x mb-3 opacity-25"></i>
-                                    <p class="mb-0 fw-semibold small">Start the discussion!</p>
-                                </div>
-                            <% } %>
-                        </div>
-
-                        <div class="p-3 bg-white border-top d-flex flex-column gap-2">
-                            <!-- Active Reply Banner (Hidden by default) -->
-                            <div id="activeReplyBanner"
-                                class="d-none align-items-center justify-content-between p-2 rounded-3 bg-light border-start border-4"
-                                style="border-color: #be123c !important; font-size: 0.8rem;">
-                                <div class="text-truncate min-w-0 flex-grow-1 pe-3">
-                                    <i class="fas fa-reply text-danger me-1"></i>
-                                    <span class="fw-bold text-dark" id="replyTargetName"></span>:
-                                    <span class="text-muted" id="replyTargetText"></span>
-                                </div>
-                                <button type="button" class="btn-close shadow-none" style="font-size: 0.5rem;"
-                                    id="cancelReplyBtn"></button>
-                            </div>
-
-                            <!-- Enhanced Form -->
-                            <form id="taskCommentForm" class="d-flex gap-2 m-0">
-                                <input type="text" id="taskCommentInput"
-                                    class="form-control rounded-pill bg-light border-0 px-3 flex-grow-1"
-                                    placeholder="Discuss this task..." autocomplete="off" required>
-                                <button type="submit"
-                                    class="btn btn-danger rounded-circle shadow-sm d-flex align-items-center justify-content-center flex-shrink-0"
-                                    style="width: 42px; height: 42px;">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    </main>
 
-    <script>
-        $(document).ready(function () {
-            const taskId = $("#taskCommentsSection").attr("data-task-id");
-            const projectId = $("#taskCommentsSection").attr("data-project-id");
-            const currentUserId = $("#taskCommentsSection").attr("data-user-id");
+    </div>
+</main>
 
-            /* ==========================================
-               FILE UPLOAD AJAX
-            ========================================== */
-            $("#taskFileUploadForm").on("submit", function (e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                const $btn = $("#uploadTaskFileBtn");
-                const $msg = $("#taskFileMessage");
+<script>
+$(document).ready(function () {
 
-                $btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i>');
+    const taskId = "<%= task.task_id %>";
 
-                $.ajax({
-                    url: `/tasks/${taskId}/files`,
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (res) {
-                        if (res.success) {
-                            $(".no-files-msg").remove();
-                            const file = res.attachment;
+    /* ==========================================
+       FILE UPLOAD AJAX
+    ========================================== */
 
-                            // The person uploading ALWAYS gets the delete button
-                            $("#taskFilesList").prepend(`
+    $("#taskFileUploadForm").on("submit", function (e) {
+
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        const $btn = $("#uploadTaskFileBtn");
+        const $msg = $("#taskFileMessage");
+
+        $btn
+            .prop("disabled", true)
+            .html('<i class="fas fa-spinner fa-spin"></i>');
+
+        $.ajax({
+
+            url: `/tasks/${taskId}/files`,
+
+            type: "POST",
+
+            data: formData,
+
+            processData: false,
+
+            contentType: false,
+
+            success: function (res) {
+
+                if (res.success) {
+
+                    $(".no-files-msg").remove();
+
+                    const file = res.attachment;
+
+                    $("#taskFilesList").prepend(`
+
                         <div class="col-md-6 file-card-${file.attachment_id}">
+
                             <div class="d-flex align-items-center justify-content-between p-3 rounded-3 bg-white shadow-sm border-start border-4 border-success">
+
                                 <div class="flex-grow-1 min-w-0 me-3">
-                                    <a href="${file.file_path}" target="_blank" class="fw-bold text-dark text-decoration-none text-truncate d-block">${file.original_name}</a>
-                                    <div class="small text-muted mt-1">Just now</div>
+
+                                    <a
+                                        href="${file.file_path}"
+                                        target="_blank"
+                                        class="fw-bold text-dark text-decoration-none text-truncate d-block"
+                                    >
+                                        ${file.original_name}
+                                    </a>
+
+                                    <div class="small text-muted mt-1">
+                                        Just now
+                                    </div>
+
                                 </div>
-                                <button type="button" class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle delete-task-file-btn hover-lift" data-id="${file.attachment_id}" title="Delete File" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle delete-task-file-btn hover-lift"
+                                    data-id="${file.attachment_id}"
+                                    title="Delete File"
+                                    style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;"
+                                >
                                     <i class="fas fa-trash"></i>
                                 </button>
+
                             </div>
                         </div>
                     `);
-                            $("#taskFileUploadForm")[0].reset();
-                            $msg.removeClass("d-none alert-danger").addClass("alert-success").text("File uploaded successfully.");
-                            setTimeout(() => $msg.addClass("d-none"), 3000);
-                        }
-                    },
-                    error: function () {
-                        $msg.removeClass("d-none alert-success").addClass("alert-danger").text("Error uploading file.");
-                    },
-                    complete: function () {
-                        $btn.prop("disabled", false).html('<i class="fas fa-upload"></i> Upload');
-                    }
-                });
-            });
 
-            /* ==========================================
-               FILE DELETE AJAX
-            ========================================== */
-            $(document).on("click", ".delete-task-file-btn", function () {
-                const attachmentId = $(this).attr("data-id");
+                    $("#taskFileUploadForm")[0].reset();
 
-                if (window.confirm("Are you sure you want to delete this file? This cannot be undone.")) {
-                    const $btn = $(this);
-                    $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
+                    $msg
+                        .removeClass("d-none alert-danger")
+                        .addClass("alert-success")
+                        .text("File uploaded successfully.");
 
-                    $.ajax({
-                        url: `/tasks/files/${attachmentId}`,
-                        type: "DELETE",
-                        success: function (res) {
-                            if (res.success) {
-                                // Remove the specific file card smoothly
-                                $(`.file-card-${attachmentId}`).fadeOut(300, function () {
-                                    $(this).remove();
-
-                                    // If it was the last file, show the empty state message again
-                                    if ($("#taskFilesList").children('.col-md-6').length === 0) {
-                                        $("#taskFilesList").html(`
-                                    <div class="col-12 text-center py-4 text-muted no-files-msg">
-                                        <i class="fas fa-folder-open fa-2x mb-2 opacity-50"></i>
-                                        <p class="mb-0 small">No files attached to this task.</p>
-                                    </div>
-                                `);
-                                    }
-                                });
-                            } else {
-                                alert(res.message || "Unable to delete file.");
-                                $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
-                            }
-                        },
-                        error: function () {
-                            alert("An error occurred while trying to delete the file.");
-                            $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
-                        }
-                    });
+                    setTimeout(function () {
+                        $msg.addClass("d-none");
+                    }, 3000);
                 }
-            });
+            },
 
-            /* ==========================================
-               AJAX COMMENTS (Replaces Socket.io)
-            ========================================== */
-            const $feed = $("#taskCommentsFeed");
-            const scrollToBottom = () => $feed.scrollTop($feed[0].scrollHeight);
-            scrollToBottom();
+            error: function () {
 
-            let currentReplyId = null;
+                $msg
+                    .removeClass("d-none alert-success")
+                    .addClass("alert-danger")
+                    .text("Error uploading file.");
 
-            // 1. Reply Button Click
-            $(document).on("click", ".reply-msg-btn", function() {
-                currentReplyId = $(this).attr("data-id");
-                $("#replyTargetName").text($(this).attr("data-name"));
-                $("#replyTargetText").text($(this).attr("data-text"));
-                $("#activeReplyBanner").removeClass("d-none").addClass("d-flex");
-                $("#taskCommentInput").focus();
-            });
+            },
 
-            // 2. Cancel Reply Click
-            $("#cancelReplyBtn").on("click", function() {
-                currentReplyId = null;
-                $("#activeReplyBanner").removeClass("d-flex").addClass("d-none");
-            });
+            complete: function () {
 
-            // 3. Submit Comment (AJAX POST)
-            $("#taskCommentForm").on("submit", function (e) {
-                e.preventDefault();
-                const content = $("#taskCommentInput").val();
-                if (!content.trim()) return;
+                $btn
+                    .prop("disabled", false)
+                    .html('<i class="fas fa-upload"></i> Upload');
 
-                const $btn = $(this).find('button[type="submit"]');
-                $btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i>');
-
-                $.ajax({
-                    url: `/tasks/${taskId}/comments`,
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        projectId,
-                        content,
-                        replyToId: currentReplyId
-                    }),
-                    success: function(res) {
-                        if (res.success) {
-                            renderNewComment(res.comment);
-                            $("#taskCommentInput").val("");
-                            $("#cancelReplyBtn").trigger("click");
-                        } else {
-                            alert(res.message || "Error posting comment.");
-                        }
-                    },
-                    error: function() {
-                        alert("An error occurred while posting your comment.");
-                    },
-                    complete: function() {
-                        $btn.prop("disabled", false).html('<i class="fas fa-paper-plane"></i>');
-                    }
-                });
-            });
-
-            // 4. Delete Comment (AJAX DELETE)
-            $(document).on("click", ".delete-msg-btn", function() {
-                if(window.confirm("Delete this message?")) {
-                    const commentId = $(this).attr("data-id");
-                    
-                    $.ajax({
-                        url: `/tasks/comments/${commentId}`,
-                        type: "DELETE",
-                        success: function(res) {
-                            if (res.success) {
-                                $(`#comment-${commentId}`).fadeOut(300, function() { 
-                                    $(this).remove(); 
-                                });
-                            } else {
-                                alert(res.message || "Error deleting comment.");
-                            }
-                        }
-                    });
-                }
-            });
-
-            // 5. Helper Function to Render New Comment Bubble
-            function renderNewComment(comment) {
-                $(".no-comments-msg").remove();
-                
-                const avatar = comment.profile_image
-                    ? `<img src="${comment.profile_image}" class="rounded-circle shadow-sm" width="32" height="32" style="object-fit: cover;">`
-                    : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold small" style="width: 32px; height: 32px; background: #be123c; color: #fff;">${comment.full_name.charAt(0).toUpperCase()}</div>`;
-
-                let replyHtml = '';
-                if (comment.reply_to_id && comment.reply_user_name) {
-                    replyHtml = `
-                        <div class="mb-2 p-2 rounded-3 text-start" style="background: rgba(0,0,0,0.05); font-size: 0.75rem; border-left: 3px solid #fff;">
-                            <div class="fw-bold opacity-75">${comment.reply_user_name}</div>
-                            <div class="text-truncate" style="max-width: 200px; opacity: 0.8;">${comment.reply_content || 'Deleted message'}</div>
-                        </div>
-                    `;
-                }
-
-                $feed.append(`
-                    <div class="d-flex gap-2 chat-bubble-wrapper flex-row-reverse text-end" id="comment-${comment.comment_id}">
-                        <div>${avatar}</div>
-                        <div class="d-flex flex-column align-items-end" style="max-width: 80%;">
-                            <div class="p-2 px-3 rounded-4 shadow-sm bg-danger text-white">
-                                <div class="small fw-bold mb-1" style="font-size: 0.75rem; opacity: 0.8;">${comment.full_name}</div>
-                                ${replyHtml}
-                                <div class="small lh-sm">${comment.content}</div>
-                            </div>
-                            <div class="d-flex gap-1 align-items-center mt-1 justify-content-end" style="font-size: 0.75rem;">
-                                <button type="button" class="btn btn-link text-muted p-0 text-decoration-none reply-msg-btn" data-id="${comment.comment_id}" data-name="${comment.full_name}" data-text="${comment.content}">Reply</button>
-                                <span class="text-muted opacity-25">|</span> 
-                                <button type="button" class="btn btn-link text-danger p-0 text-decoration-none delete-msg-btn" data-id="${comment.comment_id}">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                `);
-                scrollToBottom();
             }
+
         });
-    </script>
+
+    });
+
+
+    /* ==========================================
+       FILE DELETE AJAX
+    ========================================== */
+
+    $(document).on(
+        "click",
+        ".delete-task-file-btn",
+        function () {
+
+            const attachmentId =
+                $(this).attr("data-id");
+
+            if (
+                !window.confirm(
+                    "Are you sure you want to delete this file? This cannot be undone."
+                )
+            ) {
+                return;
+            }
+
+            const $btn = $(this);
+
+            $btn
+                .prop("disabled", true)
+                .html(
+                    '<span class="spinner-border spinner-border-sm"></span>'
+                );
+
+            $.ajax({
+
+                url: `/tasks/files/${attachmentId}`,
+
+                type: "DELETE",
+
+                success: function (res) {
+
+                    if (res.success) {
+
+                        $(`.file-card-${attachmentId}`)
+                            .fadeOut(300, function () {
+
+                                $(this).remove();
+
+                                if (
+                                    $("#taskFilesList")
+                                        .children(".col-md-6")
+                                        .length === 0
+                                ) {
+
+                                    $("#taskFilesList").html(`
+
+                                        <div class="col-12 text-center py-4 text-muted no-files-msg">
+
+                                            <i class="fas fa-folder-open fa-2x mb-2 opacity-50"></i>
+
+                                            <p class="mb-0 small">
+                                                No files attached to this task.
+                                            </p>
+
+                                        </div>
+
+                                    `);
+
+                                }
+
+                            });
+
+                    } else {
+
+                        alert(
+                            res.message ||
+                            "Unable to delete file."
+                        );
+
+                        $btn
+                            .prop("disabled", false)
+                            .html('<i class="fas fa-trash"></i>');
+                    }
+
+                },
+
+                error: function () {
+
+                    alert(
+                        "An error occurred while trying to delete the file."
+                    );
+
+                    $btn
+                        .prop("disabled", false)
+                        .html('<i class="fas fa-trash"></i>');
+
+                }
+
+            });
+
+        }
+    );
+
+});
+</script>
+
+<script src="/js/discussion-comments.js"></script>
 
 <%- include('layout/footer') %>

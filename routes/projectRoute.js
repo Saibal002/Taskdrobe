@@ -80,6 +80,19 @@ router.delete(
   attachmentController.deleteProjectFile,
 );
 
-router.post("/:projectId/comments", authMiddleware, projectController.addProjectComment);
-router.delete("/comments/:commentId", authMiddleware, projectController.deleteProjectComment);
+router.get(
+  "/:projectId/comments",
+  authMiddleware,
+  projectController.getProjectComments,
+);
+router.post(
+  "/:projectId/comments",
+  authMiddleware,
+  projectController.addProjectComment,
+);
+router.delete(
+  "/comments/:commentId",
+  authMiddleware,
+  projectController.deleteProjectComment,
+);
 module.exports = router;

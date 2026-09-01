@@ -227,38 +227,116 @@ const getTaskInsight = async (req, res, next) => {
         next(err);
     }
 };
+const getTaskComments = async (req, res, next) => {
+    try {
+
+        const taskId = req.params.taskId;
+
+        const comments =
+            await commentModel.getTaskComments(taskId);
+
+        return res.json({
+            success: true,
+            comments
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+};
 
 const addTaskComment = async (req, res, next) => {
     try {
         const taskId = req.params.taskId;
-        const { projectId, content, replyToId } = req.body;
+        const {
+            content,
+            replyToId
+        } = req.body;
 
         if (!content || !content.trim()) {
-            return res.status(400).json({ success: false, message: "Comment cannot be empty." });
+            return res.status(400).json({
+                success: false,
+                message: "Comment cannot be empty."
+            });
         }
 
-        const savedComment = await commentModel.addComment({
-            projectId,
-            taskId,
-            userId: req.user.user_id,
-            content: content.trim(),
-            replyToId: replyToId || null
+        // Get the task so we know its project_id.
+        const task =
+            await taskModel.getTaskInsightData(taskId);
+
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found."
+            });
+        }
+
+        const projectId = task.project_id;
+
+        const savedComment =
+            await commentModel.addComment({
+                projectId,
+                taskId,
+                userId: req.user.user_id,
+                content: content.trim(),
+                replyToId: replyToId || null
+            });
+
+        const comments =
+            await commentModel.getTaskComments(taskId);
+
+        const fullComment =
+            comments.find(
+                comment =>
+                    String(comment.comment_id) ===
+                    String(savedComment.comment_id)
+            );
+
+        if (!fullComment) {
+            return res.status(500).json({
+                success: false,
+                message:
+                    "Comment was saved but could not be loaded."
+            });
+        }
+
+        // Notify the author of the parent comment when this is a reply.
+        if (replyToId) {
+
+            const parentComment =
+                comments.find(
+                    comment =>
+                        String(comment.comment_id) ===
+                        String(replyToId)
+                );
+
+            if (
+                parentComment &&
+                String(parentComment.user_id) !==
+                    String(req.user.user_id)
+            ) {
+
+                await triggerSystemAlert(
+                    req,
+                    parentComment.user_id,
+                    "task_comment",
+                    taskId,
+                    `${req.user.full_name} replied to your task comment.`
+                );
+            }
+        }
+
+        return res.status(201).json({
+            success: true,
+            comment: fullComment
         });
 
-        const comments = await commentModel.getTaskComments(taskId);
-        const fullComment = comments.find(c => String(c.comment_id) === String(savedComment.comment_id));
-
-        // NOTIFY: The original author of the comment being replied to
-        if (replyToId && fullComment.reply_user_id) {
-            await triggerSystemAlert(req, fullComment.reply_user_id, 'task_comment', taskId, `Replied to your comment.`);
-        }
-
-        return res.status(201).json({ success: true, comment: fullComment });
     } catch (err) {
-        return res.status(500).json({ success: false, message: "Failed to add comment." });
+        next(err);
     }
 };
-
 const deleteTaskComment = async (req, res, next) => {
     try {
         const commentId = req.params.commentId;
@@ -284,6 +362,7 @@ module.exports = {
   updateTaskAssignment,
   getProjectTasksData,
   getTaskInsight,
+  getTaskComments,
   addTaskComment,
   deleteTaskComment,
 };
