@@ -20,7 +20,7 @@ const dashboard = async (req, res, next) => {
     const projectChartData = await dashboardService.getProjectChartData();
     const upcomingTasks = await taskModel.getUpcomingTasks(10);
 
-    res.render("dashboard", {
+    res.render("emp_dashboard", {
       title: "Dashboard",
 
       user: req.user,
@@ -86,7 +86,7 @@ const managerDashboard = async (req, res, next) => {
             await projectService.getProjectsByManager(
                 managerId
             );
-    res.render("manager/dashboard", {
+    res.render("manager/man_dashboard", {
       title: "Manager Dashboard",
 
       user: req.user,

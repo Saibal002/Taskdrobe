@@ -1,42 +1,91 @@
-/* Global Styles for NOVO Dashboard */
+/* =========================================================
+   CORE DESIGN SYSTEM & THEME VARIABLES
+========================================================= */
 
-/* Custom Variables */
+/* --- LIGHT MODE (DEFAULT) --- */
 :root {
+    /* Preserved Custom Gradients */
     --purple-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --teal-gradient: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
     --orange-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+    /* Brand Colors */
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --accent-purple: #7c3aed;
+    --accent-rose: #be123c;
+    
+    /* Main Background */
+    --bg-main: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%);
+    --gradient-glass-purple: linear-gradient(135deg, rgba(76, 29, 149, 0.1), rgba(190, 18, 60, 0.1));
+    
+    /* Surface & Glassmorphism */
+    --surface-solid: #ffffff;
+    --surface-glass-heavy: rgba(255, 255, 255, 0.6);
+    --surface-glass-medium: rgba(255, 255, 255, 0.45);
+    --surface-glass-light: rgba(255, 255, 255, 0.15);
+    
+    /* Borders & Shadows */
+    --border-glass: rgba(255, 255, 255, 0.6);
+    --border-solid: #e2e8f0;
+    --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    --shadow-solid: 0 10px 40px rgba(15, 23, 42, 0.08);
+    
+    /* Typography */
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+    
+    /* Layout */
     --sidebar-width: 250px;
     --header-height: 65px;
+    --radius-lg: 24px;
+    --radius-md: 18px;
 }
 
-/* Base Styles */
-body {
+/* --- DARK MODE OVERRIDES --- */
+[data-theme="dark"] {
+    /* Gradients */
+    --bg-main: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #e9d5ff 0%, #ffe4e6 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
+    /* Surface & Glassmorphism */
+    --surface-solid: #1e293b;
+    --surface-glass-heavy: rgba(15, 23, 42, 0.75);
+    --surface-glass-medium: rgba(15, 23, 42, 0.55);
+    --surface-glass-light: rgba(255, 255, 255, 0.05);
+    
+    /* Borders & Shadows */
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --border-solid: #334155;
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --shadow-solid: 0 10px 40px rgba(0, 0, 0, 0.3);
+    
+    /* Typography */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
 }
-
 /* =========================================================
    GLASSMORPHISM UTILITIES
 ========================================================= */
+/* Glass Utility */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.4) !important; /* Semi-transparent white */
+    background: var(--surface-glass-medium) !important;
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.6) !important;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05) !important;
+    border: 1px solid var(--border-glass) !important;
+    box-shadow: var(--shadow-glass) !important;
+    color: var(--text-main);
 }
-
-/* Header Styles */
+/* Header */
 .custom-header {
     height: var(--header-height);
-    background: rgba(255, 255, 255, 0.6);
+    background: var(--surface-glass-heavy);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid var(--border-glass);
     z-index: 1030;
+    transition: background 0.4s ease;
 }
 
 .logo-icon {
@@ -106,6 +155,7 @@ body {
 
 /* Sidebar Styles */
 /* Sidebar Styles */
+/* Sidebar */
 .sidebar {
     position: fixed;
     top: var(--header-height);
@@ -114,11 +164,12 @@ body {
     z-index: 100;
     width: var(--sidebar-width);
     padding: 1.5rem 0;
-    background: rgba(255, 255, 255, 0.35);
+    background: var(--surface-glass-heavy);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-right: 1px solid rgba(255, 255, 255, 0.6);
+    border-right: 1px solid var(--border-glass);
     overflow-y: auto;
+    transition: background 0.4s ease;
 }
 
 .sidebar-item {
@@ -194,6 +245,12 @@ body {
 
 .project-card .progress-bar {
     border-radius: 3px;
+}
+/* Welcome & Project Hero Cards */
+.welcome-card,
+.project-overview-card {
+    background: var(--gradient-primary);
+    color: var(--text-inverse);
 }
 
 /* Task Items */

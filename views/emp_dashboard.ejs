@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TaskDrobe employee workspace">
+    <meta name="author" content="TaskDrobe">
+    <title><%= title || "TaskDrobe" %></title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+        crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/emp_dashboard.css" rel="stylesheet">
+</head>
+
+<body class="employee-dashboard-page">
+    <%- include("layout/navBar.ejs") %>
+
+    <%
+        const projectList = Array.isArray(projects) ? projects : [];
+        const taskQueue = Array.isArray(upcomingTasks) ? upcomingTasks : [];
+        const visibleTasks = taskQueue.slice(0, 6);
+        const featuredProject = projectList[0] || null;
+        const formatDate = (value, options) => {
+            if (!value) return "No deadline";
+            const date = new Date(value);
+            return Number.isNaN(date.getTime())
+                ? "No deadline"
+                : date.toLocaleDateString("en-US", options);
+        };
+        const priorityClass = (priority) => {
+            const value = String(priority || "").toLowerCase();
+            return value === "high" ? "priority-high"
+                : value === "medium" ? "priority-medium"
+                : "priority-low";
+        };
+    %>
+
+    <main class="main-content employee-dashboard" id="main-content">
+        <div class="container-fluid dashboard-container">
+            <section class="dashboard-hero" aria-labelledby="dashboard-title">
+                <div class="hero-copy">
+                    <p class="eyebrow"><i class="bi bi-stars" aria-hidden="true"></i> Employee workspace</p>
+                    <h1 id="dashboard-title">
+                        Good
+                        <%= new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening" %>,
+                        <span><%= user.full_name %></span>
+                    </h1>
+                    <p class="hero-description">
+                        A clear view of your projects, deadlines, and the work that needs your attention today.
+                    </p>
+                </div>
+
+                <div class="hero-summary">
+                    <div class="hero-date">
+                        <i class="bi bi-calendar3" aria-hidden="true"></i>
+                        <div>
+                            <span>Today</span>
+                            <strong><%= today %></strong>
+                        </div>
+                    </div>
+                    <div class="hero-divider"></div>
+                    <div class="hero-attention">
+                        <span class="attention-value"><%= stats.overdueTasks %></span>
+                        <span class="attention-label">overdue task<%= stats.overdueTasks === 1 ? "" : "s" %></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="focus-strip" aria-label="Current focus">
+                <div class="focus-icon"><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i></div>
+                <div class="focus-copy">
+                    <span class="focus-label">Your focus</span>
+                    <% if (featuredProject) { %>
+                        <strong><%= featuredProject.project_name %></strong>
+                        <span>is <%= Number(featuredProject.progress || 0) %>% complete.</span>
+                    <% } else { %>
+                        <strong>Your workspace is ready.</strong>
+                        <span>Choose a project to get started.</span>
+                    <% } %>
+                </div>
+                <a class="focus-link" href="/projects">
+                    View projects <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                </a>
+            </section>
+
+            <section class="projects-section projects-section-featured" aria-labelledby="projects-title">
+                <header class="section-heading projects-heading">
+                    <div>
+                        <p class="section-kicker">Keep momentum</p>
+                        <h2 id="projects-title">Your projects</h2>
+                    </div>
+                    <a class="section-action" href="/projects">
+                        View all projects <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </header>
+
+                <% if (projectList.length === 0) { %>
+                    <div class="workspace-card project-empty-state">
+                        <div class="empty-state-icon"><i class="bi bi-folder-plus" aria-hidden="true"></i></div>
+                        <div>
+                            <h3>No projects available yet</h3>
+                            <p>When you are assigned to a project, it will appear here with its latest progress.</p>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="project-carousel-shell">
+                        <div class="project-carousel" id="projectsScroll">
+                            <% projectList.forEach((project, index) => {
+                                const progress = Math.min(100, Math.max(0, Number(project.progress || 0)));
+                                const status = project.status || "Not started";
+                                const colorClass = ["project-card-navy", "project-card-teal", "project-card-coral"][index % 3];
+                            %>
+                                <a class="project-card project-card-link <%= colorClass %>"
+                                    href="/projects/<%= project.project_id %>"
+                                    data-project-url="/projects/<%= project.project_id %>">
+                                    <div class="project-card-topline">
+                                        <span class="project-status"><%= status %></span>
+                                        <span class="project-arrow"><i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                                    </div>
+                                    <h3><%= project.project_name %></h3>
+                                    <p class="project-description"><%= project.description || "No description has been added to this project." %></p>
+                                    <div class="project-progress-meta">
+                                        <span>Progress</span>
+                                        <strong><%= progress %>%</strong>
+                                    </div>
+                                    <div class="progress project-progress" role="progressbar"
+                                        aria-label="<%= project.project_name %> progress"
+                                        aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar" style="width: <%= progress %>%"></div>
+                                    </div>
+                                    <div class="project-card-footer">
+                                        <span><i class="bi bi-person-circle" aria-hidden="true"></i> <%= project.full_name || "Project team" %></span>
+                                        <span><i class="bi bi-calendar-event" aria-hidden="true"></i> <%= formatDate(project.deadline, { month: "short", day: "numeric" }) %></span>
+                                    </div>
+                                </a>
+                            <% }) %>
+                        </div>
+
+                        <button class="project-carousel-control project-carousel-previous" id="scrollLeft"
+                            type="button" aria-label="Show previous projects">
+                            <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="project-carousel-control project-carousel-next" id="scrollRight"
+                            type="button" aria-label="Show more projects">
+                            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                <% } %>
+            </section>
+
+            <section class="dashboard-overview" aria-labelledby="overview-title">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">At a glance</p>
+                        <h2 id="overview-title">Workspace overview</h2>
+                    </div>
+                    <span class="section-note">Updated with your latest project activity</span>
+                </div>
+
+                <div class="metric-grid">
+                    <article class="metric-card">
+                        <div class="metric-icon metric-icon-projects"><i class="bi bi-folder2-open" aria-hidden="true"></i></div>
+                        <div>
+                            <span class="metric-label">Your projects</span>
+                            <strong><%= projectList.length %></strong>
+                            <small>Projects you can access</small>
+                        </div>
+                    </article>
+
+                    <article class="metric-card">
+                        <div class="metric-icon metric-icon-tasks"><i class="bi bi-list-check" aria-hidden="true"></i></div>
+                        <div>
+                            <span class="metric-label">Open tasks</span>
+                            <strong><%= stats.pendingTasks %></strong>
+                            <small>Across the workspace</small>
+                        </div>
+                    </article>
+
+                    <article class="metric-card">
+                        <div class="metric-icon metric-icon-complete"><i class="bi bi-check2-circle" aria-hidden="true"></i></div>
+                        <div>
+                            <span class="metric-label">Completion rate</span>
+                            <strong><%= stats.completionRate %>%</strong>
+                            <small><%= stats.completedTasks %> completed tasks</small>
+                        </div>
+                    </article>
+
+                    <article class="metric-card <%= stats.overdueTasks > 0 ? "metric-card-alert" : "" %>">
+                        <div class="metric-icon metric-icon-deadline"><i class="bi bi-alarm" aria-hidden="true"></i></div>
+                        <div>
+                            <span class="metric-label">Needs attention</span>
+                            <strong><%= stats.overdueTasks %></strong>
+                            <small><%= stats.overdueTasks > 0 ? "Past their deadline" : "Nothing overdue" %></small>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="dashboard-main-grid" aria-label="Tasks, insights, and calendar">
+                <div class="dashboard-main-column">
+                    <section class="dashboard-work-grid" aria-label="Tasks and insights">
+                        <article class="workspace-card task-queue-card">
+                    <header class="card-heading">
+                        <div>
+                            <p class="section-kicker">Plan your day</p>
+                            <h2>Upcoming deadlines</h2>
+                        </div>
+                        <span class="count-chip"><%= taskQueue.length %> task<%= taskQueue.length === 1 ? "" : "s" %></span>
+                    </header>
+
+                    <% if (visibleTasks.length === 0) { %>
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="bi bi-calendar-check" aria-hidden="true"></i></div>
+                            <strong>No upcoming deadlines</strong>
+                            <span>Enjoy the breathing room or open a project to plan your next task.</span>
+                        </div>
+                    <% } else { %>
+                        <div class="task-queue">
+                            <% visibleTasks.forEach((task) => {
+                                const dueDate = task.due_date ? new Date(task.due_date) : null;
+                                const hasValidDate = dueDate && !Number.isNaN(dueDate.getTime());
+                                const isOverdue = hasValidDate && dueDate < new Date() && task.status !== "Completed";
+                            %>
+                                <div class="task-row">
+                                    <button class="task-checkbox <%= task.status === "Completed" ? "checked" : "" %>"
+                                        type="button"
+                                        aria-label="Mark <%= task.title %> as complete"
+                                        aria-pressed="<%= task.status === "Completed" ? "true" : "false" %>">
+                                        <% if (task.status === "Completed") { %>
+                                            <i class="fas fa-check" aria-hidden="true"></i>
+                                        <% } %>
+                                    </button>
+                                    <div class="task-main">
+                                        <div class="task-title-line">
+                                            <h3><%= task.title %></h3>
+                                            <span class="task-priority <%= priorityClass(task.priority) %>"><%= task.priority || "Normal" %></span>
+                                        </div>
+                                        <p><i class="bi bi-folder2" aria-hidden="true"></i> <%= task.project_name || "No project" %></p>
+                                    </div>
+                                    <time class="task-deadline <%= isOverdue ? "is-overdue" : "" %>">
+                                        <i class="bi bi-clock" aria-hidden="true"></i>
+                                        <span><%= formatDate(task.due_date, { month: "short", day: "numeric" }) %></span>
+                                    </time>
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% } %>
+                        </article>
+
+                        <div class="insights-region">
+                            <%- include("layout/charts") %>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="calendar-region">
+                    <%- include("layout/calendarSidebar", { upcomingTasks }) %>
+                </aside>
+            </section>
+        </div>
+    </main>
+
+    <button class="btn chat-button position-fixed" type="button" aria-label="Open chat">
+        <i class="fas fa-comment" aria-hidden="true"></i>
+    </button>
+
+    <%- include("layout/addProjectModal.ejs") %>
+    <%- include("layout/footer") %>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/dashboard.js"></script>
+
+    <script>
+        const themeToggle = document.getElementById("themeToggle");
+
+        if (themeToggle) {
+            const body = document.body;
+            const root = document.documentElement;
+
+            if (localStorage.getItem("theme") === "dark") {
+                body.classList.add("dark-theme");
+                root.setAttribute("data-theme", "dark");
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            themeToggle.addEventListener("click", () => {
+                const isDark = body.classList.toggle("dark-theme");
+                root.toggleAttribute("data-theme", isDark);
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+                themeToggle.innerHTML = isDark
+                    ? '<i class="fas fa-sun"></i>'
+                    : '<i class="fas fa-moon"></i>';
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".task-checkbox").forEach((checkbox) => {
+                checkbox.addEventListener("click", function () {
+                    const isChecked = this.classList.toggle("checked");
+                    this.setAttribute("aria-pressed", String(isChecked));
+                    this.innerHTML = isChecked
+                        ? '<i class="fas fa-check" aria-hidden="true"></i>'
+                        : "";
+                });
+            });
+
+            const addTaskBtn = document.getElementById("addTaskBtn");
+            const taskFields = document.getElementById("taskFields");
+
+            if (taskFields && addTaskBtn) {
+                addTaskBtn.addEventListener("click", () => {
+                    const taskGroup = document.createElement("div");
+                    taskGroup.classList.add("input-group", "mb-2");
+                    taskGroup.innerHTML =
+                        '<input type="text" class="form-control" name="tasks[]" placeholder="Enter task">' +
+                        '<button type="button" class="btn btn-outline-danger remove-task">✖</button>';
+                    taskFields.appendChild(taskGroup);
+                });
+
+                taskFields.addEventListener("click", (event) => {
+                    if (event.target.classList.contains("remove-task")) {
+                        event.target.closest(".input-group")?.remove();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
