@@ -1,226 +1,195 @@
-/* =========================================================
-   TASKDROBE MANAGER DASHBOARD
-   Modern SaaS + Compact Professional
-   Variable-driven theme + subtle glassmorphism
-   ========================================================= */
 
 .manager-dashboard-page {
 
-    /* =====================================================
-       CORE COLORS
-       Change these first when creating a new theme
-       ===================================================== */
+    --purple-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --teal-gradient: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+    --orange-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 
-    --manager-bg: #f4f7fb;
-    --manager-bg-alt: #eef3f9;
+    /* Core Backgrounds */
+    --manager-bg: #667eea;
+    --manager-bg-alt: #764ba2;
 
-    --manager-surface: rgba(255, 255, 255, 0.82);
-    --manager-surface-strong: rgba(255, 255, 255, 0.94);
-    --manager-surface-soft: rgba(248, 250, 252, 0.78);
+    /* Colored UI Surfaces */
+    --manager-surface: rgba(231, 236, 255, 0.97);
+    --manager-surface-strong: rgba(218, 225, 255, 0.98);
+    --manager-surface-soft: rgba(224, 232, 255, 0.97);
 
-    /* =====================================================
-       BRAND COLORS
-       ===================================================== */
+    /* Brand Colors */
+    --manager-primary: #667eea;
+    --manager-primary-dark: #4f5fd0;
+    --manager-primary-soft: #d8defd;
 
-    --manager-primary: #6366f1;
-    --manager-primary-dark: #4f46e5;
-    --manager-primary-soft: #eef2ff;
+    --manager-purple: #764ba2;
+    --manager-purple-soft: #e7d9f5;
+    --manager-purple-dark: #5b3780;
 
-    --manager-purple: #7c3aed;
-    --manager-purple-soft: #f3e8ff;
+    --manager-teal: #44a08d;
+    --manager-teal-dark: #277765;
+    --manager-teal-soft: #c8eee7;
 
-    --manager-teal: #0f9f92;
-    --manager-teal-dark: #0f766e;
-    --manager-teal-soft: #ccfbf1;
+    --manager-blue: #3478e5;
+    --manager-blue-soft: #d5e5ff;
 
-    --manager-blue: #2563eb;
-    --manager-blue-soft: #dbeafe;
+    --manager-brand-span: #c0b9ff;
 
-    /* =====================================================
-       SEMANTIC COLORS
-       ===================================================== */
+    /* Semantic Colors */
+    --manager-success: #18b873;
+    --manager-success-dark: #108653;
+    --manager-success-soft: #c9f2df;
 
-    --manager-success: #16a34a;
-    --manager-success-dark: #15803d;
-    --manager-success-soft: #dcfce7;
+    --manager-warning: #f0a329;
+    --manager-warning-dark: #bd7416;
+    --manager-warning-soft: #ffe8bc;
 
-    --manager-warning: #d97706;
-    --manager-warning-dark: #b45309;
-    --manager-warning-soft: #fef3c7;
+    --manager-danger: #f04465;
+    --manager-danger-dark: #c92e4d;
+    --manager-danger-soft: #ffd4dc;
 
-    --manager-danger: #dc2626;
-    --manager-danger-dark: #b91c1c;
-    --manager-danger-soft: #fee2e2;
+    --manager-info: #2186d9;
+    --manager-info-soft: #d3e9ff;
 
-    --manager-info: #0369a1;
-    --manager-info-soft: #e0f2fe;
+    --manager-archived-bg: #d6dcec;
+    --manager-archived-text: #5c6680;
 
-    /* =====================================================
-       TEXT
-       ===================================================== */
+    --manager-logout-hover-text: #ff8fa3;
 
-    --manager-text: #111827;
-    --manager-text-soft: #334155;
-    --manager-muted: #64748b;
-    --manager-placeholder: #94a3b8;
+    /* Text */
+    --manager-text: #17213d;
+    --manager-text-soft: #344263;
+    --manager-muted: #64708f;
+    --manager-placeholder: #8994b0;
     --manager-white: #ffffff;
 
-    /* =====================================================
-       BORDERS
-       ===================================================== */
+    /* Typography */
+    --manager-font-family: inherit;
 
-    --manager-border: rgba(148, 163, 184, 0.20);
-    --manager-border-strong: rgba(100, 116, 139, 0.28);
+    --manager-fs-30: 30px; --manager-fs-26: 26px; --manager-fs-23: 23px;
+    --manager-fs-22: 22px; --manager-fs-21: 21px; --manager-fs-20: 20px;
+    --manager-fs-19: 19px; --manager-fs-18: 18px; --manager-fs-17: 17px;
+    --manager-fs-16: 16px; --manager-fs-15: 15px; --manager-fs-14: 14px;
+    --manager-fs-13: 13px; --manager-fs-12: 12px; --manager-fs-11: 11px;
+    --manager-fs-10: 10px; --manager-fs-9: 9px;   --manager-fs-8: 8px;
 
-    --manager-glass-border: rgba(255, 255, 255, 0.58);
+    --manager-fw-800: 800; --manager-fw-750: 750; --manager-fw-700: 700;
+    --manager-fw-650: 650; --manager-fw-550: 550; --manager-fw-400: 400;
 
-    /* =====================================================
-       GLASSMORPHISM
-       ===================================================== */
+    --manager-ls-wide: 0.12em;
+    --manager-ls-tight: -0.3px;
+    --manager-ls-tighter: -0.4px;
+    --manager-ls-tightest: -0.55px;
 
-    --manager-glass-bg: rgba(255, 255, 255, 0.68);
-    --manager-glass-bg-strong: rgba(255, 255, 255, 0.84);
+    --manager-lh-1: 1; --manager-lh-1-15: 1.15; --manager-lh-1-3: 1.3;
+    --manager-lh-1-4: 1.4; --manager-lh-1-45: 1.45; --manager-lh-1-5: 1.5;
+    --manager-lh-1-55: 1.55;
+
+    /* Tinted Borders */
+    --manager-border: rgba(102, 126, 234, 0.42);
+    --manager-border-strong: rgba(118, 75, 162, 0.62);
+    --manager-glass-border: rgba(78, 205, 196, 0.48);
+
+    /* Colored Glassmorphism */
+    --manager-glass-bg: rgba(218, 227, 252, 0.96);
+    --manager-glass-bg-strong: rgba(204, 215, 248, 0.98);
 
     --manager-glass-blur: 18px;
     --manager-glass-saturate: 135%;
 
-    /* =====================================================
-       SIDEBAR
-       ===================================================== */
+    /* Sidebar */
+    --manager-sidebar-bg: rgba(27, 25, 61, 0.99);
+    --manager-sidebar-text: #f1f3ff;
+    --manager-sidebar-muted: #b6b9d5;
+    --manager-sidebar-label: #8589ad;
+    --manager-sidebar-hover: rgba(102, 126, 234, 0.16);
+    --manager-sidebar-active: rgba(102, 126, 234, 0.34);
+    --manager-sidebar-border: rgba(150, 163, 255, 0.18);
 
-    --manager-sidebar-bg: rgba(16, 42, 42, 0.96);
-
-    --manager-sidebar-text: #e2e8f0;
-    --manager-sidebar-muted: #aebebe;
-    --manager-sidebar-label: #8ba0a0;
-
-    --manager-sidebar-hover: rgba(255, 255, 255, 0.07);
-    --manager-sidebar-active: rgba(99, 102, 241, 0.20);
-    --manager-sidebar-border: rgba(255, 255, 255, 0.08);
-
-    /* =====================================================
-       SHADOWS
-       ===================================================== */
-
+    /* Shadows */
     --manager-shadow:
-        0 1px 2px rgba(15, 23, 42, 0.03),
-        0 8px 28px rgba(15, 23, 42, 0.055);
-
+        0 1px 2px rgba(39, 42, 90, 0.08),
+        0 8px 28px rgba(67, 76, 190, 0.16);
     --manager-shadow-hover:
-        0 12px 32px rgba(15, 23, 42, 0.10);
-
+        0 12px 32px rgba(102, 126, 234, 0.30);
     --manager-shadow-glass:
-        0 10px 35px rgba(15, 23, 42, 0.075);
+        0 10px 35px rgba(118, 75, 162, 0.18);
 
-    /* =====================================================
-       SIZING
-       ===================================================== */
-
+    /* Sizing & Radius */
     --manager-sidebar-width: 250px;
     --manager-header-height: 76px;
 
-    --manager-radius: 16px;
+    --manager-radius-round: 50%;
+    --manager-radius-pill: 20px;
+    --manager-radius-lg: 16px;
+    --manager-radius-14: 14px;
+    --manager-radius-md: 13px;
     --manager-radius-sm: 12px;
+    --manager-radius-11: 11px;
     --manager-radius-xs: 10px;
+    --manager-radius-9: 9px;
+    --manager-radius-7: 7px;
+    --manager-radius-5: 5px;
 
     --manager-transition: 0.18s ease;
 
-
-    /* =====================================================
-       PAGE BACKGROUND
-       ===================================================== */
-
+    /* Page Background */
     background:
-        radial-gradient(
-            circle at 8% 8%,
-            rgba(99, 102, 241, 0.075),
-            transparent 28%
-        ),
-        radial-gradient(
-            circle at 92% 18%,
-            rgba(15, 159, 146, 0.055),
-            transparent 25%
-        ),
-        linear-gradient(
-            135deg,
-            var(--manager-bg),
-            var(--manager-bg-alt)
-        );
+        var(--purple-gradient);
 
     color: var(--manager-text);
+    font-family: var(--manager-font-family);
 
     min-height: 100vh;
 }
 
-
-/* =========================================================
-   DARK THEME
-   ========================================================= */
-
 [data-theme="dark"] .manager-dashboard-page {
 
-    --manager-bg: #0b1120;
-    --manager-bg-alt: #111827;
+    --manager-bg: #12102b;
+    --manager-bg-alt: #102d31;
 
-    --manager-surface: rgba(23, 32, 51, 0.78);
-    --manager-surface-strong: rgba(23, 32, 51, 0.92);
-    --manager-surface-soft: rgba(30, 41, 59, 0.74);
+    --manager-surface: rgba(48, 42, 91, 0.97);
+    --manager-surface-strong: rgba(65, 55, 113, 0.98);
+    --manager-surface-soft: rgba(39, 64, 76, 0.97);
 
-    --manager-text: #f8fafc;
-    --manager-text-soft: #cbd5e1;
-    --manager-muted: #94a3b8;
-    --manager-placeholder: #64748b;
+    --manager-text: #f8f7ff;
+    --manager-text-soft: #dedbf0;
+    --manager-muted: #aaa6c2;
+    --manager-placeholder: #77738f;
 
-    --manager-border: rgba(148, 163, 184, 0.15);
-    --manager-border-strong: rgba(148, 163, 184, 0.25);
+    --manager-border: rgba(119, 139, 255, 0.48);
+    --manager-border-strong: rgba(166, 103, 230, 0.66);
+    --manager-glass-border: rgba(78, 205, 196, 0.42);
 
-    --manager-glass-border: rgba(255, 255, 255, 0.08);
-
-    --manager-glass-bg: rgba(23, 32, 51, 0.60);
-    --manager-glass-bg-strong: rgba(23, 32, 51, 0.82);
+    --manager-glass-bg: rgba(43, 39, 82, 0.96);
+    --manager-glass-bg-strong: rgba(58, 49, 99, 0.98);
 
     /* Soft colors automatically adapt */
+    --manager-primary-soft: rgba(102, 126, 234, 0.25);
+    --manager-purple-soft: rgba(118, 75, 162, 0.27);
+    --manager-teal-soft: rgba(68, 160, 141, 0.25);
+    --manager-blue-soft: rgba(63, 114, 199, 0.25);
 
-    --manager-primary-soft: rgba(99, 102, 241, 0.16);
-    --manager-purple-soft: rgba(124, 58, 237, 0.16);
-    --manager-teal-soft: rgba(15, 159, 146, 0.16);
-    --manager-blue-soft: rgba(37, 99, 235, 0.16);
+    --manager-success-soft: rgba(24, 184, 115, 0.24);
+    --manager-warning-soft: rgba(240, 163, 41, 0.24);
+    --manager-danger-soft: rgba(240, 68, 101, 0.24);
+    --manager-info-soft: rgba(33, 134, 217, 0.24);
 
-    --manager-success-soft: rgba(22, 163, 74, 0.16);
-    --manager-warning-soft: rgba(217, 119, 6, 0.16);
-    --manager-danger-soft: rgba(220, 38, 38, 0.16);
-    --manager-info-soft: rgba(3, 105, 161, 0.16);
-
-    --manager-sidebar-bg: rgba(8, 25, 25, 0.98);
+    --manager-sidebar-bg: rgba(8, 8, 25, 0.99);
 
     --manager-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.18),
-        0 10px 30px rgba(0, 0, 0, 0.20);
-
+        0 1px 2px rgba(0, 0, 0, 0.30),
+        0 10px 30px rgba(0, 0, 0, 0.42);
     --manager-shadow-hover:
-        0 14px 34px rgba(0, 0, 0, 0.26);
-
+        0 14px 34px rgba(102, 126, 234, 0.34);
     --manager-shadow-glass:
-        0 12px 36px rgba(0, 0, 0, 0.22);
+        0 12px 36px rgba(118, 75, 162, 0.28);
 
     background:
-        radial-gradient(
-            circle at 8% 8%,
-            rgba(99, 102, 241, 0.10),
-            transparent 28%
-        ),
-        radial-gradient(
-            circle at 92% 18%,
-            rgba(15, 159, 146, 0.07),
-            transparent 25%
-        ),
         linear-gradient(
             135deg,
-            var(--manager-bg),
-            var(--manager-bg-alt)
+            #17142d 0%,
+            #30245a 48%,
+            #103d3b 100%
         );
 }
-
 
 body.manager-dashboard-page {
     background: var(--manager-bg);
@@ -234,20 +203,15 @@ body.manager-dashboard-page {
 .manager-sidebar {
 
     position: fixed;
-
     inset: 0 auto 0 0;
-
     width: var(--manager-sidebar-width);
-
     background: var(--manager-sidebar-bg);
-
     color: var(--manager-sidebar-text);
 
     display: flex;
     flex-direction: column;
 
     z-index: 1100;
-
     border-right: 1px solid var(--manager-sidebar-border);
 
     box-shadow:
@@ -261,12 +225,9 @@ body.manager-dashboard-page {
 .manager-sidebar-brand {
 
     height: var(--manager-header-height);
-
     display: flex;
     align-items: center;
-
     padding: 0 20px;
-
     border-bottom: 1px solid var(--manager-sidebar-border);
 }
 
@@ -275,11 +236,8 @@ body.manager-dashboard-page {
 
     display: flex;
     align-items: center;
-
     gap: 11px;
-
     color: var(--manager-white);
-
     text-decoration: none;
 }
 
@@ -288,10 +246,8 @@ body.manager-dashboard-page {
 
     width: 38px;
     height: 38px;
-
     display: grid;
     place-items: center;
-
     border-radius: var(--manager-radius-xs);
 
     background:
@@ -302,9 +258,7 @@ body.manager-dashboard-page {
         );
 
     color: var(--manager-white);
-
-    font-size: 17px;
-
+    font-size: var(--manager-fs-17);
     box-shadow:
         0 8px 20px rgba(99, 102, 241, 0.28);
 }
@@ -312,41 +266,32 @@ body.manager-dashboard-page {
 
 .manager-brand-text {
 
-    font-size: 20px;
-
-    font-weight: 750;
-
-    letter-spacing: -0.55px;
+    font-size: var(--manager-fs-20);
+    font-weight: var(--manager-fw-750);
+    letter-spacing: var(--manager-ls-tightest);
 }
 
 
 .manager-brand-text span {
-    color: #a5b4fc;
+    color: var(--manager-brand-span);
 }
 
 
 .manager-sidebar-close {
 
     display: none;
-
     margin-left: auto;
-
     border: 0;
-
     background: transparent;
-
     color: var(--manager-sidebar-text);
-
-    font-size: 18px;
+    font-size: var(--manager-fs-18);
 }
 
 
 .manager-sidebar-content {
 
     flex: 1;
-
     padding: 24px 12px;
-
     overflow-y: auto;
 }
 
@@ -359,17 +304,11 @@ body.manager-dashboard-page {
 .manager-nav-label {
 
     padding: 0 12px;
-
     margin-bottom: 8px;
-
     color: var(--manager-sidebar-label);
-
-    font-size: 11px;
-
-    font-weight: 750;
-
-    letter-spacing: 0.12em;
-
+    font-size: var(--manager-fs-11);
+    font-weight: var(--manager-fw-750);
+    letter-spacing: var(--manager-ls-wide);
     text-transform: uppercase;
 }
 
@@ -377,31 +316,21 @@ body.manager-dashboard-page {
 .manager-nav-item {
 
     width: 100%;
-
     min-height: 46px;
-
     padding: 0 12px;
-
     margin-bottom: 4px;
-
     display: flex;
     align-items: center;
-
     gap: 12px;
-
     border: 0;
-
     border-radius: var(--manager-radius-xs);
 
     background: transparent;
-
     color: var(--manager-sidebar-muted);
-
     text-decoration: none;
 
-    font-size: 14px;
-
-    font-weight: 550;
+    font-size: var(--manager-fs-14);
+    font-weight: var(--manager-fw-550);
 
     transition:
         background var(--manager-transition),
@@ -413,7 +342,6 @@ body.manager-dashboard-page {
 .manager-nav-item:hover {
 
     background: var(--manager-sidebar-hover);
-
     color: var(--manager-white);
 }
 
@@ -421,7 +349,6 @@ body.manager-dashboard-page {
 .manager-nav-item.active {
 
     background: var(--manager-sidebar-active);
-
     color: var(--manager-white);
 
     box-shadow:
@@ -432,19 +359,15 @@ body.manager-dashboard-page {
 .manager-nav-icon {
 
     width: 20px;
-
     display: inline-flex;
-
     justify-content: center;
-
-    font-size: 17px;
+    font-size: var(--manager-fs-17);
 }
 
 
 .manager-nav-disabled {
 
     cursor: not-allowed;
-
     opacity: 0.55;
 }
 
@@ -452,7 +375,6 @@ body.manager-dashboard-page {
 .manager-nav-disabled:hover {
 
     background: transparent;
-
     color: var(--manager-sidebar-muted);
 }
 
@@ -460,15 +382,10 @@ body.manager-dashboard-page {
 .manager-coming-soon {
 
     margin-left: auto;
-
     padding: 4px 8px;
-
-    border-radius: 20px;
-
+    border-radius: var(--manager-radius-pill);
     background: var(--manager-sidebar-hover);
-
-    font-size: 9px;
-
+    font-size: var(--manager-fs-9);
     text-transform: uppercase;
 }
 
@@ -476,15 +393,13 @@ body.manager-dashboard-page {
 .manager-sidebar-bottom {
 
     padding: 12px;
-
     border-top: 1px solid var(--manager-sidebar-border);
 }
 
 
 .manager-logout:hover {
 
-    color: #fca5a5;
-
+    color: var(--manager-logout-hover-text);
     background: var(--manager-danger-soft);
 }
 
@@ -501,22 +416,17 @@ body.manager-dashboard-page {
 .manager-topbar {
 
     position: fixed;
-
     top: 0;
     right: 0;
-
     left: var(--manager-sidebar-width);
-
     height: var(--manager-header-height);
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 28px;
 
     background: var(--manager-glass-bg-strong);
-
     border-bottom: 1px solid var(--manager-glass-border);
 
     box-shadow:
@@ -538,7 +448,6 @@ body.manager-dashboard-page {
 
     display: flex;
     align-items: center;
-
     min-width: 0;
 }
 
@@ -546,21 +455,15 @@ body.manager-dashboard-page {
 .manager-menu-toggle {
 
     display: none;
-
     width: 40px;
     height: 40px;
-
     margin-right: 10px;
 
     border: 1px solid var(--manager-border);
-
     border-radius: var(--manager-radius-xs);
-
     background: var(--manager-surface);
-
     color: var(--manager-text);
-
-    font-size: 20px;
+    font-size: var(--manager-fs-20);
 }
 
 
@@ -572,46 +475,35 @@ body.manager-dashboard-page {
 .manager-header-label {
 
     display: block;
-
     margin-bottom: 2px;
 
     color: var(--manager-primary);
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 0.12em;
+    font-size: var(--manager-fs-10);
+    font-weight: var(--manager-fw-800);
+    letter-spacing: var(--manager-ls-wide);
 }
 
 
 .manager-header-title {
 
     color: var(--manager-text);
-
-    font-size: 19px;
-
-    font-weight: 750;
-
-    letter-spacing: -0.3px;
-
+    font-size: var(--manager-fs-19);
+    font-weight: var(--manager-fw-750);
+    letter-spacing: var(--manager-ls-tight);
     white-space: nowrap;
 }
 
 
 .manager-wave {
-    font-size: 17px;
+    font-size: var(--manager-fs-17);
 }
 
 
 .manager-header-subtitle {
 
     color: var(--manager-muted);
-
-    font-size: 12px;
-
+    font-size: var(--manager-fs-12);
     margin-top: 2px;
-
     white-space: nowrap;
 }
 
@@ -620,9 +512,7 @@ body.manager-dashboard-page {
 
     display: flex;
     align-items: center;
-
     gap: 9px;
-
     margin-left: 20px;
 }
 
@@ -639,17 +529,12 @@ body.manager-dashboard-page {
 
     display: flex;
     align-items: center;
-
     gap: 9px;
-
     padding: 0 11px;
 
     border: 1px solid var(--manager-border);
-
     border-radius: var(--manager-radius-xs);
-
     background: var(--manager-surface-soft);
-
     color: var(--manager-muted);
 
     transition:
@@ -662,32 +547,25 @@ body.manager-dashboard-page {
 .manager-search:focus-within {
 
     border-color: rgba(99, 102, 241, 0.42);
-
     box-shadow:
         0 0 0 4px rgba(99, 102, 241, 0.08);
-
     background: var(--manager-surface-strong);
 }
 
 
 .manager-search i {
-    font-size: 15px;
+    font-size: var(--manager-fs-15);
 }
 
 
 .manager-search input {
 
     width: 100%;
-
     border: 0;
-
     outline: 0;
-
     background: transparent;
-
     color: var(--manager-text);
-
-    font-size: 13px;
+    font-size: var(--manager-fs-13);
 }
 
 
@@ -699,17 +577,12 @@ body.manager-dashboard-page {
 .manager-search kbd {
 
     padding: 3px 6px;
-
     border: 1px solid var(--manager-border);
-
-    border-radius: 5px;
+    border-radius: var(--manager-radius-5);
 
     background: var(--manager-surface);
-
     color: var(--manager-muted);
-
-    font-size: 10px;
-
+    font-size: var(--manager-fs-10);
     white-space: nowrap;
 }
 
@@ -717,29 +590,19 @@ body.manager-dashboard-page {
 .manager-search-results {
 
     position: absolute;
-
     top: calc(100% + 8px);
-
     right: 0;
-
     width: 360px;
-
     max-height: 420px;
-
     overflow-y: auto;
-
     padding: 6px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: var(--manager-radius);
-
+    border-radius: var(--manager-radius-lg);
     background: var(--manager-surface-strong);
-
     box-shadow: var(--manager-shadow-glass);
 
     backdrop-filter: blur(var(--manager-glass-blur));
-
     -webkit-backdrop-filter: blur(var(--manager-glass-blur));
 
     z-index: 1200;
@@ -760,15 +623,11 @@ body.manager-dashboard-page {
 
     display: flex;
     align-items: center;
-
     gap: 10px;
-
     padding: 11px;
 
     border-radius: var(--manager-radius-xs);
-
     color: var(--manager-text);
-
     text-decoration: none;
 
     transition: background var(--manager-transition);
@@ -784,14 +643,11 @@ body.manager-dashboard-page {
 
     width: 32px;
     height: 32px;
-
     display: grid;
     place-items: center;
 
-    border-radius: 9px;
-
+    border-radius: var(--manager-radius-9);
     background: var(--manager-primary-soft);
-
     color: var(--manager-primary);
 }
 
@@ -799,51 +655,38 @@ body.manager-dashboard-page {
 .manager-search-result strong {
 
     display: block;
-
-    font-size: 13px;
+    font-size: var(--manager-fs-13);
 }
 
 
 .manager-search-result span {
 
     display: block;
-
     margin-top: 2px;
-
     color: var(--manager-muted);
-
-    font-size: 11px;
+    font-size: var(--manager-fs-11);
 }
 
 
 .manager-search-empty {
 
     padding: 24px 12px;
-
     text-align: center;
-
     color: var(--manager-muted);
-
-    font-size: 13px;
+    font-size: var(--manager-fs-13);
 }
 
 
 .manager-search-clear {
 
     border: 0;
-
     background: transparent;
-
     color: var(--manager-muted);
-
     width: 24px;
     height: 24px;
-
     display: grid;
     place-items: center;
-
     padding: 0;
-
     cursor: pointer;
 }
 
@@ -860,23 +703,17 @@ body.manager-dashboard-page {
 .manager-icon-button {
 
     position: relative;
-
     width: 42px;
     height: 42px;
-
     display: grid;
     place-items: center;
 
     border: 1px solid var(--manager-border);
-
     border-radius: var(--manager-radius-xs);
-
     background: var(--manager-surface);
-
     color: var(--manager-text-soft);
 
     cursor: pointer;
-
     transition:
         border-color var(--manager-transition),
         color var(--manager-transition),
@@ -888,11 +725,8 @@ body.manager-dashboard-page {
 .manager-icon-button:hover {
 
     color: var(--manager-primary);
-
     border-color: rgba(99, 102, 241, 0.28);
-
     background: var(--manager-primary-soft);
-
     transform: translateY(-1px);
 }
 
@@ -900,29 +734,20 @@ body.manager-dashboard-page {
 .manager-notification-badge {
 
     position: absolute;
-
     top: -4px;
     right: -4px;
-
     min-width: 18px;
     height: 18px;
-
     display: grid;
     place-items: center;
-
     padding: 0 4px;
 
     border: 2px solid var(--manager-surface-strong);
-
-    border-radius: 20px;
-
+    border-radius: var(--manager-radius-pill);
     background: var(--manager-danger);
-
     color: var(--manager-white);
-
-    font-size: 9px;
-
-    font-weight: 750;
+    font-size: var(--manager-fs-9);
+    font-weight: var(--manager-fw-750);
 }
 
 
@@ -934,27 +759,18 @@ body.manager-dashboard-page {
 .manager-notification-dropdown {
 
     position: absolute;
-
     top: calc(100% + 10px);
-
     right: 0;
-
     width: 350px;
-
     max-height: 470px;
-
     overflow: hidden;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: var(--manager-radius);
-
+    border-radius: var(--manager-radius-lg);
     background: var(--manager-surface-strong);
-
     box-shadow: var(--manager-shadow-glass);
 
     backdrop-filter: blur(var(--manager-glass-blur));
-
     -webkit-backdrop-filter: blur(var(--manager-glass-blur));
 
     z-index: 1200;
@@ -964,11 +780,9 @@ body.manager-dashboard-page {
 .manager-notification-header {
 
     padding: 15px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     border-bottom: 1px solid var(--manager-border);
 }
 
@@ -977,30 +791,24 @@ body.manager-dashboard-page {
 
     display: flex;
     align-items: center;
-
     gap: 7px;
 }
 
 
 .manager-notification-header strong {
-    font-size: 14px;
+    font-size: var(--manager-fs-14);
 }
 
 
 .manager-notification-header span {
 
     min-width: 20px;
-
     padding: 3px 6px;
-
-    border-radius: 10px;
+    border-radius: var(--manager-radius-xs);
 
     background: var(--manager-primary-soft);
-
     color: var(--manager-primary);
-
-    font-size: 10px;
-
+    font-size: var(--manager-fs-10);
     text-align: center;
 }
 
@@ -1008,21 +816,16 @@ body.manager-dashboard-page {
 .manager-notification-mark {
 
     border: 0;
-
     background: transparent;
-
     color: var(--manager-primary);
-
-    font-size: 11px;
-
-    font-weight: 650;
+    font-size: var(--manager-fs-11);
+    font-weight: var(--manager-fw-650);
 }
 
 
 .manager-notification-list {
 
     max-height: 390px;
-
     overflow-y: auto;
 }
 
@@ -1030,15 +833,11 @@ body.manager-dashboard-page {
 .manager-notification-item {
 
     display: flex;
-
     gap: 10px;
-
     padding: 13px 15px;
-
     border-bottom: 1px solid var(--manager-border);
 
     cursor: pointer;
-
     transition: background var(--manager-transition);
 }
 
@@ -1057,19 +856,14 @@ body.manager-dashboard-page {
 
     width: 32px;
     height: 32px;
-
     flex: 0 0 auto;
-
     display: grid;
     place-items: center;
 
-    border-radius: 9px;
-
+    border-radius: var(--manager-radius-9);
     background: var(--manager-primary-soft);
-
     color: var(--manager-primary);
-
-    font-size: 14px;
+    font-size: var(--manager-fs-14);
 }
 
 
@@ -1081,74 +875,53 @@ body.manager-dashboard-page {
 .manager-notification-item-content strong {
 
     display: block;
-
     color: var(--manager-text);
-
-    font-size: 12px;
-
-    font-weight: 650;
-
-    line-height: 1.4;
+    font-size: var(--manager-fs-12);
+    font-weight: var(--manager-fw-650);
+    line-height: var(--manager-lh-1-4);
 }
 
 
 .manager-notification-item-content span {
 
     display: block;
-
     margin-top: 4px;
-
     color: var(--manager-muted);
-
-    font-size: 10px;
+    font-size: var(--manager-fs-10);
 }
 
 
 .manager-notification-empty {
 
     min-height: 180px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
 
     color: var(--manager-muted);
-
-    font-size: 12px;
+    font-size: var(--manager-fs-12);
 }
 
 
 .manager-notification-empty i {
-    font-size: 23px;
+    font-size: var(--manager-fs-23);
 }
 
 
 .manager-profile-button {
 
     height: 42px;
-
     display: flex;
-
     align-items: center;
-
     gap: 8px;
-
     padding: 3px 8px 3px 3px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: 11px;
-
+    border-radius: var(--manager-radius-11);
     background: var(--manager-surface);
-
     color: var(--manager-text);
-
     text-decoration: none;
 
     transition:
@@ -1160,7 +933,6 @@ body.manager-dashboard-page {
 .manager-profile-button:hover {
 
     border-color: var(--manager-border-strong);
-
     background: var(--manager-surface-strong);
 }
 
@@ -1169,54 +941,43 @@ body.manager-dashboard-page {
 
     width: 34px;
     height: 34px;
-
     display: grid;
     place-items: center;
 
-    border-radius: 9px;
-
+    border-radius: var(--manager-radius-9);
     background: var(--manager-purple-soft);
-
     color: var(--manager-purple);
-
-    font-size: 13px;
-
-    font-weight: 750;
+    font-size: var(--manager-fs-13);
+    font-weight: var(--manager-fw-750);
 }
 
 
 .manager-profile-info {
 
     display: flex;
-
     flex-direction: column;
-
-    line-height: 1.15;
+    line-height: var(--manager-lh-1-15);
 }
 
 
 .manager-profile-info strong {
-    font-size: 11px;
+    font-size: var(--manager-fs-11);
 }
 
 
 .manager-profile-info small {
 
     margin-top: 2px;
-
     color: var(--manager-muted);
-
-    font-size: 10px;
+    font-size: var(--manager-fs-10);
 }
 
 
 .manager-profile-button > i {
 
     margin-left: 2px;
-
     color: var(--manager-muted);
-
-    font-size: 9px;
+    font-size: var(--manager-fs-9);
 }
 
 
@@ -1224,18 +985,13 @@ body.manager-dashboard-page {
 
     width: 42px;
     height: 42px;
-
     display: grid;
     place-items: center;
 
     border: 1px solid var(--manager-border);
-
     border-radius: var(--manager-radius-xs);
-
     color: var(--manager-muted);
-
     background: var(--manager-surface);
-
     text-decoration: none;
 
     transition:
@@ -1248,9 +1004,7 @@ body.manager-dashboard-page {
 .manager-logout-button:hover {
 
     color: var(--manager-danger);
-
     border-color: rgba(220, 38, 38, 0.24);
-
     background: var(--manager-danger-soft);
 }
 
@@ -1262,9 +1016,7 @@ body.manager-dashboard-page {
 .manager-main {
 
     min-height: 100vh;
-
     margin-left: var(--manager-sidebar-width);
-
     padding-top: var(--manager-header-height);
 }
 
@@ -1272,9 +1024,7 @@ body.manager-dashboard-page {
 .manager-container {
 
     width: min(100%, 1600px);
-
     margin: 0 auto;
-
     padding: 25px 28px 45px;
 }
 
@@ -1282,13 +1032,9 @@ body.manager-dashboard-page {
 .manager-page-context {
 
     min-height: 36px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     margin-bottom: 17px;
 }
 
@@ -1296,9 +1042,7 @@ body.manager-dashboard-page {
 .manager-page-context > div:first-child {
 
     display: flex;
-
     align-items: center;
-
     gap: 8px;
 }
 
@@ -1306,38 +1050,29 @@ body.manager-dashboard-page {
 .manager-page-context span {
 
     color: var(--manager-muted);
-
-    font-size: 11px;
+    font-size: var(--manager-fs-11);
 }
 
 
 .manager-page-context strong {
 
     color: var(--manager-text-soft);
-
-    font-size: 12px;
+    font-size: var(--manager-fs-12);
 }
 
 
 .manager-date-chip {
 
     display: flex;
-
     align-items: center;
-
     gap: 7px;
-
     padding: 8px 11px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: 9px;
-
+    border-radius: var(--manager-radius-9);
     background: var(--manager-surface);
-
     color: var(--manager-muted);
-
-    font-size: 11px;
+    font-size: var(--manager-fs-11);
 }
 
 
@@ -1358,16 +1093,12 @@ body.manager-dashboard-page {
 .manager-section-eyebrow {
 
     display: block;
-
     margin-bottom: 3px;
 
     color: var(--manager-primary);
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 0.12em;
+    font-size: var(--manager-fs-10);
+    font-weight: var(--manager-fw-800);
+    letter-spacing: var(--manager-ls-wide);
 }
 
 
@@ -1375,14 +1106,10 @@ body.manager-dashboard-page {
 .manager-panel-header h2 {
 
     margin: 0;
-
     color: var(--manager-text);
-
-    font-size: 19px;
-
-    font-weight: 750;
-
-    letter-spacing: -0.4px;
+    font-size: var(--manager-fs-19);
+    font-weight: var(--manager-fw-750);
+    letter-spacing: var(--manager-ls-tighter);
 }
 
 
@@ -1390,10 +1117,8 @@ body.manager-dashboard-page {
 .manager-panel-header p {
 
     margin: 4px 0 0;
-
     color: var(--manager-muted);
-
-    font-size: 12px;
+    font-size: var(--manager-fs-12);
 }
 
 
@@ -1404,10 +1129,8 @@ body.manager-dashboard-page {
 .manager-stats-grid {
 
     display: grid;
-
     grid-template-columns:
         repeat(4, minmax(0, 1fr));
-
     gap: 12px;
 }
 
@@ -1415,27 +1138,19 @@ body.manager-dashboard-page {
 .manager-stat-card {
 
     min-height: 116px;
-
     display: flex;
-
     align-items: center;
-
     gap: 14px;
-
     padding: 18px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: var(--manager-radius);
-
+    border-radius: var(--manager-radius-lg);
     background: var(--manager-glass-bg);
-
     box-shadow: var(--manager-shadow);
 
     backdrop-filter:
         blur(14px)
         saturate(120%);
-
     -webkit-backdrop-filter:
         blur(14px)
         saturate(120%);
@@ -1450,9 +1165,7 @@ body.manager-dashboard-page {
 .manager-stat-card:hover {
 
     transform: translateY(-3px);
-
     border-color: var(--manager-border-strong);
-
     box-shadow: var(--manager-shadow-hover);
 }
 
@@ -1461,23 +1174,18 @@ body.manager-dashboard-page {
 
     width: 46px;
     height: 46px;
-
     flex: 0 0 auto;
-
     display: grid;
-
     place-items: center;
 
-    border-radius: 13px;
-
-    font-size: 18px;
+    border-radius: var(--manager-radius-md);
+    font-size: var(--manager-fs-18);
 }
 
 
 .manager-stat-icon.purple {
 
     background: var(--manager-purple-soft);
-
     color: var(--manager-purple);
 }
 
@@ -1485,7 +1193,6 @@ body.manager-dashboard-page {
 .manager-stat-icon.teal {
 
     background: var(--manager-teal-soft);
-
     color: var(--manager-teal-dark);
 }
 
@@ -1493,7 +1200,6 @@ body.manager-dashboard-page {
 .manager-stat-icon.blue {
 
     background: var(--manager-blue-soft);
-
     color: var(--manager-blue);
 }
 
@@ -1501,7 +1207,6 @@ body.manager-dashboard-page {
 .manager-stat-icon.red {
 
     background: var(--manager-danger-soft);
-
     color: var(--manager-danger);
 }
 
@@ -1509,7 +1214,6 @@ body.manager-dashboard-page {
 .manager-stat-icon.green {
 
     background: var(--manager-success-soft);
-
     color: var(--manager-success);
 }
 
@@ -1522,40 +1226,29 @@ body.manager-dashboard-page {
 .manager-stat-label {
 
     display: block;
-
     color: var(--manager-muted);
-
-    font-size: 11px;
-
-    font-weight: 550;
+    font-size: var(--manager-fs-11);
+    font-weight: var(--manager-fw-550);
 }
 
 
 .manager-stat-value {
 
     display: block;
-
     margin-top: 4px;
-
     color: var(--manager-text);
-
-    font-size: 26px;
-
-    font-weight: 750;
-
-    line-height: 1;
+    font-size: var(--manager-fs-26);
+    font-weight: var(--manager-fw-750);
+    line-height: var(--manager-lh-1);
 }
 
 
 .manager-stat-meta {
 
     display: block;
-
     margin-top: 6px;
-
     color: var(--manager-muted);
-
-    font-size: 10px;
+    font-size: var(--manager-fs-10);
 }
 
 
@@ -1566,9 +1259,7 @@ body.manager-dashboard-page {
 .manager-dashboard-grid {
 
     display: grid;
-
     gap: 14px;
-
     margin-bottom: 14px;
 }
 
@@ -1600,21 +1291,16 @@ body.manager-dashboard-page {
 .manager-panel {
 
     min-width: 0;
-
     padding: 20px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: var(--manager-radius);
-
+    border-radius: var(--manager-radius-lg);
     background: var(--manager-glass-bg);
-
     box-shadow: var(--manager-shadow);
 
     backdrop-filter:
         blur(14px)
         saturate(120%);
-
     -webkit-backdrop-filter:
         blur(14px)
         saturate(120%);
@@ -1624,13 +1310,9 @@ body.manager-dashboard-page {
 .manager-panel-header {
 
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
-
     gap: 15px;
-
     margin-bottom: 17px;
 }
 
@@ -1638,17 +1320,14 @@ body.manager-dashboard-page {
 .manager-panel-header-icon {
 
     color: var(--manager-muted);
-
-    font-size: 17px;
+    font-size: var(--manager-fs-17);
 }
 
 
 .manager-panel-actions {
 
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 }
 
@@ -1656,21 +1335,14 @@ body.manager-dashboard-page {
 .manager-primary-button {
 
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 6px;
-
     min-height: 36px;
-
     padding: 0 13px;
 
     border: 0;
-
-    border-radius: 9px;
-
+    border-radius: var(--manager-radius-9);
     background:
         linear-gradient(
             135deg,
@@ -1679,13 +1351,9 @@ body.manager-dashboard-page {
         );
 
     color: var(--manager-white);
-
-    font-size: 11px;
-
-    font-weight: 650;
-
+    font-size: var(--manager-fs-11);
+    font-weight: var(--manager-fw-650);
     text-decoration: none;
-
     cursor: pointer;
 
     box-shadow:
@@ -1708,7 +1376,6 @@ body.manager-dashboard-page {
         );
 
     color: var(--manager-white);
-
     transform: translateY(-1px);
 
     box-shadow:
@@ -1719,17 +1386,12 @@ body.manager-dashboard-page {
 .manager-text-button {
 
     display: inline-flex;
-
     align-items: center;
-
     gap: 5px;
 
     color: var(--manager-primary);
-
-    font-size: 11px;
-
-    font-weight: 650;
-
+    font-size: var(--manager-fs-11);
+    font-weight: var(--manager-fw-650);
     text-decoration: none;
 }
 
@@ -1746,10 +1408,8 @@ body.manager-dashboard-page {
 .manager-project-grid {
 
     display: grid;
-
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
-
     gap: 10px;
 }
 
@@ -1757,11 +1417,8 @@ body.manager-dashboard-page {
 .manager-project-link {
 
     display: block;
-
     color: inherit;
-
     text-decoration: none;
-
     cursor: pointer;
 }
 
@@ -1769,17 +1426,12 @@ body.manager-dashboard-page {
 .manager-project-card {
 
     min-height: 205px;
-
     display: flex;
-
     flex-direction: column;
-
     padding: 16px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: 13px;
-
+    border-radius: var(--manager-radius-md);
     background: var(--manager-surface-soft);
 
     transition:
@@ -1793,11 +1445,8 @@ body.manager-dashboard-page {
 .manager-project-link:hover .manager-project-card {
 
     transform: translateY(-3px);
-
     border-color: rgba(99, 102, 241, 0.25);
-
     background: var(--manager-surface-strong);
-
     box-shadow: var(--manager-shadow-hover);
 }
 
@@ -1805,9 +1454,7 @@ body.manager-dashboard-page {
 .manager-project-top {
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 }
 
@@ -1815,18 +1462,13 @@ body.manager-dashboard-page {
 .manager-project-status {
 
     display: inline-flex;
-
     align-items: center;
-
     gap: 5px;
-
     padding: 5px 8px;
 
-    border-radius: 20px;
-
-    font-size: 9px;
-
-    font-weight: 750;
+    border-radius: var(--manager-radius-pill);
+    font-size: var(--manager-fs-9);
+    font-weight: var(--manager-fw-750);
 }
 
 
@@ -1834,9 +1476,7 @@ body.manager-dashboard-page {
 
     width: 5px;
     height: 5px;
-
-    border-radius: 50%;
-
+    border-radius: var(--manager-radius-round);
     background: currentColor;
 }
 
@@ -1844,7 +1484,6 @@ body.manager-dashboard-page {
 .manager-project-status.completed {
 
     background: var(--manager-success-soft);
-
     color: var(--manager-success-dark);
 }
 
@@ -1852,24 +1491,21 @@ body.manager-dashboard-page {
 .manager-project-status.in-progress {
 
     background: var(--manager-purple-soft);
-
-    color: #6d28d9;
+    color: var(--manager-purple-dark);
 }
 
 
 .manager-project-status.on-hold {
 
     background: var(--manager-warning-soft);
-
     color: var(--manager-warning-dark);
 }
 
 
 .manager-project-status.archived {
 
-    background: #e2e8f0;
-
-    color: #64748b;
+    background: var(--manager-archived-bg);
+    color: var(--manager-archived-text);
 }
 
 
@@ -1877,7 +1513,6 @@ body.manager-dashboard-page {
 .manager-project-status.default {
 
     background: var(--manager-info-soft);
-
     color: var(--manager-info);
 }
 
@@ -1885,7 +1520,6 @@ body.manager-dashboard-page {
 .manager-project-actions {
 
     display: flex;
-
     gap: 4px;
 }
 
@@ -1894,21 +1528,15 @@ body.manager-dashboard-page {
 
     width: 29px;
     height: 29px;
-
     display: grid;
-
     place-items: center;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: 7px;
-
+    border-radius: var(--manager-radius-7);
     background: var(--manager-surface-strong);
-
     color: var(--manager-muted);
 
-    font-size: 11px;
-
+    font-size: var(--manager-fs-11);
     cursor: pointer;
 
     transition:
@@ -1921,9 +1549,7 @@ body.manager-dashboard-page {
 .manager-project-action:hover {
 
     color: var(--manager-primary);
-
     border-color: rgba(99, 102, 241, 0.28);
-
     background: var(--manager-primary-soft);
 }
 
@@ -1931,9 +1557,7 @@ body.manager-dashboard-page {
 .manager-project-action.project-delete-btn:hover {
 
     color: var(--manager-danger);
-
     border-color: rgba(220, 38, 38, 0.25);
-
     background: var(--manager-danger-soft);
 }
 
@@ -1941,7 +1565,6 @@ body.manager-dashboard-page {
 .manager-project-body {
 
     margin-top: 15px;
-
     flex: 1;
 }
 
@@ -1949,33 +1572,23 @@ body.manager-dashboard-page {
 .manager-project-body h3 {
 
     margin: 0;
-
     color: var(--manager-text);
-
-    font-size: 15px;
-
-    font-weight: 750;
-
-    line-height: 1.3;
+    font-size: var(--manager-fs-15);
+    font-weight: var(--manager-fw-750);
+    line-height: var(--manager-lh-1-3);
 }
 
 
 .manager-project-body p {
 
     display: -webkit-box;
-
     margin: 6px 0 0;
-
     overflow: hidden;
-
     color: var(--manager-muted);
-
-    font-size: 11px;
-
-    line-height: 1.55;
+    font-size: var(--manager-fs-11);
+    line-height: var(--manager-lh-1-55);
 
     -webkit-box-orient: vertical;
-
     -webkit-line-clamp: 2;
 }
 
@@ -1988,14 +1601,10 @@ body.manager-dashboard-page {
 .manager-progress-header {
 
     display: flex;
-
     justify-content: space-between;
-
     margin-bottom: 6px;
-
     color: var(--manager-muted);
-
-    font-size: 10px;
+    font-size: var(--manager-fs-10);
 }
 
 
@@ -2007,13 +1616,9 @@ body.manager-dashboard-page {
 .manager-progress-track {
 
     width: 100%;
-
     height: 6px;
-
     overflow: hidden;
-
-    border-radius: 10px;
-
+    border-radius: var(--manager-radius-xs);
     background: var(--manager-border-strong);
 }
 
@@ -2026,7 +1631,6 @@ body.manager-dashboard-page {
 .manager-progress-fill {
 
     height: 100%;
-
     border-radius: inherit;
 
     background:
@@ -2065,33 +1669,24 @@ body.manager-dashboard-page {
 .manager-project-footer {
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 8px;
 
     margin-top: 13px;
-
     padding-top: 10px;
-
     border-top: 1px solid var(--manager-border);
 
     color: var(--manager-muted);
-
-    font-size: 10px;
+    font-size: var(--manager-fs-10);
 }
 
 
 .manager-project-footer span {
 
     min-width: 0;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
 }
 
@@ -2108,7 +1703,6 @@ body.manager-dashboard-page {
 .manager-task-panel {
 
     display: flex;
-
     flex-direction: column;
 }
 
@@ -2116,10 +1710,8 @@ body.manager-dashboard-page {
 .manager-task-chart-wrapper {
 
     position: relative;
-
     width: 205px;
     height: 205px;
-
     margin: 0 auto 17px;
 }
 
@@ -2127,7 +1719,6 @@ body.manager-dashboard-page {
 .manager-task-chart-wrapper canvas {
 
     width: 100% !important;
-
     height: 100% !important;
 }
 
@@ -2135,17 +1726,11 @@ body.manager-dashboard-page {
 .manager-chart-center {
 
     position: absolute;
-
     inset: 0;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     pointer-events: none;
 }
 
@@ -2153,34 +1738,25 @@ body.manager-dashboard-page {
 .manager-chart-center strong {
 
     color: var(--manager-text);
-
-    font-size: 30px;
-
-    line-height: 1;
+    font-size: var(--manager-fs-30);
+    line-height: var(--manager-lh-1);
 }
 
 
 .manager-chart-center span {
 
     margin-top: 5px;
-
     color: var(--manager-muted);
-
-    font-size: 10px;
+    font-size: var(--manager-fs-10);
 }
 
 
 .manager-task-legend {
 
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-
     padding-top: 13px;
-
     border-top: 1px solid var(--manager-border);
 }
 
@@ -2188,9 +1764,7 @@ body.manager-dashboard-page {
 .manager-legend-item {
 
     display: flex;
-
     align-items: center;
-
     gap: 6px;
 }
 
@@ -2199,10 +1773,8 @@ body.manager-dashboard-page {
 
     width: 8px;
     height: 8px;
-
     flex: 0 0 auto;
-
-    border-radius: 50%;
+    border-radius: var(--manager-radius-round);
 }
 
 
@@ -2224,20 +1796,16 @@ body.manager-dashboard-page {
 .manager-legend-item strong {
 
     display: block;
-
     color: var(--manager-text);
-
-    font-size: 12px;
+    font-size: var(--manager-fs-12);
 }
 
 
 .manager-legend-item span:not(.manager-legend-dot) {
 
     display: block;
-
     color: var(--manager-muted);
-
-    font-size: 9px;
+    font-size: var(--manager-fs-9);
 }
 
 
@@ -2249,14 +1817,10 @@ body.manager-dashboard-page {
 .manager-completion-summary > div:first-child {
 
     display: flex;
-
     justify-content: space-between;
-
     margin-bottom: 6px;
-
     color: var(--manager-muted);
-
-    font-size: 10px;
+    font-size: var(--manager-fs-10);
 }
 
 
@@ -2272,9 +1836,7 @@ body.manager-dashboard-page {
 .manager-attention-list {
 
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
 }
 
@@ -2282,19 +1844,13 @@ body.manager-dashboard-page {
 .manager-attention-item {
 
     display: flex;
-
     align-items: center;
-
     gap: 10px;
-
     padding: 11px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: 11px;
-
+    border-radius: var(--manager-radius-11);
     color: var(--manager-text);
-
     text-decoration: none;
 
     transition:
@@ -2307,11 +1863,8 @@ body.manager-dashboard-page {
 .manager-attention-item:hover {
 
     background: var(--manager-surface-soft);
-
     border-color: var(--manager-border-strong);
-
     color: var(--manager-text);
-
     transform: translateX(2px);
 }
 
@@ -2320,23 +1873,18 @@ body.manager-dashboard-page {
 
     width: 34px;
     height: 34px;
-
     flex: 0 0 auto;
-
     display: grid;
-
     place-items: center;
 
-    border-radius: 9px;
-
-    font-size: 14px;
+    border-radius: var(--manager-radius-9);
+    font-size: var(--manager-fs-14);
 }
 
 
 .manager-attention-item.danger .manager-attention-icon {
 
     background: var(--manager-danger-soft);
-
     color: var(--manager-danger);
 }
 
@@ -2344,7 +1892,6 @@ body.manager-dashboard-page {
 .manager-attention-item.warning .manager-attention-icon {
 
     background: var(--manager-warning-soft);
-
     color: var(--manager-warning);
 }
 
@@ -2352,7 +1899,6 @@ body.manager-dashboard-page {
 .manager-attention-item.purple .manager-attention-icon {
 
     background: var(--manager-purple-soft);
-
     color: var(--manager-purple);
 }
 
@@ -2360,7 +1906,6 @@ body.manager-dashboard-page {
 .manager-attention-item.success .manager-attention-icon {
 
     background: var(--manager-success-soft);
-
     color: var(--manager-success);
 }
 
@@ -2368,7 +1913,6 @@ body.manager-dashboard-page {
 .manager-attention-content {
 
     min-width: 0;
-
     flex: 1;
 }
 
@@ -2376,30 +1920,24 @@ body.manager-dashboard-page {
 .manager-attention-content strong {
 
     display: block;
-
-    font-size: 12px;
+    font-size: var(--manager-fs-12);
 }
 
 
 .manager-attention-content span {
 
     display: block;
-
     margin-top: 3px;
-
     color: var(--manager-muted);
-
-    font-size: 10px;
-
-    line-height: 1.4;
+    font-size: var(--manager-fs-10);
+    line-height: var(--manager-lh-1-4);
 }
 
 
 .manager-attention-arrow {
 
     color: var(--manager-muted);
-
-    font-size: 11px;
+    font-size: var(--manager-fs-11);
 }
 
 
@@ -2410,7 +1948,6 @@ body.manager-dashboard-page {
 .manager-deadline-list {
 
     display: flex;
-
     flex-direction: column;
 }
 
@@ -2418,13 +1955,9 @@ body.manager-dashboard-page {
 .manager-deadline-item {
 
     display: flex;
-
     align-items: center;
-
     gap: 11px;
-
     padding: 10px 0;
-
     border-bottom: 1px solid var(--manager-border);
 }
 
@@ -2438,21 +1971,15 @@ body.manager-dashboard-page {
 
     width: 40px;
     height: 44px;
-
     flex: 0 0 auto;
 
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
 
-    border-radius: 9px;
-
+    border-radius: var(--manager-radius-9);
     background: var(--manager-surface-soft);
-
     border: 1px solid var(--manager-border);
 }
 
@@ -2460,29 +1987,23 @@ body.manager-dashboard-page {
 .manager-deadline-date strong {
 
     color: var(--manager-text);
-
-    font-size: 15px;
-
-    line-height: 1;
+    font-size: var(--manager-fs-15);
+    line-height: var(--manager-lh-1);
 }
 
 
 .manager-deadline-date span {
 
     margin-top: 3px;
-
     color: var(--manager-muted);
-
-    font-size: 8px;
-
-    font-weight: 700;
+    font-size: var(--manager-fs-8);
+    font-weight: var(--manager-fw-700);
 }
 
 
 .manager-deadline-content {
 
     min-width: 0;
-
     flex: 1;
 }
 
@@ -2490,15 +2011,10 @@ body.manager-dashboard-page {
 .manager-deadline-content strong {
 
     display: block;
-
     overflow: hidden;
-
     color: var(--manager-text);
-
-    font-size: 11px;
-
+    font-size: var(--manager-fs-11);
     text-overflow: ellipsis;
-
     white-space: nowrap;
 }
 
@@ -2506,17 +2022,11 @@ body.manager-dashboard-page {
 .manager-deadline-content span {
 
     display: block;
-
     margin-top: 3px;
-
     overflow: hidden;
-
     color: var(--manager-muted);
-
-    font-size: 9px;
-
+    font-size: var(--manager-fs-9);
     text-overflow: ellipsis;
-
     white-space: nowrap;
 }
 
@@ -2524,19 +2034,15 @@ body.manager-dashboard-page {
 .manager-deadline-priority {
 
     padding: 4px 7px;
-
-    border-radius: 20px;
-
-    font-size: 8px;
-
-    font-weight: 750;
+    border-radius: var(--manager-radius-pill);
+    font-size: var(--manager-fs-8);
+    font-weight: var(--manager-fw-750);
 }
 
 
 .manager-deadline-priority.danger {
 
     background: var(--manager-danger-soft);
-
     color: var(--manager-danger-dark);
 }
 
@@ -2544,7 +2050,6 @@ body.manager-dashboard-page {
 .manager-deadline-priority.warning {
 
     background: var(--manager-warning-soft);
-
     color: var(--manager-warning-dark);
 }
 
@@ -2552,8 +2057,7 @@ body.manager-dashboard-page {
 .manager-deadline-priority.purple {
 
     background: var(--manager-purple-soft);
-
-    color: #6d28d9;
+    color: var(--manager-purple-dark);
 }
 
 
@@ -2564,9 +2068,7 @@ body.manager-dashboard-page {
 .manager-team-list {
 
     display: flex;
-
     flex-direction: column;
-
     gap: 9px;
 }
 
@@ -2576,9 +2078,7 @@ body.manager-dashboard-page {
     padding: 12px;
 
     border: 1px solid var(--manager-border);
-
-    border-radius: 11px;
-
+    border-radius: var(--manager-radius-11);
     background: var(--manager-surface-soft);
 
     transition:
@@ -2590,7 +2090,6 @@ body.manager-dashboard-page {
 .manager-team-item:hover {
 
     border-color: var(--manager-border-strong);
-
     background: var(--manager-surface-strong);
 }
 
@@ -2598,9 +2097,7 @@ body.manager-dashboard-page {
 .manager-team-main {
 
     display: flex;
-
     align-items: center;
-
     gap: 10px;
 }
 
@@ -2614,24 +2111,17 @@ body.manager-dashboard-page {
 
     width: 30px;
     height: 30px;
-
     display: grid;
-
     place-items: center;
 
     margin-left: -5px;
-
     border: 2px solid var(--manager-surface-soft);
-
-    border-radius: 50%;
-
+    border-radius: var(--manager-radius-round);
     background: var(--manager-purple-soft);
-
     color: var(--manager-purple);
 
-    font-size: 8px;
-
-    font-weight: 750;
+    font-size: var(--manager-fs-8);
+    font-weight: var(--manager-fw-750);
 }
 
 
@@ -2648,22 +2138,17 @@ body.manager-dashboard-page {
 .manager-team-main strong {
 
     display: block;
-
     color: var(--manager-text);
-
-    font-size: 11px;
+    font-size: var(--manager-fs-11);
 }
 
 
 .manager-team-main span {
 
     display: block;
-
     margin-top: 3px;
-
     color: var(--manager-muted);
-
-    font-size: 9px;
+    font-size: var(--manager-fs-9);
 }
 
 
@@ -2675,14 +2160,11 @@ body.manager-dashboard-page {
 .manager-team-progress-label {
 
     display: flex;
-
     justify-content: space-between;
-
     margin-bottom: 5px;
 
     color: var(--manager-muted);
-
-    font-size: 9px;
+    font-size: var(--manager-fs-9);
 }
 
 
@@ -2694,38 +2176,26 @@ body.manager-dashboard-page {
 .manager-static-badge {
 
     padding: 4px 7px;
-
-    border-radius: 20px;
-
+    border-radius: var(--manager-radius-pill);
     background: var(--manager-surface-soft);
-
     border: 1px solid var(--manager-border);
-
     color: var(--manager-muted);
-
-    font-size: 9px;
+    font-size: var(--manager-fs-9);
 }
 
 
 .manager-team-footer {
 
     display: flex;
-
     align-items: flex-start;
-
     gap: 7px;
-
     margin-top: 12px;
-
     padding-top: 11px;
-
     border-top: 1px solid var(--manager-border);
 
     color: var(--manager-muted);
-
-    font-size: 9px;
-
-    line-height: 1.5;
+    font-size: var(--manager-fs-9);
+    line-height: var(--manager-lh-1-5);
 }
 
 
@@ -2736,7 +2206,6 @@ body.manager-dashboard-page {
 .manager-activity-list {
 
     display: flex;
-
     flex-direction: column;
 }
 
@@ -2744,11 +2213,8 @@ body.manager-dashboard-page {
 .manager-activity-item {
 
     display: flex;
-
     gap: 10px;
-
     padding: 11px 0;
-
     border-bottom: 1px solid var(--manager-border);
 }
 
@@ -2761,7 +2227,6 @@ body.manager-dashboard-page {
 .manager-activity-item:last-child {
 
     padding-bottom: 0;
-
     border-bottom: 0;
 }
 
@@ -2770,22 +2235,16 @@ body.manager-dashboard-page {
 
     width: 32px;
     height: 32px;
-
     flex: 0 0 auto;
-
     display: grid;
-
     place-items: center;
 
-    border-radius: 9px;
-
+    border-radius: var(--manager-radius-9);
     background: var(--manager-primary-soft);
-
     color: var(--manager-primary);
 
-    font-size: 9px;
-
-    font-weight: 750;
+    font-size: var(--manager-fs-9);
+    font-weight: var(--manager-fw-750);
 }
 
 
@@ -2797,32 +2256,25 @@ body.manager-dashboard-page {
 .manager-activity-content p {
 
     margin: 0;
-
     color: var(--manager-text-soft);
-
-    font-size: 10px;
-
-    line-height: 1.45;
+    font-size: var(--manager-fs-10);
+    line-height: var(--manager-lh-1-45);
 }
 
 
 .manager-activity-content strong {
 
     color: var(--manager-text);
-
-    font-weight: 650;
+    font-weight: var(--manager-fw-650);
 }
 
 
 .manager-activity-content > span {
 
     display: block;
-
     margin-top: 3px;
-
     color: var(--manager-muted);
-
-    font-size: 9px;
+    font-size: var(--manager-fs-9);
 }
 
 
@@ -2833,17 +2285,11 @@ body.manager-dashboard-page {
 .manager-empty-state {
 
     min-height: 250px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     padding: 30px;
-
     text-align: center;
 }
 
@@ -2852,44 +2298,32 @@ body.manager-dashboard-page {
 
     width: 52px;
     height: 52px;
-
     display: grid;
-
     place-items: center;
-
     margin-bottom: 10px;
 
-    border-radius: 14px;
-
+    border-radius: var(--manager-radius-14);
     background: var(--manager-primary-soft);
-
     color: var(--manager-primary);
-
-    font-size: 22px;
+    font-size: var(--manager-fs-22);
 }
 
 
 .manager-empty-state h3 {
 
     margin: 0;
-
     color: var(--manager-text);
-
-    font-size: 15px;
+    font-size: var(--manager-fs-15);
 }
 
 
 .manager-empty-state p {
 
     max-width: 300px;
-
     margin: 5px 0 13px;
-
     color: var(--manager-muted);
-
-    font-size: 11px;
-
-    line-height: 1.5;
+    font-size: var(--manager-fs-11);
+    line-height: var(--manager-lh-1-5);
 }
 
 
@@ -2909,7 +2343,6 @@ body.manager-dashboard-page {
 .manager-text-button:focus-visible {
 
     outline: 2px solid var(--manager-primary);
-
     outline-offset: 2px;
 }
 
@@ -2928,7 +2361,6 @@ body.manager-dashboard-page {
     .manager-container {
 
         padding-left: 20px;
-
         padding-right: 20px;
     }
 
@@ -2961,9 +2393,7 @@ body.manager-dashboard-page {
     .manager-sidebar {
 
         transform: translateX(-100%);
-
         transition: transform 0.22s ease;
-
         box-shadow:
             15px 0 35px rgba(15, 23, 42, 0.15);
     }
@@ -2982,11 +2412,8 @@ body.manager-dashboard-page {
     .manager-sidebar-backdrop {
 
         position: fixed;
-
         inset: 0;
-
         background: rgba(15, 23, 42, 0.35);
-
         z-index: 1050;
     }
 
@@ -3004,7 +2431,6 @@ body.manager-dashboard-page {
     .manager-menu-toggle {
 
         display: grid;
-
         place-items: center;
     }
 
@@ -3032,11 +2458,8 @@ body.manager-dashboard-page {
     .manager-topbar {
 
         height: auto;
-
         min-height: var(--manager-header-height);
-
         padding: 10px 14px;
-
         align-items: center;
     }
 
@@ -3047,19 +2470,18 @@ body.manager-dashboard-page {
 
 
     .manager-header-title {
-        font-size: 16px;
+        font-size: var(--manager-fs-16);
     }
 
 
     .manager-header-label {
-        font-size: 9px;
+        font-size: var(--manager-fs-9);
     }
 
 
     .manager-topbar-actions {
 
         gap: 6px;
-
         margin-left: 8px;
     }
 
@@ -3077,9 +2499,7 @@ body.manager-dashboard-page {
     .manager-profile-button {
 
         padding-right: 3px;
-
         border: 0;
-
         background: transparent;
     }
 
@@ -3087,7 +2507,6 @@ body.manager-dashboard-page {
     .manager-profile-avatar {
 
         width: 35px;
-
         height: 35px;
     }
 
@@ -3109,7 +2528,7 @@ body.manager-dashboard-page {
 
 
     .manager-page-context > div:first-child strong {
-        font-size: 11px;
+        font-size: var(--manager-fs-11);
     }
 
 
@@ -3117,7 +2536,6 @@ body.manager-dashboard-page {
 
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
-
         gap: 8px;
     }
 
@@ -3125,9 +2543,7 @@ body.manager-dashboard-page {
     .manager-stat-card {
 
         min-height: 104px;
-
         padding: 13px;
-
         gap: 9px;
     }
 
@@ -3136,25 +2552,23 @@ body.manager-dashboard-page {
 
         width: 38px;
         height: 38px;
-
-        border-radius: 10px;
-
-        font-size: 15px;
+        border-radius: var(--manager-radius-xs);
+        font-size: var(--manager-fs-15);
     }
 
 
     .manager-stat-label {
-        font-size: 10px;
+        font-size: var(--manager-fs-10);
     }
 
 
     .manager-stat-value {
-        font-size: 21px;
+        font-size: var(--manager-fs-21);
     }
 
 
     .manager-stat-meta {
-        font-size: 9px;
+        font-size: var(--manager-fs-9);
     }
 
 
@@ -3165,7 +2579,7 @@ body.manager-dashboard-page {
 
     .manager-section-heading h2,
     .manager-panel-header h2 {
-        font-size: 18px;
+        font-size: var(--manager-fs-18);
     }
 
 
@@ -3177,7 +2591,6 @@ body.manager-dashboard-page {
     .manager-panel-actions {
 
         flex-wrap: wrap;
-
         justify-content: flex-end;
     }
 
@@ -3185,7 +2598,6 @@ body.manager-dashboard-page {
     .manager-task-chart-wrapper {
 
         width: 185px;
-
         height: 185px;
     }
 
@@ -3193,13 +2605,9 @@ body.manager-dashboard-page {
     .manager-search-results {
 
         position: fixed;
-
         top: 62px;
-
         left: 13px;
-
         right: 13px;
-
         width: auto;
     }
 
@@ -3207,13 +2615,9 @@ body.manager-dashboard-page {
     .manager-notification-dropdown {
 
         position: fixed;
-
         top: 62px;
-
         left: 13px;
-
         right: 13px;
-
         width: auto;
     }
 }
@@ -3233,11 +2637,8 @@ body.manager-dashboard-page {
     .manager-header-title {
 
         max-width: 135px;
-
         overflow: hidden;
-
         text-overflow: ellipsis;
-
         white-space: nowrap;
     }
 
@@ -3245,9 +2646,7 @@ body.manager-dashboard-page {
     .manager-search {
 
         width: 40px;
-
         justify-content: center;
-
         padding: 0;
     }
 
@@ -3258,7 +2657,7 @@ body.manager-dashboard-page {
 
 
     .manager-search i {
-        font-size: 16px;
+        font-size: var(--manager-fs-16);
     }
 
 
@@ -3270,15 +2669,13 @@ body.manager-dashboard-page {
     .manager-stat-card {
 
         flex-direction: column;
-
         align-items: flex-start;
-
         min-height: 118px;
     }
 
 
     .manager-stat-meta {
-        font-size: 8px;
+        font-size: var(--manager-fs-8);
     }
 
 
@@ -3295,7 +2692,6 @@ body.manager-dashboard-page {
     .manager-panel-actions {
 
         width: 100%;
-
         justify-content: space-between;
     }
 }
@@ -3312,9 +2708,7 @@ body.manager-dashboard-page {
     .manager-dashboard-page *::after {
 
         scroll-behavior: auto !important;
-
         transition: none !important;
-
         animation: none !important;
     }
 }
