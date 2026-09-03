@@ -61,6 +61,9 @@
 ├── 📁 plugins
 │   ├── 📄 db.js
 │   └── 📄 query.js
+├── 📁 providers
+│   ├── 📄 routeConfig.js
+│   └── 📄 routeServiceProvider.js
 ├── 📁 public
 │   ├── 📁 css
 │   │   ├── 🎨 dashboard.css

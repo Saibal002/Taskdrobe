@@ -12,19 +12,10 @@ const errorHandler = require("./middleware/errorHandler");
 
 const commentModel = require("./models/commentModel"); // Add comment model
 
-const homeRoute = require("./routes/homeRoute");
-const authRoute = require("./routes/authRoute");
-const dashboardRoute = require("./routes/dashboardRoute");
-const adminRoute = require("./routes/adminRoutes");
-const managerRoute = require("./routes/managerRoutes");
-const projectRoute = require("./routes/projectRoute");
-const projectMemberRoutes = require("./routes/projectMemberRoutes");
-const taskRoute = require("./routes/taskRoute");
-const searchRoute = require("./routes/searchRoute");
-const profileRoute = require("./routes/profileRoute");
-const chatRoutes = require("./routes/chatRoute");
-const notificationRoute =
-    require("./routes/notificationRoute");
+//router Service Provider
+const RouteServiceProvider = require("./providers/routeServiceProvider");
+
+
 const { initializeChatSocket } = require("./controllers/chatSocketController");
 const {
   initializeNotificationSocket,
@@ -89,24 +80,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// ======================
-// Routes
-// ======================
-app.use("/", homeRoute);
-app.use("/auth", authRoute);
-app.use("/", dashboardRoute);
-app.use("/admin", adminRoute);
-app.use("/manager", managerRoute);
-app.use("/projects", projectRoute);
-app.use("/", projectMemberRoutes);
-app.use("/tasks", taskRoute);
-app.use("/search", searchRoute);
-app.use("/", profileRoute);
-app.use("/api/chat", chatRoutes);
-app.use(
-    "/api/notifications",
-    notificationRoute
-);
+
+const routeServiceProvider = new RouteServiceProvider(app);
+
+routeServiceProvider.register();
 
 app.use(errorHandler);
 
