@@ -1,0 +1,59 @@
+<section class="manager-panel">
+
+    <div class="manager-panel-header">
+
+        <div>
+            <span class="manager-section-eyebrow">
+                ACTIVITY
+            </span>
+
+            <h2>
+                Recent activity
+            </h2>
+
+            <p>
+                Recent workspace events.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="manager-activity-list">
+
+        <% activities.forEach(activity => { %>
+
+            <div class="manager-activity-item">
+
+                <div class="manager-activity-avatar">
+                    <%= activity.initials %>
+                </div>
+
+
+                <div class="manager-activity-content">
+
+                    <p>
+                        <strong>
+                            <%= activity.name %>
+                        </strong>
+
+                        <%= activity.action %>
+
+                        <strong>
+                            <%= activity.target %>
+                        </strong>
+                    </p>
+
+                    <span>
+                        <%= activity.time %>
+                    </span>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+</section>

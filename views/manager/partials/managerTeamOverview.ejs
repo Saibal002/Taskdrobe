@@ -1,0 +1,103 @@
+<section class="manager-panel">
+
+    <div class="manager-panel-header">
+
+        <div>
+            <span class="manager-section-eyebrow">
+                PEOPLE
+            </span>
+
+            <h2>
+                Team overview
+            </h2>
+
+            <p>
+                A quick look at your teams.
+            </p>
+        </div>
+
+        <span class="manager-static-badge">
+            Preview
+        </span>
+
+    </div>
+
+
+    <div class="manager-team-list">
+
+        <% teams.forEach(team => { %>
+
+            <div class="manager-team-item">
+
+                <div class="manager-team-main">
+
+                    <div class="manager-team-avatar-stack">
+
+                        <% team.members.forEach(member => { %>
+
+                            <span class="manager-team-avatar">
+                                <%= member %>
+                            </span>
+
+                        <% }) %>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            <%= team.name %>
+                        </strong>
+
+                        <span>
+                            <%= team.membersCount %> members ·
+                            <%= team.activeTasks %> active tasks
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="manager-team-progress">
+
+                    <div class="manager-team-progress-label">
+
+                        <span>
+                            Progress
+                        </span>
+
+                        <strong>
+                            <%= team.progress %>%
+                        </strong>
+
+                    </div>
+
+                    <div class="manager-progress-track">
+
+                        <div
+                            class="manager-progress-fill purple"
+                            style="width: <%= team.progress %>%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+
+    <div class="manager-team-footer">
+
+        <i class="bi bi-info-circle"></i>
+
+        Team membership will become dynamic when the team backend is added.
+
+    </div>
+
+</section>

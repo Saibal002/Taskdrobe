@@ -1,0 +1,183 @@
+<header class="manager-topbar">
+
+    <div class="manager-topbar-left">
+
+        <button
+            type="button"
+            class="manager-menu-toggle"
+            id="managerSidebarToggle"
+            aria-label="Open navigation"
+            aria-expanded="false">
+            <i class="bi bi-list"></i>
+        </button>
+
+
+        <div class="manager-header-greeting">
+
+            <span class="manager-header-label">
+                MANAGER OVERVIEW
+            </span>
+
+            <div class="manager-header-title">
+                Good morning, <%= user.full_name %>
+                <span class="manager-wave">👋</span>
+            </div>
+
+            <div class="manager-header-subtitle">
+                Here's what's happening across your workspace today.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="manager-topbar-actions">
+
+        <!-- Global Search -->
+        <div class="manager-search-wrapper">
+
+    <div class="manager-search">
+
+        <i class="bi bi-search"></i>
+
+        <input
+            type="text"
+            id="globalSearch"
+            placeholder="Search projects or tasks..."
+            autocomplete="off"
+            aria-label="Search">
+
+        <button
+            type="button"
+            id="clearSearch"
+            class="manager-search-clear d-none"
+            aria-label="Clear search">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+        <kbd>⌘ K</kbd>
+
+    </div>
+
+
+    <div
+        id="searchResults"
+        class="manager-search-results d-none">
+    </div>
+
+</div>
+
+
+        <!-- Notifications -->
+        <div class="manager-notification-wrapper">
+
+          <button
+    type="button"
+    class="manager-icon-button"
+    id="notificationButton"
+    data-user-id="<%= user.user_id %>"
+    aria-label="Notifications"
+    aria-expanded="false">
+
+    <i class="bi bi-bell"></i>
+
+    <span
+        id="notificationBadge"
+        class="manager-notification-badge d-none">
+        0
+    </span>
+
+</button>
+
+
+            <div
+                id="notificationDropdown"
+                class="manager-notification-dropdown d-none">
+
+                <div class="manager-notification-header">
+
+                    <div>
+                        <strong>Notifications</strong>
+                        <span id="notificationHeaderCount">0</span>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="markAllNotifications"
+                        class="manager-notification-mark">
+                        Mark all read
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="notificationList"
+                    class="manager-notification-list">
+
+                    <div class="manager-notification-empty">
+                        <i class="bi bi-bell-slash"></i>
+                        <span>No notifications</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Theme -->
+        <button
+            type="button"
+            class="manager-icon-button"
+            id="themeToggle"
+            aria-label="Toggle theme">
+
+            <i class="bi bi-moon"></i>
+
+        </button>
+
+
+        <!-- Profile -->
+        <a
+            href="/manager/profile"
+            class="manager-profile-button">
+
+            <span class="manager-profile-avatar">
+                <%= (user.full_name || "M").charAt(0).toUpperCase() %>
+            </span>
+
+            <span class="manager-profile-info">
+
+                <strong>
+                    <%= user.full_name %>
+                </strong>
+
+                <small>
+                    Manager
+                </small>
+
+            </span>
+
+            <i class="bi bi-chevron-down"></i>
+
+        </a>
+
+
+        <!-- Logout -->
+        <a
+            href="/auth/logout"
+            class="manager-logout-button"
+            aria-label="Logout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</header>

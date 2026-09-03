@@ -1,0 +1,132 @@
+<%
+    const totalProjects = Number(stats.totalProjects || 0);
+    const activeProjects = Number(stats.activeProjects || 0);
+    const totalTasks = Number(stats.totalTasks || 0);
+    const overdueTasks = Number(stats.overdueTasks || 0);
+%>
+
+<section class="manager-section">
+
+    <div class="manager-section-heading">
+
+        <div>
+            <span class="manager-section-eyebrow">
+                OVERVIEW
+            </span>
+
+            <h2>
+                At a glance
+            </h2>
+        </div>
+
+    </div>
+
+
+    <div class="manager-stats-grid">
+
+        <!-- Projects -->
+        <article class="manager-stat-card">
+
+            <div class="manager-stat-icon purple">
+                <i class="bi bi-kanban"></i>
+            </div>
+
+            <div class="manager-stat-content">
+
+                <span class="manager-stat-label">
+                    Total Projects
+                </span>
+
+                <strong class="manager-stat-value">
+                    <%= totalProjects %>
+                </strong>
+
+                <span class="manager-stat-meta">
+                    <%= activeProjects %> currently active
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <!-- Tasks -->
+        <article class="manager-stat-card">
+
+            <div class="manager-stat-icon teal">
+                <i class="bi bi-check2-square"></i>
+            </div>
+
+            <div class="manager-stat-content">
+
+                <span class="manager-stat-label">
+                    Total Tasks
+                </span>
+
+                <strong class="manager-stat-value">
+                    <%= totalTasks %>
+                </strong>
+
+                <span class="manager-stat-meta">
+                    Across all projects
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <!-- Team -->
+        <article class="manager-stat-card">
+
+            <div class="manager-stat-icon blue">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <div class="manager-stat-content">
+
+                <span class="manager-stat-label">
+                    Team Members
+                </span>
+
+                <strong class="manager-stat-value">
+                    <%= teamMemberCount %>
+                </strong>
+
+                <span class="manager-stat-meta">
+                    Across your teams
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <!-- Attention -->
+        <article class="manager-stat-card">
+
+            <div class="manager-stat-icon <%= overdueTasks > 0 ? 'red' : 'green' %>">
+                <i class="bi <%= overdueTasks > 0 ? 'bi-exclamation-circle' : 'bi-check-circle' %>"></i>
+            </div>
+
+            <div class="manager-stat-content">
+
+                <span class="manager-stat-label">
+                    Attention Required
+                </span>
+
+                <strong class="manager-stat-value">
+                    <%= overdueTasks %>
+                </strong>
+
+                <span class="manager-stat-meta">
+                    <%= overdueTasks > 0 ? 'Overdue tasks' : 'Everything is on track' %>
+                </span>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>

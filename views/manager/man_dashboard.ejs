@@ -1,325 +1,346 @@
+<%
+    const managerStats = projectStats || {};
+
+    /*
+     * Static preview data.
+     * These will eventually come from the team/activity/deadline backend.
+     */
+
+    const managerTeamMemberCount = 7;
+
+
+    const attentionItems = [
+
+        {
+            tone: Number(managerStats.overdueTasks || 0) > 0
+                ? "danger"
+                : "success",
+
+            icon: Number(managerStats.overdueTasks || 0) > 0
+                ? "bi-exclamation-octagon"
+                : "bi-check-circle",
+
+            title: Number(managerStats.overdueTasks || 0) > 0
+                ? `${managerStats.overdueTasks} overdue task${Number(managerStats.overdueTasks) === 1 ? "" : "s"}`
+                : "No overdue tasks",
+
+            text: Number(managerStats.overdueTasks || 0) > 0
+                ? "Review overdue work and reassign where necessary."
+                : "Your current overdue queue is clear.",
+
+            action: "/tasks"
+        },
+
+        {
+            tone: "warning",
+            icon: "bi-clock-history",
+            title: "2 projects nearing deadline",
+            text: "Review upcoming milestones before they become blockers.",
+            action: "/projects"
+        },
+
+        {
+            tone: "purple",
+            icon: "bi-person-exclamation",
+            title: "1 task needs assignment",
+            text: "Make sure new work has a clear owner.",
+            action: "/tasks"
+        }
+
+    ];
+
+
+    const upcomingDeadlines = [
+
+        {
+            day: "15",
+            month: "SEP",
+            project: "Website Redesign",
+            description: "Final review and delivery",
+            priority: "High",
+            tone: "danger"
+        },
+
+        {
+            day: "21",
+            month: "SEP",
+            project: "Mobile Application",
+            description: "Sprint milestone",
+            priority: "Medium",
+            tone: "warning"
+        },
+
+        {
+            day: "03",
+            month: "OCT",
+            project: "Analytics Platform",
+            description: "Initial release",
+            priority: "Planned",
+            tone: "purple"
+        }
+
+    ];
+
+
+    const teamOverview = [
+
+        {
+            name: "Product Team",
+            members: ["AK", "MR", "JS"],
+            membersCount: 4,
+            activeTasks: 12,
+            progress: 78
+        },
+
+        {
+            name: "Delivery Team",
+            members: ["RN", "SK", "AD"],
+            membersCount: 3,
+            activeTasks: 8,
+            progress: 91
+        }
+
+    ];
+
+
+    const recentActivity = [
+
+        {
+            initials: "AK",
+            name: "Alex",
+            action: "completed",
+            target: "API Integration",
+            time: "18 minutes ago"
+        },
+
+        {
+            initials: "MR",
+            name: "Maya",
+            action: "updated the status of",
+            target: "Website Redesign",
+            time: "42 minutes ago"
+        },
+
+        {
+            initials: "JS",
+            name: "Jordan",
+            action: "commented on",
+            target: "Mobile Application",
+            time: "1 hour ago"
+        },
+
+        {
+            initials: "RN",
+            name: "Ryan",
+            action: "started working on",
+            target: "Analytics Dashboard",
+            time: "2 hours ago"
+        }
+
+    ];
+%>
+
+
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %> | TaskDrobe</title>
 
-    <!-- Bootstrap & Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <!-- Custom CSS -->
-    <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/dashboard.css" rel="stylesheet">
-    <link href="/css/project.css" rel="stylesheet">
+    <title>
+        <%= title %> | TaskDrobe
+    </title>
+
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        rel="stylesheet">
+
+
+    <!-- Global styles -->
+    <link
+        href="/css/style.css"
+        rel="stylesheet">
+
+
+    <!-- Existing project/modal styles -->
+    <link
+        href="/css/project.css"
+        rel="stylesheet">
+
+
+    <!-- Manager-only design -->
+    <link
+        href="/css/manager_dashboard.css"
+        rel="stylesheet">
+
 </head>
-<body>
 
-    <%- include("../layout/navBar") %>
 
-    <div class="container-fluid">
-        <div class="row">
+<body class="manager-dashboard-page">
 
-            <%- include("../layout/sideBar") %>
 
-            <!-- Main Content Area -->
-            <main class="col-lg-9 col-xl-10 ms-sm-auto px-4 main-content">
-                
-                <!-- Your Existing Partials -->
-                <%- include("../layout/welcome", { stats: projectStats }) %>
-<%- include("../layout/projectCarousel") %>
-<%- include("../layout/statistics", { stats: projectStats }) %>
+    <!-- Manager Sidebar -->
+    <%- include("../layout/sideBar") %>
 
-            </main>
+
+    <!-- Manager Navbar -->
+    <%- include("./partials/managerNavBar") %>
+
+
+    <!-- Main Dashboard -->
+    <main class="manager-main">
+
+        <div class="manager-container">
+
+
+            <!-- Small page context -->
+            <div class="manager-page-context">
+
+                <div>
+
+                    <span>
+                        Workspace
+                    </span>
+
+                    <strong>
+                        Manager Dashboard
+                    </strong>
+
+                </div>
+
+
+                <div class="manager-date-chip">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    <%= today %>
+
+                </div>
+
+            </div>
+
+
+            <!-- Statistics -->
+            <%- include("./partials/managerStats", {
+                stats: managerStats,
+                teamMemberCount: managerTeamMemberCount
+            }) %>
+
+
+            <!-- Projects + Task Overview -->
+            <div class="manager-dashboard-grid manager-main-grid">
+
+                <%- include("./partials/managerProjects", {
+                    projects,
+                    user
+                }) %>
+
+
+                <%- include("./partials/managerTaskOverview", {
+                    stats: managerStats
+                }) %>
+
+            </div>
+
+
+            <!-- Attention + Deadlines -->
+            <div class="manager-dashboard-grid manager-secondary-grid">
+
+                <%- include("./partials/managerAttention", {
+                    items: attentionItems
+                }) %>
+
+
+                <%- include("./partials/managerDeadlines", {
+                    deadlines: upcomingDeadlines
+                }) %>
+
+            </div>
+
+
+            <!-- Activity + Team -->
+            <div class="manager-dashboard-grid manager-bottom-grid">
+
+                <%- include("./partials/managerActivity", {
+                    activities: recentActivity
+                }) %>
+
+
+                <%- include("./partials/managerTeamOverview", {
+                    teams: teamOverview
+                }) %>
+
+            </div>
+
         </div>
-    </div>
 
-    <!-- 
-      THE MODAL FLICKER FIX:
-      Render all Add/Edit modals down here, completely outside the main layout grid 
-      and away from any 'overflow-x' carousel containers. 
-    -->
+    </main>
+
+
+    <!-- Existing Add Project Modal -->
     <%- include("../layout/addProjectModal") %>
-    
+
+
+    <!-- Existing Edit Project Modals -->
     <% if (projects && projects.length > 0) { %>
+
         <% projects.forEach(project => { %>
-            <%- include("../layout/editProjectModal", { project }) %>
+
+            <%- include("../layout/editProjectModal", {
+                project
+            }) %>
+
         <% }) %>
+
     <% } %>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/dashboard.js"></script>
 
-    <!-- Carousel Scroll Logic -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const scrollContainer = document.getElementById('projectScrollContainer');
-            const leftBtn = document.getElementById('scrollLeftBtn');
-            const rightBtn = document.getElementById('scrollRightBtn');
-            
-            if (scrollContainer && leftBtn && rightBtn) {
-                const scrollAmount = 364; 
-
-                leftBtn.addEventListener('click', () => {
-                    scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                });
-
-                rightBtn.addEventListener('click', () => {
-                    scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                });
-            }
-        });
+    <!-- Libraries -->
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js">
     </script>
-    <script>
 
-    // =========================================================
-    // PROJECT CARD NAVIGATION
-    // =========================================================
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
 
-    $(document).on(
-        "click",
-        ".project-card-link",
-        function (event) {
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
 
-            // Do not navigate when Delete was clicked
-            if (
-                $(event.target)
-                    .closest(".project-edit-btn, .project-delete-btn")
-                    .length
-            ) {
-                return;
-            }
+    <script
+        src="/socket.io/socket.io.js">
+    </script>
 
-            const projectUrl =
-                $(this).data("project-url");
 
-            if (projectUrl) {
+    <!-- Manager-only JavaScript -->
+    <script
+        src="/js/managerDashboard.js">
+    </script>
 
-                window.location.href =
-                    projectUrl;
 
-            }
-
-        }
-    );
-
-
-    // Keyboard accessibility
-    $(document).on(
-        "keydown",
-        ".project-card-link",
-        function (event) {
-
-            if (
-                event.key !== "Enter" &&
-                event.key !== " "
-            ) {
-                return;
-            }
-
-            if (
-                $(event.target)
-                    .closest(".project-delete-btn")
-                    .length
-            ) {
-                return;
-            }
-
-            event.preventDefault();
-
-            const projectUrl =
-                $(this).data("project-url");
-
-            if (projectUrl) {
-
-                window.location.href =
-                    projectUrl;
-
-            }
-
-        }
-    );
-
-
-    // =========================================================
-    // DELETE PROJECT
-    // =========================================================
-
-    $(document).on(
-        "click",
-        ".project-delete-btn",
-        function (event) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            const button =
-                $(this);
-
-            const projectId =
-                button.data("project-id");
-
-
-            if (!projectId) {
-
-                alert(
-                    "Project ID is missing."
-                );
-
-                return;
-
-            }
-
-
-            const confirmed =
-                window.confirm(
-                    "Are you sure you want to delete this project?"
-                );
-
-
-            if (!confirmed) {
-
-                return;
-
-            }
-
-
-            button
-                .prop("disabled", true)
-                .html(
-                    '<span class="spinner-border spinner-border-sm me-1"></span>Deleting...'
-                );
-
-
-            $.ajax({
-
-                url:
-                    `/projects/${projectId}/delete`,
-
-                type:
-                    "POST",
-
-                headers: {
-                    "X-Requested-With":
-                        "XMLHttpRequest"
-                },
-
-                success:
-                    function (response) {
-
-                        if (
-                            !response ||
-                            !response.success
-                        ) {
-
-                            button
-                                .prop(
-                                    "disabled",
-                                    false
-                                )
-                                .html(
-                                    '<i class="bi bi-trash me-1"></i>Delete'
-                                );
-
-                            alert(
-                                response?.message ||
-                                "Unable to delete project."
-                            );
-
-                            return;
-
-                        }
-
-
-                        const card =
-                            button.closest(
-                                ".project-card-link"
-                            );
-
-
-                        card.fadeOut(
-                            250,
-                            function () {
-
-                                $(this).remove();
-
-                                // If no project cards remain
-                                const remainingCards =
-                                    $("#projectScrollContainer")
-                                        .find(".project-card-link")
-                                        .length;
-
-                                if (
-                                    remainingCards === 0
-                                ) {
-
-                                    $("#projectScrollContainer")
-                                        .html(`
-                                            <div class="text-center text-muted w-100 py-5">
-                                                <i class="bi bi-folder-x display-5 d-block mb-3"></i>
-                                                <h5 class="mb-1">
-                                                    No projects yet.
-                                                </h5>
-                                                <p class="mb-0">
-                                                    Create your first project to get started.
-                                                </p>
-                                            </div>
-                                        `);
-
-                                }
-
-                            }
-                        );
-
-                    },
-
-
-                error:
-                    function (xhr) {
-
-                        button
-                            .prop(
-                                "disabled",
-                                false
-                            )
-                            .html(
-                                '<i class="bi bi-trash me-1"></i>Delete'
-                            );
-
-
-                        let message =
-                            "Unable to delete project.";
-
-
-                        if (
-                            xhr.responseJSON &&
-                            xhr.responseJSON.message
-                        ) {
-
-                            message =
-                                xhr.responseJSON.message;
-
-                        }
-
-
-                        alert(message);
-
-                    }
-
-            });
-
-        }
-    );
-
-</script>
-
-
-    <%- include('../layout/globalChat') %>
+    <%- include("../layout/globalChat") %>
 
 </body>
+
 </html>

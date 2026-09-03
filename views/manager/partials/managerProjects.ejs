@@ -1,0 +1,272 @@
+<%
+    const dashboardProjects = (projects || []).slice(0, 4);
+%>
+
+<section class="manager-panel manager-projects-panel">
+
+    <div class="manager-panel-header">
+
+        <div>
+            <span class="manager-section-eyebrow">
+                PORTFOLIO
+            </span>
+
+            <h2>Projects</h2>
+
+            <p>
+                Keep an eye on progress across your active work.
+            </p>
+        </div>
+
+
+        <div class="manager-panel-actions">
+
+            <button
+                type="button"
+                class="manager-primary-button"
+                data-bs-toggle="modal"
+                data-bs-target="#addProjectModal">
+
+                <i class="bi bi-plus-lg"></i>
+                Add Project
+
+            </button>
+
+
+            <a
+                href="/projects"
+                class="manager-text-button">
+
+                View all
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <% if (dashboardProjects.length > 0) { %>
+
+        <div
+            class="manager-project-grid"
+            id="managerProjectsGrid">
+
+            <% dashboardProjects.forEach(project => { %>
+
+                <%
+                    const progress = Math.min(
+                        100,
+                        Math.max(
+                            0,
+                            Number(project.progress || 0)
+                        )
+                    );
+
+                    const status =
+                        String(project.status || "Not Started");
+
+                    const statusKey =
+                        status
+                            .toLowerCase()
+                            .replace(/\s+/g, "-");
+                %>
+
+
+                <article
+                    class="project-card-link manager-project-link"
+                    tabindex="0"
+                    role="link"
+                    data-project-url="/projects/<%= project.project_id %>">
+
+
+                    <div class="manager-project-card">
+
+
+                        <!-- TOP -->
+
+                        <div class="manager-project-top">
+
+                            <span
+                                class="manager-project-status <%= statusKey %>">
+
+                                <span></span>
+
+                                <%= status %>
+
+                            </span>
+
+
+                            <% if (
+                                user &&
+                                user.role_name === "manager"
+                            ) { %>
+
+                                <div class="manager-project-actions">
+
+
+                                    <!-- EDIT -->
+
+                                    <button
+                                        type="button"
+                                        class="manager-project-action project-edit-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editProjectModal-<%= project.project_id %>"
+                                        aria-label="Edit <%= project.project_name %>">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </button>
+
+
+                                    <!-- DELETE -->
+
+                                    <button
+                                        type="button"
+                                        class="manager-project-action project-delete-btn"
+                                        data-project-id="<%= project.project_id %>"
+                                        aria-label="Delete <%= project.project_name %>">
+
+                                        <i class="bi bi-trash3"></i>
+
+                                    </button>
+
+                                </div>
+
+                            <% } %>
+
+                        </div>
+
+
+                        <!-- BODY -->
+
+                        <div class="manager-project-body">
+
+                            <h3>
+                                <%= project.project_name %>
+                            </h3>
+
+
+                            <p>
+                                <%= project.description ||
+                                    "No project description available." %>
+                            </p>
+
+                        </div>
+
+
+                        <!-- PROGRESS -->
+
+                        <div class="manager-project-progress">
+
+                            <div class="manager-progress-header">
+
+                                <span>
+                                    Progress
+                                </span>
+
+                                <strong>
+                                    <%= progress %>%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="manager-progress-track">
+
+                                <div
+                                    class="manager-progress-fill"
+                                    style="width: <%= progress %>%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FOOTER -->
+
+                        <div class="manager-project-footer">
+
+                            <span>
+
+                                <i class="bi bi-calendar3"></i>
+
+                                <%= project.deadline
+                                    ? new Date(
+                                        project.deadline
+                                    ).toLocaleDateString(
+                                        undefined,
+                                        {
+                                            month: "short",
+                                            day: "numeric",
+                                            year: "numeric"
+                                        }
+                                    )
+                                    : "No deadline"
+                                %>
+
+                            </span>
+
+
+                            <span>
+
+                                <i class="bi bi-person"></i>
+
+                                <%= project.full_name || "No owner" %>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            <% }) %>
+
+        </div>
+
+
+    <% } else { %>
+
+
+        <div
+            class="manager-empty-state"
+            id="managerProjectsGrid">
+
+            <div class="manager-empty-icon">
+
+                <i class="bi bi-folder2-open"></i>
+
+            </div>
+
+
+            <h3>
+                No projects yet
+            </h3>
+
+
+            <p>
+                Create your first project to start managing your workspace.
+            </p>
+
+
+            <button
+                type="button"
+                class="manager-primary-button"
+                data-bs-toggle="modal"
+                data-bs-target="#addProjectModal">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Create Project
+
+            </button>
+
+        </div>
+
+    <% } %>
+
+</section>

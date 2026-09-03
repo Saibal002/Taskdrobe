@@ -1,0 +1,66 @@
+<section class="manager-panel">
+
+    <div class="manager-panel-header">
+
+        <div>
+            <span class="manager-section-eyebrow">
+                SCHEDULE
+            </span>
+
+            <h2>
+                Upcoming deadlines
+            </h2>
+
+            <p>
+                What is coming up next.
+            </p>
+        </div>
+
+        <i class="bi bi-calendar3 manager-panel-header-icon"></i>
+
+    </div>
+
+
+    <div class="manager-deadline-list">
+
+        <% deadlines.forEach(deadline => { %>
+
+            <div class="manager-deadline-item">
+
+                <div class="manager-deadline-date">
+
+                    <strong>
+                        <%= deadline.day %>
+                    </strong>
+
+                    <span>
+                        <%= deadline.month %>
+                    </span>
+
+                </div>
+
+
+                <div class="manager-deadline-content">
+
+                    <strong>
+                        <%= deadline.project %>
+                    </strong>
+
+                    <span>
+                        <%= deadline.description %>
+                    </span>
+
+                </div>
+
+
+                <span class="manager-deadline-priority <%= deadline.tone %>">
+                    <%= deadline.priority %>
+                </span>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+</section>

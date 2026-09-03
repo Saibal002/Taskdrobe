@@ -1,0 +1,131 @@
+<% if (user && user.role_name === "manager") { %>
+
+<aside class="manager-sidebar" id="managerSidebar">
+
+    <div class="manager-sidebar-brand">
+        <a href="/manager/dashboard" class="manager-brand">
+            <span class="manager-brand-icon">
+                <i class="bi bi-grid-1x2-fill"></i>
+            </span>
+
+            <span class="manager-brand-text">
+                Task<span>Drobe</span>
+            </span>
+        </a>
+
+        <button
+            type="button"
+            class="manager-sidebar-close"
+            id="managerSidebarClose"
+            aria-label="Close navigation">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div class="manager-sidebar-content">
+
+        <div class="manager-nav-group">
+
+            <div class="manager-nav-label">
+                Workspace
+            </div>
+
+            <a href="/manager/dashboard"
+               class="manager-nav-item active">
+                <span class="manager-nav-icon">
+                    <i class="bi bi-grid-1x2"></i>
+                </span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/projects"
+               class="manager-nav-item">
+                <span class="manager-nav-icon">
+                    <i class="bi bi-kanban"></i>
+                </span>
+                <span>Projects</span>
+            </a>
+
+            <a href="/tasks"
+               class="manager-nav-item">
+                <span class="manager-nav-icon">
+                    <i class="bi bi-check2-square"></i>
+                </span>
+                <span>Tasks</span>
+            </a>
+
+        </div>
+
+
+        <div class="manager-nav-group">
+
+            <div class="manager-nav-label">
+                Management
+            </div>
+
+            <button
+                type="button"
+                class="manager-nav-item manager-nav-disabled"
+                disabled>
+                <span class="manager-nav-icon">
+                    <i class="bi bi-people"></i>
+                </span>
+
+                <span>Teams</span>
+
+                <span class="manager-coming-soon">
+                    Soon
+                </span>
+            </button>
+
+            <button
+                type="button"
+                class="manager-nav-item manager-nav-disabled"
+                disabled>
+                <span class="manager-nav-icon">
+                    <i class="bi bi-bar-chart"></i>
+                </span>
+
+                <span>Reports</span>
+
+                <span class="manager-coming-soon">
+                    Soon
+                </span>
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="manager-sidebar-bottom">
+
+        <a href="/manager/profile"
+           class="manager-nav-item">
+            <span class="manager-nav-icon">
+                <i class="bi bi-person-circle"></i>
+            </span>
+
+            <span>Profile</span>
+        </a>
+
+        <a href="/auth/logout"
+           class="manager-nav-item manager-logout">
+            <span class="manager-nav-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </span>
+
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+</aside>
+
+
+<div
+    class="manager-sidebar-backdrop"
+    id="managerSidebarBackdrop">
+</div>
+
+<% } %>
