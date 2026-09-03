@@ -1,13 +1,17 @@
 # File Tree: TaskDrobe
 
+
 ```
 ├── 📁 config
 │   └── 📄 environment.js
 ├── 📁 controllers
 │   ├── 📄 attachmentController.js
 │   ├── 📄 authController.js
+│   ├── 📄 chatController.js
 │   ├── 📄 chatSocketController.js
 │   ├── 📄 dashboardController.js
+│   ├── 📄 notificationController.js
+│   ├── 📄 notificationSocketController.js
 │   ├── 📄 profileController.js
 │   ├── 📄 projectController.js
 │   ├── 📄 projectMemberController.js
@@ -21,7 +25,10 @@
 │   │   │   ├── 📄 02_users.sql
 │   │   │   ├── 📄 03_seed_roles.sql
 │   │   │   ├── 📄 04_sessions.sql
-│   │   │   └── 📄 05_user_profiles.sql
+│   │   │   ├── 📄 05_user_profiles.sql
+│   │   │   ├── 📄 06_conversations.sql
+│   │   │   ├── 📄 07_messages.sql
+│   │   │   └── 📄 08_notifications.sql
 │   │   ├── 📁 projects
 │   │   │   ├── 📄 01_project_status.sql
 │   │   │   ├── 📄 02_projects.sql
@@ -42,8 +49,10 @@
 │   └── 📄 uploadMiddleware.js
 ├── 📁 models
 │   ├── 📄 attachmentModel.js
+│   ├── 📄 chatModel.js
 │   ├── 📄 commentModel.js
 │   ├── 📄 dashboardModel.js
+│   ├── 📄 notificationModel.js
 │   ├── 📄 projectMemberModel.js
 │   ├── 📄 projectModel.js
 │   ├── 📄 roleModel.js
@@ -55,6 +64,8 @@
 ├── 📁 public
 │   ├── 📁 css
 │   │   ├── 🎨 dashboard.css
+│   │   ├── 🎨 discussion-comments.css
+│   │   ├── 🎨 emp_dashboard.css
 │   │   ├── 🎨 project.css
 │   │   └── 🎨 style.css
 │   ├── 📁 images
@@ -62,14 +73,17 @@
 │   └── 📁 js
 │       ├── 📄 auth.js
 │       ├── 📄 dashboard.js
+│       ├── 📄 discussion-comments.js
 │       ├── 📄 project.js
 │       └── 📄 task.js
 ├── 📁 routes
 │   ├── 📄 adminRoutes.js
 │   ├── 📄 authRoute.js
+│   ├── 📄 chatRoute.js
 │   ├── 📄 dashboardRoute.js
 │   ├── 📄 homeRoute.js
 │   ├── 📄 managerRoutes.js
+│   ├── 📄 notificationRoute.js
 │   ├── 📄 profileRoute.js
 │   ├── 📄 projectMemberRoutes.js
 │   ├── 📄 projectRoute.js
@@ -101,9 +115,12 @@
 │   │   ├── 📄 assignTaskModal.ejs
 │   │   ├── 📄 calendarSidebar.ejs
 │   │   ├── 📄 charts.ejs
+│   │   ├── 📄 discussionComment.ejs
+│   │   ├── 📄 discussionComments.ejs
 │   │   ├── 📄 editProjectModal.ejs
 │   │   ├── 📄 editTaskModal.ejs
 │   │   ├── 📄 footer.ejs
+│   │   ├── 📄 globalChat.ejs
 │   │   ├── 📄 header.ejs
 │   │   ├── 📄 navBar.ejs
 │   │   ├── 📄 projectCarousel.ejs
@@ -115,9 +132,9 @@
 │   ├── 📁 manager
 │   │   ├── 📁 partials
 │   │   │   └── 📄 projectTasks.ejs
-│   │   ├── 📄 dashboard.ejs
+│   │   ├── 📄 man_dashboard.ejs
 │   │   └── 📄 projectMembers.ejs
-│   ├── 📄 dashboard.ejs
+│   ├── 📄 emp_dashboard.ejs
 │   ├── 📄 landing.ejs
 │   ├── 📄 login.ejs
 │   ├── 📄 profile.ejs
