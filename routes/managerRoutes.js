@@ -57,5 +57,26 @@ router.post(
     projectMemberController.removeMember
 );
 
+// Render the Teams Dashboard Page
+router.get("/teams", (req, res) => {
+    // Generate a simple date string for the sidebar/navbar if needed
+    const today = new Date().toLocaleDateString("en-US", { 
+        weekday: 'short', month: 'short', day: 'numeric' 
+    });
 
+    res.render("manager/teams", {
+        title: "Teams Directory",
+        user: req.user,
+        today: today
+    });
+});
+
+// Render Single Team Insight Page
+router.get("/teams/:teamId", (req, res) => {
+    res.render("manager/team_insight", {
+        title: "Team Insight",
+        user: req.user,
+        teamId: req.params.teamId
+    });
+});
 module.exports = router;

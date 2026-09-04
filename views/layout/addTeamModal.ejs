@@ -1,0 +1,33 @@
+<div class="modal fade" id="addTeamModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow border-0 overflow-hidden">
+      <!-- Vibrant colored header -->
+      <div class="modal-header text-white px-4 py-3" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
+        <h5 class="modal-title d-flex align-items-center fw-bold">
+          <i class="bi bi-people-fill me-2"></i> Create New Team
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Light shaded body to contrast the white form fields -->
+      <div class="modal-body p-4" style="background-color: #f8fafc;">
+        <form id="createTeamForm" class="d-flex flex-column gap-3">
+          <div class="form-group">
+            <label for="teamName" class="form-label fw-bold" style="color: #334155;">Team Name</label>
+            <input type="text" class="form-control shadow-sm border-0" id="teamName" name="teamName" placeholder="e.g., Backend Developers" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="teamDescription" class="form-label fw-bold" style="color: #334155;">Description</label>
+            <textarea class="form-control shadow-sm border-0" id="teamDescription" name="description" rows="3" placeholder="Core API and database team..."></textarea>
+          </div>
+          
+          <div class="d-flex justify-content-end mt-3">
+            <button type="button" class="btn btn-light me-2 text-muted fw-bold shadow-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn text-white px-4 fw-bold shadow-sm" style="background-color: #4f46e5;">Create Team</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

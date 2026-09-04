@@ -82,25 +82,7 @@
     ];
 
 
-    const teamOverview = [
 
-        {
-            name: "Product Team",
-            members: ["AK", "MR", "JS"],
-            membersCount: 4,
-            activeTasks: 12,
-            progress: 78
-        },
-
-        {
-            name: "Delivery Team",
-            members: ["RN", "SK", "AD"],
-            membersCount: 3,
-            activeTasks: 8,
-            progress: 91
-        }
-
-    ];
 
 
     const recentActivity = [
@@ -286,9 +268,7 @@
                 }) %>
 
 
-                <%- include("./partials/managerTeamOverview", {
-                    teams: teamOverview
-                }) %>
+                <%- include("./partials/managerTeamOverview") %>
 
             </div>
 
@@ -300,6 +280,8 @@
     <!-- Existing Add Project Modal -->
     <%- include("../layout/addProjectModal") %>
 
+    <!-- New Add Team Modal -->
+    <%- include("../layout/addTeamModal") %>
 
     <!-- Existing Edit Project Modals -->
     <% if (projects && projects.length > 0) { %>
@@ -337,7 +319,7 @@
     <script
         src="/js/managerDashboard.js">
     </script>
-
+    <script src="/js/managerTeamsAjax.js"></script>
 
     <%- include("../layout/globalChat") %>
 

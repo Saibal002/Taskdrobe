@@ -1,4 +1,4 @@
-CREATE TABLE conversations (
+CREATE TABLE IF NOT EXISTS conversations (
     conversation_id SERIAL PRIMARY KEY,
     user1_id BIGINT REFERENCES users(user_id) ON DELETE CASCADE,
     user2_id BIGINT REFERENCES users(user_id) ON DELETE CASCADE,

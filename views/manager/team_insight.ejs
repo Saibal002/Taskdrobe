@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | TaskDrobe</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/manager_dashboard.css" rel="stylesheet">
+</head>
+<body class="manager-dashboard-page" style="background-color: #f8fafc;">
+
+    <%- include("../layout/sideBar") %>
+    <%- include("./partials/managerNavBar") %>
+
+    <main class="manager-main">
+        <div class="manager-container">
+            
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/manager/teams" class="text-decoration-none fw-bold" style="color: #4f46e5;">Teams</a></li>
+                    <li class="breadcrumb-item active text-muted fw-bold" aria-current="page" id="breadcrumbName">Loading...</li>
+                </ol>
+            </nav>
+
+            <!-- Vibrant Hero Header -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                <div class="card-body p-5 text-white position-relative" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
+                    <!-- Decorative background element -->
+                    <div class="position-absolute opacity-25" style="top: -50px; right: -20px; font-size: 15rem;">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    
+                    <div class="position-relative z-index-1">
+                        <div class="d-flex align-items-center gap-4 mb-3">
+                            <div id="teamAvatar" class="rounded-circle shadow-lg d-flex align-items-center justify-content-center fw-bold bg-white" style="width: 80px; height: 80px; font-size: 2rem; color: #4f46e5;">
+                                --
+                            </div>
+                            <div>
+                                <h1 id="teamName" class="fw-bold mb-1 display-6">Loading Team...</h1>
+                                <p id="teamDescription" class="mb-0 fs-5 opacity-75">Please wait while we fetch the team details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Tab Navigation -->
+            <ul class="nav nav-pills mb-4 gap-2" id="teamTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold rounded-pill px-4" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">Overview & Stats</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-pill px-4" id="members-tab" data-bs-toggle="pill" data-bs-target="#members" type="button" role="tab">Members</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-pill px-4" id="projects-tab" data-bs-toggle="pill" data-bs-target="#projects" type="button" role="tab">Assigned Projects</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-pill px-4" id="tasks-tab" data-bs-toggle="pill" data-bs-target="#tasks" type="button" role="tab">Tasks</button>
+                </li>
+            </ul>
+
+            <!-- Tab Content Area -->
+            <div class="tab-content" id="teamTabsContent">
+                
+                <!-- 1. Overview Tab (We will build stats here next) -->
+                <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                    <div class="text-center py-5">
+                        <p class="text-muted fw-bold">Stats and metrics will load here.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Members Tab -->
+                <div class="tab-pane fade" id="members" role="tabpanel">
+                    <div class="text-center py-5">
+                        <p class="text-muted fw-bold">Team member management will load here.</p>
+                    </div>
+                </div>
+
+                <!-- 3. Projects Tab -->
+                <div class="tab-pane fade" id="projects" role="tabpanel">
+                    <div class="text-center py-5">
+                        <p class="text-muted fw-bold">Assigned projects will load here.</p>
+                    </div>
+                </div>
+
+                <!-- 4. Tasks Tab -->
+                <div class="tab-pane fade" id="tasks" role="tabpanel">
+                    <div class="text-center py-5">
+                        <p class="text-muted fw-bold">Team tasks will load here.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Pass the server-side teamId to the client -->
+    <script>
+        const CURRENT_TEAM_ID = "<%= teamId %>";
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/managerDashboard.js"></script>
+    <script src="/js/managerTeamsAjax.js"></script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 -- 08_notifications.sql
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
     notification_id SERIAL PRIMARY KEY,
     user_id BIGINT REFERENCES users(user_id) ON DELETE CASCADE,
     sender_id BIGINT REFERENCES users(user_id) ON DELETE SET NULL,

@@ -1,5 +1,6 @@
-const routeConfig = require("./routeConfig");
+const express = require("express");
 
+const routeConfig = require("./routeConfig");
 const authMiddleware = require("../middleware/authMiddleware");
 
 class RouteServiceProvider {
@@ -19,10 +20,16 @@ class RouteServiceProvider {
     }
 
     registerProtectedRoutes() {
-        this.mountGroup(
-            routeConfig.protected,
-            [authMiddleware]
-        );
+        const protectedRouter = express.Router();
+
+        // Authenticate once for the entire protected group
+        protectedRouter.use(authMiddleware);
+
+        routeConfig.protected.forEach(({ path, router }) => {
+            protectedRouter.use(path, router);
+        });
+
+        this.app.use("/", protectedRouter);
     }
 
     registerApiRoutes() {
@@ -40,30 +47,16 @@ class RouteServiceProvider {
 
     mount(routes) {
         routes.forEach(({ path, router }) => {
+            console.log("📌 MOUNTING:", path);
             this.app.use(path, router);
         });
     }
 
-    mountGroup(routes, middleware = []) {
-        routes.forEach(({ path, router }) => {
-            this.app.use(
-                path,
-                ...middleware,
-                router
-            );
-        });
-    }
-
     mountWithMiddleware(routes) {
-        routes.forEach(
-            ({ path, router, middleware = [] }) => {
-                this.app.use(
-                    path,
-                    ...middleware,
-                    router
-                );
-            }
-        );
+        routes.forEach(({ path, router, middleware = [] }) => {
+            console.log("📌 MOUNTING ROLE:", path);
+            this.app.use(path, ...middleware, router);
+        });
     }
 }
 

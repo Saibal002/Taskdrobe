@@ -1359,7 +1359,7 @@ document.addEventListener("DOMContentLoaded", function () {
         switch (type) {
 
             case "task_assigned":
-            case "task_status":
+                case "task_status":
             case "task_comment":
 
                 window.location.href =
@@ -1373,111 +1373,103 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =====================================================
-       SOCKET.IO
+       SOCKET.IO NOTIFICATIONS
     ===================================================== */
 
-  /* =====================================================
-   SOCKET.IO NOTIFICATIONS
-===================================================== */
+    if (
+        typeof io !== "undefined" &&
+        currentUserId
+    ) {
 
-if (
-    typeof io !== "undefined" &&
-    currentUserId
-) {
-
-    const notificationSocket =
-        io("/notifications");
+        const notificationSocket =
+            io("/notifications");
 
 
-    notificationSocket.on(
-        "connect",
-        function () {
+        notificationSocket.on(
+            "connect",
+            function () {
 
-            console.log(
-                "🔔 Manager notification socket connected:",
-                notificationSocket.id
-            );
-
-
-            notificationSocket.emit(
-                "joinNotificationRoom",
-                currentUserId
-            );
+                console.log(
+                    "🔔 Manager notification socket connected:",
+                    notificationSocket.id
+                );
 
 
-            console.log(
-                "🔔 Joined notification room:",
-                currentUserId
-            );
-
-        }
-    );
+                notificationSocket.emit(
+                    "joinNotificationRoom",
+                    currentUserId
+                );
 
 
-    notificationSocket.on(
-        "newSystemNotification",
-        function (notification) {
+                console.log(
+                    "🔔 Joined notification room:",
+                    currentUserId
+                );
 
-            console.log(
-                "🔔 NEW MANAGER NOTIFICATION:",
-                notification
-            );
-
-
-            /*
-             * Reload from database so the manager
-             * receives the exact notification record.
-             */
-            loadNotifications();
-
-        }
-    );
+            }
+        );
 
 
-    notificationSocket.on(
-        "notificationCountUpdated",
-        function (count) {
+        notificationSocket.on(
+            "newSystemNotification",
+            function (notification) {
 
-            console.log(
-                "🔔 Manager notification count:",
-                count
-            );
-
-
-            updateNotificationBadge(
-                count
-            );
-
-        }
-    );
+                console.log(
+                    "🔔 NEW MANAGER NOTIFICATION:",
+                    notification
+                );
 
 
-    notificationSocket.on(
-        "connect_error",
-        function (error) {
+                loadNotifications();
 
-            console.error(
-                "❌ Notification socket connection error:",
-                error
-            );
+            }
+        );
 
-        }
-    );
 
-} else {
+        notificationSocket.on(
+            "notificationCountUpdated",
+            function (count) {
 
-    console.error(
-        "❌ Notification socket could not initialize.",
-        {
-            ioAvailable:
-                typeof io !== "undefined",
+                console.log(
+                    "🔔 Manager notification count:",
+                    count
+                );
 
-            currentUserId:
-                currentUserId
-        }
-    );
 
-}
+                updateNotificationBadge(
+                    count
+                );
+
+            }
+        );
+
+
+        notificationSocket.on(
+            "connect_error",
+            function (error) {
+
+                console.error(
+                    "❌ Notification socket connection error:",
+                    error
+                );
+
+            }
+        );
+
+    } else {
+
+        console.error(
+            "❌ Notification socket could not initialize.",
+            {
+                ioAvailable:
+                    typeof io !== "undefined",
+
+                currentUserId:
+                    currentUserId
+            }
+        );
+
+    }
 
 
     /*
