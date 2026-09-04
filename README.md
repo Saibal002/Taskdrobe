@@ -16,7 +16,8 @@
 │   ├── 📄 projectController.js
 │   ├── 📄 projectMemberController.js
 │   ├── 📄 searchController.js
-│   └── 📄 taskController.js
+│   ├── 📄 taskController.js
+│   └── 📄 teamController.js
 ├── 📁 database
 │   ├── 📁 migration
 │   ├── 📁 modules
@@ -35,10 +36,13 @@
 │   │   │   ├── 📄 03_project_members.sql
 │   │   │   ├── 📄 04_attachments.sql
 │   │   │   └── 📄 05_comments.sql
-│   │   └── 📁 tasks
-│   │       ├── 📄 01_task_status.sql
-│   │       ├── 📄 02_task_priority.sql
-│   │       └── 📄 03_tasks.sql
+│   │   ├── 📁 tasks
+│   │   │   ├── 📄 01_task_status.sql
+│   │   │   ├── 📄 02_task_priority.sql
+│   │   │   └── 📄 03_tasks.sql
+│   │   └── 📁 teams
+│   │       ├── 📄 01_teams.sql
+│   │       └── 📄 02_team_members.sql
 │   ├── 📝 README.md
 │   └── 📄 dbSetup.js
 ├── 📁 middleware
@@ -57,6 +61,7 @@
 │   ├── 📄 projectModel.js
 │   ├── 📄 roleModel.js
 │   ├── 📄 taskModel.js
+│   ├── 📄 teamModel.js
 │   └── 📄 userModel.js
 ├── 📁 plugins
 │   ├── 📄 db.js
@@ -79,6 +84,7 @@
 │       ├── 📄 dashboard.js
 │       ├── 📄 discussion-comments.js
 │       ├── 📄 managerDashboard.js
+│       ├── 📄 managerTeamsAjax.js
 │       ├── 📄 project.js
 │       └── 📄 task.js
 ├── 📁 routes
@@ -93,7 +99,8 @@
 │   ├── 📄 projectMemberRoutes.js
 │   ├── 📄 projectRoute.js
 │   ├── 📄 searchRoute.js
-│   └── 📄 taskRoute.js
+│   ├── 📄 taskRoute.js
+│   └── 📄 teamRoute.js
 ├── 📁 scripts
 ├── 📁 services
 │   ├── 📄 authService.js
@@ -102,7 +109,8 @@
 │   ├── 📄 projectMemberService.js
 │   ├── 📄 projectService.js
 │   ├── 📄 searchService.js
-│   └── 📄 taskService.js
+│   ├── 📄 taskService.js
+│   └── 📄 teamService.js
 ├── 📁 utils
 │   ├── 📄 AppError.js
 │   └── 📄 jwt.js
@@ -110,6 +118,7 @@
 │   ├── 📄 authValidator.js
 │   ├── 📄 projectValidator.js
 │   ├── 📄 taskValidator.js
+│   ├── 📄 teamValidator.js
 │   └── 📄 validate.js
 ├── 📁 views
 │   ├── 📁 admin
@@ -117,6 +126,7 @@
 │   ├── 📁 layout
 │   │   ├── 📄 addProjectModal.ejs
 │   │   ├── 📄 addTaskModal.ejs
+│   │   ├── 📄 addTeamModal.ejs
 │   │   ├── 📄 assignTaskModal.ejs
 │   │   ├── 📄 calendarSidebar.ejs
 │   │   ├── 📄 charts.ejs
@@ -147,7 +157,9 @@
 │   │   │   ├── 📄 managerWelcome.ejs
 │   │   │   └── 📄 projectTasks.ejs
 │   │   ├── 📄 man_dashboard.ejs
-│   │   └── 📄 projectMembers.ejs
+│   │   ├── 📄 projectMembers.ejs
+│   │   ├── 📄 team_insight.ejs
+│   │   └── 📄 teams.ejs
 │   ├── 📄 emp_dashboard.ejs
 │   ├── 📄 landing.ejs
 │   ├── 📄 login.ejs
@@ -164,3 +176,15 @@
 ```
 
 ---
+
+***RECENT MODIFICATIONS***
+```
+models/teamModel.js
+ public/js/managerTeamsAjax.js
+ routes/teamRoute.js
+ services/teamService.js
+ validators/teamValidator.js
+ views/layout/addTeamModal.ejs
+ views/manager/team_insight.ejs
+ views/manager/teams.ejs
+```
