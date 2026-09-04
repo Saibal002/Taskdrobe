@@ -69,6 +69,7 @@
 │   │   ├── 🎨 dashboard.css
 │   │   ├── 🎨 discussion-comments.css
 │   │   ├── 🎨 emp_dashboard.css
+│   │   ├── 🎨 manager_dashboard.css
 │   │   ├── 🎨 project.css
 │   │   └── 🎨 style.css
 │   ├── 📁 images
@@ -77,6 +78,7 @@
 │       ├── 📄 auth.js
 │       ├── 📄 dashboard.js
 │       ├── 📄 discussion-comments.js
+│       ├── 📄 managerDashboard.js
 │       ├── 📄 project.js
 │       └── 📄 task.js
 ├── 📁 routes
@@ -134,6 +136,15 @@
 │   │   └── 📄 welcome.ejs
 │   ├── 📁 manager
 │   │   ├── 📁 partials
+│   │   │   ├── 📄 managerActivity.ejs
+│   │   │   ├── 📄 managerAttention.ejs
+│   │   │   ├── 📄 managerDeadlines.ejs
+│   │   │   ├── 📄 managerNavBar.ejs
+│   │   │   ├── 📄 managerProjects.ejs
+│   │   │   ├── 📄 managerStats.ejs
+│   │   │   ├── 📄 managerTaskOverview.ejs
+│   │   │   ├── 📄 managerTeamOverview.ejs
+│   │   │   ├── 📄 managerWelcome.ejs
 │   │   │   └── 📄 projectTasks.ejs
 │   │   ├── 📄 man_dashboard.ejs
 │   │   └── 📄 projectMembers.ejs

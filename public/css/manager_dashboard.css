@@ -5,6 +5,18 @@
     --teal-gradient: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
     --orange-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 
+    /* --- NAVBAR-SPECIFIC VARIABLES --- */
+    --manager-topbar-bg: background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+    --manager-topbar-surface: rgba(255, 255, 255, 0.15);
+    --manager-topbar-surface-soft: rgba(255, 255, 255, 0.10);
+    --manager-topbar-surface-strong: rgba(255, 255, 255, 0.25);
+    --manager-topbar-text: #ffffff;
+    --manager-topbar-text-soft: rgba(255, 255, 255, 0.95);
+    --manager-topbar-muted: rgba(255, 255, 255, 0.75);
+    --manager-topbar-placeholder: rgba(255, 255, 255, 0.60);
+    --manager-topbar-border: rgba(255, 255, 255, 0.20);
+    --manager-topbar-primary: #ffffff;
+
     /* Core Backgrounds */
     --manager-bg: #667eea;
     --manager-bg-alt: #764ba2;
@@ -142,6 +154,18 @@
 
 [data-theme="dark"] .manager-dashboard-page {
 
+    /* --- NAVBAR-SPECIFIC VARIABLES (DARK MODE) --- */
+    --manager-topbar-bg: linear-gradient(135deg, #17142d 0%, #30245a 48%, #103d3b 100%);
+    --manager-topbar-surface: rgba(0, 0, 0, 0.25);
+    --manager-topbar-surface-soft: rgba(0, 0, 0, 0.15);
+    --manager-topbar-surface-strong: rgba(0, 0, 0, 0.40);
+    --manager-topbar-text: #f8f7ff;
+    --manager-topbar-text-soft: #dedbf0;
+    --manager-topbar-muted: #aaa6c2;
+    --manager-topbar-placeholder: #77738f;
+    --manager-topbar-border: rgba(255, 255, 255, 0.10);
+    --manager-topbar-primary: #a667e6;
+
     --manager-bg: #12102b;
     --manager-bg-alt: #102d31;
 
@@ -190,7 +214,6 @@
             #103d3b 100%
         );
 }
-
 body.manager-dashboard-page {
     background: var(--manager-bg);
 }
@@ -1143,7 +1166,7 @@ body.manager-dashboard-page {
     gap: 14px;
     padding: 18px;
 
-    border: 1px solid var(--manager-border);
+    border: 2px solid var(--manager-border);
     border-radius: var(--manager-radius-lg);
     background: var(--manager-glass-bg);
     box-shadow: var(--manager-shadow);
