@@ -86,32 +86,23 @@ const notifyProjectMembers = async (
     content,
     extraUserIds = []
 ) => {
-
     try {
+        const project = await projectModel.getProjectById(projectId);
+        const memberIds = await projectMemberModel.getProjectMemberIds(projectId);
 
-        const memberIds =
-            await projectMemberModel.getProjectMemberIds(
-                projectId
-            );
+        // Explicitly include the manager (created_by) in the notification pool
+        const allCandidates = [
+            ...memberIds,
+            ...(project ? [project.created_by] : []),
+            ...extraUserIds
+        ];
 
-        const recipients =
-            [
-                ...memberIds,
-                ...extraUserIds
-            ]
+        const recipients = allCandidates
             .map(id => String(id))
-            .filter(
-                (id, index, array) =>
-                    array.indexOf(id) === index
-            )
-            .filter(
-                id =>
-                    id !==
-                    String(req.user.user_id)
-            );
+            .filter((id, index, array) => array.indexOf(id) === index) // Remove duplicates
+            .filter(id => id !== String(req.user.user_id)); // Don't notify the sender
 
         for (const userId of recipients) {
-
             await sendProjectNotification(
                 req,
                 userId,
@@ -120,13 +111,8 @@ const notifyProjectMembers = async (
                 content
             );
         }
-
     } catch (err) {
-
-        console.error(
-            "Project member notification error:",
-            err.message
-        );
+        console.error("Project member notification error:", err.message);
     }
 };
 //========================
@@ -135,9 +121,7 @@ const notifyProjectMembers = async (
 /**
  * Create Project
  */
-/**
- * Create Project
- */
+
 const createProject = async (req, res, next) => {
   try {
     // 1. Create the base project
@@ -255,6 +239,8 @@ const deleteProject = async (req, res, next) => {
             await projectMemberModel.getProjectMemberIds(
                 projectId
             );
+
+            
 
         // =====================================================
         // 3. DELETE PROJECT
