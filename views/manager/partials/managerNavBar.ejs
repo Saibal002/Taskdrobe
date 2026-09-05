@@ -2,11 +2,7 @@
 
     <div class="manager-topbar-left">
 
-        <button
-            type="button"
-            class="manager-menu-toggle"
-            id="managerSidebarToggle"
-            aria-label="Open navigation"
+        <button type="button" class="manager-menu-toggle" id="managerSidebarToggle" aria-label="Open navigation"
             aria-expanded="false">
             <i class="bi bi-list"></i>
         </button>
@@ -20,7 +16,7 @@
 
             <div class="manager-header-title">
                 Good morning, <%= user.full_name %>
-                <span class="manager-wave">👋</span>
+                    <span class="manager-wave">👋</span>
             </div>
 
             <div class="manager-header-subtitle">
@@ -37,86 +33,65 @@
         <!-- Global Search -->
         <div class="manager-search-wrapper">
 
-    <div class="manager-search">
+            <div class="manager-search">
 
-        <i class="bi bi-search"></i>
+                <i class="bi bi-search"></i>
 
-        <input
-            type="text"
-            id="globalSearch"
-            placeholder="Search projects or tasks..."
-            autocomplete="off"
-            aria-label="Search">
+                <input type="text" id="globalSearch" placeholder="Search projects or tasks..." autocomplete="off"
+                    aria-label="Search">
 
-        <button
-            type="button"
-            id="clearSearch"
-            class="manager-search-clear d-none"
-            aria-label="Clear search">
+                <button type="button" id="clearSearch" class="manager-search-clear d-none" aria-label="Clear search">
 
-            <i class="bi bi-x-lg"></i>
+                    <i class="bi bi-x-lg"></i>
 
-        </button>
+                </button>
 
-        <kbd>⌘ K</kbd>
+                <kbd>⌘ K</kbd>
 
-    </div>
+            </div>
 
 
-    <div
-        id="searchResults"
-        class="manager-search-results d-none">
-    </div>
+            <div id="searchResults" class="manager-search-results d-none">
+            </div>
 
-</div>
+        </div>
 
 
         <!-- Notifications -->
         <div class="manager-notification-wrapper">
 
-          <button
-    type="button"
-    class="manager-icon-button"
-    id="notificationButton"
-    data-user-id="<%= user.user_id %>"
-    aria-label="Notifications"
-    aria-expanded="false">
+            <button type="button" class="manager-icon-button" id="notificationButton" data-user-id="<%= user.user_id %>"
+                aria-label="Notifications" aria-expanded="false">
 
-    <i class="bi bi-bell"></i>
+                <i class="bi bi-bell"></i>
 
-    <span
-        id="notificationBadge"
-        class="manager-notification-badge d-none">
-        0
-    </span>
+                <span id="notificationBadge" class="manager-notification-badge d-none">
+                    0
+                </span>
 
-</button>
+            </button>
 
 
-            <div
-                id="notificationDropdown"
-                class="manager-notification-dropdown d-none">
+            <div id="notificationDropdown" class="manager-notification-dropdown d-none">
 
                 <div class="manager-notification-header">
 
                     <div>
                         <strong>Notifications</strong>
-                        <span id="notificationHeaderCount">0</span>
+
+                        <small id="notificationSubtitle" class="manager-notification-subtitle">
+                            You're all caught up
+                        </small>
                     </div>
 
-                    <button
-                        type="button"
-                        id="markAllNotifications"
-                        class="manager-notification-mark">
+                    <button type="button" id="markAllNotifications" class="manager-notification-mark d-none">
                         Mark all read
                     </button>
 
                 </div>
 
 
-                <div
-                    id="notificationList"
-                    class="manager-notification-list">
+                <div id="notificationList" class="manager-notification-list">
 
                     <div class="manager-notification-empty">
                         <i class="bi bi-bell-slash"></i>
@@ -131,11 +106,7 @@
 
 
         <!-- Theme -->
-        <button
-            type="button"
-            class="manager-icon-button"
-            id="themeToggle"
-            aria-label="Toggle theme">
+        <button type="button" class="manager-icon-button" id="themeToggle" aria-label="Toggle theme">
 
             <i class="bi bi-moon"></i>
 
@@ -143,12 +114,10 @@
 
 
         <!-- Profile -->
-        <a
-            href="/manager/profile"
-            class="manager-profile-button">
+        <a href="/manager/profile" class="manager-profile-button">
 
             <span class="manager-profile-avatar">
-                <%= (user.full_name || "M").charAt(0).toUpperCase() %>
+                <%= (user.full_name || "M" ).charAt(0).toUpperCase() %>
             </span>
 
             <span class="manager-profile-info">
@@ -169,10 +138,7 @@
 
 
         <!-- Logout -->
-        <a
-            href="/auth/logout"
-            class="manager-logout-button"
-            aria-label="Logout">
+        <a href="/auth/logout" class="manager-logout-button" aria-label="Logout">
 
             <i class="bi bi-box-arrow-right"></i>
 
