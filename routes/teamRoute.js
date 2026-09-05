@@ -102,13 +102,7 @@ router.get(
     TeamController.getEmployeeTeamMembers
 );
 
-// View single team details
-router.get(
-    "/:teamId",
-    requireRole("manager"),
-    validate(teamIdValidator),
-    TeamController.getTeam
-);
+
 
 
 module.exports = router;
