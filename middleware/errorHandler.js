@@ -1,16 +1,25 @@
+const responseFormatter = require("../utils/responseFormatter");
+
 module.exports = (err, req, res, next) => {
+
     console.log("🔥 ERROR HANDLER");
     console.log(err);
-    res.status(err.statusCode || 500).json({
 
-        success: false,
+    const statusCode = err.statusCode || 500;
 
-        status: err.status || "error",
+    const message =
+        err.message || "Internal Server Error";
 
-        message: err.message || "Internal Server Error",
+    const title =
+        err.status === "fail"
+            ? "Request Failed"
+            : "Something went wrong";
 
-        errors: err.errors || []
-
+    return responseFormatter.error(res, {
+        statusCode,
+        title,
+        message,
+        stack: err.stack
     });
 
 };
