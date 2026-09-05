@@ -1,4 +1,4 @@
-<!-- Add Project Modal -->
+<!-- views/layout/addProjectModal.ejs -->
 <div class="modal fade" id="addProjectModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content rounded-3 shadow">
@@ -42,6 +42,15 @@
           <div class="mb-3">
             <label class="form-label">Progress (%)</label>
             <input type="number" class="form-control" name="progress" min="0" max="100" value="0">
+          </div>
+
+          <!-- Assign Team Members (AJAX Loaded) -->
+          <div class="mb-3">
+            <label class="form-label">Assign Team Members</label>
+            <select class="form-select manager-subordinate-select" name="employees[]" multiple>
+                <!-- Loaded via AJAX -->
+            </select>
+            <div class="form-text">Hold CTRL (or CMD) to select multiple.</div>
           </div>
 
           <!-- Tasks -->

@@ -32,7 +32,27 @@ router.get(
     requireRole("manager"),
     TeamController.getManagerTeams
 );
+router.get(
+    "/manager/subordinates",
+    requireRole("manager"),
+    TeamController.getManagerSubordinates
+);
+router.get(
+    "/:teamId/available-employees",
+    requireRole("manager"),
+    TeamController.getAvailableEmployeesForTeam
+);
+router.get(
+    "/:teamId/projects",
+    requireRole("manager"),
+    TeamController.getTeamProjects
+);
 
+router.get(
+    "/:teamId/tasks",
+    requireRole("manager"),
+    TeamController.getTeamTasks
+);
 // 3. Dynamic routes come last
 router.put(
     "/:teamId",

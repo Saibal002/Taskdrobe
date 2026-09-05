@@ -2,9 +2,6 @@ $(document).ready(function () {
     /* =====================================================
        1. DASHBOARD: LOAD TEAM OVERVIEW PARTIAL
     ===================================================== */
-   /* =====================================================
-       1. DASHBOARD: LOAD TEAM OVERVIEW PARTIAL
-    ===================================================== */
     function loadManagerTeams() {
         const $container = $("#managerTeamListContainer");
         if (!$container.length) return;
@@ -16,17 +13,13 @@ $(document).ready(function () {
             headers: { "X-Requested-With": "XMLHttpRequest" },
             success: function (result) {
                 if (result.success && result.data.length > 0) {
-                    $container.empty(); // Clear loading state
+                    $container.empty(); 
                     
-                    // Optional: Add a scrollable wrapper style to keep it compact beside Recent Activity
                     $container.css({
                         "max-height": "260px",
                         "overflow-y": "auto",
                         "padding-right": "4px"
                     });
-
-                    // Slice to show only the 2 latest teams if you prefer strictly two:
-                    // const latestTeams = result.data.slice(0, 2);
 
                     result.data.forEach((team, index) => {
                         const gradients = [
@@ -71,7 +64,6 @@ $(document).ready(function () {
             }
         });
     }
-
 
     /* =====================================================
        2. TEAMS DIRECTORY: LOAD FULL PAGE GRID
@@ -155,12 +147,10 @@ $(document).ready(function () {
         });
     }
 
-
     /* =====================================================
        3. TEAM INSIGHT: LOAD SINGLE TEAM DETAILS
     ===================================================== */
     function loadTeamInsight() {
-        // Look for the global variable set in team_insight.ejs
         if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
 
         $.ajax({
@@ -187,7 +177,6 @@ $(document).ready(function () {
         });
     }
 
-
     /* =====================================================
        4. CREATE TEAM FORM SUBMIT HANDLER
     ===================================================== */
@@ -213,7 +202,6 @@ $(document).ready(function () {
             headers: { "X-Requested-With": "XMLHttpRequest" },
             success: function (response) {
                 if (response.success) {
-                    // Close Bootstrap modal
                     const modalElement = document.getElementById("addTeamModal");
                     const modalInstance = bootstrap.Modal.getInstance(modalElement);
                     if (modalInstance) modalInstance.hide();
@@ -221,7 +209,6 @@ $(document).ready(function () {
                     $form.trigger("reset");
                     $submitButton.prop("disabled", false).html(originalText);
 
-                    // Dynamically refresh whichever UI is currently on the screen
                     if ($("#managerTeamListContainer").length) {
                         loadManagerTeams(); 
                     }
@@ -237,11 +224,304 @@ $(document).ready(function () {
         });
     });
 
+    /* =====================================================
+       5. DYNAMIC ASSIGNMENT DROPDOWNS
+    ===================================================== */
+    $('#addProjectModal').on('show.bs.modal', function () {
+        const $select = $(this).find('.manager-subordinate-select');
+        if (!$select.length || $select.children().length > 0) return; 
+        
+        $select.html('<option disabled>Loading...</option>');
+
+        $.ajax({
+            url: '/teams/manager/subordinates',
+            type: 'GET',
+            success: function (res) {
+                if (res.success) {
+                    $select.empty();
+                    res.data.forEach(emp => {
+                        $select.append(`<option value="${emp.user_id}">${emp.full_name}</option>`);
+                    });
+                } else {
+                    $select.html('<option disabled>Failed to load</option>');
+                }
+            },
+            error: function () {
+                $select.html('<option disabled>Error loading</option>');
+            }
+        });
+    });
+
+    $('#addTaskModal').on('show.bs.modal', function () {
+        const $select = $(this).find('.project-member-select');
+        if (!$select.length || $select.children().length > 1) return; 
+        
+        const projectId = $select.attr('data-project-id');
+
+        $.ajax({
+            url: `/projects/${projectId}/members/data`,
+            type: 'GET',
+            success: function (res) {
+                if (res.success && res.members) {
+                    res.members.forEach(member => {
+                        $select.append(`<option value="${member.user_id}">${member.full_name}</option>`);
+                    });
+                }
+            }
+        });
+    });
+
+    /* =====================================================
+       6. TEAM INSIGHT: LOAD TAB DATA
+    ===================================================== */
+    function loadTeamMembersList() {
+        if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
+        const $tbody = $("#teamMembersTableBody");
+        
+        $.ajax({
+            url: `/teams/${CURRENT_TEAM_ID}/members`,
+            type: "GET",
+            success: function(res) {
+                if (res.success && res.data && res.data.length > 0) {
+                    $tbody.empty();
+                    $("#stat-total-members").text(res.data.length); 
+                    
+                    res.data.forEach(member => {
+                        const avatar = member.profile_image 
+                            ? `<img src="${member.profile_image}" class="rounded-circle me-2" width="32" height="32">` 
+                            : `<div class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center me-2 fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">${member.full_name.substring(0,2).toUpperCase()}</div>`;
+                        
+                        const date = new Date(member.joined_at).toLocaleDateString();
+                        
+                        $tbody.append(`
+                            <tr>
+                                <td>${avatar} <span class="fw-bold">${member.full_name}</span></td>
+                                <td class="text-muted">${member.email}</td>
+                                <td>${date}</td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-danger rounded-pill remove-member-btn" data-id="${member.user_id}">Remove</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    $tbody.html('<tr><td colspan="4" class="text-center text-muted py-4">No members in this team yet.</td></tr>');
+                    $("#stat-total-members").text("0");
+                }
+            }
+        });
+    }
+
+  function loadTeamProjects() {
+        if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
+        const $grid = $("#teamProjectsGrid");
+        
+        $.ajax({
+            url: `/teams/${CURRENT_TEAM_ID}/projects`,
+            type: "GET",
+            success: function(res) {
+                if (res.success && res.data && res.data.length > 0) {
+                    $grid.empty();
+                    $("#stat-active-projects").text(res.data.length); 
+                    
+                    res.data.forEach(project => {
+                        const statusColor = project.status === 'Completed' ? 'success' : 
+                                          project.status === 'In Progress' ? 'primary' : 'warning';
+                        
+                        const date = project.deadline ? new Date(project.deadline).toLocaleDateString() : 'No Deadline';
+                        
+                        $grid.append(`
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card h-100 border-0 shadow-sm rounded-4">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <span class="badge bg-${statusColor} bg-opacity-10 text-${statusColor} rounded-pill px-3 py-2">${project.status}</span>
+                                            <span class="text-muted small"><i class="bi bi-calendar-event me-1"></i>${date}</span>
+                                        </div>
+                                        <h5 class="fw-bold mb-3 text-truncate">${project.project_name}</h5>
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between small mb-1">
+                                                <span class="text-muted">Progress</span>
+                                                <span class="fw-bold">${project.progress}%</span>
+                                            </div>
+                                            <div class="progress" style="height: 6px;">
+                                                <div class="progress-bar bg-${statusColor}" role="progressbar" style="width: ${project.progress}%"></div>
+                                            </div>
+                                        </div>
+                                        <a href="/projects/${project.project_id}" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-bold">View Project</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                } else {
+                    $grid.html('<div class="col-12 text-center text-muted py-5"><i class="bi bi-folder-x fs-1 d-block mb-3"></i>No projects involve this team yet.</div>');
+                    $("#stat-active-projects").text("0"); 
+                }
+            },
+            error: function() {
+                $grid.html('<div class="col-12 text-center text-danger py-4">Failed to load projects.</div>');
+            }
+        });
+    }
+
+    function loadTeamTasks() {
+        if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
+        const $list = $("#teamTasksList");
+        
+        $.ajax({
+            url: `/teams/${CURRENT_TEAM_ID}/tasks`,
+            type: "GET",
+            success: function(res) {
+                if (res.success && res.data && res.data.length > 0) {
+                    $list.empty();
+                    
+                    // Filter pending tasks for the stat counter
+                    const pendingCount = res.data.filter(t => t.status !== 'Completed').length;
+                    $("#stat-pending-tasks").text(pendingCount);
+                    
+                    res.data.forEach(task => {
+                        const statusColor = task.status === 'Completed' ? 'success' : 'primary';
+                        const priorityColor = task.priority === 'High' || task.priority === 'Critical' ? 'danger' : 'secondary';
+                        const date = task.due_date ? new Date(task.due_date).toLocaleDateString() : 'No Due Date';
+                        
+                        $list.append(`
+                            <div class="list-group-item border-0 border-bottom py-3 px-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="fw-bold mb-1">${task.title}</h6>
+                                        <div class="small text-muted mb-2">
+                                            <i class="bi bi-person-fill me-1"></i>${task.assigned_user} 
+                                            <span class="mx-2">•</span> 
+                                            <i class="bi bi-folder me-1"></i><a href="/projects/${task.project_id}" class="text-decoration-none">${task.project_name}</a>
+                                        </div>
+                                        <span class="badge bg-${priorityColor} bg-opacity-10 text-${priorityColor} rounded-pill me-2">${task.priority} Priority</span>
+                                        <span class="badge bg-${statusColor} bg-opacity-10 text-${statusColor} rounded-pill">${task.status}</span>
+                                    </div>
+                                    <div class="text-end text-muted small fw-bold bg-light px-3 py-2 rounded-3">
+                                        <i class="bi bi-calendar3 me-1"></i> ${date}
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                } else {
+                    $list.html('<div class="text-center text-muted py-5"><i class="bi bi-check2-circle fs-1 d-block mb-3"></i>No tasks assigned to this team.</div>');
+                    $("#stat-pending-tasks").text("0");
+                }
+            },
+            error: function() {
+                $list.html('<div class="text-center text-danger py-4">Failed to load tasks.</div>');
+            }
+        });
+    }
+
+    $('#members-tab').on('shown.bs.tab', loadTeamMembersList);
+    $('#projects-tab').on('shown.bs.tab', loadTeamProjects);
+    $('#tasks-tab').on('shown.bs.tab', loadTeamTasks);
+
+    if (typeof CURRENT_TEAM_ID !== "undefined" && CURRENT_TEAM_ID) {
+        loadTeamMembersList(); 
+    }
+
+    /* =====================================================
+       7. TEAM INSIGHT: FETCH AVAILABLE EMPLOYEES
+    ===================================================== */
+    $('#addTeamMemberModal').on('show.bs.modal', function () {
+        if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
+        
+        const $select = $("#newMemberUserId");
+        $select.html('<option value="" disabled selected>Loading...</option>');
+
+        $.ajax({
+            url: `/teams/${CURRENT_TEAM_ID}/available-employees`,
+            type: "GET",
+            success: function(res) {
+                if (res.success) {
+                    $select.empty();
+                    if (res.data.length === 0) {
+                        $select.append('<option value="" disabled selected>No available employees to add</option>');
+                    } else {
+                        $select.append('<option value="" disabled selected>Choose an employee...</option>');
+                        res.data.forEach(emp => {
+                            $select.append(`<option value="${emp.user_id}">${emp.full_name} (${emp.email})</option>`);
+                        });
+                    }
+                }
+            },
+            error: function() {
+                $select.html('<option value="" disabled selected>Error loading employees</option>');
+            }
+        });
+    });
+
+    /* =====================================================
+       8. TEAM INSIGHT: ADD / REMOVE MEMBERS
+    ===================================================== */
+    $(document).on("submit", "#addTeamMemberForm", function(e) {
+        e.preventDefault();
+        if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
+
+        const userId = $("#newMemberUserId").val();
+        if (!userId) return;
+
+        const $btn = $(this).find('button[type="submit"]');
+        const originalText = $btn.html();
+
+        $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
+
+        $.ajax({
+            url: `/teams/${CURRENT_TEAM_ID}/members`,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ userId: userId }),
+            success: function(res) {
+                if (res.success) {
+                    const modalEl = document.getElementById('addTeamMemberModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                    
+                    $("#addTeamMemberForm")[0].reset();
+                    loadTeamMembersList();
+                }
+            },
+            error: function(xhr) {
+                alert(xhr.responseJSON?.message || "Failed to add member.");
+            },
+            complete: function() {
+                $btn.prop("disabled", false).html(originalText);
+            }
+        });
+    });
+
+    $(document).on("click", ".remove-member-btn", function() {
+        if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
+        
+        const userId = $(this).attr("data-id");
+        
+        if (window.confirm("Are you sure you want to remove this employee from the team?")) {
+            const $btn = $(this);
+            $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
+
+            $.ajax({
+                url: `/teams/${CURRENT_TEAM_ID}/members/${userId}`,
+                type: "DELETE",
+                success: function(res) {
+                    if (res.success) {
+                        loadTeamMembersList();
+                    }
+                },
+                error: function(xhr) {
+                    alert(xhr.responseJSON?.message || "Failed to remove member.");
+                    $btn.prop("disabled", false).html('Remove');
+                }
+            });
+        }
+    });
 
     /* =====================================================
        INITIALIZE
     ===================================================== */
-    // Fire the functions. They will safely exit if their target container isn't on the page.
     loadManagerTeams();
     loadFullTeamGrid();
     loadTeamInsight();

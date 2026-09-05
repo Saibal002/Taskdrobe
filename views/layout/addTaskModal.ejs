@@ -160,50 +160,22 @@
 
 
                     <!-- Assign Employee -->
+                  <!-- Assign Employee -->
                     <% if (user.role_name === "manager") { %>
-
                         <div class="mb-3">
-
-                            <label
-                                for="assignedTo"
-                                class="form-label">
-
+                            <label for="assignedTo" class="form-label">
                                 Assign To
-
                             </label>
-
-                            <select
-                                class="form-select"
-                                id="assignedTo"
-                                name="assignedTo">
-
-                                <option value="">
-                                    Unassigned
-                                </option>
-
-                                <% if (projectMembers && projectMembers.length > 0) { %>
-
-                                    <% projectMembers.forEach(member => { %>
-
-                                        <option
-                                            value="<%= member.user_id %>">
-
-                                            <%= member.full_name %>
-
-                                        </option>
-
-                                    <% }) %>
-
-                                <% } %>
-
+                            
+                            <select class="form-select project-member-select" id="assignedTo" name="assignedTo" data-project-id="<%= project.project_id %>">
+                                <option value="">Unassigned</option>
+                                <!-- Loaded via AJAX -->
                             </select>
-
+                            
                             <div class="form-text">
                                 Only employees assigned to this project can be selected.
                             </div>
-
                         </div>
-
                     <% } %>
 
 

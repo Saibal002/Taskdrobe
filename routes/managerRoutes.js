@@ -32,12 +32,12 @@ router.get(
 // ===========================
 
 // View members
-router.get(
-    "/projects/:projectId/members",
-    authMiddleware,
-    requireRole("manager"),
-    projectMemberController.getMembers
-);
+// router.get(
+//     "/projects/:projectId/members",
+//     authMiddleware,
+//     requireRole("manager"),
+//     projectMemberController.getMembers
+// );
 
 
 // Add employee

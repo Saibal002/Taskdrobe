@@ -19,12 +19,12 @@ router.post(
 
 
 // Get project members
-router.get(
-    "/projects/:projectId/members",
-    authMiddleware,
-    requireRole(["manager", "admin"]),
-    projectMemberController.getMembers
-);
+// router.get(
+//     "/projects/:projectId/members",
+//     authMiddleware,
+//     requireRole(["manager", "admin"]),
+//     projectMemberController.getMembers
+// );
 
 // AJAX: Get project members as JSON
 router.get(

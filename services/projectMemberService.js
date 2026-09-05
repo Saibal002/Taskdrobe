@@ -1,6 +1,7 @@
 const projectMemberModel = require("../models/projectMemberModel");
 const userModel = require("../models/userModel");
 const projectModel = require("../models/projectModel");
+const TeamModel = require("../models/teamModel");
 const AppError = require("../utils/AppError");
 
 /**
@@ -61,6 +62,22 @@ const addMember = async (
         );
     }
 
+    // ==========================================
+    // GATEKEEPER: ENFORCE TEAM HIERARCHY
+    // ==========================================
+    const isInTeam = 
+        await TeamModel.isEmployeeInManagerTeams(
+            managerId, 
+            userId
+        );
+
+    if (!isInTeam) {
+        throw new AppError(
+            "Unauthorized: You can only assign employees who belong to your teams.",
+            403
+        );
+    }
+
     const alreadyMember =
         await projectMemberModel.isProjectMember(
             projectId,
@@ -79,7 +96,6 @@ const addMember = async (
         userId
     );
 };
-
 
 /**
  * Remove Employee From Project
@@ -172,7 +188,6 @@ const getMembersForView = async (
         );
     }
 
-
     // Manager can only view their own project.
     if (user.role_name === "manager") {
 
@@ -197,22 +212,21 @@ const getMembersForView = async (
         );
     }
 
-
     const members =
         await projectMemberModel.getProjectMembers(
             projectId
         );
 
-
     let availableEmployees = [];
-
 
     // Only managers need the available employee list.
     if (user.role_name === "manager") {
 
+        // ==========================================
+        // GATEKEEPER: FETCH ONLY SUBORDINATES
+        // ==========================================
         const employees =
-            await userModel.getAllEmployees();
-
+            await TeamModel.getEmployeesByManager(user.user_id);
 
         const memberIds =
             new Set(
@@ -222,7 +236,6 @@ const getMembersForView = async (
                 )
             );
 
-
         availableEmployees =
             employees.filter(
                 employee =>
@@ -231,7 +244,6 @@ const getMembersForView = async (
                     )
             );
     }
-
 
     return {
         members,

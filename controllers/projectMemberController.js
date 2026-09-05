@@ -186,56 +186,56 @@ const removeMember = async (req, res, next) => {
 /**
  * Manage Project Members Page
  */
-const getMembers = async (req, res, next) => {
-    try {
+// const getMembers = async (req, res, next) => {
+//     try {
 
-        const {
-            projectId
-        } = req.params;
+//         const {
+//             projectId
+//         } = req.params;
 
-        const managerId =
-            req.user.user_id;
+//         const managerId =
+//             req.user.user_id;
 
-        const members =
-            await projectMemberService.getMembers(
-                projectId,
-                managerId
-            );
+//         const members =
+//             await projectMemberService.getMembers(
+//                 projectId,
+//                 managerId
+//             );
 
-        const employees =
-            await userModel.getAllEmployees();
+//         const employees =
+//             await userModel.getAllEmployees();
 
-        const memberIds =
-            new Set(
-                members.map(
-                    member =>
-                        String(member.user_id)
-                )
-            );
+//         const memberIds =
+//             new Set(
+//                 members.map(
+//                     member =>
+//                         String(member.user_id)
+//                 )
+//             );
 
-        const availableEmployees =
-            employees.filter(
-                employee =>
-                    !memberIds.has(
-                        String(employee.user_id)
-                    )
-            );
+//         const availableEmployees =
+//             employees.filter(
+//                 employee =>
+//                     !memberIds.has(
+//                         String(employee.user_id)
+//                     )
+//             );
 
-        return res.render(
-            "manager/projectMembers",
-            {
-                title: "Manage Project Members",
-                user: req.user,
-                projectId,
-                members,
-                employees,
-            }
-        );
+//         return res.render(
+//             "manager/projectMembers",
+//             {
+//                 title: "Manage Project Members",
+//                 user: req.user,
+//                 projectId,
+//                 members,
+//                 employees,
+//             }
+//         );
 
-    } catch (err) {
-        next(err);
-    }
-};
+//     } catch (err) {
+//         next(err);
+//     }
+// };
 
 
 /**
@@ -278,7 +278,7 @@ const getMembersData = async (req, res, next) => {
 module.exports = {
     addMember,
     removeMember,
-    getMembers,
+    
     getMembersData
 };
 

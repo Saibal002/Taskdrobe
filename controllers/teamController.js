@@ -1,5 +1,6 @@
 const TeamService = require("../services/teamService");
-
+const TeamModel = require("../models/teamModel");
+const userModel = require("../models/userModel");
 class TeamController {
 
     // =========================
@@ -275,6 +276,75 @@ class TeamController {
                 data: members
             });
 
+        } catch (error) {
+            next(error);
+        }
+    }
+    static async getManagerSubordinates(req, res, next) {
+        try {
+            const managerId = req.user.user_id;
+            const employees = await TeamModel.getEmployeesByManager(managerId);
+            
+            return res.status(200).json({
+                success: true,
+                data: employees
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+    // =========================
+    // Manager: Get Available Employees
+    // =========================
+    static async getAvailableEmployeesForTeam(req, res, next) {
+        try {
+            const { teamId } = req.params;
+            
+            // 1. Get all employees in the system
+            const allEmployees = await userModel.getAllEmployees();
+            
+            // 2. Get current team members
+            const teamMembers = await TeamModel.findTeamMembers(teamId);
+            const memberIds = new Set(teamMembers.map(m => String(m.user_id)));
+            
+            // 3. Filter out employees already in the team
+            const available = allEmployees.filter(emp => !memberIds.has(String(emp.user_id)));
+
+            return res.status(200).json({
+                success: true,
+                data: available
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+    // =========================
+    // Manager: Team Insight Data
+    // =========================
+
+    static async getTeamProjects(req, res, next) {
+        try {
+            const { teamId } = req.params;
+            const projects = await TeamModel.getTeamProjects(teamId);
+            
+            return res.status(200).json({
+                success: true,
+                data: projects
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async getTeamTasks(req, res, next) {
+        try {
+            const { teamId } = req.params;
+            const tasks = await TeamModel.getTeamTasks(teamId);
+            
+            return res.status(200).json({
+                success: true,
+                data: tasks
+            });
         } catch (error) {
             next(error);
         }
