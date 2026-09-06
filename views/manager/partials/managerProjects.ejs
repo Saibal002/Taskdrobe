@@ -1,5 +1,43 @@
 <%
     const dashboardProjects = (projects || []).slice(0, 4);
+
+    const projectHealth = (() => {
+        const now = new Date();
+        const items = dashboardProjects.map(project => ({
+            ...project,
+            progressValue: Math.min(100, Math.max(0, Number(project.progress || 0))),
+            statusValue: String(project.status || "Not Started").toLowerCase(),
+            deadlineDate: project.deadline ? new Date(project.deadline) : null
+        }));
+
+        const averageProgress = items.length
+            ? Math.round(items.reduce((sum, project) => sum + project.progressValue, 0) / items.length)
+            : 0;
+
+        const activeCount = items.filter(project => project.statusValue === "in progress").length;
+
+        const attentionProjects = items.filter(project =>
+            (project.deadlineDate && !Number.isNaN(project.deadlineDate.getTime()) && project.deadlineDate < now) ||
+            project.statusValue === "on hold" ||
+            !project.full_name
+        );
+
+        const upcoming = items
+            .filter(project => project.deadlineDate && !Number.isNaN(project.deadlineDate.getTime()) && project.deadlineDate >= now)
+            .sort((a, b) => a.deadlineDate - b.deadlineDate)[0];
+
+        const attentionProject = attentionProjects[0];
+        const isHealthy = attentionProjects.length === 0;
+
+        return {
+            averageProgress,
+            activeCount,
+            attentionCount: attentionProjects.length,
+            attentionProject,
+            upcoming,
+            isHealthy
+        };
+    })();
 %>
 
 <section class="manager-panel manager-projects-panel">
@@ -225,6 +263,72 @@
                 </article>
 
             <% }) %>
+
+        </div>
+
+        <div class="manager-project-health" aria-label="Project health summary">
+
+            <div class="manager-project-health-header">
+                <div>
+                    <span class="manager-section-eyebrow">PROJECT HEALTH</span>
+                    <p>A quick snapshot of where your portfolio needs attention.</p>
+                </div>
+
+                <span class="manager-project-health-state <%= projectHealth.isHealthy ? "healthy" : "attention" %>">
+                    <i class="bi <%= projectHealth.isHealthy ? "bi-check-circle" : "bi-exclamation-circle" %>"></i>
+                    <%= projectHealth.isHealthy ? "On track" : "Needs attention" %>
+                </span>
+            </div>
+
+            <div class="manager-project-health-metrics">
+                <div class="manager-project-health-metric">
+                    <strong><%= projectHealth.averageProgress %>%</strong>
+                    <span>Avg. progress</span>
+                </div>
+
+                <div class="manager-project-health-metric">
+                    <strong><%= projectHealth.activeCount %></strong>
+                    <span>Active</span>
+                </div>
+
+                <div class="manager-project-health-metric">
+                    <strong><%= projectHealth.attentionCount %></strong>
+                    <span>Attention</span>
+                </div>
+
+                <div class="manager-project-health-metric next-deadline">
+                    <% if (projectHealth.upcoming) { %>
+                        <strong><%= projectHealth.upcoming.deadlineDate.toLocaleDateString(undefined, { month: "short", day: "numeric" }) %></strong>
+                        <span>Next deadline</span>
+                    <% } else { %>
+                        <strong>—</strong>
+                        <span>No deadline</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="manager-project-health-action">
+                <% if (projectHealth.isHealthy) { %>
+                    <span class="manager-project-health-action-icon healthy">
+                        <i class="bi bi-check2"></i>
+                    </span>
+                    <div>
+                        <strong>Portfolio looks healthy</strong>
+                        <span>All displayed projects have an owner and no overdue or on-hold work.</span>
+                    </div>
+                <% } else { %>
+                    <span class="manager-project-health-action-icon attention">
+                        <i class="bi bi-arrow-up-right"></i>
+                    </span>
+                    <div>
+                        <strong><%= projectHealth.attentionProject?.project_name || "Review project health" %></strong>
+                        <span>Review this project for an overdue deadline, on-hold status, or missing owner.</span>
+                    </div>
+                    <% if (projectHealth.attentionProject) { %>
+                        <a href="/projects/<%= projectHealth.attentionProject.project_id %>" class="manager-project-health-action-link">Review <i class="bi bi-arrow-right"></i></a>
+                    <% } %>
+                <% } %>
+            </div>
 
         </div>
 

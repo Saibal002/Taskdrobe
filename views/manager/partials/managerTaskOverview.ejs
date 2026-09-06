@@ -1,134 +1,247 @@
-<%
-    const completedTasks = Number(stats.completedTasks || 0);
-    const pendingTasks = Number(stats.pendingTasks || 0);
-    const overdueTasks = Number(stats.overdueTasks || 0);
-    const completionRate = Number(stats.completionRate || 0);
-    const totalTasks = Number(stats.totalTasks || 0);
+<% 
+    const completedTasks = Number(stats.completedTasks || 0); 
+    const pendingTasks = Number(stats.pendingTasks || 0); 
+    const overdueTasks = Number(stats.overdueTasks || 0); 
+    const completionRate = Number(stats.completionRate || 0); 
+    const totalTasks = Number(stats.totalTasks || 0); 
+    
+    // Determine status class
+    let statusClass = 'attention';
+    let statusLabel = '⚠️ Needs Attention';
+    if (completionRate >= 80) {
+        statusClass = 'excellent';
+        statusLabel = '🎯 Excellent';
+    } else if (completionRate >= 50) {
+        statusClass = 'progress';
+        statusLabel = '🚀 In Progress';
+    } else if (completionRate >= 20) {
+        statusClass = 'starting';
+        statusLabel = '📋 Getting Started';
+    }
 %>
 
-<section class="manager-panel manager-task-panel">
-
+<section class="manager-panel manager-task-panel <%= completionRate === 0 ? 'attention-mode' : '' %> <%= completionRate >= 80 ? 'high-completion' : '' %>">
     <div class="manager-panel-header">
-
         <div>
-            <span class="manager-section-eyebrow">
-                TASKS
-            </span>
-
-            <h2>
-                Task overview
-            </h2>
-
-            <p>
-                Current task distribution.
-            </p>
+            <span class="manager-section-eyebrow">TASKS</span>
+            <h2>Task overview</h2>
+            <p>Current task distribution</p>
         </div>
-
+        <span class="manager-panel-header-icon">
+            <i class="bi bi-pie-chart-fill" style="color: var(--md-primary);"></i>
+        </span>
     </div>
-
 
     <div class="manager-task-chart-wrapper">
-
-        <canvas
-            id="taskChart"
-            data-completed="<%= completedTasks %>"
-            data-pending="<%= pendingTasks %>"
-            data-overdue="<%= overdueTasks %>">
-        </canvas>
-
-        <div class="manager-chart-center">
-
-            <strong>
-                <%= totalTasks %>
-            </strong>
-
-            <span>
-                Total Tasks
-            </span>
-
+        <div class="manager-chart-ring">
+            <div class="manager-chart-ring-bg"></div>
+            <!-- Canvas - Chart.js draws here -->
+            <canvas 
+                id="taskChart" 
+                data-completed="<%= completedTasks %>" 
+                data-pending="<%= pendingTasks %>" 
+                data-overdue="<%= overdueTasks %>"
+                data-rate="<%= completionRate %>"
+                data-total="<%= totalTasks %>"
+                data-status="<%= statusLabel %>"
+                data-status-class="<%= statusClass %>">
+            </canvas>
+            <!-- Hidden fallback if Chart.js fails -->
+            <div class="manager-chart-center-fallback">
+                <strong><%= completionRate %>%</strong>
+                <span class="task-status-label <%= statusClass %>"><%= statusLabel %></span>
+                <span class="task-total"><%= totalTasks %> total tasks</span>
+            </div>
         </div>
-
     </div>
-
 
     <div class="manager-task-legend">
-
-        <div class="manager-legend-item">
-
+        <div class="manager-legend-item <%= completedTasks === 0 ? 'zero-count' : '' %>">
             <span class="manager-legend-dot completed"></span>
-
             <div>
-                <strong>
-                    <%= completedTasks %>
-                </strong>
-
-                <span>
-                    Completed
-                </span>
+                <strong><%= completedTasks %></strong>
+                <span>Completed</span>
             </div>
-
         </div>
-
-
-        <div class="manager-legend-item">
-
+        <div class="manager-legend-item <%= pendingTasks === 0 ? 'zero-count' : '' %>">
             <span class="manager-legend-dot pending"></span>
-
             <div>
-                <strong>
-                    <%= pendingTasks %>
-                </strong>
-
-                <span>
-                    Pending
-                </span>
+                <strong><%= pendingTasks %></strong>
+                <span>Pending</span>
             </div>
-
         </div>
-
-
-        <div class="manager-legend-item">
-
+        <div class="manager-legend-item <%= overdueTasks === 0 ? 'zero-count' : '' %>">
             <span class="manager-legend-dot overdue"></span>
-
             <div>
-                <strong>
-                    <%= overdueTasks %>
-                </strong>
-
-                <span>
-                    Overdue
-                </span>
+                <strong><%= overdueTasks %></strong>
+                <span>Overdue</span>
             </div>
-
         </div>
-
     </div>
-
 
     <div class="manager-completion-summary">
-
         <div>
-
-            <span>
-                Overall completion
-            </span>
-
-            <strong>
-                <%= completionRate %>%
-            </strong>
-
+            <span>Overall completion</span>
+            <strong><%= completionRate %>%</strong>
         </div>
-
         <div class="manager-progress-track">
-
-            <div
-                class="manager-progress-fill teal"
+            <div class="manager-progress-fill 
+                <% if (completionRate >= 80) { %>high<% } 
+                   else if (completionRate >= 50) { %>medium<% } 
+                   else if (completionRate > 0) { %>low<% } 
+                   else { %>low<% } %>" 
                 style="width: <%= Math.min(100, Math.max(0, completionRate)) %>%">
             </div>
-
         </div>
-
     </div>
-
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if Chart.js is loaded
+    if (typeof Chart === 'undefined') {
+        console.warn('Chart.js not loaded - using fallback');
+        document.querySelector('.manager-task-chart-wrapper').classList.add('no-chart');
+        document.querySelector('#taskChart').style.display = 'none';
+        return;
+    }
+
+    // Get the canvas element
+    const canvas = document.getElementById('taskChart');
+    if (!canvas) {
+        console.warn('Task chart canvas not found');
+        return;
+    }
+
+    // Get data from data attributes
+    const completed = parseInt(canvas.dataset.completed) || 0;
+    const pending = parseInt(canvas.dataset.pending) || 0;
+    const overdue = parseInt(canvas.dataset.overdue) || 0;
+    const total = parseInt(canvas.dataset.total) || 0;
+    const rate = parseInt(canvas.dataset.rate) || 0;
+    const statusLabel = canvas.dataset.status || '⚠️ Needs Attention';
+    const statusClass = canvas.dataset.statusClass || 'attention';
+
+    // --- Chart Configuration ---
+    const ctx = canvas.getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (window.taskChartInstance) {
+        window.taskChartInstance.destroy();
+    }
+
+    // Create the chart
+    window.taskChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Pending', 'Overdue'],
+            datasets: [{
+                data: [completed, pending, overdue],
+                backgroundColor: [
+                    'rgba(5, 150, 105, 0.85)',
+                    'rgba(217, 119, 6, 0.85)',
+                    'rgba(220, 38, 38, 0.85)'
+                ],
+                borderColor: [
+                    '#059669',
+                    '#D97706',
+                    '#DC2626'
+                ],
+                borderWidth: 2,
+                hoverOffset: 12,
+                hoverBorderWidth: 3,
+                spacing: 2,
+                borderRadius: 4,
+            }]
+        },
+        options: {
+            cutout: '72%',
+            responsive: true,
+            maintainAspectRatio: true,
+            animation: {
+                animateRotate: true,
+                duration: 1200,
+                easing: 'easeOutQuart'
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#e2e8f0',
+                    cornerRadius: 8,
+                    padding: 12,
+                    borderColor: 'rgba(255,255,255,0.05)',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? Math.round((context.parsed / total) * 100) : 0;
+                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            },
+            onHover: function(event, chartElement) {
+                event.native.target.style.cursor = chartElement.length ? 'pointer' : 'default';
+            }
+        },
+        plugins: [{
+            id: 'centerText',
+            beforeDraw: function(chart) {
+                const { width, height, ctx } = chart;
+                ctx.save();
+                
+                const centerX = width / 2;
+                const centerY = height / 2;
+                
+                // Draw percentage with gradient
+                const gradient = ctx.createLinearGradient(centerX - 40, centerY - 40, centerX + 40, centerY + 40);
+                gradient.addColorStop(0, '#6C5CE7');
+                gradient.addColorStop(1, '#A29BFE');
+                
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // Percentage
+                ctx.font = 'bold 30px Inter, -apple-system, sans-serif';
+                ctx.fillStyle = gradient;
+                ctx.fillText(rate + '%', centerX, centerY - 8);
+                
+                // Status label with color
+                let statusColor = '#DC2626';
+                if (rate >= 80) statusColor = '#059669';
+                else if (rate >= 50) statusColor = '#2563EB';
+                else if (rate >= 20) statusColor = '#7C3AED';
+                
+                ctx.font = '600 11px Inter, -apple-system, sans-serif';
+                ctx.fillStyle = statusColor;
+                ctx.fillText(statusLabel, centerX, centerY + 24);
+                
+                // Total tasks
+                ctx.font = '500 10px Inter, -apple-system, sans-serif';
+                ctx.fillStyle = '#94A3B8';
+                ctx.fillText(total + ' total tasks', centerX, centerY + 42);
+                
+                ctx.restore();
+            }
+        }]
+    });
+
+    // --- Update chart when theme changes ---
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            setTimeout(() => {
+                if (window.taskChartInstance) {
+                    window.taskChartInstance.update();
+                }
+            }, 100);
+        });
+    }
+
+    console.log('✅ Task chart initialized:', { completed, pending, overdue, total, rate });
+});
+</script>
