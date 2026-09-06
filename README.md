@@ -1,6 +1,7 @@
 # File Tree: TaskDrobe
 
 
+
 ```
 ├── 📁 config
 │   └── 📄 environment.js
@@ -113,7 +114,8 @@
 │   └── 📄 teamService.js
 ├── 📁 utils
 │   ├── 📄 AppError.js
-│   └── 📄 jwt.js
+│   ├── 📄 jwt.js
+│   └── 📄 responseFormatter.js
 ├── 📁 validators
 │   ├── 📄 authValidator.js
 │   ├── 📄 projectValidator.js
@@ -157,10 +159,10 @@
 │   │   │   ├── 📄 managerWelcome.ejs
 │   │   │   └── 📄 projectTasks.ejs
 │   │   ├── 📄 man_dashboard.ejs
-│   │   ├── 📄 projectMembers.ejs
 │   │   ├── 📄 team_insight.ejs
 │   │   └── 📄 teams.ejs
 │   ├── 📄 emp_dashboard.ejs
+│   ├── 📄 error.ejs
 │   ├── 📄 landing.ejs
 │   ├── 📄 login.ejs
 │   ├── 📄 profile.ejs
@@ -176,15 +178,3 @@
 ```
 
 ---
-
-***RECENT MODIFICATIONS***
-```
-models/teamModel.js
- public/js/managerTeamsAjax.js
- routes/teamRoute.js
- services/teamService.js
- validators/teamValidator.js
- views/layout/addTeamModal.ejs
- views/manager/team_insight.ejs
- views/manager/teams.ejs
-```

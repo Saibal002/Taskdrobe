@@ -49,37 +49,79 @@
 
     ];
 
+    /*
+     * Dynamic schedule data.
+     * Use the real project deadlines already available to the dashboard.
+     * Keep only projects with a valid deadline, sort by date, and show the
+     * next three items in the manager schedule panel.
+     */
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
 
-    const upcomingDeadlines = [
+    const upcomingDeadlines = (projects || [])
+        .filter(project => project && project.deadline)
+        .map(project => {
+            const deadlineDate = new Date(project.deadline);
 
-        {
-            day: "15",
-            month: "SEP",
-            project: "Website Redesign",
-            description: "Final review and delivery",
-            priority: "High",
-            tone: "danger"
-        },
+            if (Number.isNaN(deadlineDate.getTime())) {
+                return null;
+            }
 
-        {
-            day: "21",
-            month: "SEP",
-            project: "Mobile Application",
-            description: "Sprint milestone",
-            priority: "Medium",
-            tone: "warning"
-        },
+            const dateOnly = new Date(
+                deadlineDate.getFullYear(),
+                deadlineDate.getMonth(),
+                deadlineDate.getDate()
+            );
 
-        {
-            day: "03",
-            month: "OCT",
-            project: "Analytics Platform",
-            description: "Initial release",
-            priority: "Planned",
-            tone: "purple"
-        }
+            const daysUntil = Math.ceil(
+                (dateOnly.getTime() - todayStart.getTime()) /
+                (1000 * 60 * 60 * 24)
+            );
 
-    ];
+            let priority = "Planned";
+            let tone = "purple";
+
+            if (daysUntil < 0) {
+                priority = "Overdue";
+                tone = "danger";
+            } else if (daysUntil <= 3) {
+                priority = "High";
+                tone = "danger";
+            } else if (daysUntil <= 7) {
+                priority = "Medium";
+                tone = "warning";
+            }
+
+            let relative = "Upcoming";
+
+            if (daysUntil < 0) {
+                const overdueDays = Math.abs(daysUntil);
+                relative = `${overdueDays} day${overdueDays === 1 ? "" : "s"} overdue`;
+            } else if (daysUntil === 0) {
+                relative = "Due today";
+            } else if (daysUntil === 1) {
+                relative = "Due tomorrow";
+            } else {
+                relative = `Due in ${daysUntil} days`;
+            }
+
+            return {
+                date: dateOnly,
+                day: String(dateOnly.getDate()).padStart(2, "0"),
+                month: dateOnly.toLocaleDateString(undefined, {
+                    month: "short"
+                }).toUpperCase(),
+                project: project.project_name || "Untitled project",
+                description: project.description || "Project deadline",
+                priority,
+                tone,
+                relative,
+                projectId: project.project_id
+            };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.date - b.date)
+        .slice(0, 3);
 
 
 

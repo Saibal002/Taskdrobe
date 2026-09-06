@@ -2,69 +2,92 @@ $(document).ready(function () {
     /* =====================================================
        1. DASHBOARD: LOAD TEAM OVERVIEW PARTIAL
     ===================================================== */
-    function loadManagerTeams() {
-        const $container = $("#managerTeamListContainer");
-        if (!$container.length) return;
+ function loadManagerTeams() {
+    const $container = $("#managerTeamListContainer");
+    if (!$container.length) return;
 
-        $.ajax({
-            url: "/teams/manager",
-            type: "GET",
-            dataType: "json",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-            success: function (result) {
-                if (result.success && result.data.length > 0) {
-                    $container.empty(); 
-                    
-                    $container.css({
-                        "max-height": "260px",
-                        "overflow-y": "auto",
-                        "padding-right": "4px"
-                    });
+    $.ajax({
+        url: "/teams/manager",
+        type: "GET",
+        dataType: "json",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
 
-                    result.data.forEach((team, index) => {
-                        const gradients = [
-                            "linear-gradient(135deg, #4f46e5, #7c3aed)",
-                            "linear-gradient(135deg, #0ea5e9, #2563eb)",
-                            "linear-gradient(135deg, #f59e0b, #ea580c)",
-                            "linear-gradient(135deg, #10b981, #059669)"
-                        ];
-                        const bg = gradients[index % gradients.length];
-                        const initials = team.team_name.substring(0, 2).toUpperCase();
+        success: function (result) {
+            if (result.success && result.data.length > 0) {
+                $container.empty();
 
-                        const html = `
-                            <div class="manager-team-item d-flex align-items-center justify-content-between p-3 mb-2 rounded-4 shadow-sm" style="background-color: #f8fafc; border-left: 4px solid transparent; transition: all 0.2s;" onmouseover="this.style.borderLeft='4px solid #4f46e5'; this.style.backgroundColor='#fff';" onmouseout="this.style.borderLeft='4px solid transparent'; this.style.backgroundColor='#f8fafc';">
-                                <div class="manager-team-main d-flex align-items-center gap-3">
-                                    <div class="manager-team-avatar fw-bold d-flex align-items-center justify-content-center rounded-circle shadow-sm" style="width: 42px; height: 42px; min-width: 42px; background: ${bg}; color: white;">
-                                        ${initials}
-                                    </div>
-                                    <div>
-                                        <strong class="text-dark d-block" style="font-size: 1rem; line-height: 1.2;">${team.team_name}</strong>
-                                        <span class="text-muted small text-truncate d-inline-block" style="max-width: 180px;">${team.description || "No description provided."}</span>
-                                    </div>
+                $container.css({
+                    "max-height": "260px",
+                    "overflow-y": "auto",
+                    "padding-right": "4px"
+                });
+
+                result.data.forEach((team, index) => {
+                    const initials = team.team_name
+                        .substring(0, 2)
+                        .toUpperCase();
+
+                    const html = `
+                        <div class="manager-team-item">
+
+                            <div class="manager-team-main">
+
+                                <div class="manager-team-avatar">
+                                    ${initials}
                                 </div>
-                                <div class="manager-team-actions">
-                                    <a href="/manager/teams/${team.team_id}" class="btn btn-sm btn-light text-primary fw-bold rounded-pill px-3 shadow-sm">Manage</a>
+
+                                <div class="manager-team-info">
+
+                                    <strong>
+                                        ${team.team_name}
+                                    </strong>
+
+                                    <span>
+                                        ${team.description || "No description provided."}
+                                    </span>
+
                                 </div>
+
                             </div>
-                        `;
-                        $container.append(html);
-                    });
-                } else {
-                    $container.html(`
-                        <div class="text-center py-4 rounded-4 shadow-sm" style="background-color: #f8fafc; border: 2px dashed #cbd5e1;">
-                            <i class="bi bi-people text-muted fs-2 mb-1 d-block"></i>
-                            <p class="text-muted fw-bold mb-0 small">No teams found</p>
-                        </div>
-                    `);
-                }
-            },
-            error: function (xhr) {
-                console.error("Error loading teams:", xhr);
-                $container.html('<div class="alert alert-danger shadow-sm rounded-4 small p-2">Failed to load teams.</div>');
-            }
-        });
-    }
 
+                            <div class="manager-team-actions">
+
+                                <a
+                                    href="/manager/teams/${team.team_id}"
+                                    class="manager-team-manage">
+                                    Manage
+                                </a>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                    $container.append(html);
+                });
+
+            } else {
+                $container.html(`
+                    <div class="manager-team-empty">
+                        <i class="bi bi-people"></i>
+                        <strong>No teams found</strong>
+                        <span>Create a team to get started.</span>
+                    </div>
+                `);
+            }
+        },
+
+        error: function (xhr) {
+            console.error("Error loading teams:", xhr);
+
+            $container.html(`
+                <div class="manager-team-error">
+                    Failed to load teams.
+                </div>
+            `);
+        }
+    });
+}
     /* =====================================================
        2. TEAMS DIRECTORY: LOAD FULL PAGE GRID
     ===================================================== */

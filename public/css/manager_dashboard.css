@@ -93,11 +93,11 @@
 }
 
 /* ---- Cardboard effect (light theme) ---- */
-.manager-dashboard-page:not([data-theme="dark"]) .manager-panel,
-.manager-dashboard-page:not([data-theme="dark"]) .manager-stat-card,
-.manager-dashboard-page:not([data-theme="dark"]) .manager-team-item,
-.manager-dashboard-page:not([data-theme="dark"]) .manager-attention-item,
-.manager-dashboard-page:not([data-theme="dark"]) .manager-deadline-item {
+html:not([data-theme="dark"]) .manager-dashboard-page .manager-panel,
+html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card,
+html:not([data-theme="dark"]) .manager-dashboard-page .manager-team-item,
+html:not([data-theme="dark"]) .manager-dashboard-page .manager-attention-item,
+html:not([data-theme="dark"]) .manager-dashboard-page .manager-deadline-item {
     background: var(--md-gradient-cardboard) !important;
     box-shadow: var(--md-shadow-cardboard) !important;
     backdrop-filter: none !important;
@@ -160,8 +160,8 @@
 }
 
 /* ---- Cardboard texture (subtle grain) ---- */
-.manager-dashboard-page:not([data-theme="dark"]) .manager-panel::after,
-.manager-dashboard-page:not([data-theme="dark"]) .manager-stat-card::after {
+html:not([data-theme="dark"]) .manager-dashboard-page .manager-panel::after,
+html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -961,6 +961,73 @@
 .manager-text-button:hover {
     color: var(--md-primary-dark);
     gap: 8px;
+}
+
+/* ---- DARK THEME SURFACE FIX ---- */
+/* Theme is stored on <html>, so light-only surfaces must key off the root theme. */
+[data-theme="dark"] .manager-panel,
+[data-theme="dark"] .manager-stat-card,
+[data-theme="dark"] .manager-team-item,
+[data-theme="dark"] .manager-attention-item,
+[data-theme="dark"] .manager-deadline-item {
+    background: var(--md-surface);
+    border-color: var(--md-border);
+    box-shadow: var(--md-shadow-sm);
+}
+
+[data-theme="dark"] .manager-panel:hover,
+[data-theme="dark"] .manager-stat-card:hover {
+    border-color: var(--md-border-strong);
+    box-shadow: var(--md-shadow-md);
+}
+
+[data-theme="dark"] .manager-project-link:nth-child(1) .manager-project-card { --project-gradient: linear-gradient(135deg,#1e293b 0%,#273449 100%); }
+[data-theme="dark"] .manager-project-link:nth-child(2) .manager-project-card { --project-gradient: linear-gradient(135deg,#172f35 0%,#16434a 100%); }
+[data-theme="dark"] .manager-project-link:nth-child(3) .manager-project-card { --project-gradient: linear-gradient(135deg,#33232a 0%,#42262f 100%); }
+[data-theme="dark"] .manager-project-link:nth-child(4) .manager-project-card { --project-gradient: linear-gradient(135deg,#29243f 0%,#342e4d 100%); }
+
+[data-theme="dark"] .manager-project-card {
+    border-color: rgba(148,163,184,0.18);
+    box-shadow: var(--md-shadow-sm);
+}
+
+[data-theme="dark"] .manager-project-card::before {
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+}
+
+[data-theme="dark"] .manager-project-card::after {
+    background: rgba(255,255,255,0.06);
+}
+
+[data-theme="dark"] .manager-project-link:hover .manager-project-card {
+    border-color: var(--md-border-strong);
+    box-shadow: var(--md-shadow-md);
+}
+
+[data-theme="dark"] .manager-project-action {
+    border-color: rgba(148,163,184,0.16);
+    background: rgba(15,23,42,0.55);
+    color: var(--md-text-muted);
+}
+
+[data-theme="dark"] .manager-project-action:hover {
+    background: rgba(108,92,231,0.16);
+}
+
+[data-theme="dark"] .manager-progress-track {
+    background: rgba(148,163,184,0.16);
+}
+
+[data-theme="dark"] .manager-project-health-state.healthy,
+[data-theme="dark"] .manager-project-health-action-icon.healthy {
+    background: rgba(52,211,153,0.14);
+    color: #6ee7b7;
+}
+
+[data-theme="dark"] .manager-project-health-state.attention,
+[data-theme="dark"] .manager-project-health-action-icon.attention {
+    background: rgba(251,191,36,0.14);
+    color: #fbbf24;
 }
 
 /* ---- PROJECTS ---- */
@@ -1854,79 +1921,148 @@
 }
 .manager-attention-arrow { color: var(--md-text-muted); font-size: 12px; flex-shrink: 0; }
 
-/* ---- DEADLINES ---- */
-.manager-deadline-list { display: flex; flex-direction: column; }
-.manager-deadline-item {
+/* ---- DEADLINES / SCHEDULE ---- */
+.manager-deadline-list {
     display: flex;
+    flex-direction: column;
+}
+.manager-deadline-item {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
     align-items: center;
-    gap: 14px;
-    padding: 10px 0;
+    gap: 12px;
+    min-width: 0;
+    padding: 9px 0;
     border-bottom: 1px solid var(--md-border);
 }
-.manager-deadline-item:last-child { border-bottom: 0; }
+.manager-deadline-item:first-child { padding-top: 0; }
+.manager-deadline-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
 .manager-deadline-date {
     width: 44px;
-    height: 48px;
+    height: 46px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: 1px solid var(--md-border);
     border-radius: var(--md-radius-sm);
     background: var(--md-surface-soft);
-    border: 1px solid var(--md-border);
 }
 .manager-deadline-date strong {
     color: var(--md-text);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     line-height: 1;
 }
 .manager-deadline-date span {
-    margin-top: 2px;
+    margin-top: 3px;
     color: var(--md-text-muted);
     font-size: 8px;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
 }
-.manager-deadline-content { min-width: 0; flex: 1; }
+.manager-deadline-content {
+    min-width: 0;
+}
+.manager-deadline-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+}
 .manager-deadline-content strong {
-    display: block;
+    min-width: 0;
     overflow: hidden;
     color: var(--md-text);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 650;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.manager-deadline-content span {
+.manager-deadline-content > span {
     display: block;
     margin-top: 2px;
     overflow: hidden;
     color: var(--md-text-muted);
-    font-size: 11px;
+    font-size: 10px;
+    line-height: 1.35;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.manager-deadline-relative {
+    flex-shrink: 0;
+    color: var(--md-text-muted);
+    font-size: 8px;
+    font-weight: 600;
+    white-space: nowrap;
+}
 .manager-deadline-priority {
-    padding: 3px 12px;
+    padding: 3px 9px;
     border-radius: var(--md-radius-full);
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 700;
     letter-spacing: 0.02em;
     flex-shrink: 0;
 }
 .manager-deadline-priority.danger {
     background: rgba(255,107,107,0.15);
-    color: var(--md-danger-dark);
+    color: var(--md-danger);
 }
 .manager-deadline-priority.warning {
     background: rgba(253,203,110,0.20);
-    color: #b7950b;
+    color: #9a7600;
 }
 .manager-deadline-priority.purple {
     background: rgba(108,92,231,0.15);
     color: var(--md-primary-dark);
+}
+.manager-deadline-empty {
+    min-height: 154px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-align: center;
+    border-top: 1px solid var(--md-border);
+    color: var(--md-text-muted);
+}
+.manager-deadline-empty-icon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 2px;
+    border-radius: var(--md-radius-sm);
+    background: var(--md-surface-soft);
+    color: var(--md-primary);
+}
+.manager-deadline-empty strong {
+    color: var(--md-text);
+    font-size: 12px;
+}
+.manager-deadline-empty span {
+    max-width: 220px;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+[data-theme="dark"] .manager-deadline-date {
+    background: rgba(30,41,59,0.45);
+}
+
+@media (max-width: 480px) {
+    .manager-deadline-item {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 10px;
+    }
+    .manager-deadline-priority {
+        display: none;
+    }
 }
 
 /* ---- ACTIVITY ---- */
@@ -1967,71 +2103,253 @@
 }
 
 /* ---- TEAM OVERVIEW ---- */
+.manager-team-overview-panel {
+    padding: 20px 22px;
+}
+
+.manager-team-overview-panel .manager-panel-header {
+    margin-bottom: 18px;
+}
+
+.manager-team-overview-panel .manager-section-eyebrow {
+    color: var(--md-primary);
+}
+
+.manager-create-team-button {
+    min-height: 34px;
+    padding: 0 14px;
+    border-radius: 9px;
+    box-shadow: 0 5px 16px rgba(108, 92, 231, 0.16);
+}
+
+.manager-create-team-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.22);
+}
+
 .manager-team-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
+
+/* AJAX-rendered team rows */
 .manager-team-item {
-    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 66px;
+    padding: 10px 12px;
+    margin: 0;
+
     border: 1px solid var(--md-border);
-    border-radius: var(--md-radius-md);
+    border-radius: 12px;
     background: var(--md-surface-soft);
-    transition: all var(--md-transition);
+
+    transition:
+        transform var(--md-transition),
+        border-color var(--md-transition),
+        background var(--md-transition),
+        box-shadow var(--md-transition);
 }
+
 .manager-team-item:hover {
+    transform: translateY(-1px);
     border-color: var(--md-border-strong);
     background: var(--md-surface-strong);
+    box-shadow: var(--md-shadow-sm);
 }
+
 .manager-team-main {
     display: flex;
     align-items: center;
     gap: 12px;
-}
-.manager-team-avatar {
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    display: grid;
-    place-items: center;
-    border-radius: var(--md-radius-full);
-    background: var(--md-gradient-primary);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-}
-.manager-team-main > div:last-child { min-width: 0; flex: 1; }
-.manager-team-main strong {
-    display: block;
-    color: var(--md-text);
-    font-size: 13px;
-    font-weight: 600;
-}
-.manager-team-main span {
-    display: block;
-    margin-top: 2px;
-    color: var(--md-text-muted);
-    font-size: 11px;
-}
-.manager-team-actions { flex-shrink: 0; }
-.manager-team-actions .btn {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 14px;
-    border-radius: var(--md-radius-full);
-    transition: all var(--md-transition);
-}
-.manager-team-footer {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid var(--md-border);
-    color: var(--md-text-muted);
-    font-size: 10px;
-    display: flex;
-    justify-content: space-between;
+    min-width: 0;
 }
 
-/* ---- EMPTY STATE ---- */
+.manager-team-avatar {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: var(--md-radius-full);
+
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    box-shadow: 0 3px 10px rgba(99, 102, 241, 0.18);
+}
+
+.manager-team-item:nth-child(4n + 2) .manager-team-avatar {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+}
+
+.manager-team-item:nth-child(4n + 3) .manager-team-avatar {
+    background: linear-gradient(135deg, #f59e0b, #ea580c);
+}
+
+.manager-team-item:nth-child(4n + 4) .manager-team-avatar {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.manager-team-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.manager-team-info strong {
+    display: block;
+    color: var(--md-text);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.manager-team-info span {
+    display: block;
+    max-width: 220px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: var(--md-text-muted);
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+.manager-team-actions {
+    flex-shrink: 0;
+}
+
+.manager-team-manage {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 30px;
+    padding: 0 13px;
+
+    border: 1px solid var(--md-border);
+    border-radius: var(--md-radius-full);
+
+    background: var(--md-surface-strong);
+    color: var(--md-primary);
+
+    font-size: 10px;
+    font-weight: 700;
+    text-decoration: none;
+
+    transition:
+        background var(--md-transition),
+        border-color var(--md-transition),
+        color var(--md-transition),
+        transform var(--md-transition);
+}
+
+.manager-team-manage:hover {
+    border-color: var(--md-primary);
+    background: var(--md-primary-glow);
+    color: var(--md-primary-dark);
+    transform: translateX(2px);
+}
+
+.manager-team-footer {
+    min-height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    margin-top: 14px;
+    padding-top: 12px;
+
+    border-top: 1px solid var(--md-border);
+}
+
+.manager-team-footer .manager-text-button {
+    font-size: 11px;
+}
+
+.manager-team-loading {
+    min-height: 90px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    color: var(--md-text-muted);
+    font-size: 11px;
+}
+
+.manager-team-loading .spinner-border {
+    width: 21px;
+    height: 21px;
+    border-width: 2px;
+    color: var(--md-primary);
+}
+
+.manager-team-empty,
+.manager-team-error {
+    padding: 20px;
+    text-align: center;
+    color: var(--md-text-muted);
+}
+
+.manager-team-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    border: 1px dashed var(--md-border);
+    border-radius: var(--md-radius-md);
+}
+
+.manager-team-empty i {
+    margin-bottom: 3px;
+    font-size: 24px;
+    color: var(--md-primary);
+}
+
+.manager-team-empty strong {
+    color: var(--md-text);
+    font-size: 12px;
+}
+
+.manager-team-empty span,
+.manager-team-error {
+    font-size: 10px;
+}
+
+.manager-team-error {
+    color: #ef4444;
+}
+
+/* Dark theme */
+[data-theme="dark"] .manager-team-item {
+    background: rgba(30, 41, 59, 0.42);
+}
+
+[data-theme="dark"] .manager-team-item:hover {
+    background: rgba(30, 41, 59, 0.72);
+}
+
+[data-theme="dark"] .manager-team-manage {
+    background: rgba(30, 41, 59, 0.72);
+}
+
+/* Empty-state compatibility */
 .manager-empty-state {
     min-height: 220px;
     display: flex;
@@ -2041,6 +2359,7 @@
     padding: 30px 20px;
     text-align: center;
 }
+
 .manager-empty-icon {
     width: 56px;
     height: 56px;
@@ -2052,12 +2371,14 @@
     color: var(--md-primary);
     font-size: 24px;
 }
+
 .manager-empty-state h3 {
     margin: 0;
     color: var(--md-text);
     font-size: 16px;
     font-weight: 700;
 }
+
 .manager-empty-state p {
     max-width: 280px;
     margin: 6px 0 16px;

@@ -1,4 +1,4 @@
-<section class="manager-panel">
+<section class="manager-panel manager-deadlines-panel">
 
     <div class="manager-panel-header">
 
@@ -7,60 +7,57 @@
                 SCHEDULE
             </span>
 
-            <h2>
-                Upcoming deadlines
-            </h2>
+            <h2>Upcoming deadlines</h2>
 
-            <p>
-                What is coming up next.
-            </p>
+            <p>What is coming up next.</p>
         </div>
 
         <i class="bi bi-calendar3 manager-panel-header-icon"></i>
 
     </div>
 
+    <% if (deadlines && deadlines.length > 0) { %>
 
-    <div class="manager-deadline-list">
+        <div class="manager-deadline-list">
 
-        <% deadlines.forEach(deadline => { %>
+            <% deadlines.forEach(deadline => { %>
 
-            <div class="manager-deadline-item">
+                <div class="manager-deadline-item">
 
-                <div class="manager-deadline-date">
+                    <div class="manager-deadline-date">
+                        <strong><%= deadline.day %></strong>
+                        <span><%= deadline.month %></span>
+                    </div>
 
-                    <strong>
-                        <%= deadline.day %>
-                    </strong>
+                    <div class="manager-deadline-content">
+                        <div class="manager-deadline-title-row">
+                            <strong><%= deadline.project %></strong>
+                            <span class="manager-deadline-relative"><%= deadline.relative %></span>
+                        </div>
 
-                    <span>
-                        <%= deadline.month %>
+                        <span><%= deadline.description %></span>
+                    </div>
+
+                    <span class="manager-deadline-priority <%= deadline.tone %>">
+                        <%= deadline.priority %>
                     </span>
 
                 </div>
 
+            <% }) %>
 
-                <div class="manager-deadline-content">
+        </div>
 
-                    <strong>
-                        <%= deadline.project %>
-                    </strong>
+    <% } else { %>
 
-                    <span>
-                        <%= deadline.description %>
-                    </span>
-
-                </div>
-
-
-                <span class="manager-deadline-priority <%= deadline.tone %>">
-                    <%= deadline.priority %>
-                </span>
-
+        <div class="manager-deadline-empty">
+            <div class="manager-deadline-empty-icon">
+                <i class="bi bi-calendar-check"></i>
             </div>
+            <strong>No upcoming deadlines</strong>
+            <span>Projects with deadlines will appear here automatically.</span>
+        </div>
 
-        <% }) %>
-
-    </div>
+    <% } %>
 
 </section>
