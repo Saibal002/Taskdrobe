@@ -6,6 +6,7 @@
 ├── 📁 config
 │   └── 📄 environment.js
 ├── 📁 controllers
+│   ├── 📄 activityController.js
 │   ├── 📄 attachmentController.js
 │   ├── 📄 authController.js
 │   ├── 📄 chatController.js
@@ -22,6 +23,8 @@
 ├── 📁 database
 │   ├── 📁 migration
 │   ├── 📁 modules
+│   │   ├── 📁 activities
+│   │   │   └── 📄 01_actiivities.sql
 │   │   ├── 📁 auth
 │   │   │   ├── 📄 01_roles.sql
 │   │   │   ├── 📄 02_users.sql
@@ -53,6 +56,7 @@
 │   ├── 📄 roleMiddleware.js
 │   └── 📄 uploadMiddleware.js
 ├── 📁 models
+│   ├── 📄 activityModel.js
 │   ├── 📄 attachmentModel.js
 │   ├── 📄 chatModel.js
 │   ├── 📄 commentModel.js
@@ -89,6 +93,7 @@
 │       ├── 📄 project.js
 │       └── 📄 task.js
 ├── 📁 routes
+│   ├── 📄 activityRoute.js
 │   ├── 📄 adminRoutes.js
 │   ├── 📄 authRoute.js
 │   ├── 📄 chatRoute.js
@@ -104,6 +109,7 @@
 │   └── 📄 teamRoute.js
 ├── 📁 scripts
 ├── 📁 services
+│   ├── 📄 activityService.js
 │   ├── 📄 authService.js
 │   ├── 📄 commentService.js
 │   ├── 📄 dashboardService.js

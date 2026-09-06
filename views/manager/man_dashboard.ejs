@@ -127,41 +127,7 @@
 
 
 
-    const recentActivity = [
-
-        {
-            initials: "AK",
-            name: "Alex",
-            action: "completed",
-            target: "API Integration",
-            time: "18 minutes ago"
-        },
-
-        {
-            initials: "MR",
-            name: "Maya",
-            action: "updated the status of",
-            target: "Website Redesign",
-            time: "42 minutes ago"
-        },
-
-        {
-            initials: "JS",
-            name: "Jordan",
-            action: "commented on",
-            target: "Mobile Application",
-            time: "1 hour ago"
-        },
-
-        {
-            initials: "RN",
-            name: "Ryan",
-            action: "started working on",
-            target: "Analytics Dashboard",
-            time: "2 hours ago"
-        }
-
-    ];
+   
 %>
 
 
@@ -306,7 +272,7 @@
             <div class="manager-dashboard-grid manager-bottom-grid">
 
                 <%- include("./partials/managerActivity", {
-                    activities: recentActivity
+                    activities: []
                 }) %>
 
 

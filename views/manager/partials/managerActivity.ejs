@@ -19,41 +19,314 @@
     </div>
 
 
-    <div class="manager-activity-list">
+    <div class="manager-activity-list" id="managerActivityList">
 
-        <% activities.forEach(activity => { %>
+        <div class="manager-activity-loading">
 
-            <div class="manager-activity-item">
+            <div class="spinner-border spinner-border-sm" role="status"></div>
 
-                <div class="manager-activity-avatar">
-                    <%= activity.initials %>
-                </div>
+            <span>
+                Loading recent activity...
+            </span>
 
-
-                <div class="manager-activity-content">
-
-                    <p>
-                        <strong>
-                            <%= activity.name %>
-                        </strong>
-
-                        <%= activity.action %>
-
-                        <strong>
-                            <%= activity.target %>
-                        </strong>
-                    </p>
-
-                    <span>
-                        <%= activity.time %>
-                    </span>
-
-                </div>
-
-            </div>
-
-        <% }) %>
+        </div>
 
     </div>
 
 </section>
+
+
+<script>
+
+(function () {
+
+    /*
+     * Activity is intentionally isolated from managerDashboard.js.
+     *
+     * The partial:
+     *  - loads its own data
+     *  - renders its own UI
+     *  - refreshes automatically
+     */
+
+    function initManagerActivity() {
+
+        if (typeof window.jQuery === "undefined") {
+
+            setTimeout(initManagerActivity, 50);
+
+            return;
+
+        }
+
+        const $ = window.jQuery;
+
+        const $container = $("#managerActivityList");
+
+        if (!$container.length) {
+            return;
+        }
+
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        function getInitials(name) {
+
+            return String(name || "User")
+                .trim()
+                .split(/\s+/)
+                .map(function (part) {
+                    return part.charAt(0);
+                })
+                .slice(0, 2)
+                .join("")
+                .toUpperCase();
+
+        }
+
+
+        function formatActivityTime(value) {
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return "";
+            }
+
+
+            const now = new Date();
+
+            const diffMs = now.getTime() - date.getTime();
+
+            const diffSeconds = Math.floor(diffMs / 1000);
+
+            const diffMinutes = Math.floor(diffSeconds / 60);
+
+            const diffHours = Math.floor(diffMinutes / 60);
+
+            const diffDays = Math.floor(diffHours / 24);
+
+
+            if (diffSeconds < 60) {
+                return "Just now";
+            }
+
+
+            if (diffMinutes < 60) {
+
+                return `${diffMinutes} minute${diffMinutes === 1 ? "" : "s"} ago`;
+
+            }
+
+
+            if (diffHours < 24) {
+
+                return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
+
+            }
+
+
+            if (diffDays < 7) {
+
+                return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+
+            }
+
+
+            return date.toLocaleString([], {
+
+                month: "short",
+
+                day: "numeric",
+
+                hour: "numeric",
+
+                minute: "2-digit"
+
+            });
+
+        }
+
+
+        function renderActivities(activities) {
+
+            if (!activities || activities.length === 0) {
+
+                $container.html(`
+
+                    <div class="manager-activity-empty">
+
+                        <i class="bi bi-clock-history"></i>
+
+                        <strong>
+                            No recent activity
+                        </strong>
+
+                        <span>
+                            Workspace activity will appear here.
+                        </span>
+
+                    </div>
+
+                `);
+
+                return;
+            }
+
+
+            let html = "";
+
+
+            activities.forEach(function (activity) {
+
+                const userName =
+                    escapeHtml(activity.user_name || "Unknown user");
+
+                const description =
+                    escapeHtml(
+                        activity.description || "Workspace activity"
+                    );
+
+                const initials =
+                    escapeHtml(
+                        getInitials(activity.user_name)
+                    );
+
+                const time =
+                    escapeHtml(
+                        formatActivityTime(activity.created_at)
+                    );
+
+
+                html += `
+
+                    <div class="manager-activity-item">
+
+                        <div class="manager-activity-avatar">
+                            ${initials}
+                        </div>
+
+
+                        <div class="manager-activity-content">
+
+                            <p>
+
+                                <strong>
+                                    ${userName}
+                                </strong>
+
+                                ${description}
+
+                            </p>
+
+
+                            <span>
+                                ${time}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            $container.html(html);
+
+        }
+
+
+        function loadManagerActivity() {
+
+            $.ajax({
+
+                url: "/api/activities/recent",
+
+                type: "GET",
+
+                dataType: "json",
+
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+
+
+                success: function (response) {
+
+                    if (!response || !response.success) {
+
+                        console.error(
+                            "Activity API returned an unsuccessful response."
+                        );
+
+                        return;
+                    }
+
+
+                    renderActivities(response.data || []);
+
+                },
+
+
+                error: function (xhr) {
+
+                    console.error(
+                        "Manager activity request failed:",
+                        xhr
+                    );
+
+                }
+
+            });
+
+        }
+
+
+        /*
+         * Initial load.
+         */
+
+        loadManagerActivity();
+
+
+        /*
+         * Automatically refresh.
+         *
+         * This means a newly created project/activity
+         * will appear without refreshing the dashboard.
+         */
+
+        setInterval(function () {
+
+            loadManagerActivity();
+
+        }, 20000);
+
+    }
+
+
+    /*
+     * The manager dashboard currently loads jQuery
+     * near the bottom of the page, after this partial.
+     *
+     * Wait until the page has finished loading so
+     * jQuery is guaranteed to exist.
+     */
+
+    window.addEventListener("load", initManagerActivity);
+
+})();
+
+</script>

@@ -1,5 +1,6 @@
 const projectModel = require("../models/projectModel");
 const taskModel = require("../models/taskModel");
+const ActivityService = require("./activityService");
 const AppError = require("../utils/AppError");
 
 /**
@@ -28,6 +29,15 @@ const createProject = async (projectData) => {
         progress,
         deadline,
         createdBy,
+    });
+
+    // Log successful project creation
+    await ActivityService.log({
+        userId: createdBy,
+        action: "created",
+        entityType: "project",
+        entityId: project.project_id,
+        description: `Created project "${projectName}"`
     });
 
     return project;

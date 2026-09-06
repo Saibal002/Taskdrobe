@@ -43,7 +43,7 @@ if (scrollContainer && leftBtn && rightBtn) {
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize Global Search safely
   initGlobalSearch();
-
+ 
   // Task Doughnut Chart
   const chartCanvas = document.getElementById("taskChart");
   if (chartCanvas) {
@@ -270,6 +270,8 @@ function escapeSearchHTML(value) {
   div.textContent = value ?? "";
   return div.innerHTML;
 }
+
+
 
 JavaScript
 document.addEventListener('DOMContentLoaded', () => {

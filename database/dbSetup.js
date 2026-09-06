@@ -24,7 +24,8 @@ async function setupDatabase() {
     const authFolder = path.join(
         __dirname,
         "modules",
-        "auth"
+        "auth",
+        
     );
 
     const authFiles = fs
@@ -100,6 +101,25 @@ async function setupDatabase() {
         );
     }
 
+      // ======================
+    // Activity Module
+    // ======================
+
+    const activityFolder = path.join(
+        __dirname,
+        "modules",
+        "activities"
+    );
+
+    const activityFiles = fs
+        .readdirSync(activityFolder)
+        .sort();
+
+    for (const file of activityFiles) {
+        await runSQLFile(
+            path.join(activityFolder, file)
+        );
+    }
 
     console.log("\n🎉 Database setup completed.");
 

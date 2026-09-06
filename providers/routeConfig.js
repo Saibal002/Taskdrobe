@@ -14,6 +14,7 @@ const searchRoute = require("../routes/searchRoute");
 const profileRoute = require("../routes/profileRoute");
 const chatRoutes = require("../routes/chatRoute");
 const notificationRoute = require("../routes/notificationRoute");
+const activityRoute = require("../routes/activityRoute");
 
 module.exports = {
   public: [
@@ -27,7 +28,7 @@ module.exports = {
     },
   ],
 
- protected: [
+  protected: [
     // 1. Explicitly named paths go first
     {
       path: "/teams",
@@ -45,7 +46,7 @@ module.exports = {
       path: "/search",
       router: searchRoute,
     },
-    
+
     // 2. Root-mounted routers go last to prevent wildcard interception
     {
       path: "/",
@@ -68,6 +69,10 @@ module.exports = {
     {
       path: "/notifications",
       router: notificationRoute,
+    },
+    {
+      path: "/activities",
+      router: activityRoute,
     },
   ],
 
