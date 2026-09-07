@@ -379,6 +379,9 @@ $(document).ready(function () {
   /* =====================================================
        6. TEAM INSIGHT: LOAD TAB DATA
     ===================================================== */
+  /* =====================================================
+       6. TEAM INSIGHT: LOAD TAB DATA (THEME UPDATED)
+    ===================================================== */
   function loadTeamMembersList() {
     if (typeof CURRENT_TEAM_ID === "undefined" || !CURRENT_TEAM_ID) return;
     const $tbody = $("#teamMembersTableBody");
@@ -392,27 +395,31 @@ $(document).ready(function () {
           $("#stat-total-members").text(res.data.length);
 
           res.data.forEach((member) => {
+            // Reusing the avatar styles from the team cards
             const avatar = member.profile_image
-              ? `<img src="${member.profile_image}" class="rounded-circle me-2" width="32" height="32">`
-              : `<div class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center me-2 fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">${member.full_name.substring(0, 2).toUpperCase()}</div>`;
+              ? `<img src="${member.profile_image}" class="manager-team-member-avatar" style="margin: 0; width: 34px; height: 34px;">`
+              : `<div class="manager-team-member-initial" style="margin: 0; width: 34px; height: 34px; border-radius: 50%;">${member.full_name.substring(0, 2).toUpperCase()}</div>`;
 
             const date = new Date(member.joined_at).toLocaleDateString();
 
             $tbody.append(`
-                            <tr>
-                                <td>${avatar} <span class="fw-bold">${member.full_name}</span></td>
-                                <td class="text-muted">${member.email}</td>
-                                <td>${date}</td>
-                                <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-danger rounded-pill remove-member-btn" data-id="${member.user_id}">Remove</button>
-                                </td>
-                            </tr>
-                        `);
+                <tr class="manager-insight-table-row">
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            ${avatar}
+                            <span style="color: var(--md-text); font-weight: 600; font-size: 13px;">${member.full_name}</span>
+                        </div>
+                    </td>
+                    <td class="manager-insight-meta align-middle">${member.email}</td>
+                    <td class="manager-insight-meta align-middle">${date}</td>
+                    <td class="text-end align-middle">
+                        <button class="manager-insight-remove-btn remove-member-btn" data-id="${member.user_id}">Remove</button>
+                    </td>
+                </tr>
+            `);
           });
         } else {
-          $tbody.html(
-            '<tr><td colspan="4" class="text-center text-muted py-4">No members in this team yet.</td></tr>',
-          );
+          $tbody.html('<tr><td colspan="4" class="text-center manager-insight-meta py-4">No members in this team yet.</td></tr>');
           $("#stat-total-members").text("0");
         }
       },
@@ -432,52 +439,46 @@ $(document).ready(function () {
           $("#stat-active-projects").text(res.data.length);
 
           res.data.forEach((project) => {
-            const statusColor =
-              project.status === "Completed"
-                ? "success"
-                : project.status === "In Progress"
-                  ? "primary"
-                  : "warning";
+            // Map database status to our existing dashboard CSS classes
+            let statusClass = "not-started";
+            if (project.status === 'Completed') statusClass = "completed";
+            else if (project.status === 'In Progress') statusClass = "in-progress";
+            else if (project.status === 'On Hold') statusClass = "on-hold";
 
-            const date = project.deadline
-              ? new Date(project.deadline).toLocaleDateString()
-              : "No Deadline";
+            const date = project.deadline ? new Date(project.deadline).toLocaleDateString() : "No Deadline";
 
             $grid.append(`
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card h-100 border-0 shadow-sm rounded-4">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between mb-3">
-                                            <span class="badge bg-${statusColor} bg-opacity-10 text-${statusColor} rounded-pill px-3 py-2">${project.status}</span>
-                                            <span class="text-muted small"><i class="bi bi-calendar-event me-1"></i>${date}</span>
-                                        </div>
-                                        <h5 class="fw-bold mb-3 text-truncate">${project.project_name}</h5>
-                                        <div class="mb-3">
-                                            <div class="d-flex justify-content-between small mb-1">
-                                                <span class="text-muted">Progress</span>
-                                                <span class="fw-bold">${project.progress}%</span>
-                                            </div>
-                                            <div class="progress" style="height: 6px;">
-                                                <div class="progress-bar bg-${statusColor}" role="progressbar" style="width: ${project.progress}%"></div>
-                                            </div>
-                                        </div>
-                                        <a href="/projects/${project.project_id}" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-bold">View Project</a>
-                                    </div>
-                                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="manager-insight-card h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="manager-project-status ${statusClass}"><span></span>${project.status}</span>
+                            <span class="manager-insight-meta"><i class="bi bi-calendar-event me-1"></i>${date}</span>
+                        </div>
+                        <h5 class="manager-insight-title text-truncate">${project.project_name}</h5>
+                        
+                        <div class="mb-4 mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="manager-insight-meta">Progress</span>
+                                <span style="color: var(--md-text); font-weight: 700; font-size: 11px;">${project.progress}%</span>
                             </div>
-                        `);
+                            <!-- Reusing the dashboard progress track -->
+                            <div class="manager-progress-track" style="background: var(--md-surface-soft); border: 1px solid var(--md-border);">
+                                <div class="manager-progress-fill" style="width: ${project.progress}%;"></div>
+                            </div>
+                        </div>
+                        
+                        <a href="/projects/${project.project_id}" class="manager-insight-btn w-100">View Project</a>
+                    </div>
+                </div>
+            `);
           });
         } else {
-          $grid.html(
-            '<div class="col-12 text-center text-muted py-5"><i class="bi bi-folder-x fs-1 d-block mb-3"></i>No projects involve this team yet.</div>',
-          );
+          $grid.html('<div class="col-12 text-center manager-insight-meta py-5"><i class="bi bi-folder-x fs-1 d-block mb-3"></i>No projects involve this team yet.</div>');
           $("#stat-active-projects").text("0");
         }
       },
       error: function () {
-        $grid.html(
-          '<div class="col-12 text-center text-danger py-4">Failed to load projects.</div>',
-        );
+        $grid.html('<div class="col-12 text-center text-danger py-4">Failed to load projects.</div>');
       },
     });
   }
@@ -492,55 +493,42 @@ $(document).ready(function () {
       success: function (res) {
         if (res.success && res.data && res.data.length > 0) {
           $list.empty();
-
-          // Filter pending tasks for the stat counter
-          const pendingCount = res.data.filter(
-            (t) => t.status !== "Completed",
-          ).length;
+          const pendingCount = res.data.filter((t) => t.status !== "Completed").length;
           $("#stat-pending-tasks").text(pendingCount);
 
           res.data.forEach((task) => {
-            const statusColor =
-              task.status === "Completed" ? "success" : "primary";
-            const priorityColor =
-              task.priority === "High" || task.priority === "Critical"
-                ? "danger"
-                : "secondary";
-            const date = task.due_date
-              ? new Date(task.due_date).toLocaleDateString()
-              : "No Due Date";
+            // Map styling
+            let statusClass = task.status === 'Completed' ? 'completed' : 'in-progress';
+            let priorityClass = task.priority === 'High' || task.priority === 'Critical' ? 'attention' : 'healthy';
+            const date = task.due_date ? new Date(task.due_date).toLocaleDateString() : "No Due Date";
 
             $list.append(`
-                            <div class="list-group-item border-0 border-bottom py-3 px-0">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <h6 class="fw-bold mb-1">${task.title}</h6>
-                                        <div class="small text-muted mb-2">
-                                            <i class="bi bi-person-fill me-1"></i>${task.assigned_user} 
-                                            <span class="mx-2">•</span> 
-                                            <i class="bi bi-folder me-1"></i><a href="/projects/${task.project_id}" class="text-decoration-none">${task.project_name}</a>
-                                        </div>
-                                        <span class="badge bg-${priorityColor} bg-opacity-10 text-${priorityColor} rounded-pill me-2">${task.priority} Priority</span>
-                                        <span class="badge bg-${statusColor} bg-opacity-10 text-${statusColor} rounded-pill">${task.status}</span>
-                                    </div>
-                                    <div class="text-end text-muted small fw-bold bg-light px-3 py-2 rounded-3">
-                                        <i class="bi bi-calendar3 me-1"></i> ${date}
-                                    </div>
-                                </div>
+                <div class="manager-insight-task-item">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <div>
+                            <h6 class="manager-insight-task-title mb-1">${task.title}</h6>
+                            <div class="manager-insight-meta mb-2">
+                                <i class="bi bi-person-fill me-1"></i>${task.assigned_user} 
+                                <span class="mx-2">•</span> 
+                                <i class="bi bi-folder me-1"></i><a href="/projects/${task.project_id}" style="color: var(--md-primary); text-decoration: none; font-weight: 600;">${task.project_name}</a>
                             </div>
-                        `);
+                            <span class="manager-project-health-state ${priorityClass} me-2">${task.priority} Priority</span>
+                            <span class="manager-project-status ${statusClass}"><span></span>${task.status}</span>
+                        </div>
+                        <div class="manager-insight-date-badge">
+                            <i class="bi bi-calendar3 me-1"></i> ${date}
+                        </div>
+                    </div>
+                </div>
+            `);
           });
         } else {
-          $list.html(
-            '<div class="text-center text-muted py-5"><i class="bi bi-check2-circle fs-1 d-block mb-3"></i>No tasks assigned to this team.</div>',
-          );
+          $list.html('<div class="text-center manager-insight-meta py-5"><i class="bi bi-check2-circle fs-1 d-block mb-3"></i>No tasks assigned to this team.</div>');
           $("#stat-pending-tasks").text("0");
         }
       },
       error: function () {
-        $list.html(
-          '<div class="text-center text-danger py-4">Failed to load tasks.</div>',
-        );
+        $list.html('<div class="text-center text-danger py-4">Failed to load tasks.</div>');
       },
     });
   }

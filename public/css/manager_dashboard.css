@@ -4,8 +4,6 @@
    – Neon glow on interactive elements
    – Box blur on glass surfaces
    – Cardboard effect (light theme: raised, textured)
-   – Preserves all existing class names & structure
-   – Fully compatible with your JS and partials
    ========================================================= */
 
 /* ---- ROOT VARIABLES (Light) ---- */
@@ -30,7 +28,7 @@
     --md-gradient-secondary: linear-gradient(135deg, #00CEC9 0%, #81ECEC 100%);
     --md-gradient-cardboard: linear-gradient(145deg, #f0f2f8 0%, #e6e9f0 100%);
 
-    --md-bg: linear-gradient(145deg, #fef9f7 0%, #fce4e1 100%)
+    --md-bg: linear-gradient(145deg, #fef9f7 0%, #6582e0 100%);
     --md-surface: rgba(255, 255, 255, 0.65);
     --md-surface-strong: rgba(255, 255, 255, 0.92);
     --md-surface-soft: rgba(255, 255, 255, 0.40);
@@ -104,61 +102,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-deadline-item {
     border: 1px solid rgba(255,255,255,0.6) !important;
 }
 
-/* ---- Glassmorphism (global) ---- */
-.manager-sidebar,
-.manager-topbar,
-.manager-search-results,
-.manager-notification-dropdown {
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
-}
-
-.manager-panel,
-.manager-stat-card {
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-}
-
-/* ---- Neon Glow Effects ---- */
-.manager-primary-button,
-.manager-icon-button:hover,
-.manager-stat-card:hover .manager-stat-icon,
-.manager-nav-item.active .manager-nav-icon {
-    box-shadow: var(--md-shadow-glow), var(--md-primary-neon);
-}
-
-.manager-primary-button {
-    box-shadow: 0 4px 16px var(--md-primary-glow), 0 0 30px rgba(108,92,231,0.15);
-    transition: all var(--md-transition);
-}
-.manager-primary-button:hover {
-    box-shadow: 0 8px 28px var(--md-primary-glow), 0 0 50px rgba(108,92,231,0.25);
-    transform: translateY(-2px) scale(1.02);
-}
-
-.manager-stat-value {
-    text-shadow: 0 2px 8px rgba(108,92,231,0.10);
-}
-.manager-stat-card:hover .manager-stat-value {
-    text-shadow: 0 4px 16px rgba(108,92,231,0.20);
-}
-
-.manager-header-title {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.02);
-}
-
-/* ---- Extra Glass / Blur refinements ---- */
-.manager-search:focus-within {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    background: var(--md-surface-strong);
-}
-
-.manager-notification-item.unread {
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
-
 /* ---- Cardboard texture (subtle grain) ---- */
 html:not([data-theme="dark"]) .manager-dashboard-page .manager-panel::after,
 html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after {
@@ -172,19 +115,55 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     mix-blend-mode: multiply;
 }
 
-/* ---- Hover glow for attention items ---- */
-.manager-attention-item:hover {
-    box-shadow: 0 4px 20px rgba(108,92,231,0.15), 0 0 30px rgba(108,92,231,0.05);
+/* ---- Neon Glow Effects ---- */
+.manager-primary-button,
+.manager-icon-button:hover,
+.manager-stat-card:hover .manager-stat-icon,
+.manager-nav-item.active .manager-nav-icon {
+    box-shadow: var(--md-shadow-glow), var(--md-primary-neon);
 }
 
-/* ---- SIDEBAR (remains dark glass) ---- */
-.manager-sidebar {
-    background: rgba(26, 26, 46, 0.92);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+/* ---- UTILITY OVERRIDES ---- */
+.d-none { display: none !important; }
+.manager-project-link:focus-visible,
+.manager-nav-item:focus-visible,
+.manager-icon-button:focus-visible,
+.manager-primary-button:focus-visible,
+.manager-text-button:focus-visible {
+    outline: 2px solid var(--md-primary);
+    outline-offset: 2px;
 }
 
-/* ---- (Keep all your existing class styles below) ---- */
+/* ---- Scrollbar for lists ---- */
+.manager-team-list,
+.manager-activity-list,
+.manager-deadline-list,
+.manager-attention-list,
+.manager-notification-list,
+.manager-project-grid,
+.manager-sidebar-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--md-border) transparent;
+}
+.manager-team-list::-webkit-scrollbar,
+.manager-activity-list::-webkit-scrollbar,
+.manager-deadline-list::-webkit-scrollbar,
+.manager-attention-list::-webkit-scrollbar,
+.manager-notification-list::-webkit-scrollbar,
+.manager-sidebar-content::-webkit-scrollbar { width: 4px; }
+.manager-project-grid::-webkit-scrollbar { height: 5px; }
+
+.manager-team-list::-webkit-scrollbar-thumb,
+.manager-activity-list::-webkit-scrollbar-thumb,
+.manager-deadline-list::-webkit-scrollbar-thumb,
+.manager-attention-list::-webkit-scrollbar-thumb,
+.manager-notification-list::-webkit-scrollbar-thumb,
+.manager-project-grid::-webkit-scrollbar-thumb,
+.manager-sidebar-content::-webkit-scrollbar-thumb {
+    background: var(--md-border-strong);
+    border-radius: var(--md-radius-full);
+}
+
 /* =========================================================
    SIDEBAR
    ========================================================= */
@@ -193,6 +172,9 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     inset: 0 auto 0 0;
     width: var(--md-sidebar-width);
     border-right: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(26, 26, 46, 0.92);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
     display: flex;
     flex-direction: column;
     z-index: 1100;
@@ -254,13 +236,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     flex: 1;
     padding: 20px 12px;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.10) transparent;
-}
-.manager-sidebar-content::-webkit-scrollbar { width: 4px; }
-.manager-sidebar-content::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.15);
-    border-radius: 10px;
 }
 .manager-nav-group { margin-bottom: 24px; }
 .manager-nav-label {
@@ -343,7 +318,9 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 .manager-sidebar-backdrop.is-visible { display: block; }
 
-/* ---- TOPBAR ---- */
+/* =========================================================
+   TOPBAR
+   ========================================================= */
 .manager-topbar {
     position: fixed;
     top: 0;
@@ -356,6 +333,8 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     padding: 0 28px;
     background: var(--md-surface-strong);
     border-bottom: 1px solid var(--md-border);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
     z-index: 1000;
     transition: background var(--md-transition), border-color var(--md-transition);
 }
@@ -400,6 +379,7 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     font-weight: 700;
     letter-spacing: -0.3px;
     white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 .manager-wave { font-size: 18px; }
 .manager-header-subtitle {
@@ -434,6 +414,8 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border-color: var(--md-primary);
     box-shadow: 0 0 0 4px var(--md-primary-glow);
     background: var(--md-surface-strong);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 .manager-search i { font-size: 14px; color: var(--md-text-muted); }
 .manager-search input {
@@ -486,7 +468,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     box-shadow: var(--md-shadow-xl);
     z-index: 1200;
 }
-.manager-search-results.d-none { display: none !important; }
 .manager-search-result {
     display: flex;
     align-items: center;
@@ -573,7 +554,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     box-shadow: var(--md-shadow-xl);
     z-index: 1200;
 }
-.manager-notification-dropdown.d-none { display: none !important; }
 .manager-notification-header {
     padding: 16px 18px;
     display: flex;
@@ -628,7 +608,11 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     transition: all var(--md-transition);
 }
 .manager-notification-item:hover { background: var(--md-surface-soft); }
-.manager-notification-item.unread { background: var(--md-primary-glow); }
+.manager-notification-item.unread { 
+    background: var(--md-primary-glow); 
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
 .manager-notification-item.unread:hover { background: rgba(108,92,231,0.15); }
 .manager-notification-item-icon {
     width: 36px;
@@ -669,18 +653,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border-radius: 50%;
     background: var(--md-danger);
 }
-.manager-notification-empty {
-    min-height: 160px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    color: var(--md-text-muted);
-    font-size: 13px;
-    padding: 20px;
-}
-.manager-notification-empty i { font-size: 28px; color: var(--md-text-placeholder); }
 
 /* ---- Profile Button ---- */
 .manager-profile-button {
@@ -737,7 +709,9 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     background: rgba(255,107,107,0.10);
 }
 
-/* ---- MAIN CONTENT ---- */
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
 .manager-main {
     min-height: 100vh;
     margin-left: var(--md-sidebar-width);
@@ -848,6 +822,10 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     font-weight: 700;
     letter-spacing: -0.5px;
     line-height: 1;
+    text-shadow: 0 2px 8px rgba(108,92,231,0.10);
+}
+.manager-stat-card:hover .manager-stat-value {
+    text-shadow: 0 4px 16px rgba(108,92,231,0.20);
 }
 .manager-stat-meta {
     display: block;
@@ -866,15 +844,9 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     gap: 18px;
     margin-bottom: 18px;
 }
-.manager-main-grid {
-    grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.8fr);
-}
-.manager-secondary-grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-}
-.manager-bottom-grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-}
+.manager-main-grid { grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.8fr); }
+.manager-secondary-grid { grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr); }
+.manager-bottom-grid { grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr); }
 
 .manager-panel {
     min-width: 0;
@@ -964,17 +936,14 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 
 /* ---- DARK THEME SURFACE FIX ---- */
-/* Theme is stored on <html>, so light-only surfaces must key off the root theme. */
 [data-theme="dark"] .manager-panel,
 [data-theme="dark"] .manager-stat-card,
-[data-theme="dark"] .manager-team-item,
 [data-theme="dark"] .manager-attention-item,
 [data-theme="dark"] .manager-deadline-item {
     background: var(--md-surface);
     border-color: var(--md-border);
     box-shadow: var(--md-shadow-sm);
 }
-
 [data-theme="dark"] .manager-panel:hover,
 [data-theme="dark"] .manager-stat-card:hover {
     border-color: var(--md-border-strong);
@@ -990,49 +959,26 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border-color: rgba(148,163,184,0.18);
     box-shadow: var(--md-shadow-sm);
 }
-
-[data-theme="dark"] .manager-project-card::before {
-    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
-}
-
-[data-theme="dark"] .manager-project-card::after {
-    background: rgba(255,255,255,0.06);
-}
-
+[data-theme="dark"] .manager-project-card::before { background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0)); }
+[data-theme="dark"] .manager-project-card::after { background: rgba(255,255,255,0.06); }
 [data-theme="dark"] .manager-project-link:hover .manager-project-card {
     border-color: var(--md-border-strong);
     box-shadow: var(--md-shadow-md);
 }
-
 [data-theme="dark"] .manager-project-action {
     border-color: rgba(148,163,184,0.16);
     background: rgba(15,23,42,0.55);
     color: var(--md-text-muted);
 }
-
-[data-theme="dark"] .manager-project-action:hover {
-    background: rgba(108,92,231,0.16);
-}
-
-[data-theme="dark"] .manager-progress-track {
-    background: rgba(148,163,184,0.16);
-}
-
+[data-theme="dark"] .manager-project-action:hover { background: rgba(108,92,231,0.16); }
+[data-theme="dark"] .manager-progress-track { background: rgba(148,163,184,0.16); }
 [data-theme="dark"] .manager-project-health-state.healthy,
-[data-theme="dark"] .manager-project-health-action-icon.healthy {
-    background: rgba(52,211,153,0.14);
-    color: #6ee7b7;
-}
-
+[data-theme="dark"] .manager-project-health-action-icon.healthy { background: rgba(52,211,153,0.14); color: #6ee7b7; }
 [data-theme="dark"] .manager-project-health-state.attention,
-[data-theme="dark"] .manager-project-health-action-icon.attention {
-    background: rgba(251,191,36,0.14);
-    color: #fbbf24;
-}
+[data-theme="dark"] .manager-project-health-action-icon.attention { background: rgba(251,191,36,0.14); color: #fbbf24; }
 
 /* ---- PROJECTS ---- */
 .manager-projects-panel { min-width: 0; }
-
 .manager-project-grid {
     display: grid;
     grid-auto-flow: column;
@@ -1043,13 +989,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     overflow-y: hidden;
     padding: 2px 2px 8px;
     scroll-snap-type: x proximity;
-    scrollbar-width: thin;
-    scrollbar-color: var(--md-border-strong) transparent;
-}
-.manager-project-grid::-webkit-scrollbar { height: 5px; }
-.manager-project-grid::-webkit-scrollbar-thumb {
-    background: var(--md-border-strong);
-    border-radius: var(--md-radius-full);
 }
 .manager-project-link {
     display: block;
@@ -1098,10 +1037,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     transform: translateY(-2px);
     border-color: rgba(108,92,231,0.24);
     box-shadow: 0 10px 24px rgba(30,41,59,0.10);
-}
-.manager-project-link:focus-visible .manager-project-card {
-    outline: 2px solid var(--md-primary);
-    outline-offset: 2px;
 }
 .manager-project-top,
 .manager-project-body,
@@ -1221,7 +1156,7 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 .manager-project-footer i { margin-right: 3px; }
 
-/* Loop through a small palette so every project gets a different soft gradient. */
+/* Palette Soft Gradients */
 .manager-project-link:nth-child(1) .manager-project-card { --project-gradient: linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%); }
 .manager-project-link:nth-child(2) .manager-project-card { --project-gradient: linear-gradient(135deg,#ecfeff 0%,#cffafe 100%); }
 .manager-project-link:nth-child(3) .manager-project-card { --project-gradient: linear-gradient(135deg,#fff1f2 0%,#ffe4e6 100%); }
@@ -1254,14 +1189,8 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     font-size: 9px;
     font-weight: 700;
 }
-.manager-project-health-state.healthy {
-    background: rgba(0,184,148,0.10);
-    color: #087f69;
-}
-.manager-project-health-state.attention {
-    background: rgba(253,203,110,0.18);
-    color: #9a7800;
-}
+.manager-project-health-state.healthy { background: rgba(0,184,148,0.10); color: #087f69; }
+.manager-project-health-state.attention { background: rgba(253,203,110,0.18); color: #9a7800; }
 .manager-project-health-metrics {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1272,10 +1201,7 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     padding: 0 12px;
     border-left: 1px solid rgba(108,92,231,0.09);
 }
-.manager-project-health-metric:first-child {
-    padding-left: 0;
-    border-left: 0;
-}
+.manager-project-health-metric:first-child { padding-left: 0; border-left: 0; }
 .manager-project-health-metric strong {
     display: block;
     color: var(--md-text);
@@ -1311,18 +1237,9 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border-radius: 8px;
     font-size: 11px;
 }
-.manager-project-health-action-icon.healthy {
-    background: rgba(0,184,148,0.10);
-    color: #087f69;
-}
-.manager-project-health-action-icon.attention {
-    background: rgba(253,203,110,0.16);
-    color: #9a7800;
-}
-.manager-project-health-action > div {
-    min-width: 0;
-    flex: 1;
-}
+.manager-project-health-action-icon.healthy { background: rgba(0,184,148,0.10); color: #087f69; }
+.manager-project-health-action-icon.attention { background: rgba(253,203,110,0.16); color: #9a7800; }
+.manager-project-health-action > div { min-width: 0; flex: 1; }
 .manager-project-health-action strong {
     display: block;
     overflow: hidden;
@@ -1354,33 +1271,19 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 .manager-project-health-action-link:hover { color: var(--md-primary-dark); }
 
-@media (max-width: 700px) {
-    .manager-project-health-metrics { grid-template-columns: repeat(2, 1fr); gap: 10px 0; }
-    .manager-project-health-metric:nth-child(3) { padding-left: 0; border-left: 0; }
-    .manager-project-health-action span:not(.manager-project-health-action-icon) { white-space: normal; }
-}
-
 /* ---- TASK OVERVIEW (Enhanced Donut with Glow & Animation) ---- */
-.manager-task-panel { 
-    display: flex; 
-    flex-direction: column; 
-}
-
-/* ---- Chart Wrapper with Ring ---- */
+.manager-task-panel { display: flex; flex-direction: column; }
 .manager-task-chart-wrapper {
     position: relative;
     width: 200px;
     height: 200px;
     margin: 0 auto 20px;
 }
-
 .manager-chart-ring {
     position: relative;
     width: 100%;
     height: 100%;
 }
-
-/* Subtle background ring with gradient border */
 .manager-chart-ring-bg {
     position: absolute;
     inset: 3px;
@@ -1391,25 +1294,18 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     pointer-events: none;
     transition: all var(--md-transition);
 }
-
-/* Pulsing glow ring for attention mode */
 .manager-task-panel.attention-mode .manager-chart-ring-bg {
     border-color: var(--md-danger);
     animation: pulse-ring 2s ease-in-out infinite;
 }
-
 @keyframes pulse-ring {
     0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.2); }
     50% { box-shadow: 0 0 20px 4px rgba(220, 38, 38, 0.15); }
 }
-
-/* Success glow when high completion */
 .manager-task-panel.high-completion .manager-chart-ring-bg {
     border-color: var(--md-success);
     box-shadow: 0 0 30px rgba(5, 150, 105, 0.10);
 }
-
-/* Canvas positioning - CRITICAL FIX */
 .manager-task-chart-wrapper canvas {
     width: 100% !important;
     height: 100% !important;
@@ -1417,18 +1313,8 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     z-index: 1;
     display: block !important;
 }
-
-/* ---- Chart Center - HIDE HTML content, we use canvas plugin ---- */
-.manager-chart-center {
-    display: none; /* Hide HTML center content - canvas plugin draws it */
-}
-
-/* Keep the HTML center for fallback only */
-.manager-chart-center-fallback {
-    display: none;
-}
-
-/* Show fallback if chart fails */
+.manager-chart-center { display: none; }
+.manager-chart-center-fallback { display: none; }
 .no-chart .manager-chart-center-fallback {
     display: flex;
     flex-direction: column;
@@ -1439,7 +1325,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     z-index: 2;
     pointer-events: none;
 }
-/* Percentage with gradient and glow */
 .manager-chart-center strong {
     font-size: 32px;
     font-weight: 800;
@@ -1452,8 +1337,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     transition: all var(--md-transition);
     position: relative;
 }
-
-/* Percentage glow effect */
 .manager-chart-center strong::after {
     content: attr(data-percentage);
     position: absolute;
@@ -1466,16 +1349,12 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     opacity: 0.2;
     z-index: -1;
 }
-
-/* Status badge wrapper */
 .manager-chart-center .task-status-wrapper {
     margin-top: 4px;
     display: flex;
     align-items: center;
     gap: 6px;
 }
-
-/* Status badge - modern pill */
 .manager-chart-center .task-status-label {
     display: inline-flex;
     align-items: center;
@@ -1492,29 +1371,9 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     white-space: nowrap;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
-
-/* Status label variants with colors */
-.task-status-label.excellent {
-    background: rgba(5, 150, 105, 0.12);
-    color: var(--md-success);
-    border-color: rgba(5, 150, 105, 0.20);
-    box-shadow: 0 1px 8px rgba(5, 150, 105, 0.10);
-}
-
-.task-status-label.progress {
-    background: rgba(37, 99, 235, 0.12);
-    color: var(--md-primary);
-    border-color: rgba(37, 99, 235, 0.20);
-    box-shadow: 0 1px 8px rgba(37, 99, 235, 0.10);
-}
-
-.task-status-label.starting {
-    background: rgba(124, 58, 237, 0.12);
-    color: var(--md-secondary);
-    border-color: rgba(124, 58, 237, 0.20);
-    box-shadow: 0 1px 8px rgba(124, 58, 237, 0.10);
-}
-
+.task-status-label.excellent { background: rgba(5, 150, 105, 0.12); color: var(--md-success); border-color: rgba(5, 150, 105, 0.20); box-shadow: 0 1px 8px rgba(5, 150, 105, 0.10); }
+.task-status-label.progress { background: rgba(37, 99, 235, 0.12); color: var(--md-primary); border-color: rgba(37, 99, 235, 0.20); box-shadow: 0 1px 8px rgba(37, 99, 235, 0.10); }
+.task-status-label.starting { background: rgba(124, 58, 237, 0.12); color: var(--md-secondary); border-color: rgba(124, 58, 237, 0.20); box-shadow: 0 1px 8px rgba(124, 58, 237, 0.10); }
 .task-status-label.attention {
     background: rgba(220, 38, 38, 0.12);
     color: var(--md-danger);
@@ -1522,18 +1381,8 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     box-shadow: 0 1px 8px rgba(220, 38, 38, 0.10);
     animation: subtle-pulse 2s ease-in-out infinite;
 }
-
-/* Status label hover effect */
-.manager-chart-center .task-status-label:hover {
-    transform: scale(1.05);
-}
-
-@keyframes subtle-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.75; }
-}
-
-/* Total tasks counter */
+.manager-chart-center .task-status-label:hover { transform: scale(1.05); }
+@keyframes subtle-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.75; } }
 .manager-chart-center .task-total {
     display: block;
     margin-top: 5px;
@@ -1544,7 +1393,7 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     letter-spacing: 0.02em;
 }
 
-/* ---- Task Legend with Modern Design ---- */
+/* ---- Task Legend ---- */
 .manager-task-legend {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1552,7 +1401,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     padding: 16px 4px 0;
     border-top: 1px solid var(--md-border);
 }
-
 .manager-legend-item {
     display: flex;
     align-items: center;
@@ -1565,15 +1413,12 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     position: relative;
     border: 1px solid transparent;
 }
-
 .manager-legend-item:hover {
     background: var(--md-surface-strong);
     border-color: var(--md-border);
     transform: translateY(-2px);
     box-shadow: var(--md-shadow-sm);
 }
-
-/* Legend dot with glow and animation */
 .manager-legend-dot {
     width: 12px;
     height: 12px;
@@ -1582,38 +1427,12 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     transition: all var(--md-transition);
     position: relative;
 }
-
-.manager-legend-item:hover .manager-legend-dot {
-    transform: scale(1.2);
-}
-
-/* Dot colors with glow */
-.manager-legend-dot.completed { 
-    background: var(--md-success); 
-    box-shadow: 0 1px 8px rgba(5, 150, 105, 0.30);
-}
-
-.manager-legend-dot.pending { 
-    background: var(--md-warning); 
-    box-shadow: 0 1px 8px rgba(217, 119, 6, 0.30);
-}
-
-.manager-legend-dot.overdue { 
-    background: var(--md-danger); 
-    box-shadow: 0 1px 8px rgba(220, 38, 38, 0.30);
-}
-
-/* Active dot pulse for non-zero counts */
-.manager-legend-item:not(.zero-count) .manager-legend-dot {
-    animation: dot-pulse 3s ease-in-out infinite;
-}
-
-@keyframes dot-pulse {
-    0%, 100% { box-shadow: 0 1px 8px rgba(0,0,0,0.10); }
-    50% { box-shadow: 0 1px 16px rgba(0,0,0,0.20); }
-}
-
-/* Legend text */
+.manager-legend-item:hover .manager-legend-dot { transform: scale(1.2); }
+.manager-legend-dot.completed { background: var(--md-success); box-shadow: 0 1px 8px rgba(5, 150, 105, 0.30); }
+.manager-legend-dot.pending { background: var(--md-warning); box-shadow: 0 1px 8px rgba(217, 119, 6, 0.30); }
+.manager-legend-dot.overdue { background: var(--md-danger); box-shadow: 0 1px 8px rgba(220, 38, 38, 0.30); }
+.manager-legend-item:not(.zero-count) .manager-legend-dot { animation: dot-pulse 3s ease-in-out infinite; }
+@keyframes dot-pulse { 0%, 100% { box-shadow: 0 1px 8px rgba(0,0,0,0.10); } 50% { box-shadow: 0 1px 16px rgba(0,0,0,0.20); } }
 .manager-legend-item strong {
     display: block;
     color: var(--md-text);
@@ -1622,7 +1441,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     line-height: 1.1;
     letter-spacing: -0.2px;
 }
-
 .manager-legend-item span:not(.manager-legend-dot) {
     display: block;
     color: var(--md-text-muted);
@@ -1631,19 +1449,9 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
-
-/* Zero count styling */
-.manager-legend-item.zero-count {
-    opacity: 0.45;
-}
-
-.manager-legend-item.zero-count strong {
-    color: var(--md-text-muted);
-}
-
-.manager-legend-item.zero-count:hover {
-    opacity: 0.6;
-}
+.manager-legend-item.zero-count { opacity: 0.45; }
+.manager-legend-item.zero-count strong { color: var(--md-text-muted); }
+.manager-legend-item.zero-count:hover { opacity: 0.6; }
 
 /* ---- Completion Summary Bar ---- */
 .manager-completion-summary {
@@ -1651,7 +1459,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     padding-top: 16px;
     border-top: 1px solid var(--md-border);
 }
-
 .manager-completion-summary > div:first-child {
     display: flex;
     justify-content: space-between;
@@ -1661,7 +1468,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     font-size: 12px;
     font-weight: 500;
 }
-
 .manager-completion-summary strong { 
     color: var(--md-text);
     font-weight: 700;
@@ -1671,8 +1477,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-
-/* Progress track with glow and border */
 .manager-completion-summary .manager-progress-track {
     height: 8px;
     border-radius: var(--md-radius-full);
@@ -1682,7 +1486,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border: 1px solid var(--md-border);
     padding: 1px;
 }
-
 .manager-completion-summary .manager-progress-track::after {
     content: '';
     position: absolute;
@@ -1691,8 +1494,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     opacity: 0.04;
     pointer-events: none;
 }
-
-/* Progress fill with gradient and glow */
 .manager-completion-summary .manager-progress-fill {
     height: 100%;
     border-radius: var(--md-radius-full);
@@ -1701,8 +1502,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     position: relative;
     min-width: 4px;
 }
-
-/* Progress fill glow effect */
 .manager-completion-summary .manager-progress-fill::after {
     content: '';
     position: absolute;
@@ -1715,154 +1514,31 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     opacity: 0.30;
     border-radius: var(--md-radius-full);
 }
+.manager-completion-summary .manager-progress-fill.low,
+.manager-completion-summary .manager-progress-fill.low::after { background: linear-gradient(90deg, var(--md-danger), var(--md-warning)); }
+.manager-completion-summary .manager-progress-fill.medium,
+.manager-completion-summary .manager-progress-fill.medium::after { background: linear-gradient(90deg, var(--md-warning), var(--md-primary)); }
+.manager-completion-summary .manager-progress-fill.high,
+.manager-completion-summary .manager-progress-fill.high::after { background: linear-gradient(90deg, var(--md-primary), var(--md-success)); }
+.manager-completion-summary .manager-progress-fill.complete,
+.manager-completion-summary .manager-progress-fill.complete::after { background: linear-gradient(90deg, var(--md-success), #34D399); }
 
-/* Progress fill variants */
-.manager-completion-summary .manager-progress-fill.low {
-    background: linear-gradient(90deg, var(--md-danger), var(--md-warning));
-}
-.manager-completion-summary .manager-progress-fill.low::after {
-    background: linear-gradient(90deg, var(--md-danger), var(--md-warning));
-}
-
-.manager-completion-summary .manager-progress-fill.medium {
-    background: linear-gradient(90deg, var(--md-warning), var(--md-primary));
-}
-.manager-completion-summary .manager-progress-fill.medium::after {
-    background: linear-gradient(90deg, var(--md-warning), var(--md-primary));
-}
-
-.manager-completion-summary .manager-progress-fill.high {
-    background: linear-gradient(90deg, var(--md-primary), var(--md-success));
-}
-.manager-completion-summary .manager-progress-fill.high::after {
-    background: linear-gradient(90deg, var(--md-primary), var(--md-success));
-}
-
-.manager-completion-summary .manager-progress-fill.complete {
-    background: linear-gradient(90deg, var(--md-success), #34D399);
-}
-.manager-completion-summary .manager-progress-fill.complete::after {
-    background: linear-gradient(90deg, var(--md-success), #34D399);
-}
-
-/* ---- Dark Theme Adjustments ---- */
-[data-theme="dark"] .manager-chart-ring-bg {
-    background: rgba(30, 41, 59, 0.60);
-    border-color: var(--md-border);
-}
-
-[data-theme="dark"] .task-status-label {
-    background: rgba(139, 124, 240, 0.20);
-    color: var(--md-primary-light);
-    border-color: rgba(139, 124, 240, 0.15);
-}
-
-[data-theme="dark"] .task-status-label.excellent {
-    background: rgba(52, 211, 153, 0.20);
-    color: var(--md-success);
-    border-color: rgba(52, 211, 153, 0.15);
-}
-
-[data-theme="dark"] .task-status-label.progress {
-    background: rgba(96, 165, 250, 0.20);
-    color: var(--md-primary-light);
-    border-color: rgba(96, 165, 250, 0.15);
-}
-
-[data-theme="dark"] .task-status-label.starting {
-    background: rgba(167, 139, 250, 0.20);
-    color: #A78BFA;
-    border-color: rgba(167, 139, 250, 0.15);
-}
-
-[data-theme="dark"] .task-status-label.attention {
-    background: rgba(248, 113, 113, 0.20);
-    color: var(--md-danger);
-    border-color: rgba(248, 113, 113, 0.15);
-}
-
-[data-theme="dark"] .manager-legend-dot.completed { 
-    box-shadow: 0 1px 12px rgba(52, 211, 153, 0.30);
-}
-[data-theme="dark"] .manager-legend-dot.pending { 
-    box-shadow: 0 1px 12px rgba(251, 191, 36, 0.30);
-}
-[data-theme="dark"] .manager-legend-dot.overdue { 
-    box-shadow: 0 1px 12px rgba(248, 113, 113, 0.30);
-}
-
-[data-theme="dark"] .manager-legend-item {
-    background: rgba(30, 41, 59, 0.40);
-}
-
-[data-theme="dark"] .manager-legend-item:hover {
-    background: rgba(30, 41, 59, 0.70);
-}
-
-[data-theme="dark"] .manager-completion-summary .manager-progress-track {
-    background: rgba(30, 41, 59, 0.80);
-    border-color: var(--md-border);
-}
-
-/* ---- Responsive Adjustments ---- */
-@media (max-width: 700px) {
-    .manager-task-chart-wrapper {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .manager-chart-center strong {
-        font-size: 26px;
-    }
-    
-    .manager-chart-center .task-status-label {
-        font-size: 10px;
-        padding: 2px 12px;
-    }
-    
-    .manager-legend-item {
-        padding: 6px 8px;
-    }
-    
-    .manager-legend-item strong {
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 480px) {
-    .manager-task-chart-wrapper {
-        width: 140px;
-        height: 140px;
-    }
-    
-    .manager-chart-center strong {
-        font-size: 22px;
-    }
-    
-    .manager-chart-center .task-status-label {
-        font-size: 9px;
-        padding: 2px 10px;
-    }
-    
-    .manager-chart-center .task-total {
-        font-size: 9px;
-    }
-    
-    .manager-legend-item strong {
-        font-size: 12px;
-    }
-}
-
-
-
-
+/* ---- Dark Theme Task Adjustments ---- */
+[data-theme="dark"] .manager-chart-ring-bg { background: rgba(30, 41, 59, 0.60); border-color: var(--md-border); }
+[data-theme="dark"] .task-status-label { background: rgba(139, 124, 240, 0.20); color: var(--md-primary-light); border-color: rgba(139, 124, 240, 0.15); }
+[data-theme="dark"] .task-status-label.excellent { background: rgba(52, 211, 153, 0.20); color: var(--md-success); border-color: rgba(52, 211, 153, 0.15); }
+[data-theme="dark"] .task-status-label.progress { background: rgba(96, 165, 250, 0.20); color: var(--md-primary-light); border-color: rgba(96, 165, 250, 0.15); }
+[data-theme="dark"] .task-status-label.starting { background: rgba(167, 139, 250, 0.20); color: #A78BFA; border-color: rgba(167, 139, 250, 0.15); }
+[data-theme="dark"] .task-status-label.attention { background: rgba(248, 113, 113, 0.20); color: var(--md-danger); border-color: rgba(248, 113, 113, 0.15); }
+[data-theme="dark"] .manager-legend-dot.completed { box-shadow: 0 1px 12px rgba(52, 211, 153, 0.30); }
+[data-theme="dark"] .manager-legend-dot.pending { box-shadow: 0 1px 12px rgba(251, 191, 36, 0.30); }
+[data-theme="dark"] .manager-legend-dot.overdue { box-shadow: 0 1px 12px rgba(248, 113, 113, 0.30); }
+[data-theme="dark"] .manager-legend-item { background: rgba(30, 41, 59, 0.40); }
+[data-theme="dark"] .manager-legend-item:hover { background: rgba(30, 41, 59, 0.70); }
+[data-theme="dark"] .manager-completion-summary .manager-progress-track { background: rgba(30, 41, 59, 0.80); border-color: var(--md-border); }
 
 /* ---- ATTENTION ---- */
-.manager-attention-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+.manager-attention-list { display: flex; flex-direction: column; gap: 8px; }
 .manager-attention-item {
     display: flex;
     align-items: center;
@@ -1890,42 +1566,17 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border-radius: var(--md-radius-full);
     font-size: 15px;
 }
-.manager-attention-item.danger .manager-attention-icon {
-    background: rgba(255,107,107,0.15);
-    color: var(--md-danger);
-}
-.manager-attention-item.warning .manager-attention-icon {
-    background: rgba(253,203,110,0.20);
-    color: #b7950b;
-}
-.manager-attention-item.purple .manager-attention-icon {
-    background: rgba(108,92,231,0.15);
-    color: var(--md-primary);
-}
-.manager-attention-item.success .manager-attention-icon {
-    background: rgba(0,184,148,0.15);
-    color: var(--md-success-dark);
-}
+.manager-attention-item.danger .manager-attention-icon { background: rgba(255,107,107,0.15); color: var(--md-danger); }
+.manager-attention-item.warning .manager-attention-icon { background: rgba(253,203,110,0.20); color: #b7950b; }
+.manager-attention-item.purple .manager-attention-icon { background: rgba(108,92,231,0.15); color: var(--md-primary); }
+.manager-attention-item.success .manager-attention-icon { background: rgba(0,184,148,0.15); color: var(--md-success-dark); }
 .manager-attention-content { min-width: 0; flex: 1; }
-.manager-attention-content strong {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-}
-.manager-attention-content span {
-    display: block;
-    margin-top: 2px;
-    color: var(--md-text-muted);
-    font-size: 11px;
-    line-height: 1.4;
-}
+.manager-attention-content strong { display: block; font-size: 13px; font-weight: 600; }
+.manager-attention-content span { display: block; margin-top: 2px; color: var(--md-text-muted); font-size: 11px; line-height: 1.4; }
 .manager-attention-arrow { color: var(--md-text-muted); font-size: 12px; flex-shrink: 0; }
 
 /* ---- DEADLINES / SCHEDULE ---- */
-.manager-deadline-list {
-    display: flex;
-    flex-direction: column;
-}
+.manager-deadline-list { display: flex; flex-direction: column; }
 .manager-deadline-item {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr) auto;
@@ -1936,10 +1587,7 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border-bottom: 1px solid var(--md-border);
 }
 .manager-deadline-item:first-child { padding-top: 0; }
-.manager-deadline-item:last-child {
-    padding-bottom: 0;
-    border-bottom: 0;
-}
+.manager-deadline-item:last-child { padding-bottom: 0; border-bottom: 0; }
 .manager-deadline-date {
     width: 44px;
     height: 46px;
@@ -1952,85 +1600,32 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     border-radius: var(--md-radius-sm);
     background: var(--md-surface-soft);
 }
-.manager-deadline-date strong {
-    color: var(--md-text);
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1;
-}
-.manager-deadline-date span {
-    margin-top: 3px;
-    color: var(--md-text-muted);
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-}
-.manager-deadline-content {
-    min-width: 0;
-}
-.manager-deadline-title-row {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    min-width: 0;
-}
-.manager-deadline-content strong {
-    min-width: 0;
-    overflow: hidden;
-    color: var(--md-text);
-    font-size: 12px;
-    font-weight: 650;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.manager-deadline-content > span {
-    display: block;
-    margin-top: 2px;
-    overflow: hidden;
-    color: var(--md-text-muted);
-    font-size: 10px;
-    line-height: 1.35;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.manager-deadline-relative {
-    flex-shrink: 0;
-    color: var(--md-text-muted);
-    font-size: 8px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-.manager-deadline-priority {
-    padding: 3px 9px;
-    border-radius: var(--md-radius-full);
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    flex-shrink: 0;
-}
-.manager-deadline-priority.danger {
-    background: rgba(255,107,107,0.15);
-    color: var(--md-danger);
-}
-.manager-deadline-priority.warning {
-    background: rgba(253,203,110,0.20);
-    color: #9a7600;
-}
-.manager-deadline-priority.purple {
-    background: rgba(108,92,231,0.15);
-    color: var(--md-primary-dark);
-}
-.manager-deadline-empty {
-    min-height: 154px;
+[data-theme="dark"] .manager-deadline-date { background: rgba(30,41,59,0.45); }
+.manager-deadline-date strong { color: var(--md-text); font-size: 15px; font-weight: 700; line-height: 1; }
+.manager-deadline-date span { margin-top: 3px; color: var(--md-text-muted); font-size: 8px; font-weight: 700; letter-spacing: 0.06em; }
+.manager-deadline-content { min-width: 0; }
+.manager-deadline-title-row { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.manager-deadline-content strong { min-width: 0; overflow: hidden; color: var(--md-text); font-size: 12px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+.manager-deadline-content > span { display: block; margin-top: 2px; overflow: hidden; color: var(--md-text-muted); font-size: 10px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.manager-deadline-relative { flex-shrink: 0; color: var(--md-text-muted); font-size: 8px; font-weight: 600; white-space: nowrap; }
+.manager-deadline-priority { padding: 3px 9px; border-radius: var(--md-radius-full); font-size: 8px; font-weight: 700; letter-spacing: 0.02em; flex-shrink: 0; }
+.manager-deadline-priority.danger { background: rgba(255,107,107,0.15); color: var(--md-danger); }
+.manager-deadline-priority.warning { background: rgba(253,203,110,0.20); color: #9a7600; }
+.manager-deadline-priority.purple { background: rgba(108,92,231,0.15); color: var(--md-primary-dark); }
+
+/* ---- SHARED EMPTY STATES ---- */
+.manager-team-empty,
+.manager-deadline-empty,
+.manager-notification-empty,
+.manager-empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px;
     text-align: center;
-    border-top: 1px solid var(--md-border);
     color: var(--md-text-muted);
 }
+.manager-deadline-empty { min-height: 154px; gap: 5px; border-top: 1px solid var(--md-border); }
 .manager-deadline-empty-icon {
     width: 36px;
     height: 36px;
@@ -2041,29 +1636,8 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     background: var(--md-surface-soft);
     color: var(--md-primary);
 }
-.manager-deadline-empty strong {
-    color: var(--md-text);
-    font-size: 12px;
-}
-.manager-deadline-empty span {
-    max-width: 220px;
-    font-size: 10px;
-    line-height: 1.4;
-}
-
-[data-theme="dark"] .manager-deadline-date {
-    background: rgba(30,41,59,0.45);
-}
-
-@media (max-width: 480px) {
-    .manager-deadline-item {
-        grid-template-columns: 42px minmax(0, 1fr);
-        gap: 10px;
-    }
-    .manager-deadline-priority {
-        display: none;
-    }
-}
+.manager-deadline-empty strong { color: var(--md-text); font-size: 12px; }
+.manager-deadline-empty span { max-width: 220px; font-size: 10px; line-height: 1.4; }
 
 /* ---- ACTIVITY ---- */
 .manager-activity-list { display: flex; flex-direction: column; }
@@ -2088,52 +1662,22 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     font-weight: 700;
 }
 .manager-activity-content { min-width: 0; }
-.manager-activity-content p {
-    margin: 0;
-    color: var(--md-text-soft);
-    font-size: 12px;
-    line-height: 1.45;
-}
+.manager-activity-content p { margin: 0; color: var(--md-text-soft); font-size: 12px; line-height: 1.45; }
 .manager-activity-content strong { color: var(--md-text); font-weight: 600; }
-.manager-activity-content > span {
-    display: block;
-    margin-top: 2px;
-    color: var(--md-text-muted);
-    font-size: 10px;
-}
+.manager-activity-content > span { display: block; margin-top: 2px; color: var(--md-text-muted); font-size: 10px; }
 
-/* ---- TEAM OVERVIEW ---- */
-.manager-team-overview-panel {
-    padding: 20px 22px;
-}
-
-.manager-team-overview-panel .manager-panel-header {
-    margin-bottom: 18px;
-}
-
-.manager-team-overview-panel .manager-section-eyebrow {
-    color: var(--md-primary);
-}
-
+/* ---- TEAM OVERVIEW (Sidebar Widget) ---- */
+.manager-team-overview-panel { padding: 20px 22px; }
+.manager-team-overview-panel .manager-panel-header { margin-bottom: 18px; }
+.manager-team-overview-panel .manager-section-eyebrow { color: var(--md-primary); }
 .manager-create-team-button {
     min-height: 34px;
     padding: 0 14px;
     border-radius: 9px;
     box-shadow: 0 5px 16px rgba(108, 92, 231, 0.16);
 }
-
-.manager-create-team-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.22);
-}
-
-.manager-team-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* AJAX-rendered team rows */
+.manager-create-team-button:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(108, 92, 231, 0.22); }
+.manager-team-list { display: flex; flex-direction: column; gap: 8px; }
 .manager-team-item {
     display: flex;
     align-items: center;
@@ -2142,224 +1686,91 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     min-height: 66px;
     padding: 10px 12px;
     margin: 0;
-
     border: 1px solid var(--md-border);
     border-radius: 12px;
     background: var(--md-surface-soft);
-
-    transition:
-        transform var(--md-transition),
-        border-color var(--md-transition),
-        background var(--md-transition),
-        box-shadow var(--md-transition);
+    transition: transform var(--md-transition), border-color var(--md-transition), background var(--md-transition), box-shadow var(--md-transition);
 }
-
 .manager-team-item:hover {
     transform: translateY(-1px);
     border-color: var(--md-border-strong);
     background: var(--md-surface-strong);
     box-shadow: var(--md-shadow-sm);
 }
+[data-theme="dark"] .manager-team-item { background: rgba(30, 41, 59, 0.42); }
+[data-theme="dark"] .manager-team-item:hover { background: rgba(30, 41, 59, 0.72); }
 
-.manager-team-main {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 0;
-}
-
+.manager-team-main { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .manager-team-avatar {
     width: 38px;
     height: 38px;
     min-width: 38px;
-
     display: grid;
     place-items: center;
-
     border-radius: var(--md-radius-full);
-
     color: #fff;
     font-size: 11px;
     font-weight: 700;
-
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
     box-shadow: 0 3px 10px rgba(99, 102, 241, 0.18);
 }
-
-.manager-team-item:nth-child(4n + 2) .manager-team-avatar {
-    background: linear-gradient(135deg, #0ea5e9, #2563eb);
-}
-
-.manager-team-item:nth-child(4n + 3) .manager-team-avatar {
-    background: linear-gradient(135deg, #f59e0b, #ea580c);
-}
-
-.manager-team-item:nth-child(4n + 4) .manager-team-avatar {
-    background: linear-gradient(135deg, #10b981, #059669);
-}
-
-.manager-team-info {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.manager-team-info strong {
-    display: block;
-    color: var(--md-text);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.manager-team-info span {
-    display: block;
-    max-width: 220px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    color: var(--md-text-muted);
-    font-size: 10px;
-    line-height: 1.2;
-}
-
-.manager-team-actions {
-    flex-shrink: 0;
-}
-
+.manager-team-item:nth-child(4n + 2) .manager-team-avatar { background: linear-gradient(135deg, #0ea5e9, #2563eb); }
+.manager-team-item:nth-child(4n + 3) .manager-team-avatar { background: linear-gradient(135deg, #f59e0b, #ea580c); }
+.manager-team-item:nth-child(4n + 4) .manager-team-avatar { background: linear-gradient(135deg, #10b981, #059669); }
+.manager-team-info { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.manager-team-info strong { display: block; color: var(--md-text); font-size: 12px; font-weight: 700; line-height: 1.2; }
+.manager-team-info span { display: block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--md-text-muted); font-size: 10px; line-height: 1.2; }
+.manager-team-actions { flex-shrink: 0; }
 .manager-team-manage {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     min-height: 30px;
     padding: 0 13px;
-
     border: 1px solid var(--md-border);
     border-radius: var(--md-radius-full);
-
     background: var(--md-surface-strong);
     color: var(--md-primary);
-
     font-size: 10px;
     font-weight: 700;
     text-decoration: none;
-
-    transition:
-        background var(--md-transition),
-        border-color var(--md-transition),
-        color var(--md-transition),
-        transform var(--md-transition);
+    transition: background var(--md-transition), border-color var(--md-transition), color var(--md-transition), transform var(--md-transition);
 }
-
 .manager-team-manage:hover {
     border-color: var(--md-primary);
     background: var(--md-primary-glow);
     color: var(--md-primary-dark);
     transform: translateX(2px);
 }
-
+[data-theme="dark"] .manager-team-manage { background: rgba(30, 41, 59, 0.72); }
 .manager-team-footer {
     min-height: 34px;
-
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
     margin-top: 14px;
     padding-top: 12px;
-
     border-top: 1px solid var(--md-border);
 }
-
-.manager-team-footer .manager-text-button {
-    font-size: 11px;
-}
-
+.manager-team-footer .manager-text-button { font-size: 11px; }
 .manager-team-loading {
     min-height: 90px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 7px;
-
     color: var(--md-text-muted);
     font-size: 11px;
 }
+.manager-team-loading .spinner-border { width: 21px; height: 21px; border-width: 2px; color: var(--md-primary); }
+.manager-team-empty { gap: 4px; border: 1px dashed var(--md-border); border-radius: var(--md-radius-md); padding: 20px; }
+.manager-team-empty i { margin-bottom: 3px; font-size: 24px; color: var(--md-primary); }
+.manager-team-empty strong { color: var(--md-text); font-size: 12px; }
+.manager-team-empty span, .manager-team-error { font-size: 10px; }
+.manager-team-error { padding: 20px; text-align: center; color: #ef4444; }
 
-.manager-team-loading .spinner-border {
-    width: 21px;
-    height: 21px;
-    border-width: 2px;
-    color: var(--md-primary);
-}
-
-.manager-team-empty,
-.manager-team-error {
-    padding: 20px;
-    text-align: center;
-    color: var(--md-text-muted);
-}
-
-.manager-team-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-
-    border: 1px dashed var(--md-border);
-    border-radius: var(--md-radius-md);
-}
-
-.manager-team-empty i {
-    margin-bottom: 3px;
-    font-size: 24px;
-    color: var(--md-primary);
-}
-
-.manager-team-empty strong {
-    color: var(--md-text);
-    font-size: 12px;
-}
-
-.manager-team-empty span,
-.manager-team-error {
-    font-size: 10px;
-}
-
-.manager-team-error {
-    color: #ef4444;
-}
-
-/* Dark theme */
-[data-theme="dark"] .manager-team-item {
-    background: rgba(30, 41, 59, 0.42);
-}
-
-[data-theme="dark"] .manager-team-item:hover {
-    background: rgba(30, 41, 59, 0.72);
-}
-
-[data-theme="dark"] .manager-team-manage {
-    background: rgba(30, 41, 59, 0.72);
-}
-
-/* Empty-state compatibility */
-.manager-empty-state {
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 20px;
-    text-align: center;
-}
-
+.manager-empty-state { min-height: 220px; padding: 30px 20px; }
 .manager-empty-icon {
     width: 56px;
     height: 56px;
@@ -2371,223 +1782,28 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     color: var(--md-primary);
     font-size: 24px;
 }
+.manager-empty-state h3 { margin: 0; color: var(--md-text); font-size: 16px; font-weight: 700; }
+.manager-empty-state p { max-width: 280px; margin: 6px 0 16px; color: var(--md-text-muted); font-size: 12px; line-height: 1.5; }
 
-.manager-empty-state h3 {
-    margin: 0;
-    color: var(--md-text);
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.manager-empty-state p {
-    max-width: 280px;
-    margin: 6px 0 16px;
-    color: var(--md-text-muted);
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-/* ---- RESPONSIVE (preserves your existing breakpoints) ---- */
-@media (max-width: 1200px) {
-    .manager-topbar { padding: 0 20px; }
-    .manager-container { padding-left: 20px; padding-right: 20px; }
-    .manager-search { width: 220px; }
-    .manager-profile-info,
-    .manager-profile-button > i { display: none; }
-    .manager-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-@media (max-width: 991px) {
-    .manager-sidebar {
-        transform: translateX(-100%);
-        box-shadow: 8px 0 40px rgba(0,0,0,0.25);
-    }
-    .manager-sidebar.is-open { transform: translateX(0); }
-    .manager-sidebar-close { display: block; }
-    .manager-topbar { left: 0; }
-    .manager-menu-toggle { display: grid; }
-    .manager-main { margin-left: 0; }
-    .manager-main-grid,
-    .manager-secondary-grid,
-    .manager-bottom-grid { grid-template-columns: 1fr; }
-    .manager-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .manager-search-results { width: 320px; right: -10px; }
-    .manager-notification-dropdown { width: 320px; right: -10px; }
-}
-
-@media (max-width: 700px) {
-    .manager-topbar {
-        height: auto;
-        min-height: var(--md-header-height);
-        padding: 10px 14px;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    .manager-header-subtitle { display: none; }
-    .manager-header-title { font-size: 16px; }
-    .manager-header-label { font-size: 9px; }
-    .manager-topbar-actions { gap: 6px; margin-left: 4px; }
-    .manager-search {
-        width: 40px;
-        justify-content: center;
-        padding: 0;
-        border-radius: var(--md-radius-full);
-    }
-    .manager-search input { display: none; }
-    .manager-search kbd { display: none; }
-    .manager-search i { font-size: 15px; }
-    .manager-profile-button { padding-right: 4px; border: 0; background: transparent; }
-    .manager-profile-avatar { width: 34px; height: 34px; }
-    .manager-logout-button { display: none; }
-    .manager-container { padding: 16px 12px 32px; }
-    .manager-page-context { margin-bottom: 14px; }
-    .manager-stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-    }
-    .manager-stat-card {
-        min-height: 96px;
-        padding: 14px;
-        gap: 12px;
-    }
-    .manager-stat-icon { width: 40px; height: 40px; font-size: 17px; }
-    .manager-stat-value { font-size: 22px; }
-    .manager-panel { padding: 16px; }
-    .manager-panel-header h2 { font-size: 16px; }
-    .manager-task-chart-wrapper { width: 170px; height: 170px; }
-    .manager-search-results {
-        position: fixed;
-        top: 60px;
-        left: 12px;
-        right: 12px;
-        width: auto;
-    }
-    .manager-notification-dropdown {
-        position: fixed;
-        top: 60px;
-        left: 12px;
-        right: 12px;
-        width: auto;
-    }
-    .manager-date-chip { display: none; }
-    .manager-project-card { min-height: 170px; }
-    .manager-task-legend {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-    }
-}
-
-@media (max-width: 480px) {
-    .manager-header-label { display: none; }
-    .manager-header-title {
-        max-width: 120px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-size: 15px;
-    }
-    .manager-stats-grid { gap: 8px; }
-    .manager-stat-card {
-        flex-direction: column;
-        align-items: flex-start;
-        min-height: 110px;
-        padding: 14px;
-    }
-    .manager-stat-icon { width: 36px; height: 36px; font-size: 15px; }
-    .manager-stat-value { font-size: 20px; }
-    .manager-panel-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .manager-panel-actions {
-        width: 100%;
-        justify-content: space-between;
-    }
-    .manager-task-chart-wrapper { width: 150px; height: 150px; }
-    .manager-chart-center strong { font-size: 22px; }
-    .manager-legend-item strong { font-size: 12px; }
-}
-
-/* ---- REDUCED MOTION ---- */
-@media (prefers-reduced-motion: reduce) {
-    .manager-dashboard-page *,
-    .manager-dashboard-page *::before,
-    .manager-dashboard-page *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-    }
-}
-
-/* ---- UTILITY OVERRIDES ---- */
-.d-none { display: none !important; }
-.manager-project-link:focus-visible,
-.manager-nav-item:focus-visible,
-.manager-icon-button:focus-visible,
-.manager-primary-button:focus-visible,
-.manager-text-button:focus-visible {
-    outline: 2px solid var(--md-primary);
-    outline-offset: 2px;
-}
-
-/* ---- Scrollbar for lists ---- */
-.manager-team-list,
-.manager-activity-list,
-.manager-deadline-list,
-.manager-attention-list,
-.manager-notification-list {
-    scrollbar-width: thin;
-    scrollbar-color: var(--md-border) transparent;
-}
-.manager-team-list::-webkit-scrollbar,
-.manager-activity-list::-webkit-scrollbar,
-.manager-deadline-list::-webkit-scrollbar,
-.manager-attention-list::-webkit-scrollbar,
-.manager-notification-list::-webkit-scrollbar {
-    width: 4px;
-}
-.manager-team-list::-webkit-scrollbar-thumb,
-.manager-activity-list::-webkit-scrollbar-thumb,
-.manager-deadline-list::-webkit-scrollbar-thumb,
-.manager-attention-list::-webkit-scrollbar-thumb,
-.manager-notification-list::-webkit-scrollbar-thumb {
-    background: var(--md-border-strong);
-    border-radius: 10px;
-}
-
-/* ---- MANAGER TEAMS PAGE STYLES (ALL TEAMS )---- */
-
-/* =====================================================
-   TEAM DIRECTORY GRID
-===================================================== */
+/* ---- MANAGER TEAMS PAGE STYLES (ALL TEAMS GRID) ---- */
 .manager-team-directory {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
 }
-
-/* =====================================================
-   TEAM CARD
-===================================================== */
 .manager-team-card {
     min-width: 0;
-    overflow: hidden;
     border: 1px solid var(--md-border);
     border-radius: var(--md-radius-lg);
     background: var(--md-surface);
     box-shadow: var(--md-shadow-sm);
     transition: transform var(--md-transition), box-shadow var(--md-transition), border-color var(--md-transition);
 }
-
 .manager-team-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--md-shadow-md);
     border-color: var(--md-border-strong);
 }
-
-/* =====================================================
-   HEADER (Dynamic Gradients)
-===================================================== */
 .manager-team-card-header {
     min-height: 112px;
     padding: 18px;
@@ -2595,19 +1811,11 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     align-items: flex-start;
     justify-content: space-between;
     background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border-top-left-radius: calc(var(--md-radius-lg) - 1px);
+    border-top-right-radius: calc(var(--md-radius-lg) - 1px);
 }
-
-.manager-team-card:nth-child(3n + 2) .manager-team-card-header {
-    background: linear-gradient(135deg, #0ea5e9, #2563eb);
-}
-
-.manager-team-card:nth-child(3n + 3) .manager-team-card-header {
-    background: linear-gradient(135deg, #f59e0b, #ea580c);
-}
-
-/* =====================================================
-   AVATAR & MENU (Header Elements)
-===================================================== */
+.manager-team-card:nth-child(3n + 2) .manager-team-card-header { background: linear-gradient(135deg, #0ea5e9, #2563eb); }
+.manager-team-card:nth-child(3n + 3) .manager-team-card-header { background: linear-gradient(135deg, #f59e0b, #ea580c); }
 .manager-team-card-avatar {
     width: 48px;
     height: 48px;
@@ -2616,12 +1824,11 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     justify-content: center;
     border-radius: var(--md-radius-full);
     background: rgba(255, 255, 255, 0.96);
-    color: #1e293b; /* Kept hardcoded dark for contrast against white pill */
+    color: #1e293b; 
     font-size: 15px;
     font-weight: 800;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
 .manager-team-card-menu {
     width: 34px;
     height: 34px;
@@ -2636,31 +1843,41 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     transition: all var(--md-transition);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-
-.manager-team-card-menu:hover {
-    background: #ffffff;
-    color: var(--md-primary);
+.manager-team-card-menu:hover { background: #ffffff; color: var(--md-primary); }
+.manager-team-card-dropdown {
+    border: 1px solid var(--md-border);
+    border-radius: var(--md-radius-md);
+    background: var(--md-surface-strong);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    box-shadow: var(--md-shadow-md);
+    padding: 6px 0;
+    min-width: 150px;
+    z-index: 1050;
 }
-
-/* =====================================================
-   BODY & TEXT
-===================================================== */
+.manager-team-card-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    color: var(--md-text);
+    font-size: 13px;
+    font-weight: 600;
+    transition: all var(--md-transition);
+}
+.manager-team-card-dropdown .dropdown-item:hover,
+.manager-team-card-dropdown .dropdown-item:focus { background: var(--md-surface-soft); color: var(--md-primary); }
+.manager-team-card-dropdown .dropdown-item i { font-size: 14px; }
+.manager-team-card-dropdown .dropdown-item.text-danger:hover { background: rgba(255, 107, 107, 0.12); color: var(--md-danger) !important; }
+.manager-team-card-dropdown .dropdown-divider { border-color: var(--md-border); margin: 4px 0; opacity: 1; }
 .manager-team-card-body {
     min-height: 150px;
     padding: 18px;
     display: flex;
     flex-direction: column;
-    background: transparent; /* Inherits var(--md-surface) from card */
+    background: transparent;
 }
-
-.manager-team-card-title {
-    margin-bottom: 4px;
-    color: var(--md-text);
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: -0.2px;
-}
-
+.manager-team-card-title { margin-bottom: 4px; color: var(--md-text); font-size: 15px; font-weight: 800; letter-spacing: -0.2px; }
 .manager-team-card-description {
     flex: 1;
     color: var(--md-text-muted);
@@ -2671,47 +1888,24 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
-
-/* =====================================================
-   TEAM MEMBER STACKED AVATARS
-===================================================== */
-.manager-team-member-avatars-container {
-    display: flex;
-    align-items: center;
-    margin-top: 14px;
-    padding-top: 4px;
-}
-
+.manager-team-member-avatars-container { display: flex; align-items: center; margin-top: 14px; padding-top: 4px; }
 .manager-team-member-avatar,
 .manager-team-member-initial,
 .manager-team-member-overflow {
     width: 30px;
     height: 30px;
     border-radius: var(--md-radius-full);
-    /* Dynamic border cuts perfectly into the specific surface background */
     border: 2px solid var(--md-surface);
     margin-left: -8px;
     position: relative;
     transition: transform var(--md-transition), z-index var(--md-transition);
 }
-
-.manager-team-member-avatar {
-    background-color: var(--md-surface-soft);
-    object-fit: cover;
-}
-
+.manager-team-member-avatar { background-color: var(--md-surface-soft); object-fit: cover; }
 .manager-team-member-avatar:first-child,
-.manager-team-member-initial:first-child {
-    margin-left: 0;
-}
-
+.manager-team-member-initial:first-child { margin-left: 0; }
 .manager-team-member-avatar:hover,
 .manager-team-member-initial:hover,
-.manager-team-member-overflow:hover {
-    transform: translateY(-2px) scale(1.05);
-    z-index: 10;
-}
-
+.manager-team-member-overflow:hover { transform: translateY(-2px) scale(1.05); z-index: 10; }
 .manager-team-member-initial {
     display: flex;
     align-items: center;
@@ -2723,7 +1917,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     letter-spacing: 0.02em;
     box-shadow: inset 0 0 0 1px var(--md-border);
 }
-
 .manager-team-member-overflow {
     display: flex;
     align-items: center;
@@ -2735,17 +1928,12 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     z-index: 1;
     box-shadow: inset 0 0 0 1px var(--md-border);
 }
-
-/* =====================================================
-   FOOTER & BUTTONS
-===================================================== */
 .manager-team-card-footer {
     margin-top: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-
 .manager-team-members {
     display: inline-flex;
     align-items: center;
@@ -2758,7 +1946,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     font-size: 11px;
     font-weight: 700;
 }
-
 .manager-team-view {
     display: inline-flex;
     align-items: center;
@@ -2773,7 +1960,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     text-decoration: none;
     transition: all var(--md-transition);
 }
-
 .manager-team-view:hover {
     background: var(--md-primary);
     color: #ffffff;
@@ -2782,16 +1968,243 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 
 /* =====================================================
-   RESPONSIVE
+   TEAM INSIGHTS (TAB CONTENT STYLING)
 ===================================================== */
+/* Forces bootstrap containers to use correct dynamic surface colors */
+.manager-dashboard-page .tab-content .card,
+.manager-dashboard-page .tab-content .bg-white,
+.manager-dashboard-page .tab-content .list-group {
+    background: var(--md-surface) !important;
+    border-color: var(--md-border) !important;
+    box-shadow: var(--md-shadow-sm) !important;
+}
+.manager-dashboard-page .tab-content .text-dark,
+.manager-dashboard-page .tab-content h4,
+.manager-dashboard-page .tab-content h5 {
+    color: var(--md-text) !important;
+}
+#teamTasksList { background: transparent !important; }
+
+/* Insight Cards (Projects) */
+.manager-insight-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid var(--md-border);
+    border-radius: var(--md-radius-lg);
+    background: var(--md-surface);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    box-shadow: var(--md-shadow-sm);
+    transition: transform var(--md-transition), border-color var(--md-transition), box-shadow var(--md-transition);
+}
+.manager-insight-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--md-border-strong);
+    box-shadow: var(--md-shadow-md);
+}
+.manager-insight-title { color: var(--md-text); font-size: 15px; font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
+.manager-insight-meta { color: var(--md-text-muted); font-size: 11px; font-weight: 500; }
+.manager-insight-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    margin-top: 10px;
+    border: 1px solid var(--md-primary);
+    border-radius: var(--md-radius-full);
+    background: transparent;
+    color: var(--md-primary);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all var(--md-transition);
+}
+.manager-insight-btn:hover {
+    background: var(--md-primary);
+    color: #fff;
+    box-shadow: 0 4px 12px var(--md-primary-glow);
+}
+
+/* Insight Tasks List */
+.manager-insight-task-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--md-border);
+    background: transparent;
+    border-radius: var(--md-radius-md); 
+    transition: background var(--md-transition);
+}
+.manager-insight-task-item:last-child { border-bottom: none; }
+.manager-insight-task-item:hover { background: rgba(108, 92, 231, 0.05); }
+[data-theme="dark"] .manager-insight-task-item:hover { background: rgba(255, 255, 255, 0.04); }
+.manager-insight-task-title { color: var(--md-text) !important; font-size: 14px; font-weight: 700; }
+.manager-insight-date-badge {
+    padding: 6px 12px;
+    background: var(--md-surface); 
+    border: 1px solid var(--md-border);
+    border-radius: var(--md-radius-md);
+    color: var(--md-text-muted) !important;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+/* Insight Members Table */
+.manager-insight-table-row { border-bottom: 1px solid var(--md-border); transition: background var(--md-transition); }
+.manager-insight-table-row td { padding: 14px 10px; background: transparent; border: none; }
+.manager-insight-table-row:hover { background: var(--md-surface-soft); }
+.manager-insight-remove-btn {
+    padding: 4px 12px;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: var(--md-radius-full);
+    background: transparent;
+    color: var(--md-danger);
+    font-size: 10px;
+    font-weight: 700;
+    transition: all var(--md-transition);
+}
+.manager-insight-remove-btn:hover { background: rgba(255, 107, 107, 0.1); border-color: var(--md-danger); }
+
+/* =====================================================
+   RESPONSIVE (Consolidated perfectly to remove redundancy)
+===================================================== */
+@media (max-width: 1200px) {
+    .manager-topbar { padding: 0 20px; }
+    .manager-container { padding-left: 20px; padding-right: 20px; }
+    .manager-search { width: 220px; }
+    .manager-profile-info, .manager-profile-button > i { display: none; }
+    .manager-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 1100px) {
-    .manager-team-directory {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    .manager-team-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 991px) {
+    .manager-sidebar { transform: translateX(-100%); box-shadow: 8px 0 40px rgba(0,0,0,0.25); }
+    .manager-sidebar.is-open { transform: translateX(0); }
+    .manager-sidebar-close { display: block; }
+    .manager-topbar { left: 0; }
+    .manager-menu-toggle { display: grid; }
+    .manager-main { margin-left: 0; }
+    .manager-main-grid, .manager-secondary-grid, .manager-bottom-grid { grid-template-columns: 1fr; }
+    .manager-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .manager-search-results, .manager-notification-dropdown { width: 320px; right: -10px; }
 }
 
 @media (max-width: 700px) {
-    .manager-team-directory {
-        grid-template-columns: 1fr;
+    .manager-topbar { height: auto; min-height: var(--md-header-height); padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+    .manager-header-subtitle { display: none; }
+    .manager-header-title { font-size: 16px; }
+    .manager-header-label { font-size: 9px; }
+    .manager-topbar-actions { gap: 6px; margin-left: 4px; }
+    .manager-search { width: 40px; justify-content: center; padding: 0; border-radius: var(--md-radius-full); }
+    .manager-search input, .manager-search kbd { display: none; }
+    .manager-search i { font-size: 15px; }
+    .manager-search-results, .manager-notification-dropdown { position: fixed; top: 60px; left: 12px; right: 12px; width: auto; }
+    .manager-profile-button { padding-right: 4px; border: 0; background: transparent; }
+    .manager-profile-avatar { width: 34px; height: 34px; }
+    .manager-logout-button { display: none; }
+    .manager-container { padding: 16px 12px 32px; }
+    .manager-page-context { margin-bottom: 14px; }
+    .manager-date-chip { display: none; }
+    .manager-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .manager-stat-card { min-height: 96px; padding: 14px; gap: 12px; }
+    .manager-stat-icon { width: 40px; height: 40px; font-size: 17px; }
+    .manager-stat-value { font-size: 22px; }
+    .manager-panel { padding: 16px; }
+    .manager-panel-header h2 { font-size: 16px; }
+    .manager-project-card { min-height: 170px; }
+    .manager-project-health-metrics { grid-template-columns: repeat(2, 1fr); gap: 10px 0; }
+    .manager-project-health-metric:nth-child(3) { padding-left: 0; border-left: 0; }
+    .manager-project-health-action span:not(.manager-project-health-action-icon) { white-space: normal; }
+    .manager-task-chart-wrapper { width: 160px; height: 160px; }
+    .manager-chart-center strong { font-size: 26px; }
+    .manager-chart-center .task-status-label { font-size: 10px; padding: 2px 12px; }
+    .manager-task-legend { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .manager-legend-item { padding: 6px 8px; }
+    .manager-legend-item strong { font-size: 13px; }
+    .manager-team-directory { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .manager-header-label { display: none; }
+    .manager-header-title { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+    .manager-stats-grid { gap: 8px; }
+    .manager-stat-card { flex-direction: column; align-items: flex-start; min-height: 110px; padding: 14px; }
+    .manager-stat-icon { width: 36px; height: 36px; font-size: 15px; }
+    .manager-stat-value { font-size: 20px; }
+    .manager-panel-header { flex-direction: column; align-items: stretch; }
+    .manager-panel-actions { width: 100%; justify-content: space-between; }
+    .manager-task-chart-wrapper { width: 140px; height: 140px; }
+    .manager-chart-center strong { font-size: 22px; }
+    .manager-chart-center .task-status-label { font-size: 9px; padding: 2px 10px; }
+    .manager-chart-center .task-total { font-size: 9px; }
+    .manager-legend-item strong { font-size: 12px; }
+    .manager-deadline-item { grid-template-columns: 42px minmax(0, 1fr); gap: 10px; }
+    .manager-deadline-priority { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .manager-dashboard-page *,
+    .manager-dashboard-page *::before,
+    .manager-dashboard-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}
+/* =====================================================
+   MOBILE FIX: TASK OVERVIEW DONUT CHART
+===================================================== */
+/* 1. Ensure the text wrapper is perfectly centered and overlays the canvas */
+.manager-chart-center {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none; 
+}
+
+/* 2. Tighten the vertical spacing between the text elements */
+.manager-chart-center strong {
+    margin-bottom: 2px;
+    line-height: 1;
+}
+.manager-chart-center .task-status-wrapper {
+    margin-top: 0;
+}
+.manager-chart-center .task-total {
+    margin-top: 2px;
+    line-height: 1;
+}
+
+/* 3. Prevent the chart from shrinking too much on mobile */
+@media (max-width: 700px) {
+    .manager-task-chart-wrapper { 
+        width: 180px !important; 
+        height: 180px !important; 
+    }
+    .manager-chart-center strong { 
+        font-size: 26px !important; 
+    }
+}
+
+@media (max-width: 480px) {
+    .manager-task-chart-wrapper { 
+        width: 170px !important; /* Safely increased from 140px */
+        height: 170px !important; 
+    }
+    .manager-chart-center strong { 
+        font-size: 24px !important; 
+    }
+    .manager-chart-center .task-status-label { 
+        font-size: 9px !important; 
+        padding: 2px 8px !important; 
+    }
+    .manager-chart-center .task-total { 
+        font-size: 9px !important; 
     }
 }
