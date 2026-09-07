@@ -26,11 +26,22 @@ class TeamService {
     // Manager: View Own Teams
     // =========================
 
-    static async getManagerTeams(managerId) {
-
-        return await TeamModel.findTeamsByManager(managerId);
+   static async getManagerTeams(managerId) {
+    // 1. Fetch the base teams
+    const teams = await TeamModel.findTeamsByManager(managerId);
+    
+    // 2. Loop through each team and fetch its members
+    for (let team of teams) {
+        const members = await TeamModel.findTeamMembers(team.team_id);
+        
+        // 3. Attach the members array and count to the team object
+        team.members = members;
+        team.member_count = members.length;
     }
 
+    // 4. Return the enriched data back to the controller
+    return teams;
+}
 
     // =========================
     // View Team
