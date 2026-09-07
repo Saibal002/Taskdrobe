@@ -266,28 +266,35 @@ $(document).ready(function () {
     });
   }
 
-  /* =====================================================
-       4. CREATE TEAM FORM SUBMIT HANDLER
+ /* =====================================================
+       4. CREATE / EDIT TEAM FORM SUBMIT HANDLER
     ===================================================== */
   $(document).on("submit", "#createTeamForm", function (event) {
     event.preventDefault();
 
     const $form = $(this);
-    const $submitButton = $form.find("button[type='submit']");
+    const $submitButton = $("#teamSubmitBtn");
     const originalText = $submitButton.html();
 
     $submitButton
       .prop("disabled", true)
       .html('<span class="spinner-border spinner-border-sm"></span>');
 
+    const teamId = $("#teamId").val(); // Check if we are editing
+    const isEdit = teamId !== ""; 
+
     const teamData = {
       teamName: $("#teamName").val().trim(),
       description: $("#teamDescription").val().trim(),
     };
 
+    // Dynamically set URL and Method based on Create vs Edit
+    const ajaxUrl = isEdit ? `/teams/${teamId}` : "/teams";
+    const ajaxType = isEdit ? "PUT" : "POST";
+
     $.ajax({
-      url: "/teams",
-      type: "POST",
+      url: ajaxUrl,
+      type: ajaxType,
       contentType: "application/json",
       data: JSON.stringify(teamData),
       headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -297,22 +304,25 @@ $(document).ready(function () {
           const modalInstance = bootstrap.Modal.getInstance(modalElement);
           if (modalInstance) modalInstance.hide();
 
-          $form.trigger("reset");
-          $submitButton.prop("disabled", false).html(originalText);
-
-          if ($("#managerTeamListContainer").length) {
-            loadManagerTeams();
-          }
-          if ($("#fullTeamGrid").length) {
-            loadFullTeamGrid();
-          }
+          // Refresh UI
+          if ($("#managerTeamListContainer").length) loadManagerTeams();
+          if ($("#fullTeamGrid").length) loadFullTeamGrid();
         }
       },
       error: function (xhr) {
         $submitButton.prop("disabled", false).html(originalText);
-        alert(xhr.responseJSON?.message || "Failed to create team.");
+        alert(xhr.responseJSON?.message || `Failed to ${isEdit ? 'update' : 'create'} team.`);
       },
     });
+  });
+
+  // RESET MODAL UI WHEN CLOSED
+  // This ensures that when you click "New Team" after editing, it resets to a Create form
+  $('#addTeamModal').on('hidden.bs.modal', function () {
+      $("#createTeamForm").trigger("reset");
+      $("#teamId").val("");
+      $("#teamModalTitle").html('<i class="bi bi-people-fill me-2"></i> Create New Team');
+      $("#teamSubmitBtn").prop("disabled", false).text("Create Team");
   });
 
   /* =====================================================
@@ -654,57 +664,59 @@ $(document).ready(function () {
     }
   });
 
+ 
   /* =====================================================
        9. TEAM CARD: EDIT AND DELETE ACTIONS
     ===================================================== */
     
-    // DELETE TEAM ACTION
-    $(document).on("click", ".delete-team-btn", function (e) {
-        e.preventDefault();
-        
-        // Ensure the button in loadFullTeamGrid has data-team-id="${team.team_id}"
-        const teamId = $(this).data("team-id");
-        
-        if (!teamId) {
-            console.error("No team ID found on delete button");
-            return;
-        }
+  // DELETE TEAM ACTION
+  $(document).on("click", ".delete-team-btn", function (e) {
+      e.preventDefault();
+      
+      const teamId = $(this).data("team-id");
+      
+      if (!teamId) return;
 
-        if (confirm("Are you sure you want to delete this team? This action cannot be undone.")) {
-            $.ajax({
-                url: `/teams/${teamId}`, 
-                type: "DELETE",
-                headers: { "X-Requested-With": "XMLHttpRequest" },
-                success: function (result) {
-                    if (result.success) {
-                        // Reload the grid to remove the deleted team instantly
-                        loadFullTeamGrid();
-                        // Also reload the sidebar container if it exists
-                        if ($("#managerTeamListContainer").length) {
-                            loadManagerTeams(); 
-                        }
-                    } else {
-                        alert(result.message || "Failed to delete team.");
-                    }
-                },
-                error: function (xhr) {
-                    console.error("Error deleting team:", xhr);
-                    alert(xhr.responseJSON?.message || "An error occurred while deleting the team.");
-                }
-            });
-        }
-    });
+      if (confirm("Are you sure you want to delete this team? This action cannot be undone.")) {
+          $.ajax({
+              url: `/teams/${teamId}`, 
+              type: "DELETE",
+              headers: { "X-Requested-With": "XMLHttpRequest" },
+              success: function (result) {
+                  if (result.success) {
+                      if ($("#fullTeamGrid").length) loadFullTeamGrid();
+                      if ($("#managerTeamListContainer").length) loadManagerTeams(); 
+                  } else {
+                      alert(result.message || "Failed to delete team.");
+                  }
+              },
+              error: function (xhr) {
+                  console.error("Error deleting team:", xhr);
+                  alert(xhr.responseJSON?.message || "An error occurred while deleting the team.");
+              }
+          });
+      }
+  });
 
-    // EDIT TEAM ACTION 
-    // Option A: Navigate to a dedicated edit page
-    $(document).on("click", ".edit-team-btn", function (e) {
-        e.preventDefault();
-        const teamId = $(this).data("team-id");
-        
-        if (teamId) {
-             window.location.href = `/manager/teams/${teamId}`;
-        }
-    });
+  // EDIT TEAM ACTION (Opens the modal in Edit Mode)
+  $(document).on("click", ".edit-team-btn", function (e) {
+      e.preventDefault();
+      const teamId = $(this).data("team-id");
+      const teamName = $(this).data("team-name");
+      const teamDesc = $(this).data("team-desc");
+
+      // 1. Populate the hidden ID and inputs
+      $("#teamId").val(teamId);
+      $("#teamName").val(teamName);
+      $("#teamDescription").val(teamDesc);
+      
+      // 2. Change the UI text to reflect Edit Mode
+      $("#teamModalTitle").html('<i class="bi bi-pencil-square me-2"></i> Edit Team');
+      $("#teamSubmitBtn").text("Save Changes");
+
+      // 3. Open the Modal
+      $("#addTeamModal").modal("show");
+  });
     
     // Option B: If you use a modal for editing (uncomment and replace Option A)
     /*
