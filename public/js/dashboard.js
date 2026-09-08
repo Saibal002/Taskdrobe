@@ -1,4 +1,18 @@
 // ================================
+// Global Utilities
+// ================================
+
+// Unified HTML escaper for both global search and socket notifications
+window.escapeHtml = function(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
+
+// ================================
 // Project Carousel
 // ================================
 
@@ -7,120 +21,160 @@ const leftBtn = document.getElementById("scrollLeft");
 const rightBtn = document.getElementById("scrollRight");
 
 if (scrollContainer && leftBtn && rightBtn) {
-  function getCardWidth() {
-    const card = scrollContainer.querySelector(".project-card");
-    if (!card) return 340;
-    const gap = 16;
-    return card.offsetWidth + gap;
-  }
+    function getCardWidth() {
+        const card = scrollContainer.querySelector(".project-card");
+        if (!card) return 340;
+        const gap = 16;
+        return card.offsetWidth + gap;
+    }
 
-  function updateButtons() {
-    leftBtn.disabled = scrollContainer.scrollLeft <= 5;
-    rightBtn.disabled =
-      scrollContainer.scrollLeft + scrollContainer.clientWidth >=
-      scrollContainer.scrollWidth - 5;
-  }
+    function updateButtons() {
+        leftBtn.disabled = scrollContainer.scrollLeft <= 5;
+        rightBtn.disabled =
+            scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+            scrollContainer.scrollWidth - 5;
+    }
 
-  leftBtn.addEventListener("click", () => {
-    scrollContainer.scrollBy({
-      left: -getCardWidth(),
-      behavior: "smooth",
+    leftBtn.addEventListener("click", () => {
+        scrollContainer.scrollBy({
+            left: -getCardWidth(),
+            behavior: "smooth",
+        });
     });
-  });
 
-  rightBtn.addEventListener("click", () => {
-    scrollContainer.scrollBy({
-      left: getCardWidth(),
-      behavior: "smooth",
+    rightBtn.addEventListener("click", () => {
+        scrollContainer.scrollBy({
+            left: getCardWidth(),
+            behavior: "smooth",
+        });
     });
-  });
 
-  scrollContainer.addEventListener("scroll", updateButtons);
-  window.addEventListener("resize", updateButtons);
-  updateButtons();
+    scrollContainer.addEventListener("scroll", updateButtons);
+    window.addEventListener("resize", updateButtons);
+    updateButtons();
 }
 
+// ================================
+// Main Initialization
+// ================================
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize Global Search safely
-  initGlobalSearch();
- 
-  // Task Doughnut Chart
-  const chartCanvas = document.getElementById("taskChart");
-  if (chartCanvas) {
-    const completed = Number(chartCanvas.dataset.completed || 0);
-    const pending = Number(chartCanvas.dataset.pending || 0);
-    const overdue = Number(chartCanvas.dataset.overdue || 0);
+    // 1. Initialize Global Search
+    initGlobalSearch();
 
-    new Chart(chartCanvas, {
-      type: "doughnut",
-      data: {
-        labels: ["Completed", "Pending", "Overdue"],
-        datasets: [
-          {
-            data: [completed, pending, overdue],
-            backgroundColor: ["#22c55e", "#f59e0b", "#ef4444"],
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: "70%",
-        plugins: {
-          legend: {
-            position: "bottom",
-          },
-        },
-      },
+    // 2. Task Checkbox Interactions (Moved from inline EJS)
+    document.querySelectorAll(".task-checkbox").forEach((checkbox) => {
+        checkbox.addEventListener("click", function () {
+            const isChecked = this.classList.toggle("checked");
+            this.setAttribute("aria-pressed", String(isChecked));
+            this.innerHTML = isChecked
+                ? '<i class="fas fa-check" aria-hidden="true"></i>'
+                : "";
+        });
     });
-  }
 
-  // Project Bar Chart
-  const projectCanvas = document.getElementById("projectChart");
-  if (projectCanvas && projectCanvas.dataset.projects) {
-    try {
-      const projects = JSON.parse(projectCanvas.dataset.projects);
-      new Chart(projectCanvas, {
-        type: "bar",
-        data: {
-          labels: projects.map((p) => p.status),
-          datasets: [
-            {
-              label: "Projects",
-              data: projects.map((p) => p.total),
-              borderRadius: 8,
-            },
-          ],
-        },
-        options: {
-          indexAxis: "y",
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          scales: {
-            x: {
-              beginAtZero: true,
-              ticks: {
-                precision: 0,
-              },
-            },
-          },
-        },
-      });
-    } catch (e) {
-      console.error("Error parsing project chart data:", e);
+    // 3. Unified Theme Toggle
+    const themeToggleBtn = document.getElementById('themeToggle');
+    if (themeToggleBtn) {
+        const body = document.body;
+        const root = document.documentElement;
+        
+        // Check for saved theme preference (syncing local storage keys)
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
+            root.setAttribute('data-theme', 'dark');
+            themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = body.classList.toggle("dark-theme");
+            root.toggleAttribute("data-theme", isDark);
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            themeToggleBtn.innerHTML = isDark
+                ? '<i class="fas fa-sun"></i>'
+                : '<i class="fas fa-moon"></i>';
+        });
     }
-  }
+
+    // 4. Task Doughnut Chart
+    const chartCanvas = document.getElementById("taskChart");
+    if (chartCanvas) {
+        const completed = Number(chartCanvas.dataset.completed || 0);
+        const pending = Number(chartCanvas.dataset.pending || 0);
+        const overdue = Number(chartCanvas.dataset.overdue || 0);
+
+        new Chart(chartCanvas, {
+            type: "doughnut",
+            data: {
+                labels: ["Completed", "Pending", "Overdue"],
+                datasets: [
+                    {
+                        data: [completed, pending, overdue],
+                        backgroundColor: ["#22c55e", "#f59e0b", "#ef4444"],
+                        borderWidth: 0,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "70%",
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                    },
+                },
+            },
+        });
+    }
+
+    // 5. Project Bar Chart
+    const projectCanvas = document.getElementById("projectChart");
+    if (projectCanvas && projectCanvas.dataset.projects) {
+        try {
+            const projects = JSON.parse(projectCanvas.dataset.projects);
+            new Chart(projectCanvas, {
+                type: "bar",
+                data: {
+                    labels: projects.map((p) => p.status),
+                    datasets: [
+                        {
+                            label: "Projects",
+                            data: projects.map((p) => p.total),
+                            borderRadius: 8,
+                        },
+                    ],
+                },
+                options: {
+                    indexAxis: "y",
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                            },
+                        },
+                    },
+                },
+            });
+        } catch (e) {
+            console.error("Error parsing project chart data:", e);
+        }
+    }
 });
 
 // ================================
 // Global Search Logic
 // ================================
+
 function initGlobalSearch() {
     const searchInput = document.getElementById("globalSearch");
     const searchResults = document.getElementById("searchResults");
@@ -207,94 +261,60 @@ function initGlobalSearch() {
 }
 
 function renderSearchResults(data, container) {
-  const projects = data.projects || [];
-  const tasks = data.tasks || [];
+    const projects = data.projects || [];
+    const tasks = data.tasks || [];
 
-  if (projects.length === 0 && tasks.length === 0) {
-    container.innerHTML = `
+    if (projects.length === 0 && tasks.length === 0) {
+        container.innerHTML = `
             <div class="search-no-results">
                 <i class="fas fa-search"></i>
                 <div>No results found.</div>
             </div>
         `;
-    container.classList.remove("d-none");
-    return;
-  }
+        container.classList.remove("d-none");
+        return;
+    }
 
-  let html = "";
+    let html = "";
 
-  if (projects.length > 0) {
-    html += `
+    if (projects.length > 0) {
+        html += `
             <div class="search-result-section">
                 <div class="search-result-title">Projects</div>
         `;
-    projects.forEach((project) => {
-      html += `
+        projects.forEach((project) => {
+            html += `
                 <a href="/projects/${project.project_id}" class="search-result-item">
                     <div class="search-result-icon"><i class="fas fa-folder"></i></div>
                     <div class="search-result-content">
-                        <div class="search-result-name">${escapeSearchHTML(project.project_name)}</div>
-                        <div class="search-result-meta">${escapeSearchHTML(project.status)} · ${project.progress ?? 0}%</div>
+                        <div class="search-result-name">${window.escapeHtml(project.project_name)}</div>
+                        <div class="search-result-meta">${window.escapeHtml(project.status)} · ${project.progress ?? 0}%</div>
                     </div>
                 </a>
             `;
-    });
-    html += `</div>`;
-  }
+        });
+        html += `</div>`;
+    }
 
-  if (tasks.length > 0) {
-    html += `
+    if (tasks.length > 0) {
+        html += `
             <div class="search-result-section">
                 <div class="search-result-title">Tasks</div>
         `;
-    tasks.forEach((task) => {
-      html += `
+        tasks.forEach((task) => {
+            html += `
                 <a href="/projects/${task.project_id}" class="search-result-item">
                     <div class="search-result-icon"><i class="fas fa-check-circle"></i></div>
                     <div class="search-result-content">
-                        <div class="search-result-name">${escapeSearchHTML(task.title)}</div>
-                        <div class="search-result-meta">${escapeSearchHTML(task.project_name || "No Project")} · ${escapeSearchHTML(task.priority || "No Priority")}</div>
+                        <div class="search-result-name">${window.escapeHtml(task.title)}</div>
+                        <div class="search-result-meta">${window.escapeHtml(task.project_name || "No Project")} · ${window.escapeHtml(task.priority || "No Priority")}</div>
                     </div>
                 </a>
             `;
-    });
-    html += `</div>`;
-  }
-
-  container.innerHTML = html;
-  container.classList.remove("d-none");
-}
-
-function escapeSearchHTML(value) {
-  const div = document.createElement("div");
-  div.textContent = value ?? "";
-  return div.innerHTML;
-}
-
-
-
-JavaScript
-document.addEventListener('DOMContentLoaded', () => {
-    const themeToggleBtn = document.getElementById('themeToggle');
-    const body = document.documentElement; // Apply to <html> or <body>
-    const themeIcon = themeToggleBtn.querySelector('i');
-
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('appTheme') || 'light';
-    if (savedTheme === 'dark') {
-        body.setAttribute('data-theme', 'dark');
-        themeIcon.classList.replace('fa-moon', 'fa-sun');
+        });
+        html += `</div>`;
     }
 
-    themeToggleBtn.addEventListener('click', () => {
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            localStorage.setItem('appTheme', 'light');
-            themeIcon.classList.replace('fa-sun', 'fa-moon');
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('appTheme', 'dark');
-            themeIcon.classList.replace('fa-moon', 'fa-sun');
-        }
-    });
-})
+    container.innerHTML = html;
+    container.classList.remove("d-none");
+}
