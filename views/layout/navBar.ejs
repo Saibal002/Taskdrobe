@@ -1,192 +1,1549 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top custom-header">
-    <div class="container-fluid px-3">
-        <!-- Logo -->
-        <div class="navbar-brand d-flex align-items-center">
-            <img src="/images/logo.png" alt="TaskDrobe Logo" width="40" height="40" class="me-2">
-            <span class="fw-bold fs-5">TASKDROBE</span>
+```ejs
+<!-- =========================================================
+     EMPLOYEE TOP NAVBAR
+     Manager-inspired design with employee-specific functionality
+========================================================= -->
+
+<nav class="employee-topbar fixed-top">
+
+    <div class="employee-topbar-inner">
+
+        <!-- =====================================================
+             LEFT: BRAND + MOBILE SIDEBAR TOGGLE
+        ====================================================== -->
+
+        <div class="employee-topbar-left">
+
+            <!-- Mobile Sidebar Toggle -->
+            <button
+                type="button"
+                class="employee-menu-toggle d-lg-none"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebarCollapse"
+                aria-label="Toggle sidebar"
+                title="Menu">
+
+                <i class="fas fa-bars"></i>
+
+            </button>
+
+
+            <!-- Brand -->
+            <a href="/" class="employee-brand text-decoration-none">
+
+                <img
+                    src="/images/logo.png"
+                    alt="TaskDrobe Logo"
+                    class="employee-brand-logo">
+
+                <div class="employee-brand-text">
+                    <span class="employee-brand-name">TASKDROBE</span>
+                </div>
+
+            </a>
+
+
+            <!-- Desktop Greeting -->
+            <div class="employee-header-greeting d-none d-xl-flex">
+
+                <div class="employee-header-label">
+                    EMPLOYEE WORKSPACE
+                </div>
+
+                <div class="employee-header-title">
+                    Welcome back, <%= user.full_name %>
+                    <span class="employee-wave">👋</span>
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- Mobile Toggle -->
-        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
-            data-bs-target="#sidebarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <!-- Header Navigation -->
-        <div class="d-flex align-items-center ms-auto">
-            <div class="d-none d-md-flex align-items-center me-3">
-                <!-- System Alerts Bell -->
-                <div class="nav-icon me-2 position-relative">
+        <!-- =====================================================
+             RIGHT: SEARCH + NOTIFICATIONS + THEME + PROFILE + LOGOUT
+        ====================================================== -->
 
-                    <button type="button" id="systemBellIcon"
-                        class="btn btn-link text-dark p-0 border-0 shadow-none position-relative" title="Notifications"
-                        style="line-height: 1;">
+        <div class="employee-topbar-actions">
 
-                        <i class="fas fa-bell"></i>
 
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none"
-                            id="systemBellBadge" style="font-size: 0.6rem; min-width: 16px;">
+            <!-- =================================================
+                 GLOBAL SEARCH
+            ================================================== -->
 
-                            <span id="systemBellCount">0</span>
+            <div class="employee-search-wrapper">
 
-                            <span class="visually-hidden">
-                                unread notifications
-                            </span>
+                <div class="employee-search">
 
-                        </span>
+                    <i class="fas fa-search employee-search-icon"></i>
+
+                    <input
+                        type="text"
+                        id="globalSearch"
+                        placeholder="Search projects or tasks..."
+                        autocomplete="off"
+                        aria-label="Search projects or tasks">
+
+                    <kbd>⌘ K</kbd>
+
+                    <button
+                        type="button"
+                        id="clearSearch"
+                        class="employee-search-clear d-none"
+                        aria-label="Clear search"
+                        title="Clear search">
+
+                        <i class="fas fa-times"></i>
 
                     </button>
 
-
-                    <!-- ===================================================== -->
-                    <!-- SYSTEM NOTIFICATION DROPDOWN -->
-                    <!-- ===================================================== -->
-
-                    <div id="systemNotificationDropdown"
-                        class="card shadow-lg border-0 rounded-4 d-none position-absolute" style="
-            width: 380px;
-            max-width: 90vw;
-            right: 0;
-            top: 42px;
-            z-index: 2000;
-        ">
-
-                        <!-- Header -->
-
-                        <div class="card-header bg-white border-bottom p-3">
-
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <div>
-
-                                    <h6 class="mb-0 fw-bold">
-                                        Notifications
-                                    </h6>
-
-                                    <small class="text-muted" id="notificationSubtitle">
-                                        You're all caught up
-                                    </small>
-
-                                </div>
-
-                                <button type="button" id="markAllNotificationsRead"
-                                    class="btn btn-sm btn-link text-decoration-none d-none">
-
-                                    Mark all read
-
-                                </button>
-
-                            </div>
-
-                        </div>
+                </div>
 
 
-                        <!-- Notification List -->
+                <!-- Search Results -->
+                <div
+                    id="searchResults"
+                    class="employee-search-results d-none">
 
-                        <div id="systemNotificationList" style="
-                max-height: 420px;
-                overflow-y: auto;
-            ">
-
-                            <div id="notificationLoading" class="text-center p-4 text-muted">
-
-                                <i class="fas fa-spinner fa-spin"></i>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                    <!-- Results inserted by dashboard.js -->
 
                 </div>
-                <div class="nav-icon me-2"><i class="fas fa-bookmark"></i></div>
-                <div class="nav-icon me-3"><i class="fas fa-calendar"></i></div>
 
-                <!-- Search Box -->
-                <!-- Global Search -->
+            </div>
 
-                <div class="search-wrapper me-3">
 
-                    <div class="search-box">
+            <!-- =================================================
+                 NOTIFICATIONS
+            ================================================== -->
 
-                        <i class="fas fa-search text-muted"></i>
+            <div class="employee-notification-wrapper">
 
-                        <input type="text" id="globalSearch" class="form-control border-0 bg-transparent ms-2"
-                            placeholder="Search projects or tasks..." autocomplete="off">
+                <button
+                    type="button"
+                    id="systemBellIcon"
+                    class="employee-icon-button"
+                    title="Notifications"
+                    aria-label="Notifications">
 
-                        <button type="button" id="clearSearch" class="search-clear-btn d-none" aria-label="Clear search"
-                            title="Clear search">
+                    <i class="fas fa-bell"></i>
 
-                            <i class="fas fa-times"></i>
+                    <span
+                        id="systemBellBadge"
+                        class="employee-notification-badge d-none">
+
+                        <span id="systemBellCount">0</span>
+
+                        <span class="visually-hidden">
+                            unread notifications
+                        </span>
+
+                    </span>
+
+                </button>
+
+
+                <!-- Notification Dropdown -->
+                <div
+                    id="systemNotificationDropdown"
+                    class="employee-notification-dropdown d-none">
+
+                    <!-- Header -->
+                    <div class="employee-notification-header">
+
+                        <div>
+
+                            <div class="employee-notification-title">
+                                Notifications
+                            </div>
+
+                            <div
+                                id="notificationSubtitle"
+                                class="employee-notification-subtitle">
+
+                                You're all caught up
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="markAllNotificationsRead"
+                            class="employee-mark-all d-none">
+
+                            Mark all read
 
                         </button>
 
                     </div>
 
-                    <!-- Search Results -->
 
-                    <div id="searchResults" class="search-results d-none">
+                    <!-- Notification List -->
+                    <div
+                        id="systemNotificationList"
+                        class="employee-notification-list">
 
-                        <!-- Results will be inserted by JavaScript -->
+                        <div
+                            id="notificationLoading"
+                            class="employee-notification-empty">
+
+                            <i class="fas fa-spinner fa-spin"></i>
+
+                        </div>
 
                     </div>
 
                 </div>
-                <!-- Theme Switcher -->
-                <button id="themeToggle" class="btn btn-sm btn-outline-secondary rounded-circle" title="Toggle Theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
-
-            <div class="d-flex">
-                <div class="nav-icon me-2"><i class="fas fa-expand"></i></div>
-                <!-- Corrected Profile Link -->
-                <div class="nav-icon me-2">
-                    <a href="/<%= user.role_name %>/profile" class="text-dark" title="My Profile">
-                        <i class="fas fa-user"></i>
-                    </a>
-                </div>
-                <div class="nav-icon me-2"><i class="fas fa-cog"></i></div>
-                <div class="nav-icon"><i class="fas fa-th"></i></div>
-                <div class="me-2">
-                    <a href="/auth/logout" class="logout-icon">
-                        <i class="bi bi-box-arrow-right"></i>
-                    </a>
-                </div>
 
             </div>
+
+
+            <!-- =================================================
+                 THEME TOGGLE
+            ================================================== -->
+
+            <button
+                type="button"
+                id="themeToggle"
+                class="employee-icon-button"
+                title="Toggle Theme"
+                aria-label="Toggle Theme">
+
+                <i class="fas fa-moon"></i>
+
+            </button>
+
+
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
+
+            <a
+                href="/<%= user.role_name %>/profile"
+                class="employee-profile-button text-decoration-none"
+                title="My Profile">
+
+                <span class="employee-profile-avatar">
+
+                    <%= user.full_name
+                        ? user.full_name
+                            .split(" ")
+                            .map(name => name.charAt(0))
+                            .join("")
+                            .substring(0, 2)
+                            .toUpperCase()
+                        : "U"
+                    %>
+
+                </span>
+
+
+                <span class="employee-profile-info d-none d-lg-flex">
+
+                    <span class="employee-profile-name">
+                        <%= user.full_name %>
+                    </span>
+
+                    <span class="employee-profile-role">
+                        Employee
+                    </span>
+
+                </span>
+
+
+                <i class="fas fa-chevron-down employee-profile-chevron d-none d-lg-block"></i>
+
+            </a>
+
+
+            <!-- =================================================
+                 LOGOUT
+            ================================================== -->
+
+            <a
+                href="/auth/logout"
+                class="employee-logout-button"
+                title="Logout"
+                aria-label="Logout">
+
+                <i class="fas fa-sign-out-alt"></i>
+
+                <span class="d-none d-xl-inline">
+                    Logout
+                </span>
+
+            </a>
+
         </div>
+
     </div>
+
 </nav>
+
+
+<!-- =========================================================
+     EMPLOYEE NAVBAR STYLES
+     Scoped specifically to the employee navbar.
+========================================================= -->
+
+<style>
+
+    /* =========================================================
+       DESIGN TOKENS
+    ========================================================= */
+
+    :root {
+        --employee-nav-primary: #6C5CE7;
+        --employee-nav-primary-light: rgba(108, 92, 231, 0.10);
+        --employee-nav-primary-glow: rgba(108, 92, 231, 0.18);
+
+        --employee-nav-text: #1f2937;
+        --employee-nav-muted: #64748b;
+
+        --employee-nav-surface: rgba(255, 255, 255, 0.94);
+        --employee-nav-surface-solid: #ffffff;
+
+        --employee-nav-border: rgba(15, 23, 42, 0.08);
+
+        --employee-nav-danger: #ef4444;
+
+        --employee-nav-shadow:
+            0 8px 30px rgba(15, 23, 42, 0.08);
+
+        --employee-nav-radius: 14px;
+        --employee-nav-transition: 0.2s ease;
+
+        --employee-nav-height: 72px;
+    }
+
+
+    /* =========================================================
+       TOPBAR
+    ========================================================= */
+
+    .employee-topbar {
+
+        height: var(--employee-nav-height);
+
+        background: var(--employee-nav-surface);
+
+        border-bottom: 1px solid var(--employee-nav-border);
+
+        box-shadow: var(--employee-nav-shadow);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        z-index: 1050;
+
+    }
+
+
+    .employee-topbar-inner {
+
+        height: 100%;
+
+        width: 100%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 0 28px;
+
+        gap: 24px;
+
+    }
+
+
+    /* =========================================================
+       LEFT SIDE
+    ========================================================= */
+
+    .employee-topbar-left {
+
+        display: flex;
+
+        align-items: center;
+
+        min-width: 0;
+
+        gap: 20px;
+
+    }
+
+
+    /* =========================================================
+       MOBILE MENU
+    ========================================================= */
+
+    .employee-menu-toggle {
+
+        width: 42px;
+        height: 42px;
+
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid var(--employee-nav-border);
+
+        border-radius: 12px;
+
+        background: var(--employee-nav-primary-light);
+
+        color: var(--employee-nav-primary);
+
+        transition: all var(--employee-nav-transition);
+
+    }
+
+
+    .employee-menu-toggle:hover {
+
+        background: var(--employee-nav-primary);
+
+        color: #fff;
+
+        transform: translateY(-1px);
+
+    }
+
+
+    /* =========================================================
+       BRAND
+    ========================================================= */
+
+    .employee-brand {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .employee-brand-logo {
+
+        width: 40px;
+        height: 40px;
+
+        object-fit: contain;
+
+        border-radius: 10px;
+
+    }
+
+
+    .employee-brand-name {
+
+        color: var(--employee-nav-text);
+
+        font-size: 17px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.5px;
+
+        white-space: nowrap;
+
+    }
+
+
+    /* =========================================================
+       GREETING
+    ========================================================= */
+
+    .employee-header-greeting {
+
+        flex-direction: column;
+
+        justify-content: center;
+
+        border-left: 1px solid var(--employee-nav-border);
+
+        padding-left: 20px;
+
+        line-height: 1.2;
+
+    }
+
+
+    .employee-header-label {
+
+        color: var(--employee-nav-primary);
+
+        font-size: 10px;
+
+        font-weight: 800;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 4px;
+
+    }
+
+
+    .employee-header-title {
+
+        color: var(--employee-nav-text);
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+    }
+
+
+    .employee-wave {
+
+        margin-left: 2px;
+
+    }
+
+
+    /* =========================================================
+       ACTION AREA
+    ========================================================= */
+
+    .employee-topbar-actions {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: flex-end;
+
+        gap: 10px;
+
+        min-width: 0;
+
+    }
+
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    .employee-search-wrapper {
+
+        position: relative;
+
+        width: min(330px, 30vw);
+
+    }
+
+
+    .employee-search {
+
+        height: 42px;
+
+        width: 100%;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        padding: 0 12px;
+
+        background: rgba(248, 250, 252, 0.95);
+
+        border: 1px solid var(--employee-nav-border);
+
+        border-radius: 12px;
+
+        transition: all var(--employee-nav-transition);
+
+    }
+
+
+    .employee-search:focus-within {
+
+        background: var(--employee-nav-surface-solid);
+
+        border-color: rgba(108, 92, 231, 0.35);
+
+        box-shadow:
+            0 0 0 4px var(--employee-nav-primary-light);
+
+    }
+
+
+    .employee-search-icon {
+
+        color: var(--employee-nav-muted);
+
+        font-size: 13px;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .employee-search input {
+
+        width: 100%;
+
+        min-width: 0;
+
+        border: 0;
+
+        outline: 0;
+
+        background: transparent;
+
+        color: var(--employee-nav-text);
+
+        font-size: 13px;
+
+    }
+
+
+    .employee-search input::placeholder {
+
+        color: #94a3b8;
+
+    }
+
+
+    .employee-search kbd {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        min-width: 30px;
+
+        height: 22px;
+
+        padding: 0 6px;
+
+        border: 1px solid #e2e8f0;
+
+        border-bottom-width: 2px;
+
+        border-radius: 6px;
+
+        background: #fff;
+
+        color: #94a3b8;
+
+        font-size: 10px;
+
+        white-space: nowrap;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .employee-search-clear {
+
+        width: 26px;
+        height: 26px;
+
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border: 0;
+
+        border-radius: 8px;
+
+        background: transparent;
+
+        color: var(--employee-nav-muted);
+
+        flex-shrink: 0;
+
+    }
+
+
+    .employee-search-clear:hover {
+
+        background: var(--employee-nav-primary-light);
+
+        color: var(--employee-nav-primary);
+
+    }
+
+
+    /* =========================================================
+       SEARCH RESULTS
+    ========================================================= */
+
+    .employee-search-results {
+
+        position: absolute;
+
+        top: calc(100% + 10px);
+
+        left: 0;
+
+        right: 0;
+
+        max-height: 420px;
+
+        overflow-y: auto;
+
+        background: var(--employee-nav-surface-solid);
+
+        border: 1px solid var(--employee-nav-border);
+
+        border-radius: 14px;
+
+        box-shadow:
+            0 18px 45px rgba(15, 23, 42, 0.14);
+
+        z-index: 2100;
+
+    }
+
+
+    /* Preserve existing dashboard.js result classes */
+
+    .employee-search-results .search-result-section {
+
+        padding: 8px 0;
+
+    }
+
+
+    .employee-search-results .search-result-title {
+
+        padding: 8px 14px;
+
+        color: var(--employee-nav-muted);
+
+        font-size: 11px;
+
+        font-weight: 800;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.7px;
+
+    }
+
+
+    .employee-search-results .search-result-item {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        padding: 10px 14px;
+
+        color: var(--employee-nav-text);
+
+        text-decoration: none;
+
+        transition: background var(--employee-nav-transition);
+
+    }
+
+
+    .employee-search-results .search-result-item:hover {
+
+        background: var(--employee-nav-primary-light);
+
+    }
+
+
+    .employee-search-results .search-result-icon {
+
+        width: 32px;
+        height: 32px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+
+        background: var(--employee-nav-primary-light);
+
+        color: var(--employee-nav-primary);
+
+        flex-shrink: 0;
+
+    }
+
+
+    .employee-search-results .search-result-content {
+
+        min-width: 0;
+
+    }
+
+
+    .employee-search-results .search-result-name {
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+    }
+
+
+    .employee-search-results .search-result-meta {
+
+        color: var(--employee-nav-muted);
+
+        font-size: 11px;
+
+        margin-top: 2px;
+
+    }
+
+
+    .employee-search-results .search-no-results {
+
+        padding: 28px 15px;
+
+        text-align: center;
+
+        color: var(--employee-nav-muted);
+
+        font-size: 13px;
+
+    }
+
+
+    /* =========================================================
+       ICON BUTTONS
+    ========================================================= */
+
+    .employee-icon-button {
+
+        position: relative;
+
+        width: 42px;
+        height: 42px;
+
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid var(--employee-nav-border);
+
+        border-radius: 12px;
+
+        background: var(--employee-nav-surface-solid);
+
+        color: var(--employee-nav-muted);
+
+        cursor: pointer;
+
+        transition: all var(--employee-nav-transition);
+
+        flex-shrink: 0;
+
+    }
+
+
+    .employee-icon-button:hover {
+
+        color: var(--employee-nav-primary);
+
+        border-color: rgba(108, 92, 231, 0.2);
+
+        background: var(--employee-nav-primary-light);
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 5px 15px rgba(108, 92, 231, 0.10);
+
+    }
+
+
+    /* =========================================================
+       NOTIFICATION
+    ========================================================= */
+
+    .employee-notification-wrapper {
+
+        position: relative;
+
+    }
+
+
+    .employee-notification-badge {
+
+        position: absolute;
+
+        top: -4px;
+
+        right: -4px;
+
+        min-width: 18px;
+        height: 18px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 0 4px;
+
+        border: 2px solid var(--employee-nav-surface-solid);
+
+        border-radius: 999px;
+
+        background: var(--employee-nav-danger);
+
+        color: #fff;
+
+        font-size: 9px;
+
+        font-weight: 800;
+
+        line-height: 1;
+
+    }
+
+
+    .employee-notification-dropdown {
+
+        position: absolute;
+
+        top: calc(100% + 10px);
+
+        right: 0;
+
+        width: 380px;
+
+        max-width: calc(100vw - 30px);
+
+        overflow: hidden;
+
+        background: var(--employee-nav-surface-solid);
+
+        border: 1px solid var(--employee-nav-border);
+
+        border-radius: 16px;
+
+        box-shadow:
+            0 20px 50px rgba(15, 23, 42, 0.16);
+
+        z-index: 2000;
+
+    }
+
+
+    .employee-notification-header {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        padding: 16px;
+
+        border-bottom: 1px solid var(--employee-nav-border);
+
+    }
+
+
+    .employee-notification-title {
+
+        color: var(--employee-nav-text);
+
+        font-size: 14px;
+
+        font-weight: 800;
+
+    }
+
+
+    .employee-notification-subtitle {
+
+        margin-top: 3px;
+
+        color: var(--employee-nav-muted);
+
+        font-size: 11px;
+
+    }
+
+
+    .employee-mark-all {
+
+        border: 0;
+
+        background: transparent;
+
+        color: var(--employee-nav-primary);
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+        cursor: pointer;
+
+    }
+
+
+    .employee-mark-all:hover {
+
+        text-decoration: underline;
+
+    }
+
+
+    .employee-notification-list {
+
+        max-height: 420px;
+
+        overflow-y: auto;
+
+    }
+
+
+    /* Notification items generated by existing JS */
+
+    .employee-notification-list .notification-item {
+
+        cursor: pointer;
+
+        padding: 13px 16px !important;
+
+        border-bottom: 1px solid var(--employee-nav-border) !important;
+
+        background: transparent !important;
+
+        transition: background var(--employee-nav-transition);
+
+    }
+
+
+    .employee-notification-list .notification-item:hover {
+
+        background: var(--employee-nav-primary-light) !important;
+
+    }
+
+
+    .employee-notification-list .notification-item:last-child {
+
+        border-bottom: 0 !important;
+
+    }
+
+
+    .employee-notification-list .notification-item .bg-danger {
+
+        background: var(--employee-nav-primary) !important;
+
+    }
+
+
+    .employee-notification-list .notification-item .bg-light {
+
+        background: var(--employee-nav-primary-light) !important;
+
+        color: var(--employee-nav-primary) !important;
+
+    }
+
+
+    .employee-notification-list .notification-item .text-dark {
+
+        color: var(--employee-nav-text) !important;
+
+    }
+
+
+    .employee-notification-list .notification-item .text-muted {
+
+        color: var(--employee-nav-muted) !important;
+
+    }
+
+
+    .employee-notification-empty {
+
+        min-height: 150px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 8px;
+
+        padding: 30px;
+
+        color: var(--employee-nav-muted);
+
+        text-align: center;
+
+    }
+
+
+    /* =========================================================
+       PROFILE
+    ========================================================= */
+
+    .employee-profile-button {
+
+        min-height: 42px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        padding: 4px 10px 4px 5px;
+
+        border: 1px solid var(--employee-nav-border);
+
+        border-radius: 13px;
+
+        background: var(--employee-nav-surface-solid);
+
+        transition: all var(--employee-nav-transition);
+
+    }
+
+
+    .employee-profile-button:hover {
+
+        border-color: rgba(108, 92, 231, 0.2);
+
+        background: var(--employee-nav-primary-light);
+
+        box-shadow:
+            0 5px 15px rgba(108, 92, 231, 0.08);
+
+    }
+
+
+    .employee-profile-avatar {
+
+        width: 34px;
+        height: 34px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 10px;
+
+        background: linear-gradient(
+            135deg,
+            #6C5CE7,
+            #4F46E5
+        );
+
+        color: #fff;
+
+        font-size: 11px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.3px;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .employee-profile-info {
+
+        flex-direction: column;
+
+        justify-content: center;
+
+        min-width: 0;
+
+        line-height: 1.15;
+
+    }
+
+
+    .employee-profile-name {
+
+        max-width: 115px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+
+        color: var(--employee-nav-text);
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+    }
+
+
+    .employee-profile-role {
+
+        margin-top: 3px;
+
+        color: var(--employee-nav-muted);
+
+        font-size: 10px;
+
+    }
+
+
+    .employee-profile-chevron {
+
+        color: var(--employee-nav-muted);
+
+        font-size: 9px;
+
+        margin-left: 2px;
+
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    .employee-logout-button {
+
+        min-height: 42px;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 7px;
+
+        padding: 0 12px;
+
+        border: 1px solid rgba(239, 68, 68, 0.14);
+
+        border-radius: 12px;
+
+        background: rgba(239, 68, 68, 0.06);
+
+        color: var(--employee-nav-danger);
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        text-decoration: none;
+
+        transition: all var(--employee-nav-transition);
+
+    }
+
+
+    .employee-logout-button:hover {
+
+        background: var(--employee-nav-danger);
+
+        border-color: var(--employee-nav-danger);
+
+        color: #fff;
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 5px 15px rgba(239, 68, 68, 0.15);
+
+    }
+
+
+    /* =========================================================
+       DARK THEME
+       Uses the same data-theme mechanism already used by
+       the employee application.
+    ========================================================= */
+
+    [data-theme="dark"] {
+
+        --employee-nav-text: #f1f5f9;
+
+        --employee-nav-muted: #94a3b8;
+
+        --employee-nav-surface: rgba(15, 23, 42, 0.94);
+
+        --employee-nav-surface-solid: #111827;
+
+        --employee-nav-border: rgba(255, 255, 255, 0.08);
+
+        --employee-nav-primary-light: rgba(108, 92, 231, 0.16);
+
+        --employee-nav-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.25);
+
+    }
+
+
+    [data-theme="dark"] .employee-search {
+
+        background: rgba(30, 41, 59, 0.85);
+
+    }
+
+
+    [data-theme="dark"] .employee-search:focus-within {
+
+        background: #111827;
+
+    }
+
+
+    [data-theme="dark"] .employee-search input {
+
+        color: #f1f5f9;
+
+    }
+
+
+    [data-theme="dark"] .employee-search kbd {
+
+        background: #1e293b;
+
+        border-color: rgba(255,255,255,0.08);
+
+        color: #94a3b8;
+
+    }
+
+
+    [data-theme="dark"] .employee-search-results {
+
+        background: #111827;
+
+    }
+
+
+    [data-theme="dark"] .employee-search-results .search-result-name {
+
+        color: #f1f5f9;
+
+    }
+
+
+    [data-theme="dark"] .employee-notification-list .notification-item .text-dark {
+
+        color: #f1f5f9 !important;
+
+    }
+
+
+    [data-theme="dark"] .employee-notification-list .notification-item .bg-light {
+
+        background: rgba(108, 92, 231, 0.14) !important;
+
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1200px) {
+
+        .employee-header-greeting {
+
+            display: none !important;
+
+        }
+
+        .employee-search-wrapper {
+
+            width: min(300px, 32vw);
+
+        }
+
+    }
+
+
+    @media (max-width: 991px) {
+
+        .employee-topbar-inner {
+
+            padding: 0 18px;
+
+            gap: 12px;
+
+        }
+
+
+        .employee-topbar-left {
+
+            gap: 10px;
+
+        }
+
+
+        .employee-search-wrapper {
+
+            display: none;
+
+        }
+
+
+        .employee-profile-button {
+
+            padding-right: 7px;
+
+        }
+
+    }
+
+
+    @media (max-width: 700px) {
+
+        .employee-topbar-inner {
+
+            padding: 0 12px;
+
+        }
+
+
+        .employee-brand-name {
+
+            display: none;
+
+        }
+
+
+        .employee-topbar-actions {
+
+            gap: 7px;
+
+        }
+
+
+        .employee-notification-dropdown {
+
+            position: fixed;
+
+            top: 78px;
+
+            right: 12px;
+
+            left: 12px;
+
+            width: auto;
+
+            max-width: none;
+
+        }
+
+    }
+
+
+    @media (max-width: 480px) {
+
+        .employee-profile-button {
+
+            border: 0;
+
+            background: transparent;
+
+            padding: 0;
+
+        }
+
+
+        .employee-logout-button {
+
+            width: 42px;
+
+            padding: 0;
+
+        }
+
+
+        .employee-menu-toggle,
+        .employee-icon-button,
+        .employee-profile-button,
+        .employee-logout-button {
+
+            height: 40px;
+
+            min-height: 40px;
+
+        }
+
+
+        .employee-profile-avatar {
+
+            width: 32px;
+
+            height: 32px;
+
+        }
+
+    }
+
+</style>
+
+
+<!-- =========================================================
+     EXISTING EMPLOYEE NOTIFICATION FUNCTIONALITY
+     Preserved from the original navbar.
+========================================================= -->
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
+
 $(document).ready(function () {
 
     const currentUserId =
         "<%= locals.user ? user.user_id : '' %>";
+
 
     if (!currentUserId) {
         return;
     }
 
 
-    // =========================================================
-    // SYSTEM NOTIFICATION SOCKET
-    //
-    // IMPORTANT:
-    // This is NOT the global chat socket.
-    // =========================================================
+    /* =========================================================
+       SYSTEM NOTIFICATION SOCKET
+    ========================================================= */
 
     const notificationSocket =
         io("/notifications");
 
-
-    // =========================================================
-    // CONNECT
-    // =========================================================
 
     notificationSocket.on("connect", function () {
 
@@ -195,16 +1552,18 @@ $(document).ready(function () {
             notificationSocket.id
         );
 
+
         notificationSocket.emit(
             "joinNotificationRoom",
             currentUserId
         );
+
     });
 
 
-    // =========================================================
-    // NEW SYSTEM NOTIFICATION
-    // =========================================================
+    /* =========================================================
+       NEW NOTIFICATION
+    ========================================================= */
 
     notificationSocket.on(
         "newSystemNotification",
@@ -215,37 +1574,43 @@ $(document).ready(function () {
                 notification
             );
 
+
             loadSystemNotifications();
+
         }
     );
 
 
-    // =========================================================
-    // UNREAD COUNT
-    // =========================================================
+    /* =========================================================
+       NOTIFICATION COUNT
+    ========================================================= */
 
     notificationSocket.on(
         "notificationCountUpdated",
         function (count) {
 
             updateNotificationBadge(count);
+
         }
     );
 
 
-    // =========================================================
-    // BADGE
-    // =========================================================
+    /* =========================================================
+       UPDATE BADGE
+    ========================================================= */
 
     function updateNotificationBadge(count) {
 
         count = parseInt(count, 10) || 0;
 
+
         const $badge =
             $("#systemBellBadge");
 
+
         const $count =
             $("#systemBellCount");
+
 
         if (count > 0) {
 
@@ -253,10 +1618,9 @@ $(document).ready(function () {
 
             $badge.removeClass("d-none");
 
-            $("#notificationSubtitle")
-                .text(
-                    `${count} unread notification${count === 1 ? "" : "s"}`
-                );
+            $("#notificationSubtitle").text(
+                `${count} unread notification${count === 1 ? "" : "s"}`
+            );
 
         } else {
 
@@ -268,12 +1632,13 @@ $(document).ready(function () {
                 .text("You're all caught up");
 
         }
+
     }
 
 
-    // =========================================================
-    // LOAD NOTIFICATIONS
-    // =========================================================
+    /* =========================================================
+       LOAD NOTIFICATIONS
+    ========================================================= */
 
     function loadSystemNotifications() {
 
@@ -289,6 +1654,7 @@ $(document).ready(function () {
                     return;
                 }
 
+
                 renderSystemNotifications(
                     res.notifications
                 );
@@ -298,21 +1664,29 @@ $(document).ready(function () {
             error: function () {
 
                 $("#systemNotificationList").html(`
-                    <div class="text-center text-muted p-4">
-                        <i class="fas fa-exclamation-circle mb-2"></i>
-                        <div class="small">
+
+                    <div class="employee-notification-empty">
+
+                        <i class="fas fa-exclamation-circle"></i>
+
+                        <div>
                             Unable to load notifications.
                         </div>
+
                     </div>
+
                 `);
+
             }
+
         });
+
     }
 
 
-    // =========================================================
-    // RENDER NOTIFICATIONS
-    // =========================================================
+    /* =========================================================
+       RENDER NOTIFICATIONS
+    ========================================================= */
 
     function renderSystemNotifications(
         notifications
@@ -320,6 +1694,7 @@ $(document).ready(function () {
 
         const $list =
             $("#systemNotificationList");
+
 
         $list.empty();
 
@@ -330,11 +1705,10 @@ $(document).ready(function () {
         ) {
 
             $list.html(`
-                <div class="text-center text-muted p-5">
 
-                    <i
-                        class="fas fa-bell-slash fa-2x mb-3 opacity-50">
-                    </i>
+                <div class="employee-notification-empty">
+
+                    <i class="fas fa-bell-slash fa-2x opacity-50"></i>
 
                     <div class="fw-semibold">
                         You're all caught up!
@@ -345,10 +1719,13 @@ $(document).ready(function () {
                     </small>
 
                 </div>
+
             `);
+
 
             $("#markAllNotificationsRead")
                 .addClass("d-none");
+
 
             return;
         }
@@ -385,7 +1762,7 @@ $(document).ready(function () {
             $list.append(`
 
                 <div
-                    class="notification-item p-3 border-bottom cursor-pointer
+                    class="notification-item
                     ${isUnread ? "bg-light" : ""}"
                     data-id="${notification.notification_id}"
                     data-type="${notification.type}"
@@ -395,7 +1772,9 @@ $(document).ready(function () {
 
                         <div
                             class="flex-shrink-0 rounded-circle d-flex align-items-center justify-content-center
-                            ${isUnread ? "bg-danger text-white" : "bg-light text-muted"}"
+                            ${isUnread
+                                ? "bg-danger text-white"
+                                : "bg-light text-muted"}"
                             style="
                                 width: 38px;
                                 height: 38px;
@@ -408,11 +1787,14 @@ $(document).ready(function () {
 
                         <div class="flex-grow-1 min-w-0">
 
-                            <div class="d-flex justify-content-between gap-2">
+                            <div
+                                class="d-flex justify-content-between gap-2">
 
                                 <div
                                     class="small
-                                    ${isUnread ? "fw-bold text-dark" : "text-dark"}">
+                                    ${isUnread
+                                        ? "fw-bold text-dark"
+                                        : "text-dark"}">
 
                                     ${escapeHtml(
                                         notification.content
@@ -420,18 +1802,20 @@ $(document).ready(function () {
 
                                 </div>
 
-                                ${isUnread
-                                    ? `
-                                    <span
-                                        class="rounded-circle bg-danger flex-shrink-0"
-                                        style="
-                                            width: 7px;
-                                            height: 7px;
-                                            margin-top: 5px;
-                                        ">
-                                    </span>
-                                    `
-                                    : ""
+
+                                ${
+                                    isUnread
+                                        ? `
+                                            <span
+                                                class="rounded-circle bg-danger flex-shrink-0"
+                                                style="
+                                                    width: 7px;
+                                                    height: 7px;
+                                                    margin-top: 5px;
+                                                ">
+                                            </span>
+                                        `
+                                        : ""
                                 }
 
                             </div>
@@ -457,6 +1841,7 @@ $(document).ready(function () {
                 </div>
 
             `);
+
         });
 
 
@@ -469,18 +1854,20 @@ $(document).ready(function () {
 
             $("#markAllNotificationsRead")
                 .addClass("d-none");
+
         }
 
 
         updateNotificationBadge(
             unreadCount
         );
+
     }
 
 
-    // =========================================================
-    // NOTIFICATION ICON
-    // =========================================================
+    /* =========================================================
+       NOTIFICATION ICON
+    ========================================================= */
 
     function getNotificationIcon(type) {
 
@@ -506,13 +1893,15 @@ $(document).ready(function () {
 
             default:
                 return "fas fa-bell";
+
         }
+
     }
 
 
-    // =========================================================
-    // TIME
-    // =========================================================
+    /* =========================================================
+       NOTIFICATION TIME
+    ========================================================= */
 
     function formatNotificationTime(
         dateInput
@@ -522,8 +1911,10 @@ $(document).ready(function () {
             return "";
         }
 
+
         const date =
             new Date(dateInput);
+
 
         return date.toLocaleString(
             [],
@@ -534,12 +1925,13 @@ $(document).ready(function () {
                 minute: "2-digit"
             }
         );
+
     }
 
 
-    // =========================================================
-    // ESCAPE HTML
-    // =========================================================
+    /* =========================================================
+       ESCAPE HTML
+    ========================================================= */
 
     function escapeHtml(value) {
 
@@ -549,12 +1941,13 @@ $(document).ready(function () {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
+
     }
 
 
-    // =========================================================
-    // BELL CLICK
-    // =========================================================
+    /* =========================================================
+       BELL CLICK
+    ========================================================= */
 
     $("#systemBellIcon").on(
         "click",
@@ -562,22 +1955,27 @@ $(document).ready(function () {
 
             e.stopPropagation();
 
+
             const $dropdown =
                 $("#systemNotificationDropdown");
 
+
             $dropdown.toggleClass("d-none");
+
 
             if (!$dropdown.hasClass("d-none")) {
 
                 loadSystemNotifications();
+
             }
+
         }
     );
 
 
-    // =========================================================
-    // CLICK OUTSIDE
-    // =========================================================
+    /* =========================================================
+       CLICK OUTSIDE NOTIFICATION
+    ========================================================= */
 
     $(document).on(
         "click",
@@ -591,14 +1989,16 @@ $(document).ready(function () {
 
                 $("#systemNotificationDropdown")
                     .addClass("d-none");
+
             }
+
         }
     );
 
 
-    // =========================================================
-    // CLICK INDIVIDUAL NOTIFICATION
-    // =========================================================
+    /* =========================================================
+       INDIVIDUAL NOTIFICATION
+    ========================================================= */
 
     $(document).on(
         "click",
@@ -608,11 +2008,14 @@ $(document).ready(function () {
             const $item =
                 $(this);
 
+
             const notificationId =
                 $item.attr("data-id");
 
+
             const type =
                 $item.attr("data-type");
+
 
             const referenceId =
                 $item.attr("data-reference-id");
@@ -632,12 +2035,17 @@ $(document).ready(function () {
                     }
 
 
-                    // Remove unread styling.
                     $item.removeClass("bg-light");
 
 
-                    // Remove unread dot.
-                    $item.find(".bg-danger")
+                    /*
+                     * Remove only the unread indicator
+                     * instead of accidentally removing
+                     * the notification icon styling.
+                     */
+
+                    $item
+                        .find(".rounded-circle.bg-danger")
                         .last()
                         .remove();
 
@@ -647,31 +2055,29 @@ $(document).ready(function () {
                     );
 
 
-                    /*
-                     * Navigation can be added here once
-                     * each notification type has a defined
-                     * destination.
-                     */
-
                     navigateFromNotification(
                         type,
                         referenceId
                     );
+
                 }
+
             });
+
         }
     );
 
 
-    // =========================================================
-    // MARK ALL READ
-    // =========================================================
+    /* =========================================================
+       MARK ALL READ
+    ========================================================= */
 
     $("#markAllNotificationsRead").on(
         "click",
         function (e) {
 
             e.stopPropagation();
+
 
             $.ajax({
 
@@ -686,18 +2092,23 @@ $(document).ready(function () {
                         return;
                     }
 
+
                     updateNotificationBadge(0);
 
+
                     loadSystemNotifications();
+
                 }
+
             });
+
         }
     );
 
 
-    // =========================================================
-    // NAVIGATION
-    // =========================================================
+    /* =========================================================
+       NOTIFICATION NAVIGATION
+    ========================================================= */
 
     function navigateFromNotification(
         type,
@@ -712,7 +2123,9 @@ $(document).ready(function () {
         switch (type) {
 
             case "task_assigned":
+
             case "task_status":
+
             case "task_comment":
 
                 window.location.href =
@@ -723,15 +2136,19 @@ $(document).ready(function () {
 
             default:
                 break;
+
         }
+
     }
 
 
-    // =========================================================
-    // INITIAL LOAD
-    // =========================================================
+    /* =========================================================
+       INITIAL LOAD
+    ========================================================= */
 
     loadSystemNotifications();
 
 });
+
 </script>
+```
