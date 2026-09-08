@@ -1,3 +1,22 @@
+<style>
+    /* Keep the calendar card compact while allowing additional events to scroll. */
+    .calendar-card .calendar-events {
+        max-height: 320px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 8px;
+        scrollbar-width: thin;
+    }
+
+    .calendar-card .calendar-events::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .calendar-card .calendar-events::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+    }
+</style>
+
 <div class="col-xl-4">
                         <div class="dashboard-card calendar-card">
                             <div class="card-body p-4">
