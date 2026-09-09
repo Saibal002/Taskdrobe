@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const root = document.documentElement;
         
         // Check for saved theme preference (syncing local storage keys)
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('appTheme') || localStorage.getItem('theme') || 'light';
         if (savedTheme === 'dark') {
             body.classList.add('dark-theme');
             root.setAttribute('data-theme', 'dark');
@@ -89,8 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         themeToggleBtn.addEventListener('click', () => {
             const isDark = body.classList.toggle("dark-theme");
-            root.toggleAttribute("data-theme", isDark);
+            root.setAttribute("data-theme", isDark ? "dark" : "light");
             localStorage.setItem("theme", isDark ? "dark" : "light");
+            localStorage.setItem("appTheme", isDark ? "dark" : "light");
             themeToggleBtn.innerHTML = isDark
                 ? '<i class="fas fa-sun"></i>'
                 : '<i class="fas fa-moon"></i>';
@@ -246,7 +247,7 @@ function initGlobalSearch() {
     });
 
     document.addEventListener("click", (event) => {
-        const searchWrapper = searchInput.closest(".search-wrapper");
+        const searchWrapper = searchInput.closest(".search-wrapper, .employee-search-wrapper, .manager-search-wrapper");
         if (searchWrapper && !searchWrapper.contains(event.target)) {
             closeSearch();
         }

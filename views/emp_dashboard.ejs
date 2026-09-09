@@ -309,16 +309,6 @@
     //         });
     //     };
         document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll(".task-checkbox").forEach((checkbox) => {
-                checkbox.addEventListener("click", function () {
-                    const isChecked = this.classList.toggle("checked");
-                    this.setAttribute("aria-pressed", String(isChecked));
-                    this.innerHTML = isChecked
-                        ? '<i class="fas fa-check" aria-hidden="true"></i>'
-                        : "";
-                });
-            });
-
             const addTaskBtn = document.getElementById("addTaskBtn");
             const taskFields = document.getElementById("taskFields");
 
