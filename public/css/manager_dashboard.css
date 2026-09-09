@@ -124,7 +124,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 
 /* ---- UTILITY OVERRIDES ---- */
-.d-none { display: none !important; }
 .manager-project-link:focus-visible,
 .manager-nav-item:focus-visible,
 .manager-icon-button:focus-visible,
@@ -1681,10 +1680,7 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
    RESPONSIVE (Consolidated perfectly to remove redundancy)
 ===================================================== */
 @media (max-width: 1200px) {
-    .manager-topbar { padding: 0 20px; }
     .manager-container { padding-left: 20px; padding-right: 20px; }
-    .manager-search { width: 220px; }
-    .manager-profile-info, .manager-profile-button > i { display: none; }
     .manager-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -1696,8 +1692,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     .manager-sidebar { transform: translateX(-100%); box-shadow: 8px 0 40px rgba(0,0,0,0.25); }
     .manager-sidebar.is-open { transform: translateX(0); }
     .manager-sidebar-close { display: block; }
-    .manager-topbar { left: 0; }
-    .manager-menu-toggle { display: grid; }
     .manager-main { margin-left: 0; }
     .manager-main-grid, .manager-secondary-grid, .manager-bottom-grid { grid-template-columns: 1fr; }
     .manager-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1705,18 +1699,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 
 @media (max-width: 700px) {
-    .manager-topbar { height: auto; min-height: var(--md-header-height); padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
-    .manager-header-subtitle { display: none; }
-    .manager-header-title { font-size: 16px; }
-    .manager-header-label { font-size: 9px; }
-    .manager-topbar-actions { gap: 6px; margin-left: 4px; }
-    .manager-search { width: 40px; justify-content: center; padding: 0; border-radius: var(--md-radius-full); }
-    .manager-search input, .manager-search kbd { display: none; }
-    .manager-search i { font-size: 15px; }
-    .manager-search-results, .manager-notification-dropdown { position: fixed; top: 60px; left: 12px; right: 12px; width: auto; }
-    .manager-profile-button { padding-right: 4px; border: 0; background: transparent; }
-    .manager-profile-avatar { width: 34px; height: 34px; }
-    .manager-logout-button { display: none; }
     .manager-container { padding: 16px 12px 32px; }
     .manager-page-context { margin-bottom: 14px; }
     .manager-date-chip { display: none; }
@@ -1740,8 +1722,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
 }
 
 @media (max-width: 480px) {
-    .manager-header-label { display: none; }
-    .manager-header-title { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
     .manager-stats-grid { gap: 8px; }
     .manager-stat-card { flex-direction: column; align-items: flex-start; min-height: 110px; padding: 14px; }
     .manager-stat-icon { width: 36px; height: 36px; font-size: 15px; }
@@ -1757,15 +1737,6 @@ html:not([data-theme="dark"]) .manager-dashboard-page .manager-stat-card::after 
     .manager-deadline-priority { display: none; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .manager-dashboard-page *,
-    .manager-dashboard-page *::before,
-    .manager-dashboard-page *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-    }
-}
 /* =====================================================
    MOBILE FIX: TASK OVERVIEW DONUT CHART
 ===================================================== */

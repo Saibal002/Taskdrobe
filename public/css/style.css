@@ -546,6 +546,41 @@
 }
 
 /* =========================================================
+   GLOBAL ACCESSIBILITY + MOTION
+   Shared interaction rules belong in the global stylesheet.
+========================================================= */
+
+[hidden],
+.d-none {
+    display: none !important;
+}
+
+.employee-icon-button:focus-visible,
+.manager-icon-button:focus-visible,
+.employee-profile-button:focus-visible,
+.manager-profile-button:focus-visible,
+.employee-logout-button:focus-visible,
+.manager-logout-button:focus-visible,
+.employee-menu-toggle:focus-visible,
+.manager-menu-toggle:focus-visible,
+.employee-search input:focus-visible,
+.manager-search input:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* =========================================================
    GLOBAL NAVBAR SYSTEM
    Shared visual behavior lives here; role-specific markup and
    functionality remain isolated in their own navbar/JS files.
@@ -2214,3 +2249,38 @@ html[data-theme="dark"] body {
     background: rgba(255,107,107,0.10);
 }
 
+
+/* Manager navbar responsive behavior */
+@media (max-width: 1200px) {
+    .manager-topbar { padding: 0 20px; }
+    .manager-search { width: 220px; }
+    .manager-profile-info,
+    .manager-profile-button > i { display: none; }
+}
+
+@media (max-width: 991px) {
+    .manager-topbar { left: 0; }
+    .manager-menu-toggle { display: grid; }
+}
+
+@media (max-width: 700px) {
+    .manager-topbar { height: auto; min-height: var(--md-header-height); padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+    .manager-header-subtitle { display: none; }
+    .manager-header-title { font-size: 16px; }
+    .manager-header-label { font-size: 9px; }
+    .manager-topbar-actions { gap: 6px; margin-left: 4px; }
+    .manager-search { width: 40px; justify-content: center; padding: 0; border-radius: var(--md-radius-full); }
+    .manager-search input,
+    .manager-search kbd { display: none; }
+    .manager-search i { font-size: 15px; }
+    .manager-search-results,
+    .manager-notification-dropdown { position: fixed; top: 60px; left: 12px; right: 12px; width: auto; }
+    .manager-profile-button { padding-right: 4px; border: 0; background: transparent; }
+    .manager-profile-avatar { width: 34px; height: 34px; }
+    .manager-logout-button { display: none; }
+}
+
+@media (max-width: 480px) {
+    .manager-header-label { display: none; }
+    .manager-header-title { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+}
