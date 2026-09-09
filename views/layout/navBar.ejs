@@ -1,10 +1,165 @@
-
 <!-- =========================================================
-     EMPLOYEE TOP NAVBAR
-     Manager-inspired design with employee-specific functionality
+     TASKDROBE SHARED NAVBAR
+     One navbar partial. Content changes by user role.
 ========================================================= -->
 
-<nav class="employee-topbar fixed-top">
+<% if (user && user.role_name === "manager") { %>
+
+    <!-- MANAGER NAVBAR -->
+<header class="app-navbar manager-topbar" data-navbar-role="manager">
+
+    <div class="app-navbar-left manager-topbar-left">
+
+        <button type="button" class="manager-menu-toggle" id="managerSidebarToggle" aria-label="Open navigation"
+            aria-expanded="false">
+            <i class="bi bi-list"></i>
+        </button>
+
+
+        <div class="manager-header-greeting">
+
+            <span class="manager-header-label">
+                MANAGER OVERVIEW
+            </span>
+
+            <div class="manager-header-title">
+                Good morning, <%= user.full_name %>
+                    <span class="manager-wave">👋</span>
+            </div>
+
+            <div class="manager-header-subtitle">
+                Here's what's happening across your workspace today.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="app-navbar-actions manager-topbar-actions">
+
+        <!-- Global Search -->
+        <div class="app-navbar-search-wrapper manager-search-wrapper">
+
+            <div class="app-navbar-search manager-search">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text" id="globalSearch" placeholder="Search projects or tasks..." autocomplete="off"
+                    aria-label="Search">
+
+                <button type="button" id="clearSearch" class="manager-search-clear d-none" aria-label="Clear search">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+                <kbd>⌘ K</kbd>
+
+            </div>
+
+
+            <div id="searchResults" class="manager-search-results d-none">
+            </div>
+
+        </div>
+
+
+        <!-- Notifications -->
+        <div class="manager-notification-wrapper">
+
+            <button type="button" class="app-navbar-icon manager-icon-button" id="notificationButton" data-user-id="<%= user.user_id %>"
+                aria-label="Notifications" aria-expanded="false">
+
+                <i class="bi bi-bell"></i>
+
+                <span id="notificationBadge" class="manager-notification-badge d-none">
+                    0
+                </span>
+
+            </button>
+
+
+            <div id="notificationDropdown" class="manager-notification-dropdown d-none">
+
+                <div class="manager-notification-header">
+
+                    <div>
+                        <strong>Notifications</strong>
+
+                        <small id="notificationSubtitle" class="manager-notification-subtitle">
+                            You're all caught up
+                        </small>
+                    </div>
+
+                    <button type="button" id="markAllNotifications" class="manager-notification-mark d-none">
+                        Mark all read
+                    </button>
+
+                </div>
+
+
+                <div id="notificationList" class="manager-notification-list">
+
+                    <div class="manager-notification-empty">
+                        <i class="bi bi-bell-slash"></i>
+                        <span>No notifications</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Theme -->
+        <button type="button" class="app-navbar-icon manager-icon-button" id="themeToggle" aria-label="Toggle theme">
+
+            <i class="bi bi-moon"></i>
+
+        </button>
+
+
+        <!-- Profile -->
+        <a href="/manager/profile" class="app-navbar-profile manager-profile-button">
+
+            <span class="manager-profile-avatar">
+                <%= (user.full_name || "M" ).charAt(0).toUpperCase() %>
+            </span>
+
+            <span class="manager-profile-info">
+
+                <strong>
+                    <%= user.full_name %>
+                </strong>
+
+                <small>
+                    Manager
+                </small>
+
+            </span>
+
+            <i class="bi bi-chevron-down"></i>
+
+        </a>
+
+
+        <!-- Logout -->
+        <a href="/auth/logout" class="app-navbar-logout manager-logout-button" aria-label="Logout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</header>
+
+<% } else { %>
+
+    <!-- EMPLOYEE / NON-MANAGER NAVBAR -->
+    <nav class="app-navbar employee-topbar fixed-top" data-navbar-role="employee">
 
     <div class="employee-topbar-inner">
 
@@ -12,7 +167,7 @@
              LEFT: BRAND + MOBILE SIDEBAR TOGGLE
         ====================================================== -->
 
-        <div class="employee-topbar-left">
+        <div class="app-navbar-left employee-topbar-left">
 
             <!-- Mobile Sidebar Toggle -->
             <button
@@ -64,16 +219,16 @@
              RIGHT: SEARCH + NOTIFICATIONS + THEME + PROFILE + LOGOUT
         ====================================================== -->
 
-        <div class="employee-topbar-actions">
+        <div class="app-navbar-actions employee-topbar-actions">
 
 
             <!-- =================================================
                  GLOBAL SEARCH
             ================================================== -->
 
-            <div class="employee-search-wrapper">
+            <div class="app-navbar-search-wrapper employee-search-wrapper">
 
-                <div class="employee-search">
+                <div class="app-navbar-search employee-search">
 
                     <i class="fas fa-search employee-search-icon"></i>
 
@@ -121,7 +276,7 @@
                 <button
                     type="button"
                     id="systemBellIcon"
-                    class="employee-icon-button"
+                    class="app-navbar-icon employee-icon-button"
                     title="Notifications"
                     aria-label="Notifications">
 
@@ -206,7 +361,7 @@
             <button
                 type="button"
                 id="themeToggle"
-                class="employee-icon-button"
+                class="app-navbar-icon employee-icon-button"
                 title="Toggle Theme"
                 aria-label="Toggle Theme">
 
@@ -221,7 +376,7 @@
 
             <a
                 href="/<%= user.role_name %>/profile"
-                class="employee-profile-button text-decoration-none"
+                class="app-navbar-profile employee-profile-button text-decoration-none"
                 title="My Profile">
 
                 <span class="employee-profile-avatar">
@@ -263,7 +418,7 @@
 
             <a
                 href="/auth/logout"
-                class="employee-logout-button"
+                class="app-navbar-logout employee-logout-button"
                 title="Logout"
                 aria-label="Logout">
 
@@ -279,647 +434,7 @@
 
     </div>
 
-</nav>
 
+    </nav>
 
-<!-- =========================================================
-     EMPLOYEE NAVBAR STYLES
-     Scoped specifically to the employee navbar.
-========================================================= -->
-
-
-
-
-<!-- =========================================================
-     EXISTING EMPLOYEE NOTIFICATION FUNCTIONALITY
-     Preserved from the original navbar.
-========================================================= -->
-
-<script>
-
-$(document).ready(function () {
-
-    const currentUserId =
-        "<%= locals.user ? user.user_id : '' %>";
-
-
-    if (!currentUserId) {
-        return;
-    }
-
-
-    /* =========================================================
-       SYSTEM NOTIFICATION SOCKET
-    ========================================================= */
-
-    const notificationSocket =
-        io("/notifications");
-
-
-    notificationSocket.on("connect", function () {
-
-        console.log(
-            "🔔 System notification socket connected:",
-            notificationSocket.id
-        );
-
-
-        notificationSocket.emit(
-            "joinNotificationRoom",
-            currentUserId
-        );
-
-    });
-
-
-    /* =========================================================
-       NEW NOTIFICATION
-    ========================================================= */
-
-    notificationSocket.on(
-        "newSystemNotification",
-        function (notification) {
-
-            console.log(
-                "🔔 New system notification:",
-                notification
-            );
-
-
-            loadSystemNotifications();
-
-        }
-    );
-
-
-    /* =========================================================
-       NOTIFICATION COUNT
-    ========================================================= */
-
-    notificationSocket.on(
-        "notificationCountUpdated",
-        function (count) {
-
-            updateNotificationBadge(count);
-
-        }
-    );
-
-
-    /* =========================================================
-       UPDATE BADGE
-    ========================================================= */
-
-    function updateNotificationBadge(count) {
-
-        count = parseInt(count, 10) || 0;
-
-
-        const $badge =
-            $("#systemBellBadge");
-
-
-        const $count =
-            $("#systemBellCount");
-
-
-        if (count > 0) {
-
-            $count.text(count);
-
-            $badge.removeClass("d-none");
-
-            $("#notificationSubtitle").text(
-                `${count} unread notification${count === 1 ? "" : "s"}`
-            );
-
-        } else {
-
-            $count.text("0");
-
-            $badge.addClass("d-none");
-
-            $("#notificationSubtitle")
-                .text("You're all caught up");
-
-        }
-
-    }
-
-
-    /* =========================================================
-       LOAD NOTIFICATIONS
-    ========================================================= */
-
-    function loadSystemNotifications() {
-
-        $.ajax({
-
-            url: "/api/notifications",
-
-            type: "GET",
-
-            success: function (res) {
-
-                if (!res.success) {
-                    return;
-                }
-
-
-                renderSystemNotifications(
-                    res.notifications
-                );
-
-            },
-
-            error: function () {
-
-                $("#systemNotificationList").html(`
-
-                    <div class="employee-notification-empty">
-
-                        <i class="fas fa-exclamation-circle"></i>
-
-                        <div>
-                            Unable to load notifications.
-                        </div>
-
-                    </div>
-
-                `);
-
-            }
-
-        });
-
-    }
-
-
-    /* =========================================================
-       RENDER NOTIFICATIONS
-    ========================================================= */
-
-    function renderSystemNotifications(
-        notifications
-    ) {
-
-        const $list =
-            $("#systemNotificationList");
-
-
-        $list.empty();
-
-
-        if (
-            !notifications ||
-            notifications.length === 0
-        ) {
-
-            $list.html(`
-
-                <div class="employee-notification-empty">
-
-                    <i class="fas fa-bell-slash fa-2x opacity-50"></i>
-
-                    <div class="fw-semibold">
-                        You're all caught up!
-                    </div>
-
-                    <small>
-                        No system notifications.
-                    </small>
-
-                </div>
-
-            `);
-
-
-            $("#markAllNotificationsRead")
-                .addClass("d-none");
-
-
-            return;
-        }
-
-
-        let unreadCount = 0;
-
-
-        notifications.forEach(function (
-            notification
-        ) {
-
-            if (!notification.is_read) {
-                unreadCount++;
-            }
-
-
-            const isUnread =
-                !notification.is_read;
-
-
-            const icon =
-                getNotificationIcon(
-                    notification.type
-                );
-
-
-            const time =
-                formatNotificationTime(
-                    notification.created_at
-                );
-
-
-            $list.append(`
-
-                <div
-                    class="notification-item
-                    ${isUnread ? "bg-light" : ""}"
-                    data-id="${notification.notification_id}"
-                    data-type="${notification.type}"
-                    data-reference-id="${notification.reference_id || ""}">
-
-                    <div class="d-flex gap-3">
-
-                        <div
-                            class="flex-shrink-0 rounded-circle d-flex align-items-center justify-content-center
-                            ${isUnread
-                                ? "bg-danger text-white"
-                                : "bg-light text-muted"}"
-                            style="
-                                width: 38px;
-                                height: 38px;
-                            ">
-
-                            <i class="${icon}"></i>
-
-                        </div>
-
-
-                        <div class="flex-grow-1 min-w-0">
-
-                            <div
-                                class="d-flex justify-content-between gap-2">
-
-                                <div
-                                    class="small
-                                    ${isUnread
-                                        ? "fw-bold text-dark"
-                                        : "text-dark"}">
-
-                                    ${escapeHtml(
-                                        notification.content
-                                    )}
-
-                                </div>
-
-
-                                ${
-                                    isUnread
-                                        ? `
-                                            <span
-                                                class="rounded-circle bg-danger flex-shrink-0"
-                                                style="
-                                                    width: 7px;
-                                                    height: 7px;
-                                                    margin-top: 5px;
-                                                ">
-                                            </span>
-                                        `
-                                        : ""
-                                }
-
-                            </div>
-
-
-                            <div
-                                class="small text-muted mt-1">
-
-                                ${escapeHtml(
-                                    notification.sender_name || "System"
-                                )}
-
-                                ·
-
-                                ${time}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `);
-
-        });
-
-
-        if (unreadCount > 0) {
-
-            $("#markAllNotificationsRead")
-                .removeClass("d-none");
-
-        } else {
-
-            $("#markAllNotificationsRead")
-                .addClass("d-none");
-
-        }
-
-
-        updateNotificationBadge(
-            unreadCount
-        );
-
-    }
-
-
-    /* =========================================================
-       NOTIFICATION ICON
-    ========================================================= */
-
-    function getNotificationIcon(type) {
-
-        switch (type) {
-
-            case "task_assigned":
-                return "fas fa-tasks";
-
-            case "task_status":
-                return "fas fa-flag";
-
-            case "task_comment":
-                return "fas fa-comments";
-
-            case "project_created":
-                return "fas fa-folder-plus";
-
-            case "project_updated":
-                return "fas fa-folder";
-
-            case "project_member":
-                return "fas fa-user-plus";
-
-            default:
-                return "fas fa-bell";
-
-        }
-
-    }
-
-
-    /* =========================================================
-       NOTIFICATION TIME
-    ========================================================= */
-
-    function formatNotificationTime(
-        dateInput
-    ) {
-
-        if (!dateInput) {
-            return "";
-        }
-
-
-        const date =
-            new Date(dateInput);
-
-
-        return date.toLocaleString(
-            [],
-            {
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "2-digit"
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       ESCAPE HTML
-    ========================================================= */
-
-    // function escapeHtml(value) {
-
-    //     return String(value ?? "")
-    //         .replace(/&/g, "&amp;")
-    //         .replace(/</g, "&lt;")
-    //         .replace(/>/g, "&gt;")
-    //         .replace(/"/g, "&quot;")
-    //         .replace(/'/g, "&#039;");
-
-    // }
-
-
-    /* =========================================================
-       BELL CLICK
-    ========================================================= */
-
-    $("#systemBellIcon").on(
-        "click",
-        function (e) {
-
-            e.stopPropagation();
-
-
-            const $dropdown =
-                $("#systemNotificationDropdown");
-
-
-            $dropdown.toggleClass("d-none");
-
-
-            if (!$dropdown.hasClass("d-none")) {
-
-                loadSystemNotifications();
-
-            }
-
-        }
-    );
-
-
-    /* =========================================================
-       CLICK OUTSIDE NOTIFICATION
-    ========================================================= */
-
-    $(document).on(
-        "click",
-        function (e) {
-
-            if (
-                !$(e.target).closest(
-                    "#systemBellIcon, #systemNotificationDropdown"
-                ).length
-            ) {
-
-                $("#systemNotificationDropdown")
-                    .addClass("d-none");
-
-            }
-
-        }
-    );
-
-
-    /* =========================================================
-       INDIVIDUAL NOTIFICATION
-    ========================================================= */
-
-    $(document).on(
-        "click",
-        ".notification-item",
-        function () {
-
-            const $item =
-                $(this);
-
-
-            const notificationId =
-                $item.attr("data-id");
-
-
-            const type =
-                $item.attr("data-type");
-
-
-            const referenceId =
-                $item.attr("data-reference-id");
-
-
-            $.ajax({
-
-                url:
-                    `/api/notifications/${notificationId}/read`,
-
-                type: "PATCH",
-
-                success: function (res) {
-
-                    if (!res.success) {
-                        return;
-                    }
-
-
-                    $item.removeClass("bg-light");
-
-
-                    /*
-                     * Remove only the unread indicator
-                     * instead of accidentally removing
-                     * the notification icon styling.
-                     */
-
-                    $item
-                        .find(".rounded-circle.bg-danger")
-                        .last()
-                        .remove();
-
-
-                    updateNotificationBadge(
-                        res.unreadCount
-                    );
-
-
-                    navigateFromNotification(
-                        type,
-                        referenceId
-                    );
-
-                }
-
-            });
-
-        }
-    );
-
-
-    /* =========================================================
-       MARK ALL READ
-    ========================================================= */
-
-    $("#markAllNotificationsRead").on(
-        "click",
-        function (e) {
-
-            e.stopPropagation();
-
-
-            $.ajax({
-
-                url:
-                    "/api/notifications/read-all",
-
-                type: "PATCH",
-
-                success: function (res) {
-
-                    if (!res.success) {
-                        return;
-                    }
-
-
-                    updateNotificationBadge(0);
-
-
-                    loadSystemNotifications();
-
-                }
-
-            });
-
-        }
-    );
-
-
-    /* =========================================================
-       NOTIFICATION NAVIGATION
-    ========================================================= */
-
-    function navigateFromNotification(
-        type,
-        referenceId
-    ) {
-
-        if (!referenceId) {
-            return;
-        }
-
-
-        switch (type) {
-
-            case "task_assigned":
-
-            case "task_status":
-
-            case "task_comment":
-
-                window.location.href =
-                    `/tasks/${referenceId}/insight`;
-
-                break;
-
-
-            default:
-                break;
-
-        }
-
-    }
-
-
-    /* =========================================================
-       INITIAL LOAD
-    ========================================================= */
-
-    loadSystemNotifications();
-
-});
-
-</script>
-
+<% } %>
