@@ -18,10 +18,11 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <!-- ONE role-aware authenticated navbar. -->
-<%- include("layout/navBar", { user: user }) %>
+<%- include("layout/navBar", { user: user, page: "project" }) %>
 <script src="/js/navbar.js"></script>
 
-<div class="container mt-5 pt-4 fade-in">
+<main class="app-page-main project-page-main">
+    <div class="container-fluid pt-4 fade-in">
         <div class="project-page-shell">
 
             <!-- =====================================================
@@ -212,8 +213,7 @@
                         <%- include("layout/addTaskModal") %>
                             <%- include("layout/editTaskModal") %>
                                 <%- include("layout/assignTaskModal") %>
-        </div>
-    </div>
+        <!-- Project shell intentionally stays open through files and discussion so all project sections share the same content width. -->
 
     <!-- =====================================================
              PROJECT FILES
@@ -268,6 +268,10 @@
     createUrl: `/projects/${project.project_id}/comments`,
     deleteUrl: `/projects/comments/:commentId`
 }) %>
+
+        </div>
+    </div>
+</main>
 
     <!-- =========================================================
      PROJECT MEMBERS AJAX

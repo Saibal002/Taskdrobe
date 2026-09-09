@@ -57,8 +57,8 @@
     --md-radius-full: 9999px;
 
     --md-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    --md-sidebar-width: 260px;
-    --md-header-height: 72px;
+    --md-sidebar-width: var(--app-sidebar-width, 260px);
+    --md-header-height: var(--app-navbar-height, 64px);
 
     background: var(--md-bg);
     color: var(--md-text);

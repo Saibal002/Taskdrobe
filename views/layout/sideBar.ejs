@@ -1,130 +1,73 @@
-<% if (user && user.role_name === "manager") { %>
+<% const currentPage = typeof page !== "undefined" ? page : ""; %>
 
-<aside class="manager-sidebar" id="managerSidebar">
+<!-- =========================================================
+     TASKDROBE SHARED AUTHENTICATED SIDEBAR
+     One sidebar. Content changes by user role.
+========================================================= -->
+<aside
+    id="appSidebar"
+    class="app-sidebar"
+    data-sidebar-role="<%= user && user.role_name === 'manager' ? 'manager' : 'employee' %>">
 
-    <div class="manager-sidebar-brand">
-        <a href="/manager/dashboard" class="manager-brand">
-            <span class="manager-brand-icon">
-                <i class="bi bi-grid-1x2-fill"></i>
-            </span>
-
-            <span class="manager-brand-text">
-                Task<span>Drobe</span>
-            </span>
+    <div class="app-sidebar-brand">
+        <a href="/" class="app-sidebar-brand-link">
+            <img src="/images/logo.png" alt="TaskDrobe Logo" class="app-sidebar-brand-logo">
+            <span class="app-sidebar-brand-name">TaskDrobe</span>
         </a>
-
-        <button
-            type="button"
-            class="manager-sidebar-close"
-            id="managerSidebarClose"
-            aria-label="Close navigation">
+        <button type="button" id="appSidebarClose" class="app-sidebar-close" aria-label="Close navigation">
             <i class="bi bi-x-lg"></i>
         </button>
     </div>
 
-    <div class="manager-sidebar-content">
+    <div class="app-sidebar-content">
+        <div class="app-sidebar-group">
+            <div class="app-sidebar-label">Workspace</div>
 
-        <div class="manager-nav-group">
-
-            <div class="manager-nav-label">
-                Workspace
-            </div>
-
-            <a href="/manager/dashboard"
-               class="manager-nav-item active">
-                <span class="manager-nav-icon">
-                    <i class="bi bi-grid-1x2"></i>
-                </span>
+            <a href="<%= user && user.role_name === 'manager' ? '/manager/dashboard' : '/dashboard' %>"
+               class="app-sidebar-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
+                <i class="bi bi-grid-1x2 app-sidebar-icon"></i>
                 <span>Dashboard</span>
             </a>
 
-            <a href="/projects"
-               class="manager-nav-item">
-                <span class="manager-nav-icon">
-                    <i class="bi bi-kanban"></i>
-                </span>
+            <a href="/projects" class="app-sidebar-item <%= currentPage === 'projects' || currentPage === 'project' ? 'active' : '' %>">
+                <i class="bi bi-folder2-open app-sidebar-icon"></i>
                 <span>Projects</span>
             </a>
 
-            <a href="/tasks"
-               class="manager-nav-item">
-                <span class="manager-nav-icon">
-                    <i class="bi bi-check2-square"></i>
-                </span>
+            <a href="/tasks" class="app-sidebar-item <%= currentPage === 'tasks' ? 'active' : '' %>">
+                <i class="bi bi-check2-square app-sidebar-icon"></i>
                 <span>Tasks</span>
             </a>
-
         </div>
 
+        <% if (user && user.role_name === 'manager') { %>
+            <div class="app-sidebar-group">
+                <div class="app-sidebar-label">Management</div>
 
-        <div class="manager-nav-group">
-
-            <div class="manager-nav-label">
-                Management
-            </div>
-
-            <button
-                type="button"
-                class="manager-nav-item manager-nav-disabled"
-                disabled>
-                <span class="manager-nav-icon">
-                    <i class="bi bi-people"></i>
-                </span>
-
-                <a href="/manager/teams" class="nav-link">
+                <a href="/teams" class="app-sidebar-item <%= currentPage === 'teams' ? 'active' : '' %>">
+                    <i class="bi bi-people app-sidebar-icon"></i>
                     <span>Teams</span>
                 </a>
 
-            </button>
-
-            <button
-                type="button"
-                class="manager-nav-item manager-nav-disabled"
-                disabled>
-                <span class="manager-nav-icon">
-                    <i class="bi bi-bar-chart"></i>
-                </span>
-
-                <span>Reports</span>
-
-                <span class="manager-coming-soon">
-                    Soon
-                </span>
-            </button>
-
-        </div>
-
+                <a href="#" class="app-sidebar-item app-sidebar-disabled" aria-disabled="true" tabindex="-1">
+                    <i class="bi bi-bar-chart app-sidebar-icon"></i>
+                    <span>Reports</span>
+                    <span class="app-sidebar-coming-soon">Soon</span>
+                </a>
+            </div>
+        <% } %>
     </div>
 
-
-    <div class="manager-sidebar-bottom">
-
-        <a href="/manager/profile"
-           class="manager-nav-item">
-            <span class="manager-nav-icon">
-                <i class="bi bi-person-circle"></i>
-            </span>
-
+    <div class="app-sidebar-bottom">
+        <a href="/<%= user.role_name %>/profile" class="app-sidebar-item <%= currentPage === 'profile' ? 'active' : '' %>">
+            <i class="bi bi-person-circle app-sidebar-icon"></i>
             <span>Profile</span>
         </a>
-
-        <a href="/auth/logout"
-           class="manager-nav-item manager-logout">
-            <span class="manager-nav-icon">
-                <i class="bi bi-box-arrow-right"></i>
-            </span>
-
+        <a href="/auth/logout" class="app-sidebar-item app-sidebar-logout">
+            <i class="bi bi-box-arrow-right app-sidebar-icon"></i>
             <span>Logout</span>
         </a>
-
     </div>
 
+    <div id="appSidebarBackdrop" class="app-sidebar-backdrop" aria-hidden="true"></div>
 </aside>
-
-
-<div
-    class="manager-sidebar-backdrop"
-    id="managerSidebarBackdrop">
-</div>
-
-<% } %>

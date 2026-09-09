@@ -186,15 +186,12 @@
 </head>
 
 
-<body class="manager-dashboard-page">
+<body class="manager-dashboard-page app-sidebar-layout">
 
 
-    <!-- Manager Sidebar -->
-    <%- include("../layout/sideBar") %>
-
-
-    <!-- Manager Navbar -->
-    <%- include("../layout/navBar.ejs") %>
+    <!-- Shared authenticated navigation: navbar + sidebar -->
+    <%- include("../layout/navBar", { user: user, page: "dashboard" }) %>
+    <script src="/js/navbar.js"></script>
 
 
     <!-- Main Dashboard -->

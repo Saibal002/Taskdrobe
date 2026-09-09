@@ -1,440 +1,158 @@
+<% const role = (user && user.role_name) || "employee"; %>
+<% const isManager = role === "manager"; %>
+
 <!-- =========================================================
-     TASKDROBE SHARED NAVBAR
-     One navbar partial. Content changes by user role.
+     TASKDROBE — SINGLE AUTHENTICATED NAVBAR
+     One partial for every authenticated page.
+     Role changes CONTENT only; the shell/markup/CSS stay shared.
 ========================================================= -->
 
-<% if (user && user.role_name === "manager") { %>
+<%- include("sideBar", { user: user, page: page || "" }) %>
 
-    <!-- MANAGER NAVBAR -->
-<header class="app-navbar manager-topbar" data-navbar-role="manager">
+<header
+    class="app-navbar"
+    data-navbar-role="<%= role %>"
+    data-navbar-page="<%= page || '' %>">
 
-    <div class="app-navbar-left manager-topbar-left">
+    <div class="app-navbar-inner">
 
-        <button type="button" class="manager-menu-toggle" id="managerSidebarToggle" aria-label="Open navigation"
-            aria-expanded="false">
-            <i class="bi bi-list"></i>
-        </button>
+        <!-- LEFT -->
+        <div class="app-navbar-left">
 
-
-        <div class="manager-header-greeting">
-
-            <span class="manager-header-label">
-                MANAGER OVERVIEW
-            </span>
-
-            <div class="manager-header-title">
-                Good morning, <%= user.full_name %>
-                    <span class="manager-wave">👋</span>
-            </div>
-
-            <div class="manager-header-subtitle">
-                Here's what's happening across your workspace today.
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="app-navbar-actions manager-topbar-actions">
-
-        <!-- Global Search -->
-        <div class="app-navbar-search-wrapper manager-search-wrapper">
-
-            <div class="app-navbar-search manager-search">
-
-                <i class="bi bi-search"></i>
-
-                <input type="text" id="globalSearch" placeholder="Search projects or tasks..." autocomplete="off"
-                    aria-label="Search">
-
-                <button type="button" id="clearSearch" class="manager-search-clear d-none" aria-label="Clear search">
-
-                    <i class="bi bi-x-lg"></i>
-
-                </button>
-
-                <kbd>⌘ K</kbd>
-
-            </div>
-
-
-            <div id="searchResults" class="manager-search-results d-none">
-            </div>
-
-        </div>
-
-
-        <!-- Notifications -->
-        <div class="manager-notification-wrapper">
-
-            <button type="button" class="app-navbar-icon manager-icon-button" id="notificationButton" data-user-id="<%= user.user_id %>"
-                aria-label="Notifications" aria-expanded="false">
-
-                <i class="bi bi-bell"></i>
-
-                <span id="notificationBadge" class="manager-notification-badge d-none">
-                    0
-                </span>
-
-            </button>
-
-
-            <div id="notificationDropdown" class="manager-notification-dropdown d-none">
-
-                <div class="manager-notification-header">
-
-                    <div>
-                        <strong>Notifications</strong>
-
-                        <small id="notificationSubtitle" class="manager-notification-subtitle">
-                            You're all caught up
-                        </small>
-                    </div>
-
-                    <button type="button" id="markAllNotifications" class="manager-notification-mark d-none">
-                        Mark all read
-                    </button>
-
-                </div>
-
-
-                <div id="notificationList" class="manager-notification-list">
-
-                    <div class="manager-notification-empty">
-                        <i class="bi bi-bell-slash"></i>
-                        <span>No notifications</span>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- Theme -->
-        <button type="button" class="app-navbar-icon manager-icon-button" id="themeToggle" aria-label="Toggle theme">
-
-            <i class="bi bi-moon"></i>
-
-        </button>
-
-
-        <!-- Profile -->
-        <a href="/manager/profile" class="app-navbar-profile manager-profile-button">
-
-            <span class="manager-profile-avatar">
-                <%= (user.full_name || "M" ).charAt(0).toUpperCase() %>
-            </span>
-
-            <span class="manager-profile-info">
-
-                <strong>
-                    <%= user.full_name %>
-                </strong>
-
-                <small>
-                    Manager
-                </small>
-
-            </span>
-
-            <i class="bi bi-chevron-down"></i>
-
-        </a>
-
-
-        <!-- Logout -->
-        <a href="/auth/logout" class="app-navbar-logout manager-logout-button" aria-label="Logout">
-
-            <i class="bi bi-box-arrow-right"></i>
-
-        </a>
-
-    </div>
-
-</header>
-
-<% } else { %>
-
-    <!-- EMPLOYEE / NON-MANAGER NAVBAR -->
-    <nav class="app-navbar employee-topbar fixed-top" data-navbar-role="employee">
-
-    <div class="employee-topbar-inner">
-
-        <!-- =====================================================
-             LEFT: BRAND + MOBILE SIDEBAR TOGGLE
-        ====================================================== -->
-
-        <div class="app-navbar-left employee-topbar-left">
-
-            <!-- Mobile Sidebar Toggle -->
             <button
                 type="button"
-                class="employee-menu-toggle d-lg-none"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebarCollapse"
-                aria-label="Toggle sidebar"
-                title="Menu">
-
-                <i class="fas fa-bars"></i>
-
+                id="appSidebarToggle"
+                class="app-navbar-menu"
+                aria-label="Toggle navigation"
+                aria-expanded="false">
+                <i class="bi bi-list"></i>
             </button>
 
-
-            <!-- Brand -->
-            <a href="/" class="employee-brand text-decoration-none">
-
+            <a href="/" class="app-navbar-brand text-decoration-none">
                 <img
                     src="/images/logo.png"
                     alt="TaskDrobe Logo"
-                    class="employee-brand-logo">
-
-                <div class="employee-brand-text">
-                    <span class="employee-brand-name">TASKDROBE</span>
-                </div>
-
+                    class="app-navbar-logo">
+                <span class="app-navbar-brand-name">TASKDROBE</span>
             </a>
 
-
-            <!-- Desktop Greeting -->
-            <div class="employee-header-greeting d-none d-xl-flex">
-
-                <div class="employee-header-label">
-                    EMPLOYEE WORKSPACE
-                </div>
-
-                <div class="employee-header-title">
-                    Welcome back, <%= user.full_name %>
-                    <span class="employee-wave">👋</span>
-                </div>
-
+            <div class="app-navbar-greeting d-none d-xl-flex">
+                <span class="app-navbar-label">
+                    <%= isManager ? "MANAGER OVERVIEW" : "EMPLOYEE WORKSPACE" %>
+                </span>
+                <strong class="app-navbar-title">
+                    <%= isManager ? "Good morning" : "Welcome back" %>,
+                    <%= user.full_name %>
+                    <span>👋</span>
+                </strong>
+                <span class="app-navbar-subtitle">
+                    <%= isManager
+                        ? "Here's what's happening across your workspace today."
+                        : "Here's what's happening across your workspace today." %>
+                </span>
             </div>
 
         </div>
 
+        <!-- RIGHT -->
+        <div class="app-navbar-actions">
 
-        <!-- =====================================================
-             RIGHT: SEARCH + NOTIFICATIONS + THEME + PROFILE + LOGOUT
-        ====================================================== -->
-
-        <div class="app-navbar-actions employee-topbar-actions">
-
-
-            <!-- =================================================
-                 GLOBAL SEARCH
-            ================================================== -->
-
-            <div class="app-navbar-search-wrapper employee-search-wrapper">
-
-                <div class="app-navbar-search employee-search">
-
-                    <i class="fas fa-search employee-search-icon"></i>
-
+            <!-- Search: same IDs on every authenticated page -->
+            <div class="app-navbar-search-wrapper">
+                <div class="app-navbar-search">
+                    <i class="bi bi-search"></i>
                     <input
                         type="text"
                         id="globalSearch"
                         placeholder="Search projects or tasks..."
                         autocomplete="off"
                         aria-label="Search projects or tasks">
-
-                    <kbd>⌘ K</kbd>
-
                     <button
                         type="button"
                         id="clearSearch"
-                        class="employee-search-clear d-none"
-                        aria-label="Clear search"
-                        title="Clear search">
-
-                        <i class="fas fa-times"></i>
-
+                        class="app-navbar-search-clear d-none"
+                        aria-label="Clear search">
+                        <i class="bi bi-x-lg"></i>
                     </button>
-
+                    <kbd>⌘ K</kbd>
                 </div>
-
-
-                <!-- Search Results -->
-                <div
-                    id="searchResults"
-                    class="employee-search-results d-none">
-
-                    <!-- Results inserted by dashboard.js -->
-
-                </div>
-
+                <div id="searchResults" class="app-navbar-search-results d-none"></div>
             </div>
 
-
-            <!-- =================================================
-                 NOTIFICATIONS
-            ================================================== -->
-
-            <div class="employee-notification-wrapper">
-
+            <!-- Notifications: same IDs on every authenticated page -->
+            <div class="app-navbar-notification-wrapper">
                 <button
                     type="button"
-                    id="systemBellIcon"
-                    class="app-navbar-icon employee-icon-button"
-                    title="Notifications"
-                    aria-label="Notifications">
-
-                    <i class="fas fa-bell"></i>
-
-                    <span
-                        id="systemBellBadge"
-                        class="employee-notification-badge d-none">
-
-                        <span id="systemBellCount">0</span>
-
-                        <span class="visually-hidden">
-                            unread notifications
-                        </span>
-
-                    </span>
-
+                    id="notificationButton"
+                    class="app-navbar-icon"
+                    data-user-id="<%= user.user_id %>"
+                    aria-label="Notifications"
+                    aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span id="notificationBadge" class="app-navbar-badge d-none">0</span>
                 </button>
 
-
-                <!-- Notification Dropdown -->
-                <div
-                    id="systemNotificationDropdown"
-                    class="employee-notification-dropdown d-none">
-
-                    <!-- Header -->
-                    <div class="employee-notification-header">
-
+                <div id="notificationDropdown" class="app-navbar-dropdown d-none">
+                    <div class="app-navbar-dropdown-header">
                         <div>
-
-                            <div class="employee-notification-title">
-                                Notifications
-                            </div>
-
-                            <div
-                                id="notificationSubtitle"
-                                class="employee-notification-subtitle">
-
-                                You're all caught up
-
-                            </div>
-
+                            <strong>Notifications</strong>
+                            <small id="notificationSubtitle">You're all caught up</small>
                         </div>
-
-
                         <button
                             type="button"
-                            id="markAllNotificationsRead"
-                            class="employee-mark-all d-none">
-
+                            id="markAllNotifications"
+                            class="app-navbar-mark-all d-none">
                             Mark all read
-
                         </button>
-
                     </div>
-
-
-                    <!-- Notification List -->
-                    <div
-                        id="systemNotificationList"
-                        class="employee-notification-list">
-
-                        <div
-                            id="notificationLoading"
-                            class="employee-notification-empty">
-
-                            <i class="fas fa-spinner fa-spin"></i>
-
+                    <div id="notificationList" class="app-navbar-notification-list">
+                        <div class="app-navbar-empty">
+                            <i class="bi bi-bell-slash"></i>
+                            <span>No notifications</span>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
-
-            <!-- =================================================
-                 THEME TOGGLE
-            ================================================== -->
-
+            <!-- Theme -->
             <button
                 type="button"
                 id="themeToggle"
-                class="app-navbar-icon employee-icon-button"
-                title="Toggle Theme"
-                aria-label="Toggle Theme">
-
-                <i class="fas fa-moon"></i>
-
+                class="app-navbar-icon"
+                aria-label="Toggle theme">
+                <i class="bi bi-moon"></i>
             </button>
 
-
-            <!-- =================================================
-                 PROFILE
-            ================================================== -->
-
+            <!-- Profile -->
             <a
-                href="/<%= user.role_name %>/profile"
-                class="app-navbar-profile employee-profile-button text-decoration-none"
+                href="/<%= role %>/profile"
+                class="app-navbar-profile text-decoration-none"
                 title="My Profile">
-
-                <span class="employee-profile-avatar">
-
-                    <%= user.full_name
-                        ? user.full_name
-                            .split(" ")
-                            .map(name => name.charAt(0))
-                            .join("")
-                            .substring(0, 2)
-                            .toUpperCase()
-                        : "U"
-                    %>
-
+                <span class="app-navbar-avatar">
+                    <%= (user.full_name || "U")
+                        .split(/\s+/)
+                        .map(name => name.charAt(0))
+                        .join("")
+                        .substring(0, 2)
+                        .toUpperCase() %>
                 </span>
-
-
-                <span class="employee-profile-info d-none d-lg-flex">
-
-                    <span class="employee-profile-name">
-                        <%= user.full_name %>
-                    </span>
-
-                    <span class="employee-profile-role">
-                        Employee
-                    </span>
-
+                <span class="app-navbar-profile-info d-none d-lg-flex">
+                    <strong><%= user.full_name %></strong>
+                    <small><%= isManager ? "Manager" : "Employee" %></small>
                 </span>
-
-
-                <i class="fas fa-chevron-down employee-profile-chevron d-none d-lg-block"></i>
-
+                <i class="bi bi-chevron-down d-none d-lg-block"></i>
             </a>
 
-
-            <!-- =================================================
-                 LOGOUT
-            ================================================== -->
-
+            <!-- Logout -->
             <a
                 href="/auth/logout"
-                class="app-navbar-logout employee-logout-button"
-                title="Logout"
-                aria-label="Logout">
-
-                <i class="fas fa-sign-out-alt"></i>
-
-                <span class="d-none d-xl-inline">
-                    Logout
-                </span>
-
+                class="app-navbar-logout"
+                aria-label="Logout"
+                title="Logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="d-none d-xl-inline">Logout</span>
             </a>
 
         </div>
-
     </div>
-
-
-    </nav>
-
-<% } %>
+</header>

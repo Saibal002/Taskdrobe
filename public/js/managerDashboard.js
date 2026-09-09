@@ -426,7 +426,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.addEventListener("click", function (event) {
-    if (!event.target.closest(".manager-search-wrapper")) {
+    if (!event.target.closest(".app-navbar-search-wrapper, .manager-search-wrapper")) {
       closeSearch();
     }
   });
