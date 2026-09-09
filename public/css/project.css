@@ -1,17 +1,47 @@
 /* =========================================================
-   TASKDROBE PROJECT PAGE STYLES
-   ========================================================= */
+   TASKDROBE PROJECT PAGE (Layout Fix & Typography Sync)
+========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* 1. Sidebar Overlap Fix & Font Sync */
+.project-page-main {
+    margin-left: var(--app-sidebar-width, 260px);
+    padding-top: calc(var(--app-navbar-height, 64px) + 1.5rem);
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1a1a2e; /* Syncs with --md-text from manager_dashboard */
+    transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+@media (max-width: 991px) {
+    .project-page-main {
+        margin-left: 0;
+        padding-top: calc(var(--app-navbar-height, 60px) + 1rem);
+    }
+}
 
-.project-page-shell {
-    max-width: 1180px;
-    margin: 2rem auto 4rem;
+/* 2. Premium Heading Styles (Matches Manager Dashboard) */
+.project-page-main h1, 
+.project-page-main h2, 
+.project-page-main h3 {
+    letter-spacing: -0.3px;
+    color: #1a1a2e;
+}
+
+.project-section-eyebrow,
+.project-status-label,
+.project-kpi-label {
+    letter-spacing: 0.12em; /* Crisp, spaced-out subheaders */
 }
 
 /* =========================================================
    PROJECT OVERVIEW / HERO
    ========================================================= */
+.project-page-shell {
+    max-width: 1180px;
+    margin: 2rem auto 4rem;
+}
+
 .project-overview-card {
     position: relative;
     overflow: hidden;
@@ -87,7 +117,6 @@
     color: #e0e7ff;
     font-size: 0.75rem;
     font-weight: 800;
-    letter-spacing: 0.15em;
     text-transform: uppercase;
     margin-bottom: 0.3rem;
 }
@@ -114,7 +143,7 @@
 .project-status-label {
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.75rem; font-weight: 800;
-    letter-spacing: 0.1em; text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 .project-status-badge {
@@ -129,7 +158,6 @@
 .project-status-completed { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
 .project-status-progress { color: #3730a3; background: #e0e7ff; border-color: #c7d2fe; }
 .project-status-cancelled { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
-
 .project-status-dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
 
 .project-kpi-grid {
@@ -138,20 +166,24 @@
     gap: 1.25rem; margin-top: 3rem;
 }
 
+/* Glassmorphism Upgrades for KPI Cards */
 .project-kpi-card {
     display: flex; align-items: center; gap: 1rem;
     padding: 1.25rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(15px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .project-kpi-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transform: translateY(-5px) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
 }
 
 .project-kpi-icon {
@@ -164,13 +196,14 @@
 
 .project-kpi-label {
     display: block; margin-bottom: 0.2rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.8) !important;
     font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
 }
 
 .project-kpi-value {
-    display: block; color: #fff;
+    display: block; color: #fff !important;
     font-size: 1.5rem; font-weight: 800; line-height: 1.1;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* =========================================================
@@ -204,6 +237,13 @@
     box-shadow: 0 10px 40px rgba(15, 23, 42, 0.05);
 }
 
+.project-add-member-panel {
+    background: rgba(248, 250, 252, 0.8);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
 .project-section-icon {
     width: 52px; height: 52px; border-radius: 16px;
     background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff;
@@ -214,38 +254,6 @@
     padding: 0.6rem 1.2rem; border-radius: 999px; color: #4338ca;
     background: #eef2ff; font-size: 0.85rem; font-weight: 700;
 }
-
-.project-member-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem; margin-bottom: 0.5rem;
-    border-radius: 16px; transition: background 0.2s;
-}
-
-.project-member-row:hover { background: #f8fafc; }
-
-.project-member-identity { display: flex; gap: 1rem; align-items: center; }
-
-.project-member-avatar {
-    width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
-}
-
-.project-member-avatar-placeholder {
-    background: #eef2ff; color: #4f46e5; font-weight: 800;
-    display: flex; align-items: center; justify-content: center;
-}
-
-.hover-lift { transition: transform 0.2s, box-shadow 0.2s; }
-.hover-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3) !important; }
-
-@media (max-width: 768px) {
-    .project-overview-top { flex-direction: column; align-items: flex-start; }
-    .project-status-panel { align-items: flex-start; margin-top: 1rem; }
-    .project-members-header { flex-direction: column; align-items: flex-start; gap: 1rem;}
-}
-
-/* =========================================================
-   MEMBER LIST ALIGNMENT & STYLING
-   ========================================================= */
 
 .project-members-header {
     display: flex;
@@ -270,6 +278,7 @@
 .project-member-row:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     border-color: #cbd5e1;
+    background: #f8fafc;
 }
 
 .project-member-identity {
@@ -278,7 +287,10 @@
     gap: 1rem;
 }
 
-/* Force the placeholder to be a perfect circle */
+.project-member-avatar {
+    width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+}
+
 .project-member-avatar-placeholder {
     width: 42px;
     height: 42px;
@@ -294,7 +306,6 @@
     letter-spacing: 1px;
 }
 
-/* Stack the name and email vertically */
 .project-member-details {
     display: flex;
     flex-direction: column;
@@ -325,7 +336,6 @@
     text-transform: capitalize;
 }
 
-/* Softer remove button */
 .project-remove-member-btn {
     background: #fee2e2;
     color: #b91c1c;
@@ -340,6 +350,9 @@
     background: #fecaca;
     color: #991b1b;
 }
+
+.hover-lift { transition: transform 0.2s, box-shadow 0.2s; }
+.hover-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3) !important; }
 
 /* =========================================================
    THEME BUTTON (Replaces standard primary blue)
@@ -357,6 +370,7 @@
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
     transform: translateY(-1px);
 }
+
 /* =========================================================
    TASK SECTION CONTAINER
    ========================================================= */
@@ -367,17 +381,17 @@
     border: 1px solid #e2e8f0;
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.02);
 }
+
 /* =========================================================
    PREMIUM SAAS TASK CARDS
    ========================================================= */
-
 .task-card {
     position: relative;
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
-    background: #ffffff;
-    border: 1px solid rgba(99, 102, 241, 0.12);
+    background: linear-gradient(145deg, #ffffff 0%, #f8faff 100%);
+    border: 1px solid rgba(99, 102, 241, 0.15);
     border-radius: 24px;
     box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
     overflow: hidden;
@@ -386,7 +400,6 @@
     z-index: 1;
 }
 
-/* Ambient corner glow */
 .task-card::before {
     content: "";
     position: absolute;
@@ -412,7 +425,6 @@
     background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(255,255,255,0) 70%);
 }
 
-/* Header & Typography */
 .task-header-row {
     display: flex;
     justify-content: space-between;
@@ -426,7 +438,6 @@
     font-weight: 800;
     margin-bottom: 0.3rem;
     line-height: 1.3;
-    letter-spacing: -0.01em;
 }
 
 .task-desc {
@@ -440,7 +451,6 @@
     overflow: hidden;
 }
 
-/* Check Button */
 .task-toggle-btn {
     width: 36px;
     height: 36px;
@@ -470,7 +480,6 @@
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
-/* Badges */
 .task-badges {
     display: flex;
     flex-wrap: wrap;
@@ -492,7 +501,6 @@
 .priority-default { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
 .status-badge { background: #0f172a; color: #ffffff; }
 
-/* Metadata Chips (Replaces plain text) */
 .task-meta-row {
     display: flex;
     flex-wrap: wrap;
@@ -518,7 +526,6 @@
     font-size: 0.85rem;
 }
 
-/* Integrated Action Dock */
 .task-action-dock {
     display: flex;
     justify-content: flex-end;
@@ -551,7 +558,6 @@
 /* =========================================================
    SLICK TABLE STYLES & TOOLBAR
    ========================================================= */
-
 .task-toolbar {
     background: linear-gradient(145deg, #ffffff 0%, #f5f3ff 100%);
     border: 1px solid rgba(124, 58, 237, 0.15);
@@ -609,7 +615,6 @@
     border-bottom: none;
 }
 
-/* Compact versions of existing classes for table rows */
 .table-task-title {
     color: #0f172a;
     font-size: 1rem;
@@ -649,3 +654,362 @@
     background: transparent;
     box-shadow: none;
 }
+
+/* =========================================================
+   RESPONSIVE PROJECT LAYOUT
+========================================================= */
+.project-page-main,
+.project-page-main > .container-fluid,
+.project-page-main .project-page-shell,
+.project-page-main .project-page-shell > * {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.project-page-main .project-page-shell {
+    width: min(100%, 1180px);
+}
+
+.project-overview-card,
+.project-progress-section,
+.project-members-section,
+.project-members-card,
+#projectTasksSection,
+.project-files-section,
+#projectCommentsSection {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.project-kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.task-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.custom-slick-table {
+    width: 100%;
+    min-width: 760px;
+}
+
+@media (max-width: 1199px) {
+    .project-overview-card {
+        padding: 2.25rem;
+    }
+
+    .project-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .project-page-title {
+        font-size: clamp(1.9rem, 4vw, 2.7rem);
+    }
+}
+
+@media (max-width: 991px) {
+    .project-page-main .project-page-shell {
+        width: calc(100% - 24px);
+        max-width: none;
+        margin: 1rem auto 3rem;
+    }
+
+    .project-overview-top {
+        gap: 1.25rem;
+    }
+
+    .project-title-row {
+        min-width: 0;
+    }
+
+    .project-page-title {
+        overflow-wrap: anywhere;
+    }
+
+    .project-page-description {
+        max-width: 100%;
+    }
+
+    #projectTasksSection {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .project-page-main .project-page-shell {
+        width: calc(100% - 16px);
+        margin-top: 0.75rem;
+        margin-bottom: 2rem;
+    }
+
+    .project-overview-top { flex-direction: column; align-items: flex-start; }
+    .project-status-panel { align-items: flex-start; margin-top: 1rem; }
+    .project-members-header { flex-direction: column; align-items: flex-start; gap: 1rem;}
+    
+    .project-overview-card {
+        padding: 1.5rem;
+        border-radius: 20px;
+    }
+
+    .project-title-row {
+        align-items: flex-start;
+        gap: 0.85rem;
+    }
+
+    .project-title-icon {
+        width: 52px;
+        height: 52px;
+        flex: 0 0 52px;
+        border-radius: 16px;
+    }
+
+    .project-page-title {
+        font-size: clamp(1.55rem, 7vw, 2.15rem);
+        line-height: 1.12;
+    }
+
+    .project-page-description {
+        margin-top: 1rem;
+        font-size: 0.92rem;
+    }
+
+    .project-back-link {
+        margin-bottom: 1.25rem;
+        font-size: 0.8rem;
+    }
+
+    .project-kpi-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .project-kpi-card {
+        padding: 1rem;
+    }
+
+    .project-kpi-value {
+        font-size: 1.2rem;
+    }
+
+    .project-progress-section {
+        margin-top: -1rem;
+        padding: 1.25rem;
+        border-radius: 18px;
+    }
+
+    .project-progress-header {
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .project-progress-title,
+    .project-progress-value {
+        font-size: 0.95rem;
+    }
+
+    .project-members-card {
+        padding: 1.25rem;
+        border-radius: 20px;
+    }
+
+    .project-member-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .project-member-identity {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .project-member-details {
+        min-width: 0;
+    }
+
+    .project-member-details strong,
+    .project-member-details span {
+        overflow-wrap: anywhere;
+    }
+
+    .project-member-actions {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    #projectTasksSection {
+        padding: 1.25rem;
+        border-radius: 20px;
+    }
+
+    .task-toolbar {
+        align-items: stretch !important;
+    }
+
+    .task-toolbar .input-group {
+        min-width: 0 !important;
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    .task-toolbar select,
+    .task-toolbar a,
+    .task-toolbar button {
+        max-width: 100%;
+    }
+
+    .task-table-wrapper {
+        border-radius: 14px;
+    }
+
+    .custom-slick-table th,
+    .custom-slick-table td {
+        padding: 0.8rem 0.7rem;
+    }
+
+    .table-task-desc {
+        max-width: 220px;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-overview-card {
+        padding: 1.15rem;
+        border-radius: 16px;
+    }
+
+    .project-title-row {
+        gap: 0.65rem;
+    }
+
+    .project-title-icon {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+        border-radius: 13px;
+        font-size: 1rem;
+    }
+
+    .project-eyebrow {
+        font-size: 0.62rem;
+    }
+
+    .project-page-title {
+        font-size: 1.45rem;
+    }
+
+    .project-status-badge {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.75rem;
+    }
+
+    .project-kpi-card {
+        gap: 0.75rem;
+        padding: 0.85rem;
+    }
+
+    .project-kpi-icon {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        border-radius: 11px;
+        font-size: 1rem;
+    }
+
+    .project-progress-section,
+    .project-members-card,
+    #projectTasksSection {
+        padding: 1rem;
+    }
+
+    .project-member-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .project-member-role,
+    .project-remove-member-btn {
+        width: auto;
+    }
+}
+
+/* =========================================================
+   PROJECT PAGE DARK THEME OVERRIDES
+========================================================= */
+html[data-theme="dark"] .project-progress-section,
+html[data-theme="dark"] .project-members-card,
+html[data-theme="dark"] .task-card,
+html[data-theme="dark"] .task-table-wrapper,
+html[data-theme="dark"] .custom-slick-table td {
+    background: #111827;
+}
+
+html[data-theme="dark"] .project-progress-title,
+html[data-theme="dark"] .project-member-details strong,
+html[data-theme="dark"] .task-title,
+html[data-theme="dark"] .table-task-title,
+html[data-theme="dark"] .custom-slick-table td,
+html[data-theme="dark"] .meta-chip,
+html[data-theme="dark"] .task-toggle-btn {
+    color: #f1f5f9;
+}
+
+html[data-theme="dark"] .project-progress-bar,
+html[data-theme="dark"] .task-toggle-btn,
+html[data-theme="dark"] .meta-chip,
+html[data-theme="dark"] .task-btn-assign,
+html[data-theme="dark"] .task-btn-edit,
+html[data-theme="dark"] .task-btn-delete,
+html[data-theme="dark"] .task-toolbar,
+html[data-theme="dark"] .task-table-wrapper,
+html[data-theme="dark"] .project-member-row,
+html[data-theme="dark"] .project-add-member-panel {
+    background: #1e293b;
+    border-color: rgba(255,255,255,0.08);
+}
+
+html[data-theme="dark"] .project-member-row:hover,
+html[data-theme="dark"] .custom-slick-table tbody tr:hover td {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] #projectTasksSection {
+    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+    border-color: rgba(255,255,255,0.08);
+}
+
+html[data-theme="dark"] .project-members-permission-badge,
+html[data-theme="dark"] .project-member-avatar-placeholder,
+html[data-theme="dark"] .priority-medium {
+    background: rgba(99,102,241,0.18);
+    color: #c7d2fe;
+}
+
+html[data-theme="dark"] .project-member-details span,
+html[data-theme="dark"] .project-member-role,
+html[data-theme="dark"] .table-task-desc,
+html[data-theme="dark"] .meta-chip,
+html[data-theme="dark"] .custom-slick-table td,
+html[data-theme="dark"] .project-page-main h1, 
+html[data-theme="dark"] .project-page-main h2, 
+html[data-theme="dark"] .project-page-main h3 {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .custom-slick-table td { border-bottom-color: rgba(255,255,255,0.08); }
+html[data-theme="dark"] .task-card { border-color: rgba(129,140,248,0.18); }
+html[data-theme="dark"] .task-toolbar { background: linear-gradient(145deg, #111827 0%, #1e1b4b 100%); }
+html[data-theme="dark"] .task-table-wrapper { background: #111827; }
+html[data-theme="dark"] .pagination .page-link { background: #1e293b; color: #c7d2fe; }
+html[data-theme="dark"] .task-btn-assign:hover { background: rgba(99,102,241,0.18); color: #c7d2fe; }
+html[data-theme="dark"] .task-btn-edit:hover { background: rgba(245,158,11,0.14); color: #fbbf24; }
+html[data-theme="dark"] .task-btn-delete:hover { background: rgba(239,68,68,0.14); color: #fca5a5; }
+
+
