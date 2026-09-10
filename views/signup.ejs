@@ -1,102 +1,46 @@
-<%- include('layout/header', { title: 'Signup' }) %>
+<%- include('layout/header', { title: 'Sign Up' }) %>
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
+<div class="auth-layout">
+    <div class="auth-card" style="flex-direction: row-reverse;">
+        
+        <!-- Right Side: Form (Flipped for variety) -->
+        <div class="auth-left">
+            <h2>Create Account</h2>
+            <p>Join TaskDrobe and start managing projects efficiently.</p>
 
-        <h2 class="mb-4">Signup</h2>
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div style="color: #ff00ff; margin-bottom: 1rem;"><%= error %></div>
+            <% } %>
 
-        <% if (error) { %>
-            <div class="alert alert-danger">
-                <%= error %>
+            <form method="POST" action="/auth/signup">
+                <div class="auth-form-group">
+                    <label for="fullName" class="auth-label">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" class="auth-input" placeholder="Enter your full name" required value="<%= typeof formData !== 'undefined' ? formData.fullName : '' %>">
+                </div>
+
+                <div class="auth-form-group">
+                    <label for="email" class="auth-label">Email</label>
+                    <input type="email" id="email" name="email" class="auth-input" placeholder="Enter your email" required value="<%= typeof formData !== 'undefined' ? formData.email : '' %>">
+                </div>
+
+                <div class="auth-form-group">
+                    <label for="password" class="auth-label">Password</label>
+                    <input type="password" id="password" name="password" class="auth-input" placeholder="Create a password" required>
+                </div>
+
+                <button type="submit" class="btn-glow" style="margin-top: 1rem;">Sign Up</button>
+
+                <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    Already have an account? <a href="/login" style="font-weight: 700;">Login</a>
+                </p>
+            </form>
+        </div>
+
+        <!-- Left Side: Visual -->
+        <div class="auth-right">
+            <div class="glass-panel" style="padding: 3rem; text-align: center; max-width: 300px; border: none; background: rgba(255,255,255,0.15);">
+                <h3 style="color: #fff; font-size: 2rem; line-height: 1.2;">Organize.<br>Track.<br>Assign.</h3>
             </div>
-        <% } %>
-
-        <% if (success) { %>
-            <div class="alert alert-success">
-                <%= success %>
-            </div>
-        <% } %>
-
-        <form method="POST" action="/auth/signup">
-
-            <div class="mb-3">
-                <label for="fullName" class="form-label">
-                    Full Name
-                </label>
-
-                <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    class="form-control"
-                    placeholder="Enter your full name"
-                    autocomplete="name"
-                    value="<%= typeof formData !== 'undefined' ? formData.fullName : '' %>"
-                    required
-                >
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label">
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="form-control"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                    value="<%= typeof formData !== 'undefined' ? formData.email : '' %>"
-                    required
-                >
-            </div>
-
-            <div class="mb-3">
-                <label for="phone" class="form-label">
-                    Phone
-                </label>
-
-                <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    class="form-control"
-                    placeholder="Enter your phone number"
-                    autocomplete="tel"
-                    value="<%= typeof formData !== 'undefined' ? formData.phone : '' %>"
-                >
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    placeholder="Create a password"
-                    autocomplete="new-password"
-                    required
-                >
-            </div>
-
-            <button
-                type="submit"
-                class="btn btn-success w-100"
-            >
-                Sign Up
-            </button>
-
-        </form>
-
-        <div class="text-center mt-3">
-            Already have an account?
-            <a href="/login">Login</a>
         </div>
 
     </div>

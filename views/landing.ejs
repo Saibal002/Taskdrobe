@@ -1,10 +1,20 @@
-<%- include('layout/header', { title: 'Welcome' }) %>
+<%- include('layout/header', { title: 'Welcome to TaskDrobe' }) %>
 
-<div class="text-center py-5">
-  <h1>Welcome to MyApp</h1>
-  <p class="lead">Your one-stop solution for managing everything efficiently.</p>
-  <a href="/login" class="btn btn-primary btn-lg">Login</a>
-  <a href="/signup" class="btn btn-primary btn-lg">Sign Up</a>
+<div class="auth-layout">
+    <div class="landing-content glass-panel">
+        <h1>TaskDrobe</h1>
+        <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 3rem;">
+            Your one-stop solution for managing projects, tracking time, and assigning tasks in a beautiful, distraction-free environment.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="/login" class="btn-glow" style="max-width: 200px; background: transparent; border: 2px solid var(--accent-primary); color: var(--text-primary); box-shadow: none;">
+                Login
+            </a>
+            <a href="/signup" class="btn-glow" style="max-width: 200px;">
+                Get Started
+            </a>
+        </div>
+    </div>
 </div>
 
 <%- include('layout/footer') %>

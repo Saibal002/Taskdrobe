@@ -1,75 +1,41 @@
 /* =========================================================
-   TASKDROBE PROJECT PAGE (Layout Fix & Typography Sync)
+   PROJECT PAGE - V2 DESIGN SYSTEM
 ========================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* 1. Sidebar Overlap Fix & Font Sync */
-.project-page-main {
-    margin-left: var(--app-sidebar-width, 260px);
-    padding-top: calc(var(--app-navbar-height, 64px) + 1.5rem);
-    min-height: 100vh;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #1a1a2e; /* Syncs with --md-text from manager_dashboard */
-    transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (max-width: 991px) {
-    .project-page-main {
-        margin-left: 0;
-        padding-top: calc(var(--app-navbar-height, 60px) + 1rem);
-    }
-}
-
-/* 2. Premium Heading Styles (Matches Manager Dashboard) */
-.project-page-main h1, 
-.project-page-main h2, 
-.project-page-main h3 {
-    letter-spacing: -0.3px;
-    color: #1a1a2e;
-}
-
-.project-section-eyebrow,
-.project-status-label,
-.project-kpi-label {
-    letter-spacing: 0.12em; /* Crisp, spaced-out subheaders */
-}
-
-/* =========================================================
-   PROJECT OVERVIEW / HERO
-   ========================================================= */
 .project-page-shell {
-    max-width: 1180px;
-    margin: 2rem auto 4rem;
+    max-width: 1400px;
+    margin: 0 auto 4rem;
 }
 
+/* --- Project Hero (The Wide Pill) --- */
 .project-overview-card {
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #4F46E5 100%);
+    border-radius: 100px; /* Extreme pill shape from the dark mode screenshot */
+    padding: 3rem 5rem;
+    color: #ffffff;
+    box-shadow: var(--shadow-soft);
     position: relative;
     overflow: hidden;
-    padding: 3rem;
-    border: 0;
-    border-radius: 28px;
-    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-    color: #fff;
-    box-shadow: 0 20px 50px rgba(99, 102, 241, 0.2);
+    border: none;
+    margin-bottom: 2rem;
 }
 
-.project-overview-card::before, .project-overview-card::after {
+/* Abstract glass circles inside the hero */
+.project-overview-card::before, 
+.project-overview-card::after {
     content: "";
     position: absolute;
     border-radius: 50%;
-    pointer-events: none;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
+    pointer-events: none;
 }
 
-.project-overview-card::before {
-    width: 400px; height: 400px;
-    right: -100px; top: -150px;
+.project-overview-card::before { 
+    width: 400px; height: 400px; right: -100px; top: -150px; 
 }
-
-.project-overview-card::after {
-    width: 200px; height: 200px;
-    left: -80px; bottom: -80px;
+.project-overview-card::after { 
+    width: 200px; height: 200px; left: -80px; bottom: -80px; 
 }
 
 .project-overview-top {
@@ -81,935 +47,190 @@
     gap: 2rem;
 }
 
-.project-back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    background: rgba(255,255,255,0.1);
-    padding: 0.5rem 1rem;
-    border-radius: 99px;
-}
-
-.project-back-link:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.2);
-    transform: translateX(-5px);
-}
-
-.project-title-row { display: flex; align-items: center; gap: 1.25rem; }
-
-.project-title-icon {
-    width: 64px; height: 64px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 20px;
-    color: #6366f1;
-    background: #ffffff;
-    font-size: 1.5rem;
-}
-
-.project-eyebrow {
-    color: #e0e7ff;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 0.3rem;
-}
-
 .project-page-title {
-    margin: 0; color: #fff;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800; line-height: 1.1;
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 800;
+    margin: 0;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
 }
 
 .project-page-description {
-    max-width: 600px; margin: 1.5rem 0 0;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1.05rem; line-height: 1.6;
+    max-width: 600px;
+    margin: 1rem 0 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
 }
 
-/* =========================================================
-   STATUS & KPIS
-   ========================================================= */
-.project-status-panel {
-    display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem;
-}
-
-.project-status-label {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.75rem; font-weight: 800;
-    text-transform: uppercase;
-}
-
-.project-status-badge {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 999px;
-    font-size: 0.85rem; font-weight: 700;
-    backdrop-filter: blur(10px);
-}
-
-.project-status-completed { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
-.project-status-progress { color: #3730a3; background: #e0e7ff; border-color: #c7d2fe; }
-.project-status-cancelled { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
-.project-status-dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
-
+/* --- KPI Grid --- */
 .project-kpi-grid {
-    position: relative; z-index: 2;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.25rem; margin-top: 3rem;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
 }
 
-/* Glassmorphism Upgrades for KPI Cards */
 .project-kpi-card {
-    display: flex; align-items: center; gap: 1rem;
-    padding: 1.25rem;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(15px) saturate(120%) !important;
-    -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.project-kpi-card:hover {
-    transform: translateY(-5px) !important;
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
-    background: rgba(255, 255, 255, 0.2) !important;
-}
-
-.project-kpi-icon {
-    width: 48px; height: 48px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 14px;
-    color: #fff; background: rgba(255, 255, 255, 0.2);
-    font-size: 1.2rem;
-}
-
-.project-kpi-label {
-    display: block; margin-bottom: 0.2rem;
-    color: rgba(255, 255, 255, 0.8) !important;
-    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-}
-
-.project-kpi-value {
-    display: block; color: #fff !important;
-    font-size: 1.5rem; font-weight: 800; line-height: 1.1;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* =========================================================
-   PROGRESS BAR & MEMBERS SECTION
-   ========================================================= */
-.project-progress-section {
-    margin-top: -2rem; position: relative; z-index: 3;
-    padding: 2rem; border-radius: 24px;
-    background: #fff; box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
-}
-
-.project-progress-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
-}
-
-.project-progress-title { color: #0f172a; font-size: 1.1rem; font-weight: 800; }
-.project-progress-value { color: #6366f1; font-size: 1.1rem; font-weight: 800; }
-
-.project-progress-bar {
-    height: 14px; border-radius: 999px; background: #f1f5f9; overflow: hidden;
-}
-
-.project-progress-bar > div {
-    height: 100%; border-radius: inherit;
-    background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.project-members-card {
-    padding: 2rem; border-radius: 24px; background: #fff;
-    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.05);
-}
-
-.project-add-member-panel {
-    background: rgba(248, 250, 252, 0.8);
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
+    background: var(--surface-base);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
-}
-
-.project-section-icon {
-    width: 52px; height: 52px; border-radius: 16px;
-    background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff;
-    display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
-}
-
-.project-members-permission-badge {
-    padding: 0.6rem 1.2rem; border-radius: 999px; color: #4338ca;
-    background: #eef2ff; font-size: 0.85rem; font-weight: 700;
-}
-
-.project-members-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.project-member-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.75rem;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    transition: all 0.2s ease;
-}
-
-.project-member-row:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-    border-color: #cbd5e1;
-    background: #f8fafc;
-}
-
-.project-member-identity {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.project-member-avatar {
-    width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
-}
-
-.project-member-avatar-placeholder {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-    border-radius: 50%;
-    background: #e0e7ff;
-    color: #4338ca;
-    font-size: 0.9rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 1px;
-}
-
-.project-member-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.project-member-details strong {
-    color: #0f172a;
-    font-size: 0.95rem;
-    line-height: 1.2;
-}
-
-.project-member-details span {
-    color: #64748b;
-    font-size: 0.8rem;
-    margin-top: 0.15rem;
-}
-
-.project-member-actions {
     display: flex;
     align-items: center;
     gap: 1.25rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.project-member-role {
-    color: #64748b;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: capitalize;
+.project-kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(90, 75, 209, 0.12);
 }
 
-.project-remove-member-btn {
-    background: #fee2e2;
-    color: #b91c1c;
-    border: none;
-    font-weight: 600;
-    padding: 0.4rem 0.85rem;
-    border-radius: 8px;
-    transition: background 0.2s;
+.project-kpi-icon {
+    width: 50px; height: 50px;
+    display: grid; place-items: center;
+    border-radius: 16px;
+    background: rgba(90, 75, 209, 0.1);
+    color: var(--accent-primary);
+    font-size: 1.25rem;
 }
 
-.project-remove-member-btn:hover {
-    background: #fecaca;
-    color: #991b1b;
-}
-
-.hover-lift { transition: transform 0.2s, box-shadow 0.2s; }
-.hover-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3) !important; }
-
-/* =========================================================
-   THEME BUTTON (Replaces standard primary blue)
-   ========================================================= */
-.btn-theme {
-    background: linear-gradient(135deg, #6366f1, #7c3aed);
-    color: #fff;
-    border: none;
-    font-weight: 600;
-}
-
-.btn-theme:hover {
-    background: linear-gradient(135deg, #4f46e5, #6d28d9);
-    color: #fff;
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-    transform: translateY(-1px);
-}
-
-/* =========================================================
-   TASK SECTION CONTAINER
-   ========================================================= */
-#projectTasksSection {
-    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-    padding: 2.5rem;
-    border-radius: 28px;
-    border: 1px solid #e2e8f0;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.02);
-}
-
-/* =========================================================
-   PREMIUM SAAS TASK CARDS
-   ========================================================= */
-.task-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    background: linear-gradient(145deg, #ffffff 0%, #f8faff 100%);
-    border: 1px solid rgba(99, 102, 241, 0.15);
-    border-radius: 24px;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
-    overflow: hidden;
-    gap: 1.15rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1;
-}
-
-.task-card::before {
-    content: "";
-    position: absolute;
-    top: 0; 
-    right: 0;
-    width: 200px; 
-    height: 200px;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(255,255,255,0) 70%);
-    border-radius: 50%;
-    transform: translate(30%, -30%);
-    pointer-events: none;
-    z-index: -1;
-    transition: background 0.3s ease;
-}
-
-.task-card:hover {
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 16px 40px rgba(99, 102, 241, 0.1);
-    border-color: rgba(99, 102, 241, 0.3);
-}
-
-.task-card:hover::before {
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(255,255,255,0) 70%);
-}
-
-.task-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-}
-
-.task-title {
-    color: #0f172a;
-    font-size: 1.15rem;
-    font-weight: 800;
-    margin-bottom: 0.3rem;
-    line-height: 1.3;
-}
-
-.task-desc {
-    color: #64748b;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.task-toggle-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #e2e8f0;
-    background: #f8fafc;
-    color: #cbd5e1;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.task-toggle-btn:hover {
-    border-color: #10b981;
-    background: #ecfdf5;
-    color: #10b981;
-}
-
-.task-toggle-btn.is-completed {
-    background: #10b981;
-    border-color: #10b981;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-}
-
-.task-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-}
-
-.task-badge {
-    padding: 0.4rem 0.85rem;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-}
-
-.priority-critical { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
-.priority-high { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
-.priority-medium { background: #eef2ff; color: #4f46e5; border: 1px solid #e0e7ff; }
-.priority-default { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
-.status-badge { background: #0f172a; color: #ffffff; }
-
-.task-meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
-}
-
-.meta-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.75rem;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
+.project-kpi-label {
+    display: block;
+    color: var(--text-secondary);
     font-size: 0.8rem;
-    color: #475569;
-    font-weight: 600;
-}
-
-.meta-chip i {
-    color: #94a3b8;
-    font-size: 0.85rem;
-}
-
-.task-action-dock {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: auto; 
-    padding-top: 0.5rem;
-}
-
-.task-btn-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.task-btn-assign { background: #f1f5f9; color: #475569; }
-.task-btn-assign:hover { background: #eef2ff; color: #4f46e5; }
-.task-btn-edit { background: #f1f5f9; color: #475569; }
-.task-btn-edit:hover { background: #fffbeb; color: #d97706; }
-.task-btn-delete { background: #f1f5f9; color: #475569; }
-.task-btn-delete:hover { background: #fef2f2; color: #dc2626; }
-
-/* =========================================================
-   SLICK TABLE STYLES & TOOLBAR
-   ========================================================= */
-.task-toolbar {
-    background: linear-gradient(145deg, #ffffff 0%, #f5f3ff 100%);
-    border: 1px solid rgba(124, 58, 237, 0.15);
-}
-
-.btn-outline-theme {
-    color: #6366f1;
-    border-color: #6366f1;
-    background: transparent;
-}
-
-.btn-outline-theme:hover {
-    background: #6366f1;
-    color: #fff;
-}
-
-.task-table-wrapper {
-    background: #ffffff;
-    border: 1px solid rgba(124, 58, 237, 0.15);
-    overflow: hidden;
-}
-
-.custom-slick-table {
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.custom-slick-table thead {
-    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-    color: #ffffff;
-}
-
-.custom-slick-table th {
-    padding: 1.25rem 1rem;
-    font-size: 0.85rem;
     font-weight: 700;
-    letter-spacing: 0.05em;
     text-transform: uppercase;
-    border: none;
+    letter-spacing: 0.05em;
 }
 
-.custom-slick-table td {
-    padding: 1.25rem 1rem;
-    color: #475569;
-    border-bottom: 1px solid #e2e8f0;
-    background: #ffffff;
-    transition: background 0.2s ease;
+.project-kpi-value {
+    display: block;
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.2;
 }
 
-.custom-slick-table tbody tr:hover td {
-    background: #f8fafc;
-}
-
-.custom-slick-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.table-task-title {
-    color: #0f172a;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.2rem;
-}
-
-.table-task-desc {
-    color: #64748b;
-    font-size: 0.85rem;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 300px;
-}
-
-/* Table Pagination */
-.pagination .page-link {
-    color: #6366f1;
-    border: none;
-    background: #f8fafc;
-    margin: 0 4px;
-    border-radius: 8px;
-    font-weight: 600;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-}
-
-.pagination .page-item.active .page-link {
-    background: linear-gradient(135deg, #6366f1, #7c3aed);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-
-.pagination .page-item.disabled .page-link {
-    color: #cbd5e1;
-    background: transparent;
-    box-shadow: none;
-}
-
-/* =========================================================
-   RESPONSIVE PROJECT LAYOUT
-========================================================= */
-.project-page-main,
-.project-page-main > .container-fluid,
-.project-page-main .project-page-shell,
-.project-page-main .project-page-shell > * {
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-.project-page-main .project-page-shell {
-    width: min(100%, 1180px);
-}
-
-.project-overview-card,
+/* --- Workspace Sections (Progress, Members, Tasks, Files) --- */
 .project-progress-section,
-.project-members-section,
 .project-members-card,
 #projectTasksSection,
 .project-files-section,
 #projectCommentsSection {
-    min-width: 0;
-    max-width: 100%;
+    background: var(--surface-base);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 2rem;
 }
 
-.project-kpi-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+.project-section-title {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 800;
 }
 
-.task-table-wrapper {
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+/* Task Cards inside Project */
+.task-card {
+    background: var(--surface-base);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
 }
 
-.custom-slick-table {
-    width: 100%;
-    min-width: 760px;
+.task-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(90, 75, 209, 0.3);
+    box-shadow: 0 15px 30px rgba(90, 75, 209, 0.1);
 }
 
-@media (max-width: 1199px) {
-    .project-overview-card {
-        padding: 2.25rem;
-    }
-
-    .project-kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .project-page-title {
-        font-size: clamp(1.9rem, 4vw, 2.7rem);
-    }
+/* --- Dark Theme Overrides (Neon Glass) --- */
+html[data-theme="dark"] .project-overview-card {
+    background: rgba(30, 30, 35, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.05);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
 }
 
-@media (max-width: 991px) {
-    .project-page-main .project-page-shell {
-        width: calc(100% - 24px);
-        max-width: none;
-        margin: 1rem auto 3rem;
-    }
-
-    .project-overview-top {
-        gap: 1.25rem;
-    }
-
-    .project-title-row {
-        min-width: 0;
-    }
-
-    .project-page-title {
-        overflow-wrap: anywhere;
-    }
-
-    .project-page-description {
-        max-width: 100%;
-    }
-
-    #projectTasksSection {
-        padding: 1.5rem;
-    }
+html[data-theme="dark"] .project-page-title {
+    color: var(--accent-primary);
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    font-weight: 300; /* Sleeker neon typography */
 }
 
-@media (max-width: 767px) {
-    .project-page-main .project-page-shell {
-        width: calc(100% - 16px);
-        margin-top: 0.75rem;
-        margin-bottom: 2rem;
-    }
-
-    .project-overview-top { flex-direction: column; align-items: flex-start; }
-    .project-status-panel { align-items: flex-start; margin-top: 1rem; }
-    .project-members-header { flex-direction: column; align-items: flex-start; gap: 1rem;}
-    
-    .project-overview-card {
-        padding: 1.5rem;
-        border-radius: 20px;
-    }
-
-    .project-title-row {
-        align-items: flex-start;
-        gap: 0.85rem;
-    }
-
-    .project-title-icon {
-        width: 52px;
-        height: 52px;
-        flex: 0 0 52px;
-        border-radius: 16px;
-    }
-
-    .project-page-title {
-        font-size: clamp(1.55rem, 7vw, 2.15rem);
-        line-height: 1.12;
-    }
-
-    .project-page-description {
-        margin-top: 1rem;
-        font-size: 0.92rem;
-    }
-
-    .project-back-link {
-        margin-bottom: 1.25rem;
-        font-size: 0.8rem;
-    }
-
-    .project-kpi-grid {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-    }
-
-    .project-kpi-card {
-        padding: 1rem;
-    }
-
-    .project-kpi-value {
-        font-size: 1.2rem;
-    }
-
-    .project-progress-section {
-        margin-top: -1rem;
-        padding: 1.25rem;
-        border-radius: 18px;
-    }
-
-    .project-progress-header {
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-
-    .project-progress-title,
-    .project-progress-value {
-        font-size: 0.95rem;
-    }
-
-    .project-members-card {
-        padding: 1.25rem;
-        border-radius: 20px;
-    }
-
-    .project-member-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .project-member-identity {
-        width: 100%;
-        min-width: 0;
-    }
-
-    .project-member-details {
-        min-width: 0;
-    }
-
-    .project-member-details strong,
-    .project-member-details span {
-        overflow-wrap: anywhere;
-    }
-
-    .project-member-actions {
-        width: 100%;
-        justify-content: space-between;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-    }
-
-    #projectTasksSection {
-        padding: 1.25rem;
-        border-radius: 20px;
-    }
-
-    .task-toolbar {
-        align-items: stretch !important;
-    }
-
-    .task-toolbar .input-group {
-        min-width: 0 !important;
-        width: 100%;
-        flex-basis: 100%;
-    }
-
-    .task-toolbar select,
-    .task-toolbar a,
-    .task-toolbar button {
-        max-width: 100%;
-    }
-
-    .task-table-wrapper {
-        border-radius: 14px;
-    }
-
-    .custom-slick-table th,
-    .custom-slick-table td {
-        padding: 0.8rem 0.7rem;
-    }
-
-    .table-task-desc {
-        max-width: 220px;
-    }
-}
-
-@media (max-width: 480px) {
-    .project-overview-card {
-        padding: 1.15rem;
-        border-radius: 16px;
-    }
-
-    .project-title-row {
-        gap: 0.65rem;
-    }
-
-    .project-title-icon {
-        width: 44px;
-        height: 44px;
-        flex-basis: 44px;
-        border-radius: 13px;
-        font-size: 1rem;
-    }
-
-    .project-eyebrow {
-        font-size: 0.62rem;
-    }
-
-    .project-page-title {
-        font-size: 1.45rem;
-    }
-
-    .project-status-badge {
-        padding: 0.45rem 0.8rem;
-        font-size: 0.75rem;
-    }
-
-    .project-kpi-card {
-        gap: 0.75rem;
-        padding: 0.85rem;
-    }
-
-    .project-kpi-icon {
-        width: 40px;
-        height: 40px;
-        flex: 0 0 40px;
-        border-radius: 11px;
-        font-size: 1rem;
-    }
-
-    .project-progress-section,
-    .project-members-card,
-    #projectTasksSection {
-        padding: 1rem;
-    }
-
-    .project-member-actions {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .project-member-role,
-    .project-remove-member-btn {
-        width: auto;
-    }
-}
-
-/* =========================================================
-   PROJECT PAGE DARK THEME OVERRIDES
-========================================================= */
+html[data-theme="dark"] .project-kpi-card,
 html[data-theme="dark"] .project-progress-section,
 html[data-theme="dark"] .project-members-card,
-html[data-theme="dark"] .task-card,
-html[data-theme="dark"] .task-table-wrapper,
-html[data-theme="dark"] .custom-slick-table td {
-    background: #111827;
+html[data-theme="dark"] #projectTasksSection,
+html[data-theme="dark"] .project-files-section,
+html[data-theme="dark"] #projectCommentsSection,
+html[data-theme="dark"] .task-card {
+    background: var(--surface-glass);
+    border-color: rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(16px);
 }
 
-html[data-theme="dark"] .project-progress-title,
-html[data-theme="dark"] .project-member-details strong,
-html[data-theme="dark"] .task-title,
-html[data-theme="dark"] .table-task-title,
-html[data-theme="dark"] .custom-slick-table td,
-html[data-theme="dark"] .meta-chip,
-html[data-theme="dark"] .task-toggle-btn {
-    color: #f1f5f9;
+html[data-theme="dark"] .project-kpi-card:hover,
+html[data-theme="dark"] .task-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(0, 255, 255, 0.05);
 }
 
-html[data-theme="dark"] .project-progress-bar,
-html[data-theme="dark"] .task-toggle-btn,
-html[data-theme="dark"] .meta-chip,
-html[data-theme="dark"] .task-btn-assign,
-html[data-theme="dark"] .task-btn-edit,
-html[data-theme="dark"] .task-btn-delete,
-html[data-theme="dark"] .task-toolbar,
-html[data-theme="dark"] .task-table-wrapper,
-html[data-theme="dark"] .project-member-row,
-html[data-theme="dark"] .project-add-member-panel {
-    background: #1e293b;
-    border-color: rgba(255,255,255,0.08);
+html[data-theme="dark"] .project-kpi-icon {
+    background: transparent;
+    border: 1px solid var(--accent-primary);
+    box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2);
 }
 
-html[data-theme="dark"] .project-member-row:hover,
-html[data-theme="dark"] .custom-slick-table tbody tr:hover td {
-    background: #1e293b;
+html[data-theme="dark"] .project-kpi-value,
+html[data-theme="dark"] .project-section-title {
+    color: var(--text-primary);
 }
 
-html[data-theme="dark"] #projectTasksSection {
-    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
-    border-color: rgba(255,255,255,0.08);
+/* Neon Progress Bar */
+html[data-theme="dark"] .project-progress-bar {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-html[data-theme="dark"] .project-members-permission-badge,
-html[data-theme="dark"] .project-member-avatar-placeholder,
-html[data-theme="dark"] .priority-medium {
-    background: rgba(99,102,241,0.18);
-    color: #c7d2fe;
+html[data-theme="dark"] .project-progress-bar > div {
+    background: var(--accent-primary);
+    box-shadow: 0 0 15px var(--accent-primary);
 }
 
-html[data-theme="dark"] .project-member-details span,
-html[data-theme="dark"] .project-member-role,
-html[data-theme="dark"] .table-task-desc,
-html[data-theme="dark"] .meta-chip,
-html[data-theme="dark"] .custom-slick-table td,
-html[data-theme="dark"] .project-page-main h1, 
-html[data-theme="dark"] .project-page-main h2, 
-html[data-theme="dark"] .project-page-main h3 {
-    color: #94a3b8;
+html[data-theme="dark"] .project-progress-value {
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
 }
 
-html[data-theme="dark"] .custom-slick-table td { border-bottom-color: rgba(255,255,255,0.08); }
-html[data-theme="dark"] .task-card { border-color: rgba(129,140,248,0.18); }
-html[data-theme="dark"] .task-toolbar { background: linear-gradient(145deg, #111827 0%, #1e1b4b 100%); }
-html[data-theme="dark"] .task-table-wrapper { background: #111827; }
-html[data-theme="dark"] .pagination .page-link { background: #1e293b; color: #c7d2fe; }
-html[data-theme="dark"] .task-btn-assign:hover { background: rgba(99,102,241,0.18); color: #c7d2fe; }
-html[data-theme="dark"] .task-btn-edit:hover { background: rgba(245,158,11,0.14); color: #fbbf24; }
-html[data-theme="dark"] .task-btn-delete:hover { background: rgba(239,68,68,0.14); color: #fca5a5; }
+/* --- Responsive Pill Reset --- */
+@media (max-width: 991px) {
+    .project-overview-card {
+        border-radius: 40px;
+        padding: 2.5rem;
+    }
+}
 
-
+@media (max-width: 768px) {
+    .project-overview-card {
+        border-radius: 32px;
+        padding: 1.5rem;
+    }
+    
+    .project-progress-section,
+    .project-members-card,
+    #projectTasksSection,
+    .project-files-section,
+    #projectCommentsSection {
+        padding: 1.5rem;
+    }
+}
