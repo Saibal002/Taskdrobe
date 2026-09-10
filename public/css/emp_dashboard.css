@@ -2,29 +2,28 @@
    EMPLOYEE DASHBOARD - V2 DESIGN SYSTEM
 ========================================================= */
 
-/* --- Main Layout --- */
+/* --- 1. Main Layout --- */
 .employee-dashboard {
-    padding: 2rem;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-/* --- Dashboard Hero (The Wide Pill) --- */
+/* --- 2. Dashboard Hero (The Wide Pill) --- */
 .dashboard-hero {
     background: linear-gradient(135deg, var(--accent-primary) 0%, #3b289c 100%);
-    border-radius: var(--radius-lg);
-    padding: 3rem;
+    border-radius: 100px !important;
+    padding: 2.5rem 4rem !important;
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: var(--shadow-soft);
-    margin-bottom: 2rem;
+    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.15) !important;
+    margin-bottom: 3rem !important;
     position: relative;
     overflow: hidden;
+    border: none !important;
 }
 
-/* Abstract hero circles */
 .dashboard-hero::after {
     content: '';
     position: absolute;
@@ -37,137 +36,8 @@
     backdrop-filter: blur(10px);
 }
 
-.dashboard-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
-}
-
-.hero-description {
-    font-size: 1.1rem;
-    opacity: 0.85;
-}
-
-/* --- Metric Cards --- */
-.metric-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.metric-card,
-.workspace-card,
-.project-card {
-    background: var(--surface-base);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.metric-card:hover,
-.workspace-card:hover,
-.project-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12);
-}
-
-.metric-card strong {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    display: block;
-    margin-top: 0.5rem;
-}
-
-.metric-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-}
-
-/* --- Workspace / Task Queue --- */
-.dashboard-work-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 1.5rem;
-}
-
-.task-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.task-row:last-child {
-    border-bottom: none;
-}
-
-.task-title-line h3 {
-    font-size: 1rem;
-    color: var(--text-primary);
-    margin: 0;
-}
-
-.task-main p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin: 0.25rem 0 0;
-}
-
-/* --- Dark Theme Overrides --- */
-html[data-theme="dark"] .dashboard-hero {
-    background: rgba(30, 30, 35, 0.6);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
-}
-
-html[data-theme="dark"] .dashboard-hero h1 {
-    color: var(--accent-primary);
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
-}
-
-html[data-theme="dark"] .metric-card,
-html[data-theme="dark"] .workspace-card,
-html[data-theme="dark"] .project-card {
-    background: var(--surface-glass);
-    backdrop-filter: blur(16px) saturate(120%);
-    -webkit-backdrop-filter: blur(16px) saturate(120%);
-    border-color: rgba(0, 255, 255, 0.15);
-}
-
-html[data-theme="dark"] .metric-card:hover,
-html[data-theme="dark"] .workspace-card:hover,
-html[data-theme="dark"] .project-card:hover {
-    border-color: var(--accent-primary);
-    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(0, 255, 255, 0.05);
-}
-
-html[data-theme="dark"] .metric-card strong,
-html[data-theme="dark"] .task-title-line h3 {
-    color: var(--accent-primary);
-}
-
-/* =========================================================
-   EMPLOYEE DASHBOARD: WIDE HERO PILL
-========================================================= */
-
-/* Force the top hero into an isolated floating pill */
-.dashboard-hero {
-    border-radius: 100px !important;
-    padding: 2.5rem 4rem;
-    margin-bottom: 3rem;
-    background: linear-gradient(135deg, #6C5CE7 0%, #4F46E5 100%);
-    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.15);
-    border: none;
-}
+.dashboard-hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #ffffff; }
+.hero-description { font-size: 1.1rem; opacity: 0.85; }
 
 html[data-theme="dark"] .dashboard-hero {
     background: rgba(30, 30, 35, 0.5) !important;
@@ -176,47 +46,73 @@ html[data-theme="dark"] .dashboard-hero {
     backdrop-filter: blur(24px) saturate(120%) !important;
 }
 
-html[data-theme="dark"] .dashboard-hero h1 {
-    color: #00ffff !important;
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
-    font-weight: 300;
+html[data-theme="dark"] .dashboard-hero h1 { color: #00ffff !important; text-shadow: 0 0 15px rgba(0, 255, 255, 0.4); font-weight: 300; }
+html[data-theme="dark"] .hero-description { color: rgba(255, 255, 255, 0.6); }
+
+/* --- 3. Metric Cards --- */
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-html[data-theme="dark"] .hero-description {
-    color: rgba(255, 255, 255, 0.6);
+.metric-card, .workspace-card {
+    background: var(--surface-base);
+    border-radius: var(--radius-lg) !important;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Adjust the metrics grid to match the rounded aesthetics */
-html[data-theme="dark"] .metric-card,
-html[data-theme="dark"] .workspace-card {
-    border-radius: 32px !important;
+.metric-card:hover, .workspace-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12); }
+.metric-card strong { font-size: 2rem; font-weight: 800; color: var(--text-primary); display: block; margin-top: 0.5rem; }
+.metric-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+
+html[data-theme="dark"] .metric-card, html[data-theme="dark"] .workspace-card {
     background: rgba(25, 25, 30, 0.6) !important;
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
     backdrop-filter: blur(16px) !important;
 }
+html[data-theme="dark"] .metric-card strong { color: var(--accent-primary); }
 
-/* Mobile responsive reset for the extreme pill radius */
-@media (max-width: 768px) {
-    .dashboard-hero {
-        border-radius: 32px !important;
-        padding: 2rem !important;
-    }
+/* --- 4. Workspace / Task Queue --- */
+.dashboard-work-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 1.5rem;
 }
-/* =========================================================
-   EMPLOYEE DASHBOARD: CAROUSEL CARD FIX
-========================================================= */
 
-/* Force horizontal layout and strict dimensions for cards */
+.task-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 0; border-bottom: 1px solid var(--border-color);
+}
+.task-row:last-child { border-bottom: none; }
+.task-title-line h3 { font-size: 1rem; color: var(--text-primary); margin: 0; }
+.task-main p { font-size: 0.85rem; color: var(--text-secondary); margin: 0.25rem 0 0; }
+
+html[data-theme="dark"] .task-title-line h3 { color: var(--accent-primary); }
+
+/* --- 5. Project Carousel (Patched for text visibility & geometry) --- */
+.projects-section-featured { margin-bottom: 3rem; }
+.project-carousel-shell { position: relative !important; }
+
 .project-carousel {
     display: flex !important;
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     gap: 1.5rem !important;
-    padding-bottom: 1rem !important;
+    padding: 1rem 0.5rem !important;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; 
 }
+.project-carousel::-webkit-scrollbar { display: none; }
 
 .project-carousel .project-card {
-    flex: 0 0 320px !important; /* Fixed width for carousel items */
+    flex: 0 0 320px !important; 
+    scroll-snap-align: start;
     min-height: 220px !important;
     padding: 1.5rem !important;
     border-radius: 24px !important;
@@ -226,53 +122,88 @@ html[data-theme="dark"] .workspace-card {
     text-decoration: none !important;
 }
 
-/* Typography inside the cards */
+.project-card-navy { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); }
+.project-card-teal { background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%); }
+.project-card-coral { background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%); }
+
+/* Light Mode Text for visibility */
 .project-carousel .project-card h3 {
-    color: #ffffff !important;
-    font-size: 1.25rem !important;
-    font-weight: 800 !important;
-    margin: 0.5rem 0 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    color: var(--text-primary) !important;
+    font-size: 1.25rem !important; font-weight: 800 !important;
+    margin: 0.5rem 0 !important; white-space: nowrap !important;
+    overflow: hidden !important; text-overflow: ellipsis !important;
 }
 
-.project-carousel .project-card p.project-description {
-    color: rgba(255, 255, 255, 0.7) !important;
-    font-size: 0.85rem !important;
-    margin: 0 !important;
-}
+.project-carousel .project-card p.project-description { color: var(--text-secondary) !important; font-size: 0.85rem !important; margin: 0 !important; }
+.project-carousel .project-status { color: var(--accent-primary) !important; font-size: 0.75rem !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
 
-.project-carousel .project-status {
-    color: var(--accent-primary, #00ffff) !important;
-    font-size: 0.75rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    font-weight: 700 !important;
-}
-
-/* Progress bar inside the cards */
 .project-carousel .project-progress {
-    background: rgba(255, 255, 255, 0.1) !important;
-    height: 8px !important;
-    border-radius: 4px !important;
-    margin: 1rem 0 0 !important;
-    overflow: hidden !important;
+    background: rgba(255, 255, 255, 0.5) !important;
+    height: 8px !important; border-radius: 4px !important;
+    margin: 1rem 0 0 !important; overflow: hidden !important;
 }
 
-.project-carousel .project-progress .progress-bar {
-    background: var(--accent-primary, #00ffff) !important;
-    height: 100% !important;
-    border-radius: 4px !important;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5) !important;
-}
+.project-carousel .project-progress .progress-bar { background: var(--accent-primary) !important; height: 100% !important; border-radius: 4px !important; box-shadow: 0 0 10px rgba(0, 255, 255, 0.5) !important; }
 
 .project-carousel .project-card-footer {
-    display: flex !important;
-    justify-content: space-between !important;
-    margin-top: 1rem !important;
-    padding-top: 1rem !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: rgba(255, 255, 255, 0.6) !important;
-    font-size: 0.75rem !important;
+    display: flex !important; justify-content: space-between !important;
+    margin-top: 1rem !important; padding-top: 1rem !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: var(--text-secondary) !important; font-size: 0.75rem !important;
 }
+
+.project-carousel-control {
+    position: absolute !important; top: 50% !important; transform: translateY(-50%) !important;
+    width: 44px !important; height: 44px !important; border-radius: 50% !important;
+    background: var(--surface-base) !important; border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-soft) !important; display: flex !important; align-items: center !important; justify-content: center !important;
+    color: var(--accent-primary) !important; cursor: pointer !important; z-index: 10 !important; transition: all 0.3s ease !important;
+}
+
+.project-carousel-control:hover { background: var(--accent-primary) !important; color: #ffffff !important; box-shadow: 0 10px 20px rgba(90, 75, 209, 0.3) !important; }
+.project-carousel-previous { left: -22px !important; }
+.project-carousel-next { right: -22px !important; }
+.project-carousel-control:disabled { opacity: 0 !important; pointer-events: none !important; }
+
+/* Dark Mode Carousel Reverts */
+html[data-theme="dark"] .project-card-navy,
+html[data-theme="dark"] .project-card-teal,
+html[data-theme="dark"] .project-card-coral {
+    background: var(--surface-glass); border: 1px solid rgba(0, 255, 255, 0.15); backdrop-filter: blur(16px);
+}
+html[data-theme="dark"] .project-carousel .project-card h3 { color: #ffffff !important; }
+html[data-theme="dark"] .project-carousel .project-card p.project-description { color: rgba(255, 255, 255, 0.7) !important; }
+html[data-theme="dark"] .project-carousel .project-status { color: #00ffff !important; }
+html[data-theme="dark"] .project-carousel .project-progress { background: rgba(255, 255, 255, 0.1) !important; }
+html[data-theme="dark"] .project-carousel .project-card-footer { border-top: 1px solid rgba(255, 255, 255, 0.1) !important; color: rgba(255, 255, 255, 0.6) !important; }
+html[data-theme="dark"] .project-carousel-control { background: var(--surface-glass) !important; border-color: rgba(0, 255, 255, 0.2) !important; backdrop-filter: blur(12px) !important; color: var(--accent-primary) !important; }
+html[data-theme="dark"] .project-carousel-control:hover { background: var(--accent-primary) !important; color: #121214 !important; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4) !important; }
+
+/* --- 6. Insights & Calendar Sidebar --- */
+.insights-region { margin-top: 1.5rem; }
+.insights-region .dashboard-card { background: var(--surface-base); border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); padding: 1.5rem; height: 100%; display: flex; flex-direction: column; transition: all 0.3s ease; }
+.insights-region .dashboard-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12); }
+
+.calendar-region { min-width: 0; }
+.calendar-card { position: sticky; top: calc(var(--app-navbar-height) + 2rem); background: var(--surface-base); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; box-shadow: var(--shadow-soft); transition: all 0.3s ease; }
+.calendar-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12); }
+.calendar-events { margin-top: 1.5rem; }
+.calendar-events .event-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color); }
+.calendar-events .event-item:last-child { border-bottom: none; }
+
+.event-indicator { width: 6px; height: 40px; border-radius: var(--radius-pill); flex-shrink: 0; }
+.orange-indicator { background: #ff7675; }
+.purple-indicator { background: var(--accent-primary); }
+.teal-indicator { background: #00cec9; }
+
+html[data-theme="dark"] .insights-region .dashboard-card,
+html[data-theme="dark"] .calendar-card {
+    background: var(--surface-glass); border: 1px solid rgba(0, 255, 255, 0.15); backdrop-filter: blur(16px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.05);
+}
+html[data-theme="dark"] .insights-region .dashboard-card:hover, html[data-theme="dark"] .calendar-card:hover { border-color: var(--accent-primary); box-shadow: 0 10px 30px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(0, 255, 255, 0.05); }
+html[data-theme="dark"] .orange-indicator { background: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
+html[data-theme="dark"] .purple-indicator, html[data-theme="dark"] .teal-indicator { background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary); }
+
+@media (max-width: 1199px) { .calendar-card { position: static; margin-top: 2rem; } }
+@media (max-width: 768px) { .dashboard-hero { border-radius: 32px !important; padding: 2rem !important; } }

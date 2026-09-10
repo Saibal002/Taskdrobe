@@ -1,150 +1,51 @@
-<style>
-    /* Keep the calendar card compact while allowing additional events to scroll. */
-    .calendar-card .calendar-events {
-        max-height: 320px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding-right: 8px;
-        scrollbar-width: thin;
-    }
-
-    .calendar-card .calendar-events::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .calendar-card .calendar-events::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-    }
-</style>
-
 <div class="col-xl-4">
-                        <div class="dashboard-card calendar-card">
-                            <div class="card-body p-4">
-                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <h4 class="card-title fw-bold mb-0">Calendar</h4>
-                                    <i class="fas fa-bell text-muted"></i>
-                                </div>
-
-                                <div class="calendar-events">
-
-    <% if (!upcomingTasks || upcomingTasks.length === 0) { %>
-
-        <div class="text-center py-4">
-
-            <i class="bi bi-calendar-check fs-2 text-muted"></i>
-
-            <p class="text-muted small mt-2 mb-0">
-                No upcoming deadlines.
-            </p>
-
-        </div>
-
-    <% } else { %>
-
-        <% 
-            const groupedTasks = {};
-
-            upcomingTasks.forEach(task => {
-
-                const dateKey = new Date(task.due_date)
-                    .toISOString()
-                    .split("T")[0];
-
-                if (!groupedTasks[dateKey]) {
-                    groupedTasks[dateKey] = [];
-                }
-
-                groupedTasks[dateKey].push(task);
-
-            });
-        %>
-
-
-        <% Object.keys(groupedTasks).forEach(dateKey => { %>
-
-            <div class="mb-4">
-
-                <!-- Date -->
-
-                <h6 class="fw-bold text-dark mb-3">
-
-                    <%= new Date(dateKey).toLocaleDateString(
-                        "en-US",
-                        {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric"
-                        }
-                    ) %>
-
-                </h6>
-
-
-                <!-- Tasks -->
-
-                <% groupedTasks[dateKey].forEach(task => { %>
-
-                    <div class="d-flex align-items-center mb-3">
-
-                        <!-- Time -->
-
-                        <small
-                            class="text-muted me-3"
-                            style="min-width:70px;">
-
-                            <%= new Date(task.due_date).toLocaleTimeString(
-                                "en-US",
-                                {
-                                    hour: "2-digit",
-                                    minute: "2-digit"
-                                }
-                            ) %>
-
-                        </small>
-
-
-                        <!-- Indicator -->
-
-                        <div
-                            class="event-indicator
-                            <%= task.priority === 'High'
-                                ? 'orange-indicator'
-                                : task.priority === 'Medium'
-                                ? 'purple-indicator'
-                                : 'teal-indicator' %>
-                            me-3">
-                        </div>
-
-
-                        <!-- Task -->
-
-                        <div class="flex-grow-1">
-
-                            <div class="fw-medium small">
-
-                                <%= task.title %>
-
-                            </div>
-
-                            <div class="text-muted small">
-
-                                <%= task.project_name || "No Project" %>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                <% }) %>
-
+    <div class="dashboard-card calendar-card">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="card-title fw-bold mb-0">Calendar</h4>
+                <i class="fas fa-bell text-muted"></i>
             </div>
 
-        <% }) %>
-
-    <% } %>
-
-</div>
-                            </div>
-                        </div>
+            <div class="calendar-events">
+                <% if (!upcomingTasks || upcomingTasks.length === 0) { %>
+                    <div class="text-center py-4">
+                        <i class="bi bi-calendar-check fs-2 text-muted"></i>
+                        <p class="text-muted small mt-2 mb-0">No upcoming deadlines.</p>
                     </div>
+                <% } else { %>
+                    <% 
+                        const groupedTasks = {};
+                        upcomingTasks.forEach(task => {
+                            const dateKey = new Date(task.due_date).toISOString().split("T")[0];
+                            if (!groupedTasks[dateKey]) { groupedTasks[dateKey] = []; }
+                            groupedTasks[dateKey].push(task);
+                        });
+                    %>
+
+                    <% Object.keys(groupedTasks).forEach(dateKey => { %>
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-dark mb-3">
+                                <%= new Date(dateKey).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) %>
+                            </h6>
+
+                            <% groupedTasks[dateKey].forEach(task => { %>
+                                <div class="d-flex align-items-center mb-3">
+                                    <small class="text-muted me-3" style="min-width:70px;">
+                                        <%= new Date(task.due_date).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) %>
+                                    </small>
+
+                                    <div class="event-indicator <%= task.priority === 'High' ? 'orange-indicator' : task.priority === 'Medium' ? 'purple-indicator' : 'teal-indicator' %> me-3"></div>
+
+                                    <div class="flex-grow-1">
+                                        <div class="fw-medium small"><%= task.title %></div>
+                                        <div class="text-muted small"><%= task.project_name || "No Project" %></div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>

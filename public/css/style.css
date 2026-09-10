@@ -31,6 +31,8 @@
     --radius-md: 24px;
     --radius-lg: 32px;
     --radius-pill: 9999px;
+    --sidebar-width: 90px;
+    --app-navbar-height: 80px;
 
     --font-main: 'Inter', -apple-system, sans-serif;
 }
@@ -63,7 +65,7 @@ body {
 }
 
 /* Dark Mode Ambient Glows */
-html[data-theme="dark"] body {
+html[data-theme="dark"] body.app-sidebar-layout {
     background-image: 
         radial-gradient(circle at 10% 80%, rgba(255, 0, 255, 0.08) 0%, transparent 40%),
         radial-gradient(circle at 90% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 40%);
@@ -93,201 +95,58 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* =========================================================
-   4. AUTH & LANDING PAGES (Pre-Dashboard)
+   4. SIDEBAR GEOMETRY: LIGHT (WAVY) & DARK (FLOATING PILL)
 ========================================================= */
-.auth-layout {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 2rem;
-    position: relative;
-    z-index: 1;
-}
-
-.auth-card {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    max-width: 1100px;
-    min-height: 650px;
-    overflow: hidden;
-    border-radius: var(--radius-lg);
-    background: var(--surface-base);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
-}
-
-/* Left Side: Form/Content */
-.auth-left {
-    flex: 1;
-    min-width: 350px;
-    padding: 4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.auth-left h2 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.auth-left p {
-    color: var(--text-secondary);
-    margin-bottom: 2.5rem;
-}
-
-/* Right Side: Graphic/Gradient */
-.auth-right {
-    flex: 1;
-    min-width: 350px;
-    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Abstract circles inside the right panel */
-.auth-right::before, .auth-right::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-.auth-right::before {
-    width: 300px; height: 300px;
-    top: -50px; right: -50px;
-}
-
-.auth-right::after {
-    width: 200px; height: 200px;
-    bottom: -50px; left: -50px;
-}
-
-/* Form Controls */
-.auth-form-group {
-    margin-bottom: 1.5rem;
-}
-
-.auth-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.auth-input {
-    width: 100%;
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius-sm);
-    background: var(--surface-glass);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-family: var(--font-main);
-    transition: all 0.3s ease;
-}
-
-.auth-input:focus {
-    outline: none;
-    border-color: var(--accent-primary);
-    background: transparent;
-    box-shadow: 0 0 0 4px rgba(0, 255, 255, 0.1);
-}
-
-html[data-theme="light"] .auth-input:focus {
-    box-shadow: 0 0 0 4px rgba(90, 75, 209, 0.15);
-}
-
-/* Neon/Glow Buttons */
-.btn-glow {
-    display: inline-block;
-    width: 100%;
-    padding: 1rem;
-    border-radius: var(--radius-pill);
-    background: var(--accent-primary);
-    color: #ffffff;
-    font-weight: 700;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-}
-
-/* In dark mode, text on cyan needs to be dark */
-html[data-theme="dark"] .btn-glow {
-    color: #121214;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-}
-
-html[data-theme="light"] .btn-glow {
-    box-shadow: 0 8px 25px rgba(90, 75, 209, 0.3);
-}
-
-.btn-glow:hover {
-    transform: translateY(-2px);
-}
-
-html[data-theme="dark"] .btn-glow:hover {
-    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.6);
-}
-
-html[data-theme="light"] .btn-glow:hover {
-    box-shadow: 0 12px 35px rgba(90, 75, 209, 0.4);
-}
-
-/* Landing Page Specific overrides */
-.landing-content {
-    text-align: center;
-    padding: 4rem 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.landing-content h1 {
-    font-size: clamp(3rem, 5vw, 5rem);
-    margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* =========================================================
-   SIDEBAR GEOMETRY: LIGHT (WAVY) & DARK (FLOATING PILL)
-========================================================= */
-
-/* Light Mode: The Wavy Purple Sidebar */
 .app-sidebar {
     position: fixed;
     top: 0; left: 0; bottom: 0;
-    width: 90px; /* Icon-only width */
+    width: var(--sidebar-width);
     background: linear-gradient(180deg, #6C5CE7 0%, #4F46E5 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 2rem 0;
     z-index: 1200;
-    /* Organic wavy border via border-radius manipulation */
     border-radius: 0 40px 40px 0;
     box-shadow: 10px 0 40px rgba(108, 92, 231, 0.2);
     transition: all 0.4s ease;
 }
 
-/* Hide text to enforce the sleek icon-only look */
+html[data-theme="dark"] .app-sidebar {
+    top: 20px; 
+    bottom: 20px; 
+    left: 20px;
+    border-radius: 30px;
+    background: linear-gradient(180deg, rgba(76, 29, 149, 0.4) 0%, rgba(190, 18, 60, 0.2) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 0, 255, 0.05);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+}
+
 .app-sidebar-brand-name,
 .app-sidebar-item span,
 .app-sidebar-label,
 .app-sidebar-coming-soon {
     display: none !important;
+}
+
+.app-sidebar-brand-link {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+.app-sidebar-brand-logo {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+    display: block !important;
+    border-radius: 8px !important;
+    background: transparent !important;
 }
 
 .app-sidebar-item {
@@ -309,98 +168,56 @@ html[data-theme="light"] .btn-glow:hover {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Dark Mode: The Floating Neon Pill */
-html[data-theme="dark"] .app-sidebar {
-    top: 20px; 
-    bottom: 20px; 
-    left: 20px;
-    border-radius: 30px;
-    background: linear-gradient(180deg, rgba(76, 29, 149, 0.4) 0%, rgba(190, 18, 60, 0.2) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 0, 255, 0.05);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+@media (min-width: 992px) {
+    .app-sidebar-close {
+        display: none !important;
+    }
 }
 
 /* =========================================================
    5. NAVBAR STYLES (Floating Glass Pills)
 ========================================================= */
-
-/* Base Navbar Positioning */
 .app-navbar {
     position: fixed;
     top: 0;
     right: 0;
-    left: 90px; /* Aligns with the light-mode sidebar */
-    height: var(--app-navbar-height, 80px);
+    left: var(--sidebar-width);
+    height: var(--app-navbar-height);
     display: flex;
     align-items: center;
     padding: 0 2rem;
-    background: transparent !important;
-    border: none !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+    border-bottom: 1px solid var(--border-color) !important;
     box-shadow: none !important;
     z-index: 1000;
     transition: left 0.4s ease;
 }
 
-/* Adjust for Dark Mode floating sidebar gap */
 html[data-theme="dark"] .app-navbar {
-    left: calc(90px + 40px); 
+    left: calc(var(--sidebar-width) + 40px); 
+    background: transparent !important;
+    border-bottom: none !important;
 }
 
 .app-navbar-inner {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end !important;
     align-items: center;
 }
 
-/* --- Left Side: Hide Logo, Keep Greeting --- */
-.app-navbar-brand {
-    display: none !important; /* Fixes the giant logo issue */
+.app-navbar-brand, .app-navbar-left, .app-navbar-greeting {
+    display: none !important; 
 }
 
-.app-navbar-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.app-navbar-menu {
-    display: none; /* Only show on mobile */
-}
-
-.app-navbar-greeting {
-    display: flex;
-    flex-direction: column;
-}
-
-.app-navbar-label {
-    color: var(--accent-primary);
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-}
-
-.app-navbar-title {
-    font-size: 1.1rem;
-    color: var(--text-primary);
-    margin-top: 2px;
-}
-
-.app-navbar-subtitle {
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-}
-
-/* --- Right Side: Floating Glass Controls --- */
 .app-navbar-actions {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-/* Search Box */
 .app-navbar-search {
     display: flex;
     align-items: center;
@@ -424,9 +241,7 @@ html[data-theme="dark"] .app-navbar {
     width: 200px;
 }
 
-.app-navbar-search input::placeholder {
-    color: var(--text-secondary);
-}
+.app-navbar-search input::placeholder { color: var(--text-secondary); }
 
 .app-navbar-search:focus-within {
     border-color: var(--accent-primary);
@@ -442,7 +257,6 @@ html[data-theme="dark"] .app-navbar {
     color: var(--text-secondary);
 }
 
-/* Icons (Theme, Notifications) & Buttons (Profile, Logout) */
 .app-navbar-icon,
 .app-navbar-profile,
 .app-navbar-logout {
@@ -460,29 +274,11 @@ html[data-theme="dark"] .app-navbar {
     cursor: pointer;
 }
 
-/* Circle vs Pill shapes */
-.app-navbar-icon {
-    width: 44px;
-    border-radius: 50%;
-    position: relative;
-}
+.app-navbar-icon { width: 44px; border-radius: 50%; position: relative; }
+.app-navbar-profile, .app-navbar-logout { padding: 0 1rem; border-radius: var(--radius-pill); gap: 0.5rem; }
+.app-navbar-profile strong { font-size: 0.85rem; }
+.app-navbar-profile small { display: none; }
 
-.app-navbar-profile,
-.app-navbar-logout {
-    padding: 0 1rem;
-    border-radius: var(--radius-pill);
-    gap: 0.5rem;
-}
-
-.app-navbar-profile strong {
-    font-size: 0.85rem;
-}
-
-.app-navbar-profile small {
-    display: none; /* Keep it clean */
-}
-
-/* Notification Badge */
 .app-navbar-badge {
     position: absolute;
     top: -2px;
@@ -496,7 +292,6 @@ html[data-theme="dark"] .app-navbar {
     border: 2px solid var(--surface-base);
 }
 
-/* Hovers */
 .app-navbar-icon:hover,
 .app-navbar-profile:hover,
 .app-navbar-logout:hover {
@@ -505,115 +300,293 @@ html[data-theme="dark"] .app-navbar {
     transform: translateY(-2px);
 }
 
-/* --- Dark Mode Neon Overrides --- */
 html[data-theme="dark"] .app-navbar-search,
 html[data-theme="dark"] .app-navbar-icon,
 html[data-theme="dark"] .app-navbar-profile,
 html[data-theme="dark"] .app-navbar-logout {
-    background: var(--surface-glass);
-    border-color: rgba(0, 255, 255, 0.15);
+    background: rgba(30, 30, 35, 0.6) !important;
+    border-color: rgba(0, 255, 255, 0.2) !important;
 }
 
 html[data-theme="dark"] .app-navbar-search:focus-within,
 html[data-theme="dark"] .app-navbar-icon:hover,
 html[data-theme="dark"] .app-navbar-profile:hover,
 html[data-theme="dark"] .app-navbar-logout:hover {
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    color: var(--accent-primary);
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3) !important;
+    color: var(--accent-primary) !important;
 }
 
-/* --- Mobile Responsiveness --- */
-@media (max-width: 991px) {
-    .app-navbar {
-        left: 0 !important;
-        padding: 0 1rem;
-    }
-    
-    .app-navbar-menu {
-        display: flex;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        border: 1px solid var(--border-color);
-        background: var(--surface-glass);
-        align-items: center;
-        justify-content: center;
-        color: var(--text-primary);
-    }
-
-    .app-navbar-greeting {
-        display: none !important;
-    }
-
-    .app-navbar-search input {
-        width: 120px;
-    }
-
-    .app-navbar-search kbd {
-        display: none;
-    }
-
-    .app-navbar-profile span,
-    .app-navbar-logout span {
-        display: none;
-    }
-    
-    .app-navbar-profile,
-    .app-navbar-logout {
-        padding: 0;
-        width: 44px;
-        justify-content: center;
-        border-radius: 50%;
-    }
-}
 /* =========================================================
-   6. EMERGENCY LAYOUT PATCHES
+   6. GLOBAL LAYOUT SPACING (Clearing fixed elements)
 ========================================================= */
-
-/* --- 1. Tame the Giant Logo --- */
-.app-sidebar-brand-logo {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    object-fit: contain !important;
-    margin: 0 auto !important;
-    display: block !important;
-    border-radius: 8px !important;
-    background: transparent !important;
-}
-
-.app-sidebar-brand-link {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-    padding: 0 !important;
-}
-
-/* Hide the duplicate logo in the top navbar */
-.app-navbar-brand {
-    display: none !important; 
-}
-
-/* --- 2. Fix the Navbar Overlap --- */
-/* Push the main content down below the fixed navbar */
 body.app-sidebar-layout .employee-dashboard,
 body.app-sidebar-layout .manager-main,
 body.app-sidebar-layout .project-page-main {
-    padding-top: 110px !important; /* Clears the navbar */
+    padding-top: 120px !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
-    margin-left: 90px !important; /* Clears the light-mode sidebar */
+    margin-left: var(--sidebar-width) !important;
+    transition: margin-left 0.4s ease;
 }
 
-/* Push content further right for the floating dark-mode sidebar gap */
 html[data-theme="dark"] body.app-sidebar-layout .employee-dashboard,
 html[data-theme="dark"] body.app-sidebar-layout .manager-main,
 html[data-theme="dark"] body.app-sidebar-layout .project-page-main {
-    margin-left: 130px !important; /* 90px sidebar + 40px gap */
+    margin-left: calc(var(--sidebar-width) + 40px) !important;
 }
 
-/* Clean up navbar greeting alignment */
-.app-navbar-greeting {
-    margin-left: 1rem !important;
+/* Global Card Geometry */
+.dashboard-hero, .metric-card, .workspace-card, .project-card, .manager-panel, .manager-stat-card {
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-soft) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+html[data-theme="dark"] .dashboard-hero, 
+html[data-theme="dark"] .metric-card, 
+html[data-theme="dark"] .workspace-card, 
+html[data-theme="dark"] .project-card,
+html[data-theme="dark"] .manager-panel, 
+html[data-theme="dark"] .manager-stat-card {
+    background: var(--surface-base) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(16px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+}
+
+html[data-theme="dark"] .dashboard-hero:hover, 
+html[data-theme="dark"] .metric-card:hover, 
+html[data-theme="dark"] .workspace-card:hover, 
+html[data-theme="dark"] .project-card:hover,
+html[data-theme="dark"] .manager-panel:hover, 
+html[data-theme="dark"] .manager-stat-card:hover {
+    border-color: rgba(0, 255, 255, 0.3) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.05) !important;
+    transform: translateY(-4px) !important;
+}
+
+/* =========================================================
+   7. AUTH & LANDING PAGES (Pre-Dashboard)
+========================================================= */
+.auth-layout {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 2rem; position: relative; z-index: 1;
+}
+
+.auth-card {
+    display: flex; flex-wrap: wrap; width: 100%; max-width: 1100px;
+    min-height: 650px; overflow: hidden;
+    border-radius: var(--radius-lg); background: var(--surface-base);
+    border: 1px solid var(--border-color); box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+}
+
+.auth-left { flex: 1; min-width: 350px; padding: 4rem; display: flex; flex-direction: column; justify-content: center; }
+.auth-left h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.auth-left p { color: var(--text-secondary); margin-bottom: 2.5rem; }
+
+.auth-right {
+    flex: 1; min-width: 350px; position: relative; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+}
+
+.auth-right::before, .auth-right::after {
+    content: ''; position: absolute; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+}
+.auth-right::before { width: 300px; height: 300px; top: -50px; right: -50px; }
+.auth-right::after { width: 200px; height: 200px; bottom: -50px; left: -50px; }
+
+.auth-form-group { margin-bottom: 1.5rem; }
+.auth-label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.auth-input {
+    width: 100%; padding: 1rem 1.25rem; border-radius: var(--radius-sm);
+    background: var(--surface-glass); border: 1px solid var(--border-color);
+    color: var(--text-primary); font-family: var(--font-main); transition: all 0.3s ease;
+}
+.auth-input:focus { outline: none; border-color: var(--accent-primary); background: transparent; box-shadow: 0 0 0 4px rgba(0, 255, 255, 0.1); }
+html[data-theme="light"] .auth-input:focus { box-shadow: 0 0 0 4px rgba(90, 75, 209, 0.15); }
+
+.btn-glow {
+    display: inline-block; width: 100%; padding: 1rem; border-radius: var(--radius-pill);
+    background: var(--accent-primary); color: #ffffff; font-weight: 700; text-align: center;
+    border: none; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;
+}
+
+html[data-theme="dark"] .btn-glow { color: #121214; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
+html[data-theme="light"] .btn-glow { box-shadow: 0 8px 25px rgba(90, 75, 209, 0.3); }
+.btn-glow:hover { transform: translateY(-2px); }
+html[data-theme="dark"] .btn-glow:hover { box-shadow: 0 8px 30px rgba(0, 255, 255, 0.6); }
+html[data-theme="light"] .btn-glow:hover { box-shadow: 0 12px 35px rgba(90, 75, 209, 0.4); }
+
+.landing-content { text-align: center; padding: 4rem 2rem; max-width: 800px; margin: 0 auto; }
+.landing-content h1 { font-size: clamp(3rem, 5vw, 5rem); margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+@media (max-width: 991px) {
+    .app-navbar { left: 0 !important; padding: 0 1rem; }
+    .app-navbar-menu { display: flex; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--surface-glass); align-items: center; justify-content: center; color: var(--text-primary); }
+    .app-navbar-search input { width: 120px; }
+    .app-navbar-search kbd { display: none; }
+    .app-navbar-profile span, .app-navbar-logout span { display: none; }
+    .app-navbar-profile, .app-navbar-logout { padding: 0; width: 44px; justify-content: center; border-radius: 50%; }
+}
+
+/* =========================================================
+   8. MICRO-COMPONENT PATCHES (Hero Summary, Focus Strip, Arrows)
+========================================================= */
+
+/* --- 1. Hero Content Z-Index Fix --- */
+/* Ensures text sits ON TOP of the abstract background circles */
+.hero-copy, .hero-summary {
+    position: relative;
+    z-index: 2;
+}
+
+.dashboard-hero::after {
+    z-index: 0;
+}
+
+/* --- 2. Hero Summary Flexbox & Styling --- */
+.hero-summary {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero-date {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.hero-date i {
+    font-size: 1.5rem;
+}
+
+.hero-date span, .attention-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+.hero-date strong, .attention-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.hero-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.hero-attention {
+    text-align: center;
+}
+
+html[data-theme="dark"] .hero-summary {
+    background: rgba(30, 30, 35, 0.5);
+    border-color: rgba(0, 255, 255, 0.2);
+}
+
+html[data-theme="dark"] .hero-date i,
+html[data-theme="dark"] .attention-value {
+    color: var(--accent-primary);
+}
+
+/* --- 3. Focus Strip Restyling --- */
+.focus-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--surface-base);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+    margin-bottom: 3rem;
+}
+
+.focus-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(90, 75, 209, 0.1);
+    color: var(--accent-primary);
+    display: grid;
+    place-items: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.focus-copy {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.focus-label {
+    color: var(--accent-primary);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.focus-link, .section-action {
+    color: var(--accent-primary);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+html[data-theme="dark"] .focus-strip {
+    background: var(--surface-glass);
+    border-color: rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(16px);
+}
+
+html[data-theme="dark"] .focus-icon {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+/* --- 4. Carousel Arrow Spacing Fix --- */
+.project-carousel-shell {
+    padding: 0 1rem; /* Creates breathing room so arrows don't touch cards */
+}
+
+.project-carousel-previous { left: -10px !important; }
+.project-carousel-next { right: -10px !important; }
+
+/* Keep section headers aligned */
+.section-heading, .projects-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.section-kicker {
+    color: var(--accent-primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
 }

@@ -1,77 +1,27 @@
 <% const role = (user && user.role_name) || "employee"; %>
 <% const isManager = role === "manager"; %>
 
-<!-- =========================================================
-     TASKDROBE — SINGLE AUTHENTICATED NAVBAR
-     One partial for every authenticated page.
-     Role changes CONTENT only; the shell/markup/CSS stay shared.
-========================================================= -->
-
 <%- include("sideBar", { user: user, page: page || "" }) %>
 
-<header
-    class="app-navbar"
-    data-navbar-role="<%= role %>"
-    data-navbar-page="<%= page || '' %>">
-
+<header class="app-navbar" data-navbar-role="<%= role %>" data-navbar-page="<%= page || '' %>">
     <div class="app-navbar-inner">
 
-        <!-- LEFT -->
+        <!-- Mobile Menu Toggle -->
         <div class="app-navbar-left">
-
-            <button
-                type="button"
-                id="appSidebarToggle"
-                class="app-navbar-menu"
-                aria-label="Toggle navigation"
-                aria-expanded="false">
+            <button type="button" id="appSidebarToggle" class="app-navbar-menu" aria-label="Toggle navigation" aria-expanded="false">
                 <i class="bi bi-list"></i>
             </button>
-
-            <a href="/" class="app-navbar-brand text-decoration-none">
-                <img
-                    src="/images/logo.png"
-                    alt="TaskDrobe Logo"
-                    class="app-navbar-logo">
-                <span class="app-navbar-brand-name">TASKDROBE</span>
-            </a>
-
-            <div class="app-navbar-greeting d-none d-xl-flex">
-                <span class="app-navbar-label">
-                    <%= isManager ? "MANAGER OVERVIEW" : "EMPLOYEE WORKSPACE" %>
-                </span>
-                <strong class="app-navbar-title">
-                    <%= isManager ? "Good morning" : "Welcome back" %>,
-                    <%= user.full_name %>
-                    <span>👋</span>
-                </strong>
-                <span class="app-navbar-subtitle">
-                    <%= isManager
-                        ? "Here's what's happening across your workspace today."
-                        : "Here's what's happening across your workspace today." %>
-                </span>
-            </div>
-
         </div>
 
-        <!-- RIGHT -->
+        <!-- RIGHT: Controls -->
         <div class="app-navbar-actions">
-
-            <!-- Search: same IDs on every authenticated page -->
+            
+            <!-- Search -->
             <div class="app-navbar-search-wrapper">
                 <div class="app-navbar-search">
                     <i class="bi bi-search"></i>
-                    <input
-                        type="text"
-                        id="globalSearch"
-                        placeholder="Search projects or tasks..."
-                        autocomplete="off"
-                        aria-label="Search projects or tasks">
-                    <button
-                        type="button"
-                        id="clearSearch"
-                        class="app-navbar-search-clear d-none"
-                        aria-label="Clear search">
+                    <input type="text" id="globalSearch" placeholder="Search projects or tasks..." autocomplete="off" aria-label="Search projects or tasks">
+                    <button type="button" id="clearSearch" class="app-navbar-search-clear d-none" aria-label="Clear search">
                         <i class="bi bi-x-lg"></i>
                     </button>
                     <kbd>⌘ K</kbd>
@@ -79,15 +29,9 @@
                 <div id="searchResults" class="app-navbar-search-results d-none"></div>
             </div>
 
-            <!-- Notifications: same IDs on every authenticated page -->
+            <!-- Notifications -->
             <div class="app-navbar-notification-wrapper">
-                <button
-                    type="button"
-                    id="notificationButton"
-                    class="app-navbar-icon"
-                    data-user-id="<%= user.user_id %>"
-                    aria-label="Notifications"
-                    aria-expanded="false">
+                <button type="button" id="notificationButton" class="app-navbar-icon" data-user-id="<%= user.user_id %>" aria-label="Notifications" aria-expanded="false">
                     <i class="bi bi-bell"></i>
                     <span id="notificationBadge" class="app-navbar-badge d-none">0</span>
                 </button>
@@ -98,12 +42,7 @@
                             <strong>Notifications</strong>
                             <small id="notificationSubtitle">You're all caught up</small>
                         </div>
-                        <button
-                            type="button"
-                            id="markAllNotifications"
-                            class="app-navbar-mark-all d-none">
-                            Mark all read
-                        </button>
+                        <button type="button" id="markAllNotifications" class="app-navbar-mark-all d-none">Mark all read</button>
                     </div>
                     <div id="notificationList" class="app-navbar-notification-list">
                         <div class="app-navbar-empty">
@@ -114,43 +53,24 @@
                 </div>
             </div>
 
-            <!-- Theme -->
-            <button
-                type="button"
-                id="themeToggle"
-                class="app-navbar-icon"
-                aria-label="Toggle theme">
+            <!-- Theme Toggle -->
+            <button type="button" id="themeToggle" class="app-navbar-icon" aria-label="Toggle theme">
                 <i class="bi bi-moon"></i>
             </button>
 
             <!-- Profile -->
-            <a
-                href="/<%= role %>/profile"
-                class="app-navbar-profile text-decoration-none"
-                title="My Profile">
+            <a href="/<%= role %>/profile" class="app-navbar-profile text-decoration-none" title="My Profile">
                 <span class="app-navbar-avatar">
-                    <%= (user.full_name || "U")
-                        .split(/\s+/)
-                        .map(name => name.charAt(0))
-                        .join("")
-                        .substring(0, 2)
-                        .toUpperCase() %>
+                    <%= (user.full_name || "U").split(/\s+/).map(name => name.charAt(0)).join("").substring(0, 2).toUpperCase() %>
                 </span>
                 <span class="app-navbar-profile-info d-none d-lg-flex">
                     <strong><%= user.full_name %></strong>
-                    <small><%= isManager ? "Manager" : "Employee" %></small>
                 </span>
-                <i class="bi bi-chevron-down d-none d-lg-block"></i>
             </a>
 
             <!-- Logout -->
-            <a
-                href="/auth/logout"
-                class="app-navbar-logout"
-                aria-label="Logout"
-                title="Logout">
+            <a href="/auth/logout" class="app-navbar-logout" aria-label="Logout" title="Logout">
                 <i class="bi bi-box-arrow-right"></i>
-                <span class="d-none d-xl-inline">Logout</span>
             </a>
 
         </div>
