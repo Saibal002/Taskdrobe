@@ -1,9 +1,6 @@
 /* =========================================================
    TASKDROBE — SHARED AUTHENTICATED NAVBAR CONTROLLER
-   One controller for the single navBar.ejs partial.
-   Dashboard controllers keep their existing search/theme logic;
-   this file supplies shared sidebar + notifications and provides
-   search/theme on pages that do not have a dashboard controller.
+   Single source of truth for Sidebar, Theme, Search, and Notifications.
 ========================================================= */
 (function () {
     "use strict";
@@ -29,22 +26,12 @@
         const navbar = document.querySelector(".app-navbar[data-navbar-role]");
         if (!navbar) return;
 
-        const role = navbar.dataset.navbarRole || "employee";
         const userId = navbar.querySelector("#notificationButton")?.dataset.userId || "";
-        const isDashboard = document.body.classList.contains("employee-dashboard-page") ||
-            document.body.classList.contains("manager-dashboard-page");
-        const managerDashboardOwnsNotifications = document.body.classList.contains("manager-dashboard-page");
 
         initSidebar();
-
-        if (!isDashboard) {
-            initTheme();
-            initSearch();
-        }
-
-        if (!managerDashboardOwnsNotifications) {
-            initNotifications(role, userId);
-        }
+        initTheme();
+        initSearch();
+        initNotifications(userId);
     });
 
     function initSidebar() {
@@ -125,8 +112,8 @@
         };
 
         const render = (data) => {
-            const projects = Array.isArray(data?.projects) ? data.projects : [];
-            const tasks = Array.isArray(data?.tasks) ? data.tasks : [];
+            const projects = Array.isArray(data?.projects) ? data.projects : (data?.results?.projects || []);
+            const tasks = Array.isArray(data?.tasks) ? data.tasks : (data?.results?.tasks || []);
 
             if (!projects.length && !tasks.length) {
                 results.innerHTML = '<div class="app-navbar-search-empty"><i class="bi bi-search"></i><span>No results found.</span></div>';
@@ -138,9 +125,11 @@
             if (projects.length) {
                 html += '<div class="app-navbar-search-section"><div class="app-navbar-search-title">Projects</div>';
                 projects.forEach((project) => {
-                    html += `<a href="/projects/${encodeURIComponent(project.project_id)}" class="app-navbar-search-result">
+                    const id = project.project_id ?? project.id;
+                    const name = project.project_name ?? project.title ?? "Untitled project";
+                    html += `<a href="/projects/${encodeURIComponent(id)}" class="app-navbar-search-result">
                         <span class="app-navbar-search-result-icon"><i class="bi bi-folder2-open"></i></span>
-                        <span><strong>${escapeHtml(project.project_name)}</strong><small>${escapeHtml(project.status || "Project")} · ${project.progress ?? 0}%</small></span>
+                        <span><strong>${escapeHtml(name)}</strong><small>${escapeHtml(project.status || "Project")} · ${project.progress ?? 0}%</small></span>
                     </a>`;
                 });
                 html += "</div>";
@@ -149,9 +138,10 @@
             if (tasks.length) {
                 html += '<div class="app-navbar-search-section"><div class="app-navbar-search-title">Tasks</div>';
                 tasks.forEach((task) => {
-                    const title = task.task_title || task.title || "Untitled task";
-                    html += `<a href="/tasks/${encodeURIComponent(task.task_id)}/insight" class="app-navbar-search-result">`;
-                    html += `<span class="app-navbar-search-result-icon"><i class="bi bi-check2-square"></i></span>
+                    const id = task.task_id ?? task.id;
+                    const title = task.task_title ?? task.title ?? task.name ?? "Untitled task";
+                    html += `<a href="/tasks/${encodeURIComponent(id)}/insight" class="app-navbar-search-result">
+                        <span class="app-navbar-search-result-icon"><i class="bi bi-check2-square"></i></span>
                         <span><strong>${escapeHtml(title)}</strong><small>${escapeHtml(task.status || "Task")}</small></span>
                     </a>`;
                 });
@@ -178,7 +168,6 @@
                     if (!response.ok) throw new Error("Search request failed");
                     render(await response.json());
                 } catch (error) {
-                    console.error("Search error:", error);
                     results.innerHTML = '<div class="app-navbar-search-empty"><i class="bi bi-exclamation-circle"></i><span>Unable to search.</span></div>';
                 }
             }, 250);
@@ -206,7 +195,7 @@
         });
     }
 
-    function initNotifications(role, userId) {
+    function initNotifications(userId) {
         const button = document.getElementById("notificationButton");
         const dropdown = document.getElementById("notificationDropdown");
         const list = document.getElementById("notificationList");
@@ -281,7 +270,6 @@
                 const result = await response.json();
                 render(result.notifications || []);
             } catch (error) {
-                console.error("Notification error:", error);
                 list.innerHTML = '<div class="app-navbar-empty"><i class="bi bi-exclamation-circle"></i><span>Unable to load notifications.</span></div>';
             }
         };
@@ -301,23 +289,41 @@
             }
         });
 
+        // Click to read & redirect
         list.addEventListener("click", async function (event) {
             const item = event.target.closest(".app-navbar-notification-item");
-            if (!item || !item.classList.contains("unread")) return;
+            if (!item) return;
 
-            try {
-                const response = await fetch(`/api/notifications/${encodeURIComponent(item.dataset.id)}/read`, {
-                    method: "PATCH",
-                    headers: { "Accept": "application/json", "X-Requested-With": "XMLHttpRequest" }
-                });
-                if (!response.ok) throw new Error("Unable to mark notification as read");
-                const result = await response.json();
-                item.classList.remove("unread");
-                item.classList.add("read");
-                item.querySelector(".app-navbar-notification-dot")?.remove();
-                updateBadge(result.unreadCount ?? 0);
-            } catch (error) {
-                console.error("Notification read error:", error);
+            const id = item.dataset.id;
+            const refId = item.dataset.referenceId;
+            const type = item.dataset.type;
+
+            if (item.classList.contains("unread")) {
+                try {
+                    const response = await fetch(`/api/notifications/${encodeURIComponent(id)}/read`, {
+                        method: "PATCH",
+                        headers: { "Accept": "application/json", "X-Requested-With": "XMLHttpRequest" }
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        item.classList.remove("unread");
+                        item.classList.add("read");
+                        item.querySelector(".app-navbar-notification-icon")?.classList.remove("unread");
+                        item.querySelector(".app-navbar-notification-dot")?.remove();
+                        updateBadge(result.unreadCount ?? 0);
+                    }
+                } catch (error) {
+                    console.error("Notification read error:", error);
+                }
+            }
+
+            // Route user based on notification type
+            if (refId) {
+                if (type.startsWith("project_")) {
+                    window.location.href = `/projects/${refId}`;
+                } else {
+                    window.location.href = `/tasks/${refId}/insight`;
+                }
             }
         });
 
@@ -332,7 +338,7 @@
                 await response.json();
                 await load();
             } catch (error) {
-                console.error("Mark all notifications error:", error);
+                console.error("Mark all error:", error);
             }
         });
 

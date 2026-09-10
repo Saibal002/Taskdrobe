@@ -207,3 +207,34 @@ html[data-theme="dark"] .purple-indicator, html[data-theme="dark"] .teal-indicat
 
 @media (max-width: 1199px) { .calendar-card { position: static; margin-top: 2rem; } }
 @media (max-width: 768px) { .dashboard-hero { border-radius: 32px !important; padding: 2rem !important; } }
+
+/* =========================================================
+   EMPLOYEE DASHBOARD: RESPONSIVE GRID STACKING
+========================================================= */
+
+@media (max-width: 991px) {
+    /* Force the workspace and charts to stack vertically */
+    .dashboard-work-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Allow the Hero Pill to wrap its text and date blocks */
+    .dashboard-hero {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1.5rem !important;
+        padding: 2rem !important;
+        border-radius: 40px !important;
+    }
+    
+    .hero-summary {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .metric-grid {
+        grid-template-columns: 1fr !important;
+    }
+}

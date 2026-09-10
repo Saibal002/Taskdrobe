@@ -590,3 +590,367 @@ html[data-theme="dark"] .focus-icon {
     letter-spacing: 1px;
     margin-bottom: 0.25rem;
 }
+/* =========================================================
+   8. DROPDOWNS: NOTIFICATIONS & SEARCH RESULTS
+========================================================= */
+
+/* --- Container Geometry --- */
+.app-navbar-dropdown,
+.app-navbar-search-results {
+    position: absolute;
+    top: calc(100% + 15px);
+    width: 380px;
+    max-height: 480px;
+    background: var(--surface-base);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    overflow: hidden;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Positioning adjustments */
+.app-navbar-notification-wrapper {
+    position: relative;
+}
+.app-navbar-dropdown {
+    right: 0; /* Align right under the bell icon */
+}
+
+.app-navbar-search-results {
+    left: 0; /* Align left under the search bar */
+}
+
+/* --- Header --- */
+.app-navbar-dropdown-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.app-navbar-dropdown-header strong {
+    font-size: 1rem;
+    color: var(--text-primary);
+    display: block;
+}
+
+.app-navbar-dropdown-header small {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.app-navbar-mark-all {
+    background: none;
+    border: none;
+    color: var(--accent-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.app-navbar-mark-all:hover {
+    text-decoration: underline;
+}
+
+/* --- Lists --- */
+.app-navbar-notification-list {
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+/* Items */
+.app-navbar-notification-item,
+.app-navbar-search-result {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s ease;
+    text-decoration: none;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.app-navbar-notification-item:hover,
+.app-navbar-search-result:hover {
+    background: rgba(90, 75, 209, 0.05);
+}
+
+.app-navbar-notification-item:last-child,
+.app-navbar-search-result:last-child {
+    border-bottom: none;
+}
+
+/* Unread Notification State */
+.app-navbar-notification-item.unread {
+    background: rgba(90, 75, 209, 0.08);
+}
+
+.app-navbar-notification-item.unread:hover {
+    background: rgba(90, 75, 209, 0.12);
+}
+
+/* Icons */
+.app-navbar-notification-icon,
+.app-navbar-search-result-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface-base);
+    border: 1px solid var(--border-color);
+    display: grid;
+    place-items: center;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.app-navbar-notification-item.unread .app-navbar-notification-icon {
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    background: rgba(90, 75, 209, 0.1);
+}
+
+/* Content */
+.app-navbar-notification-content,
+.app-navbar-search-result-content {
+    flex: 1;
+}
+
+.app-navbar-notification-content strong,
+.app-navbar-search-result-content strong {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.app-navbar-notification-content small,
+.app-navbar-search-result-content small {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.app-navbar-notification-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    margin-top: 0.4rem;
+    flex-shrink: 0;
+}
+
+/* Empty States */
+.app-navbar-empty,
+.app-navbar-search-empty {
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.app-navbar-empty i,
+.app-navbar-search-empty i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+/* Search Sections */
+.app-navbar-search-section {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.app-navbar-search-title {
+    padding: 0.75rem 1.5rem 0.25rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-primary);
+    font-weight: 800;
+}
+
+/* --- Dark Theme Overrides --- */
+html[data-theme="dark"] .app-navbar-dropdown,
+html[data-theme="dark"] .app-navbar-search-results {
+    background: rgba(25, 25, 30, 0.95);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 255, 255, 0.05);
+}
+
+html[data-theme="dark"] .app-navbar-dropdown-header {
+    background: rgba(0, 255, 255, 0.05);
+}
+
+html[data-theme="dark"] .app-navbar-notification-item:hover,
+html[data-theme="dark"] .app-navbar-search-result:hover {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .app-navbar-notification-item.unread {
+    background: rgba(0, 255, 255, 0.05);
+}
+
+html[data-theme="dark"] .app-navbar-notification-item.unread:hover {
+    background: rgba(0, 255, 255, 0.15);
+}
+
+html[data-theme="dark"] .app-navbar-notification-icon,
+html[data-theme="dark"] .app-navbar-search-result-icon {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .app-navbar-notification-item.unread .app-navbar-notification-icon {
+    color: var(--accent-primary);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+html[data-theme="dark"] .app-navbar-notification-dot {
+    box-shadow: 0 0 8px var(--accent-primary);
+}
+
+/* =========================================================
+   9. ULTIMATE RESPONSIVE OVERHAUL (Mobile & Tablet)
+========================================================= */
+
+@media (max-width: 991px) {
+    /* --- 1. Sidebar becomes a slide-out drawer --- */
+    .app-sidebar {
+        transform: translateX(-150%) !important;
+        width: 260px !important; /* Expand so it's clickable */
+        border-radius: 0 24px 24px 0 !important;
+        padding-top: 5rem !important;
+        z-index: 1040 !important;
+    }
+    
+    html[data-theme="dark"] .app-sidebar {
+        top: 0 !important; bottom: 0 !important; left: 0 !important;
+        border-radius: 0 24px 24px 0 !important;
+        transform: translateX(-150%) !important;
+    }
+
+    /* JavaScript toggles this class when you hit the hamburger icon */
+    .app-sidebar.is-open {
+        transform: translateX(0) !important;
+    }
+
+    /* Reveal the text labels so the expanded mobile menu makes sense */
+    .app-sidebar-item span {
+        display: inline-block !important;
+        margin-left: 1rem !important;
+    }
+    
+    .app-sidebar-item {
+        width: 85% !important;
+        justify-content: flex-start !important;
+        padding-left: 2rem !important;
+    }
+
+    /* --- 2. Free the Main Content Margins --- */
+    body.app-sidebar-layout .employee-dashboard,
+    body.app-sidebar-layout .manager-main,
+    body.app-sidebar-layout .project-page-main {
+        margin-left: 0 !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+    
+    html[data-theme="dark"] body.app-sidebar-layout .employee-dashboard,
+    html[data-theme="dark"] body.app-sidebar-layout .manager-main,
+    html[data-theme="dark"] body.app-sidebar-layout .project-page-main {
+        margin-left: 0 !important;
+    }
+
+    /* --- 3. Navbar Overlap Fix --- */
+    .app-navbar-left {
+        display: flex !important; /* Force hamburger icon to show */
+    }
+    
+    .app-navbar-search input {
+        width: 130px !important; /* Prevent search bar from crushing icons */
+    }
+}
+
+@media (max-width: 768px) {
+    /* --- 4. Dropdowns shrink to fit screen --- */
+    .app-navbar-dropdown,
+    .app-navbar-search-results {
+        position: fixed !important;
+        top: var(--app-navbar-height) !important;
+        left: 1rem !important;
+        right: 1rem !important;
+        width: auto !important; /* Stretches to screen width */
+    }
+
+    /* --- 5. Auth/Landing pages stack vertically --- */
+    .auth-card {
+        flex-direction: column !important;
+        min-height: auto !important;
+    }
+    .auth-left, .auth-right {
+        min-width: 100% !important;
+        padding: 2rem !important;
+    }
+}
+/* =========================================================
+   10. SEARCH DROPDOWN ALIGNMENT & TEXT FIX
+========================================================= */
+
+/* Anchor the dropdown strictly to the search bar wrapper */
+.app-navbar-search-wrapper {
+    position: relative !important;
+    display: flex;
+    align-items: center;
+}
+
+/* Force the results box to drop perfectly beneath the input */
+.app-navbar-search-results {
+    position: absolute !important;
+    top: calc(100% + 15px) !important;
+    left: 0 !important;
+    right: auto !important;
+    width: 380px !important;
+    max-width: 90vw !important; /* Prevents overflow on smaller screens */
+    transform-origin: top left;
+}
+
+/* Fix the squished text inside the search results */
+.app-navbar-search-result-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.app-navbar-search-result-content strong {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.app-navbar-search-result-content small {
+    font-size: 0.75rem !important;
+    color: var(--text-secondary) !important;
+    font-weight: 500 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Dark Mode visibility guarantees */
+html[data-theme="dark"] .app-navbar-search-result-content strong {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .app-navbar-search-result-content small {
+    color: rgba(255, 255, 255, 0.6) !important;
+}

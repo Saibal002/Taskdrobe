@@ -234,35 +234,34 @@
             }) %>
 
 
-            <!-- Projects + Task Overview -->
-            <div class="manager-dashboard-grid manager-main-grid">
+          <!-- Projects + Upcoming Deadlines -->
+<div class="manager-dashboard-grid manager-main-grid">
 
-                <%- include("./partials/managerProjects", {
-                    projects,
-                    user
-                }) %>
+    <%- include("./partials/managerProjects", {
+        projects,
+        user
+    }) %>
+
+    <%- include("./partials/managerDeadlines", {
+        deadlines: upcomingDeadlines
+    }) %>
+
+</div>
+
+<!-- Attention + Task Overview -->
+<div class="manager-dashboard-grid manager-secondary-grid">
+
+    <%- include("./partials/managerAttention", {
+        items: attentionItems
+    }) %>
+
+    <%- include("./partials/managerTaskOverview", {
+        stats: managerStats
+    }) %>
+
+</div>
 
 
-                <%- include("./partials/managerTaskOverview", {
-                    stats: managerStats
-                }) %>
-
-            </div>
-
-
-            <!-- Attention + Deadlines -->
-            <div class="manager-dashboard-grid manager-secondary-grid">
-
-                <%- include("./partials/managerAttention", {
-                    items: attentionItems
-                }) %>
-
-
-                <%- include("./partials/managerDeadlines", {
-                    deadlines: upcomingDeadlines
-                }) %>
-
-            </div>
 
 
             <!-- Activity + Team -->
