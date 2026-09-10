@@ -1,240 +1,1197 @@
 /* =========================================================
-   EMPLOYEE DASHBOARD - V2 DESIGN SYSTEM
-========================================================= */
+   TASKDROBE V2 · EMPLOYEE DASHBOARD
+   Cleaned · Responsive · Token-consistent
+   ========================================================= */
 
-/* --- 1. Main Layout --- */
+/* ---------------------------------------------------------
+   SHELL
+   --------------------------------------------------------- */
 .employee-dashboard {
-    max-width: 1400px;
+    max-width: 1500px;
     margin: 0 auto;
+    padding-bottom: 3rem;
 }
 
-/* --- 2. Dashboard Hero (The Wide Pill) --- */
+/* shared card geometry */
+.workspace-card,
+.metric-card,
+.insights-region .dashboard-card,
+.calendar-card {
+    background: var(--surface-base);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.workspace-card:hover,
+.metric-card:hover,
+.insights-region .dashboard-card:hover,
+.calendar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12);
+}
+
+/* ---------------------------------------------------------
+   HERO
+   --------------------------------------------------------- */
 .dashboard-hero {
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(135deg, var(--accent-primary) 0%, #3b289c 100%);
-    border-radius: 100px !important;
-    padding: 2.5rem 4rem !important;
     color: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 3rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.18);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.15) !important;
-    margin-bottom: 3rem !important;
-    position: relative;
-    overflow: hidden;
-    border: none !important;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
 .dashboard-hero::after {
     content: '';
     position: absolute;
-    right: -50px;
-    top: -50px;
-    width: 250px;
-    height: 250px;
-    background: rgba(255, 255, 255, 0.1);
+    right: -80px; top: -80px;
+    width: 320px; height: 320px;
+    background: rgba(255, 255, 255, 0.10);
     border-radius: 50%;
-    backdrop-filter: blur(10px);
+    filter: blur(20px);
+    pointer-events: none;
 }
 
-.dashboard-hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #ffffff; }
-.hero-description { font-size: 1.1rem; opacity: 0.85; }
-
-html[data-theme="dark"] .dashboard-hero {
-    background: rgba(30, 30, 35, 0.5) !important;
-    border: 1px solid rgba(0, 255, 255, 0.2) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.05) !important;
-    backdrop-filter: blur(24px) saturate(120%) !important;
+.hero-copy {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    min-width: 0;
 }
 
-html[data-theme="dark"] .dashboard-hero h1 { color: #00ffff !important; text-shadow: 0 0 15px rgba(0, 255, 255, 0.4); font-weight: 300; }
-html[data-theme="dark"] .hero-description { color: rgba(255, 255, 255, 0.6); }
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.75rem;
+}
 
-/* --- 3. Metric Cards --- */
-.metric-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+.dashboard-hero h1 {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    line-height: 1.1;
+    color: #ffffff;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.03em;
+}
+
+.dashboard-hero h1 span { color: #ffffff; font-weight: 800; }
+
+.hero-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin: 0;
+    max-width: 560px;
+}
+
+.hero-summary {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.30);
+    flex-shrink: 0;
 }
 
-.metric-card, .workspace-card {
+.hero-date { display: flex; align-items: center; gap: 0.85rem; }
+.hero-date i { font-size: 1.5rem; }
+.hero-date span {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+.hero-date strong {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.hero-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.30);
+}
+
+.hero-attention { text-align: right; }
+.attention-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+.attention-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-top: 0.25rem;
+}
+
+/* ---------------------------------------------------------
+   FOCUS STRIP
+   --------------------------------------------------------- */
+.focus-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
     background: var(--surface-base);
-    border-radius: var(--radius-lg) !important;
-    padding: 1.5rem;
-    box-shadow: var(--shadow-soft);
     border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
-.metric-card:hover, .workspace-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12); }
-.metric-card strong { font-size: 2rem; font-weight: 800; color: var(--text-primary); display: block; margin-top: 0.5rem; }
-.metric-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-
-html[data-theme="dark"] .metric-card, html[data-theme="dark"] .workspace-card {
-    background: rgba(25, 25, 30, 0.6) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    backdrop-filter: blur(16px) !important;
-}
-html[data-theme="dark"] .metric-card strong { color: var(--accent-primary); }
-
-/* --- 4. Workspace / Task Queue --- */
-.dashboard-work-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 1.5rem;
+.focus-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(90, 75, 209, 0.10);
+    color: var(--accent-primary);
+    display: grid; place-items: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
 }
 
-.task-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 0; border-bottom: 1px solid var(--border-color);
+.focus-copy {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
 }
-.task-row:last-child { border-bottom: none; }
-.task-title-line h3 { font-size: 1rem; color: var(--text-primary); margin: 0; }
-.task-main p { font-size: 0.85rem; color: var(--text-secondary); margin: 0.25rem 0 0; }
+.focus-copy strong {
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 700;
+}
+.focus-label {
+    color: var(--accent-primary);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
 
-html[data-theme="dark"] .task-title-line h3 { color: var(--accent-primary); }
+.focus-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    background: rgba(90, 75, 209, 0.08);
+    color: var(--accent-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+.focus-link:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-1px);
+}
 
-/* --- 5. Project Carousel (Patched for text visibility & geometry) --- */
-.projects-section-featured { margin-bottom: 3rem; }
-.project-carousel-shell { position: relative !important; }
+/* ---------------------------------------------------------
+   SECTION HEADINGS (shared)
+   --------------------------------------------------------- */
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+.section-kicker {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin: 0 0 0.25rem;
+}
+.section-heading h2 {
+    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+.section-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-decoration: none;
+    transition: gap 0.25s ease;
+}
+.section-action:hover { gap: 0.7rem; }
+.section-note {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* ---------------------------------------------------------
+   PROJECTS — CAROUSEL
+   --------------------------------------------------------- */
+.projects-section-featured { margin-bottom: 2rem; }
+
+.project-carousel-shell {
+    position: relative;
+    padding: 0 1.5rem;
+}
 
 .project-carousel {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    gap: 1.5rem !important;
-    padding: 1rem 0.5rem !important;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 1.25rem;
+    padding: 0.5rem 0.25rem 1rem;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none; 
+    scrollbar-width: none;
 }
 .project-carousel::-webkit-scrollbar { display: none; }
 
 .project-carousel .project-card {
-    flex: 0 0 320px !important; 
+    flex: 0 0 min(320px, 82vw);
     scroll-snap-align: start;
-    min-height: 220px !important;
-    padding: 1.5rem !important;
-    border-radius: 24px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    text-decoration: none !important;
+    min-height: 220px;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+.project-carousel .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(90, 75, 209, 0.15);
 }
 
 .project-card-navy { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); }
 .project-card-teal { background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%); }
 .project-card-coral { background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%); }
 
-/* Light Mode Text for visibility */
-.project-carousel .project-card h3 {
-    color: var(--text-primary) !important;
-    font-size: 1.25rem !important; font-weight: 800 !important;
-    margin: 0.5rem 0 !important; white-space: nowrap !important;
-    overflow: hidden !important; text-overflow: ellipsis !important;
+.project-card-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
 }
 
-.project-carousel .project-card p.project-description { color: var(--text-secondary) !important; font-size: 0.85rem !important; margin: 0 !important; }
-.project-carousel .project-status { color: var(--accent-primary) !important; font-size: 0.75rem !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
+.project-card .project-status {
+    color: var(--accent-primary);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.project-arrow {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--accent-primary);
+    display: grid; place-items: center;
+    font-size: 0.75rem;
+    transition: transform 0.25s ease;
+}
+.project-carousel .project-card:hover .project-arrow {
+    transform: translate(2px, -2px);
+}
+
+.project-carousel .project-card h3 {
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-carousel .project-card p.project-description {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0 0 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+}
+.project-progress-meta strong {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+}
 
 .project-carousel .project-progress {
-    background: rgba(255, 255, 255, 0.5) !important;
-    height: 8px !important; border-radius: 4px !important;
-    margin: 1rem 0 0 !important; overflow: hidden !important;
+    background: rgba(255, 255, 255, 0.6);
+    height: 8px;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin: 0;
+}
+.project-carousel .project-progress .progress-bar {
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    height: 100%;
+    border-radius: var(--radius-pill);
+    transition: width 0.6s ease;
 }
 
-.project-carousel .project-progress .progress-bar { background: var(--accent-primary) !important; height: 100% !important; border-radius: 4px !important; box-shadow: 0 0 10px rgba(0, 255, 255, 0.5) !important; }
-
-.project-carousel .project-card-footer {
-    display: flex !important; justify-content: space-between !important;
-    margin-top: 1rem !important; padding-top: 1rem !important;
-    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-    color: var(--text-secondary) !important; font-size: 0.75rem !important;
+.project-card-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.project-card-footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
+/* carousel controls */
 .project-carousel-control {
-    position: absolute !important; top: 50% !important; transform: translateY(-50%) !important;
-    width: 44px !important; height: 44px !important; border-radius: 50% !important;
-    background: var(--surface-base) !important; border: 1px solid var(--border-color) !important;
-    box-shadow: var(--shadow-soft) !important; display: flex !important; align-items: center !important; justify-content: center !important;
-    color: var(--accent-primary) !important; cursor: pointer !important; z-index: 10 !important; transition: all 0.3s ease !important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--surface-base);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    display: grid; place-items: center;
+    color: var(--accent-primary);
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.25s ease;
+}
+.project-carousel-control:hover {
+    background: var(--accent-primary);
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(90, 75, 209, 0.3);
+}
+.project-carousel-previous { left: -8px; }
+.project-carousel-next { right: -8px; }
+.project-carousel-control:disabled {
+    opacity: 0;
+    pointer-events: none;
 }
 
-.project-carousel-control:hover { background: var(--accent-primary) !important; color: #ffffff !important; box-shadow: 0 10px 20px rgba(90, 75, 209, 0.3) !important; }
-.project-carousel-previous { left: -22px !important; }
-.project-carousel-next { right: -22px !important; }
-.project-carousel-control:disabled { opacity: 0 !important; pointer-events: none !important; }
+/* ---------------------------------------------------------
+   DASHBOARD OVERVIEW / METRIC GRID
+   --------------------------------------------------------- */
+.dashboard-overview { margin-bottom: 2rem; }
 
-/* Dark Mode Carousel Reverts */
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+}
+
+.metric-card {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.metric-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+.metric-icon-projects { background: rgba(108, 92, 231, 0.15); color: #6C5CE7; }
+.metric-icon-tasks    { background: rgba(9, 132, 227, 0.15); color: #0984e3; }
+.metric-icon-complete { background: rgba(0, 184, 148, 0.15); color: #00b894; }
+.metric-icon-deadline { background: rgba(255, 71, 87, 0.15);  color: #ff4757; }
+
+.metric-card > div:last-child { min-width: 0; }
+
+.metric-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+.metric-card strong {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-top: 0.1rem;
+}
+.metric-card small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.15rem;
+}
+
+.metric-card-alert {
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.06), rgba(255, 71, 87, 0.02));
+    border-color: rgba(255, 71, 87, 0.25);
+}
+
+/* ---------------------------------------------------------
+   MAIN GRID (tasks + insights + calendar)
+   --------------------------------------------------------- */
+.dashboard-main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 1.5rem;
+    align-items: start;
+}
+.dashboard-main-column { min-width: 0; }
+
+.dashboard-work-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.calendar-region { min-width: 0; }
+
+/* ---------------------------------------------------------
+   TASK QUEUE CARD
+   --------------------------------------------------------- */
+.task-queue-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+.card-heading h2 {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+.count-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background: rgba(90, 75, 209, 0.10);
+    color: var(--accent-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.task-queue {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.task-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    transition: background 0.25s ease, border-color 0.25s ease;
+}
+.task-row:hover {
+    background: var(--surface-glass);
+    border-color: var(--border-color);
+}
+
+.task-checkbox {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    display: grid; place-items: center;
+    color: transparent;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+.task-checkbox:hover { border-color: var(--accent-primary); }
+.task-checkbox.checked {
+    background: #00b894;
+    border-color: #00b894;
+    color: #ffffff;
+}
+
+.task-main { min-width: 0; }
+
+.task-title-line {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+.task-title-line h3 {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 700;
+}
+
+.task-priority {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.task-priority.priority-high   { background: rgba(255, 71, 87, 0.12);  color: #d63031; }
+.task-priority.priority-medium { background: rgba(253, 203, 110, 0.22); color: #b8860b; }
+.task-priority.priority-low    { background: rgba(0, 184, 148, 0.12);  color: #00b894; }
+
+.task-main p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0.15rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.task-deadline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-pill);
+    background: var(--surface-glass);
+    border: 1px solid var(--border-color);
+    white-space: nowrap;
+    font-style: normal;
+}
+.task-deadline.is-overdue {
+    color: #d63031;
+    background: rgba(255, 71, 87, 0.10);
+    border-color: rgba(255, 71, 87, 0.25);
+}
+
+/* ---------------------------------------------------------
+   EMPTY STATES
+   --------------------------------------------------------- */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    gap: 0.4rem;
+}
+.empty-state strong { color: var(--text-primary); font-size: 0.95rem; }
+.empty-state span   { font-size: 0.85rem; }
+
+.empty-state-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(90, 75, 209, 0.10);
+    color: var(--accent-primary);
+    display: grid; place-items: center;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.workspace-card.project-empty-state {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    flex-wrap: wrap;
+}
+.workspace-card.project-empty-state h3 {
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem;
+}
+.workspace-card.project-empty-state p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ---------------------------------------------------------
+   INSIGHTS REGION (chart card)
+   --------------------------------------------------------- */
+.insights-region {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+}
+.insights-region .dashboard-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* ---------------------------------------------------------
+   CALENDAR
+   --------------------------------------------------------- */
+.calendar-card {
+    padding: 1.5rem;
+    position: sticky;
+    top: calc(var(--app-navbar-height) + 2rem);
+}
+.calendar-events { margin-top: 1rem; }
+.calendar-events .event-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.calendar-events .event-item:last-child { border-bottom: none; }
+
+.event-indicator {
+    width: 6px;
+    border-radius: var(--radius-pill);
+    flex-shrink: 0;
+}
+.orange-indicator { background: #ff7675; }
+.purple-indicator { background: var(--accent-primary); }
+.teal-indicator   { background: #00cec9; }
+
+/* ---------------------------------------------------------
+   CHAT BUTTON
+   --------------------------------------------------------- */
+.chat-button {
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #3b289c 100%);
+    color: #fff;
+    border: none;
+    display: grid;
+    place-items: center;
+    font-size: 1.15rem;
+    box-shadow: 0 12px 28px rgba(90, 75, 209, 0.35);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+.chat-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 18px 36px rgba(90, 75, 209, 0.45);
+    color: #fff;
+}
+
+/* ---------------------------------------------------------
+   DARK THEME
+   --------------------------------------------------------- */
+html[data-theme="dark"] .dashboard-hero {
+    background: rgba(30, 30, 35, 0.5) !important;
+    border: 1px solid rgba(0, 255, 255, 0.20) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.05) !important;
+    backdrop-filter: blur(24px) saturate(120%);
+}
+html[data-theme="dark"] .dashboard-hero h1,
+html[data-theme="dark"] .dashboard-hero h1 span {
+    color: #00ffff !important;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    font-weight: 300;
+}
+html[data-theme="dark"] .hero-summary {
+    background: rgba(30, 30, 35, 0.5);
+    border-color: rgba(0, 255, 255, 0.20);
+}
+html[data-theme="dark"] .hero-date i,
+html[data-theme="dark"] .attention-value { color: var(--accent-primary); }
+
+html[data-theme="dark"] .focus-strip,
+html[data-theme="dark"] .metric-card,
+html[data-theme="dark"] .workspace-card,
+html[data-theme="dark"] .insights-region .dashboard-card,
+html[data-theme="dark"] .calendar-card {
+    background: rgba(25, 25, 30, 0.6) !important;
+    border-color: rgba(0, 255, 255, 0.15) !important;
+    backdrop-filter: blur(16px);
+}
+html[data-theme="dark"] .metric-card strong,
+html[data-theme="dark"] .task-title-line h3,
+html[data-theme="dark"] .card-heading h2 {
+    color: var(--accent-primary);
+}
+html[data-theme="dark"] .metric-icon {
+    background: transparent;
+    border: 1px solid var(--accent-primary);
+    box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2);
+    color: var(--accent-primary);
+}
+html[data-theme="dark"] .metric-card-alert {
+    background: linear-gradient(135deg, rgba(255, 0, 255, 0.08), rgba(255, 0, 255, 0.02)) !important;
+    border-color: rgba(255, 0, 255, 0.3) !important;
+}
+
 html[data-theme="dark"] .project-card-navy,
 html[data-theme="dark"] .project-card-teal,
 html[data-theme="dark"] .project-card-coral {
-    background: var(--surface-glass); border: 1px solid rgba(0, 255, 255, 0.15); backdrop-filter: blur(16px);
+    background: var(--surface-glass);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(16px);
 }
 html[data-theme="dark"] .project-carousel .project-card h3 { color: #ffffff !important; }
 html[data-theme="dark"] .project-carousel .project-card p.project-description { color: rgba(255, 255, 255, 0.7) !important; }
-html[data-theme="dark"] .project-carousel .project-status { color: #00ffff !important; }
-html[data-theme="dark"] .project-carousel .project-progress { background: rgba(255, 255, 255, 0.1) !important; }
-html[data-theme="dark"] .project-carousel .project-card-footer { border-top: 1px solid rgba(255, 255, 255, 0.1) !important; color: rgba(255, 255, 255, 0.6) !important; }
-html[data-theme="dark"] .project-carousel-control { background: var(--surface-glass) !important; border-color: rgba(0, 255, 255, 0.2) !important; backdrop-filter: blur(12px) !important; color: var(--accent-primary) !important; }
-html[data-theme="dark"] .project-carousel-control:hover { background: var(--accent-primary) !important; color: #121214 !important; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4) !important; }
-
-/* --- 6. Insights & Calendar Sidebar --- */
-.insights-region { margin-top: 1.5rem; }
-.insights-region .dashboard-card { background: var(--surface-base); border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); padding: 1.5rem; height: 100%; display: flex; flex-direction: column; transition: all 0.3s ease; }
-.insights-region .dashboard-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12); }
-
-.calendar-region { min-width: 0; }
-.calendar-card { position: sticky; top: calc(var(--app-navbar-height) + 2rem); background: var(--surface-base); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; box-shadow: var(--shadow-soft); transition: all 0.3s ease; }
-.calendar-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12); }
-.calendar-events { margin-top: 1.5rem; }
-.calendar-events .event-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color); }
-.calendar-events .event-item:last-child { border-bottom: none; }
-
-.event-indicator { width: 6px; height: 40px; border-radius: var(--radius-pill); flex-shrink: 0; }
-.orange-indicator { background: #ff7675; }
-.purple-indicator { background: var(--accent-primary); }
-.teal-indicator { background: #00cec9; }
-
-html[data-theme="dark"] .insights-region .dashboard-card,
-html[data-theme="dark"] .calendar-card {
-    background: var(--surface-glass); border: 1px solid rgba(0, 255, 255, 0.15); backdrop-filter: blur(16px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.05);
+html[data-theme="dark"] .project-card .project-status { color: #00ffff !important; }
+html[data-theme="dark"] .project-arrow { background: rgba(255, 255, 255, 0.10); color: #00ffff; }
+html[data-theme="dark"] .project-carousel .project-progress { background: rgba(255, 255, 255, 0.08) !important; }
+html[data-theme="dark"] .project-progress-meta { color: rgba(255, 255, 255, 0.6); }
+html[data-theme="dark"] .project-progress-meta strong { color: #ffffff; }
+html[data-theme="dark"] .project-card-footer {
+    border-top-color: rgba(255, 255, 255, 0.10) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
 }
-html[data-theme="dark"] .insights-region .dashboard-card:hover, html[data-theme="dark"] .calendar-card:hover { border-color: var(--accent-primary); box-shadow: 0 10px 30px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(0, 255, 255, 0.05); }
-html[data-theme="dark"] .orange-indicator { background: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
-html[data-theme="dark"] .purple-indicator, html[data-theme="dark"] .teal-indicator { background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary); }
+html[data-theme="dark"] .project-carousel-control {
+    background: var(--surface-glass) !important;
+    border-color: rgba(0, 255, 255, 0.2) !important;
+    color: var(--accent-primary) !important;
+}
 
-@media (max-width: 1199px) { .calendar-card { position: static; margin-top: 2rem; } }
-@media (max-width: 768px) { .dashboard-hero { border-radius: 32px !important; padding: 2rem !important; } }
+html[data-theme="dark"] .task-row:hover {
+    background: rgba(0, 255, 255, 0.05);
+    border-color: rgba(0, 255, 255, 0.15);
+}
+html[data-theme="dark"] .task-deadline {
+    background: rgba(0, 255, 255, 0.06);
+    border-color: rgba(0, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+}
+html[data-theme="dark"] .task-deadline.is-overdue {
+    background: rgba(255, 0, 100, 0.15);
+    border-color: rgba(255, 0, 100, 0.3);
+    color: #ff7799;
+}
+html[data-theme="dark"] .task-priority.priority-high   { background: rgba(255, 0, 100, 0.15); color: #ff7799; }
+html[data-theme="dark"] .task-priority.priority-medium { background: rgba(255, 200, 0, 0.15); color: #ffc107; }
+html[data-theme="dark"] .task-priority.priority-low    { background: rgba(0, 255, 200, 0.12); color: #00ffcc; }
+
+html[data-theme="dark"] .focus-link {
+    background: rgba(0, 255, 255, 0.1);
+    color: var(--accent-primary);
+}
+html[data-theme="dark"] .focus-link:hover {
+    background: var(--accent-primary);
+    color: #121214;
+}
+html[data-theme="dark"] .empty-state-icon {
+    background: rgba(0, 255, 255, 0.1);
+    color: var(--accent-primary);
+}
+html[data-theme="dark"] .chat-button {
+    background: linear-gradient(135deg, rgba(76, 29, 149, 0.9) 0%, rgba(190, 18, 60, 0.7) 100%);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
 
 /* =========================================================
-   EMPLOYEE DASHBOARD: RESPONSIVE GRID STACKING
-========================================================= */
+   RESPONSIVE
+   ========================================================= */
 
+/* Laptop / large tablet */
+@media (max-width: 1199px) {
+    .dashboard-main-grid { grid-template-columns: 1fr; }
+    .calendar-card { position: static; }
+    .dashboard-work-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+/* Tablet */
 @media (max-width: 991px) {
-    /* Force the workspace and charts to stack vertically */
-    .dashboard-work-grid {
-        grid-template-columns: 1fr !important;
-    }
-    
-    /* Allow the Hero Pill to wrap its text and date blocks */
     .dashboard-hero {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 1.5rem !important;
-        padding: 2rem !important;
-        border-radius: 40px !important;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 2rem;
+        border-radius: var(--radius-md);
+        gap: 1.5rem;
     }
-    
     .hero-summary {
-        width: 100% !important;
-        justify-content: space-between !important;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .hero-attention { text-align: left; }
+
+    .dashboard-work-grid { grid-template-columns: 1fr; }
+
+    .project-carousel .project-card { flex: 0 0 min(300px, 78vw); }
+}
+
+/* Mobile landscape / large phone */
+@media (max-width: 768px) {
+    .employee-dashboard { padding-bottom: 2rem; }
+
+    .dashboard-hero { padding: 1.5rem; }
+    .dashboard-hero h1 { font-size: 1.6rem; }
+    .hero-description { font-size: 0.9rem; }
+
+    .hero-summary { padding: 0.85rem 1rem; gap: 1rem; }
+    .hero-date i { font-size: 1.25rem; }
+    .hero-date strong { font-size: 1rem; }
+    .attention-value { font-size: 1.25rem; }
+
+    .focus-strip { padding: 1rem 1.15rem; gap: 0.75rem; }
+    .focus-icon { width: 38px; height: 38px; font-size: 1rem; }
+    .focus-copy { font-size: 0.9rem; }
+    .focus-link { padding: 0.4rem 0.85rem; font-size: 0.8rem; }
+
+    .section-heading h2 { font-size: 1.2rem; }
+    .section-note { display: none; }
+
+    .project-carousel-shell { padding: 0 0.5rem; }
+    .project-carousel .project-card { flex: 0 0 82vw; padding: 1.25rem; }
+    .project-carousel-control { width: 38px; height: 38px; }
+    .project-carousel-previous { left: 0; }
+    .project-carousel-next { right: 0; }
+
+    .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
+    }
+    .metric-card { padding: 1rem; gap: 0.75rem; }
+    .metric-icon { width: 42px; height: 42px; font-size: 1.1rem; border-radius: 12px; }
+    .metric-card strong { font-size: 1.4rem; }
+    .metric-label { font-size: 0.7rem; }
+
+    .task-row {
+        grid-template-columns: auto 1fr;
+        padding: 0.75rem;
+        gap: 0.65rem;
+    }
+    .task-deadline {
+        grid-column: 2;
+        justify-self: start;
+        margin-top: 0.35rem;
+    }
+
+    .workspace-card.project-empty-state {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .calendar-card { padding: 1.25rem; }
+}
+
+/* Small phone */
+@media (max-width: 480px) {
+    .dashboard-hero { padding: 1.25rem; }
+    .dashboard-hero h1 { font-size: 1.35rem; }
+    .eyebrow { font-size: 0.7rem; }
+
+    .hero-summary {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+        text-align: left;
+    }
+    .hero-divider { width: 100%; height: 1px; }
+    .hero-attention { text-align: left; }
+
+    .focus-strip { flex-direction: column; align-items: flex-start; }
+    .focus-link { width: 100%; justify-content: center; }
+
+    .metric-grid { grid-template-columns: 1fr; }
+    .metric-card { padding: 0.95rem 1rem; }
+
+    .project-carousel .project-card { flex: 0 0 88vw; }
+
+    .task-title-line {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+    .task-priority { font-size: 0.6rem; }
+
+    .chat-button {
+        width: 50px; height: 50px;
+        bottom: 1.25rem; right: 1.25rem;
+        font-size: 1rem;
     }
 }
 
-@media (max-width: 575px) {
-    .metric-grid {
-        grid-template-columns: 1fr !important;
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .employee-dashboard *,
+    .employee-dashboard *::before,
+    .employee-dashboard *::after {
+        animation: none !important;
+        transition: none !important;
     }
+}
+/* =========================================================
+   CALENDAR CARD — FIXED LAYOUT
+   (overrides Bootstrap column + flex overflow)
+   ========================================================= */
+
+/* 1) Neutralize misplaced Bootstrap column classes inside the grid */
+.calendar-region [class*="col-"],
+.calendar-region > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* 2) Card container */
+.calendar-card {
+    padding: 0 !important;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.calendar-card .card-body {
+    padding: 1.25rem 1.4rem !important;
+    min-width: 0;
+}
+
+.calendar-card .card-title {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    color: var(--text-primary) !important;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.calendar-card .card-body > .d-flex:first-child {
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.calendar-card .card-body > .d-flex:first-child i {
+    color: var(--text-secondary) !important;
+    font-size: 0.95rem;
+}
+
+/* 3) Events list */
+.calendar-events {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.calendar-events > div {
+    min-width: 0;
+    margin-bottom: 0 !important;
+}
+
+/* Date heading */
+.calendar-events h6 {
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    color: var(--text-secondary) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.6rem !important;
+    line-height: 1.3;
+}
+
+/* 4) Each task row → grid (time | indicator | content) */
+.calendar-events .d-flex {
+    display: grid !important;
+    grid-template-columns: 62px 4px minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    margin: 0 !important;
+    min-width: 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.calendar-events > div > .d-flex:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Time column */
+.calendar-events .d-flex > small.text-muted {
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Colored indicator bar */
+.calendar-events .event-indicator {
+    width: 4px !important;
+    height: 32px;
+    border-radius: var(--radius-pill);
+    margin: 0 !important;
+    align-self: center;
+}
+
+/* Content column */
+.calendar-events .flex-grow-1 {
+    min-width: 0 !important;
+    flex: none !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.calendar-events .fw-medium.small {
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    line-height: 1.25;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.calendar-events .text-muted.small {
+    font-size: 0.72rem !important;
+    color: var(--text-secondary) !important;
+    line-height: 1.25;
+    margin: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+/* 5) Empty state */
+.calendar-card .text-center {
+    padding: 2rem 0 1rem !important;
+}
+.calendar-card .text-center i {
+    color: var(--text-secondary) !important;
+    opacity: 0.45;
+    font-size: 1.75rem !important;
+}
+.calendar-card .text-center p {
+    margin-top: 0.6rem !important;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* 6) Dark theme corrections (Bootstrap text-dark / text-muted clash) */
+html[data-theme="dark"] .calendar-card .card-title,
+html[data-theme="dark"] .calendar-events .fw-medium.small,
+html[data-theme="dark"] .calendar-card h6.text-dark,
+html[data-theme="dark"] .calendar-card .text-dark {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .calendar-events h6,
+html[data-theme="dark"] .calendar-events .d-flex > small.text-muted,
+html[data-theme="dark"] .calendar-events .text-muted.small,
+html[data-theme="dark"] .calendar-card .text-muted {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+html[data-theme="dark"] .calendar-events .d-flex {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+html[data-theme="dark"] .calendar-card .card-body > .d-flex:first-child {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+/* 7) Responsive tightening */
+@media (max-width: 768px) {
+    .calendar-events .d-flex {
+        grid-template-columns: 56px 4px minmax(0, 1fr);
+        gap: 0.6rem;
+    }
+    .calendar-events .event-indicator { height: 28px; }
+}
+
+@media (max-width: 480px) {
+    .calendar-card .card-body { padding: 1rem !important; }
+    .calendar-events .d-flex {
+        grid-template-columns: 50px 4px minmax(0, 1fr);
+        gap: 0.5rem;
+        padding: 0.45rem 0;
+    }
+    .calendar-events h6 { font-size: 0.68rem !important; }
+    .calendar-events .fw-medium.small { font-size: 0.78rem !important; }
 }

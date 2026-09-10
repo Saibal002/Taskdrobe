@@ -1,20 +1,276 @@
 <%- include('layout/header', { title: 'Welcome to TaskDrobe' }) %>
 
-<div class="auth-layout">
-    <div class="landing-content glass-panel">
-        <h1>TaskDrobe</h1>
-        <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 3rem;">
-            Your one-stop solution for managing projects, tracking time, and assigning tasks in a beautiful, distraction-free environment.
-        </p>
-        <div style="display: flex; gap: 1rem; justify-content: center;">
-            <a href="/login" class="btn-glow" style="max-width: 200px; background: transparent; border: 2px solid var(--accent-primary); color: var(--text-primary); box-shadow: none;">
-                Login
-            </a>
-            <a href="/signup" class="btn-glow" style="max-width: 200px;">
-                Get Started
-            </a>
+<link rel="stylesheet" href="/css/landing.css" />
+
+<main class="landing-shell">
+
+    <!-- =========================================================
+         HERO
+    ========================================================= -->
+    <section class="landing-hero">
+        <div class="landing-hero-bg" aria-hidden="true">
+            <span class="landing-blob landing-blob-1"></span>
+            <span class="landing-blob landing-blob-2"></span>
+            <span class="landing-blob landing-blob-3"></span>
         </div>
-    </div>
-</div>
+
+        <div class="landing-hero-inner">
+            <div class="landing-hero-copy">
+                <span class="landing-badge">
+                    <i class="fas fa-bolt"></i>
+                    <span>New · V2 Productivity Suite</span>
+                </span>
+
+                <h1 class="landing-hero-title">
+                    Where teams
+                    <span class="landing-gradient-text">move work forward.</span>
+                </h1>
+
+                <p class="landing-hero-subtitle">
+                    TaskDrobe brings projects, tasks, teams, and deadlines into one
+                    distraction‑free workspace — built for managers who ship.
+                </p>
+
+                <div class="landing-hero-cta">
+                    <a href="/signup" class="btn-glow landing-btn landing-btn-primary">
+                        <span>Get Started Free</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="/login" class="landing-btn landing-btn-ghost">
+                        <i class="fas fa-right-to-bracket"></i>
+                        <span>Sign In</span>
+                    </a>
+                </div>
+
+                <div class="landing-hero-trust">
+                    <div class="landing-avatars" aria-hidden="true">
+                        <span class="landing-avatar">A</span>
+                        <span class="landing-avatar">M</span>
+                        <span class="landing-avatar">K</span>
+                        <span class="landing-avatar landing-avatar-more">+9k</span>
+                    </div>
+                    <p>
+                        Trusted by <strong>9,000+</strong> teams shipping faster every day.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Mock preview card -->
+            <div class="landing-hero-preview" aria-hidden="true">
+                <div class="preview-window">
+                    <div class="preview-window-bar">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="preview-window-body">
+                        <div class="preview-row">
+                            <span class="preview-dot preview-dot-purple"></span>
+                            <div class="preview-lines">
+                                <span class="preview-line preview-line-lg"></span>
+                                <span class="preview-line preview-line-sm"></span>
+                            </div>
+                            <span class="preview-pill">In Progress</span>
+                        </div>
+                        <div class="preview-row">
+                            <span class="preview-dot preview-dot-teal"></span>
+                            <div class="preview-lines">
+                                <span class="preview-line preview-line-lg"></span>
+                                <span class="preview-line preview-line-sm"></span>
+                            </div>
+                            <span class="preview-pill preview-pill-teal">Completed</span>
+                        </div>
+                        <div class="preview-row">
+                            <span class="preview-dot preview-dot-orange"></span>
+                            <div class="preview-lines">
+                                <span class="preview-line preview-line-lg"></span>
+                                <span class="preview-line preview-line-sm"></span>
+                            </div>
+                            <span class="preview-pill preview-pill-orange">Review</span>
+                        </div>
+
+                        <div class="preview-progress">
+                            <div class="preview-progress-head">
+                                <span>Q3 Sprint Progress</span>
+                                <strong>76%</strong>
+                            </div>
+                            <div class="preview-progress-track">
+                                <span style="width: 76%"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+         TRUST STRIP
+    ========================================================= -->
+    <section class="landing-trust-strip">
+        <p>Powering projects at</p>
+        <div class="landing-trust-logos">
+            <span>Northwind</span>
+            <span>Acme Co.</span>
+            <span>Lumina</span>
+            <span>Vertex</span>
+            <span>Skyline</span>
+        </div>
+    </section>
+
+    <!-- =========================================================
+         FEATURES
+    ========================================================= -->
+    <section class="landing-section" id="features">
+        <header class="landing-section-head">
+            <span class="landing-eyebrow">Everything you need</span>
+            <h2>One workspace. Every workflow.</h2>
+            <p>
+                From kickoff to launch — plan, assign, track, and ship without
+                juggling five different tools.
+            </p>
+        </header>
+
+        <div class="landing-features">
+            <article class="landing-feature-card">
+                <span class="landing-feature-icon landing-icon-purple">
+                    <i class="fas fa-diagram-project"></i>
+                </span>
+                <h3>Project Command Center</h3>
+                <p>
+                    Oversee every project at a glance — health, progress, deadlines,
+                    and blockers in one clean view.
+                </p>
+            </article>
+
+            <article class="landing-feature-card">
+                <span class="landing-feature-icon landing-icon-teal">
+                    <i class="fas fa-list-check"></i>
+                </span>
+                <h3>Task Orchestration</h3>
+                <p>
+                    Create, assign, and prioritize tasks with deadlines, statuses, and
+                    priorities built for real work.
+                </p>
+            </article>
+
+            <article class="landing-feature-card">
+                <span class="landing-feature-icon landing-icon-orange">
+                    <i class="fas fa-users-gear"></i>
+                </span>
+                <h3>Team Management</h3>
+                <p>
+                    Onboard teammates in seconds. Assign roles, track workload, and
+                    keep everyone aligned.
+                </p>
+            </article>
+
+            <article class="landing-feature-card">
+                <span class="landing-feature-icon landing-icon-blue">
+                    <i class="fas fa-comments"></i>
+                </span>
+                <h3>Real‑Time Discussions</h3>
+                <p>
+                    Threaded comments, mentions, and file sharing — keep every
+                    conversation in its project context.
+                </p>
+            </article>
+
+            <article class="landing-feature-card">
+                <span class="landing-feature-icon landing-icon-green">
+                    <i class="fas fa-chart-pie"></i>
+                </span>
+                <h3>Insights &amp; Health</h3>
+                <p>
+                    Auto‑generated health indicators, completion trends, and overdue
+                    alerts that keep you ahead.
+                </p>
+            </article>
+
+            <article class="landing-feature-card">
+                <span class="landing-feature-icon landing-icon-pink">
+                    <i class="fas fa-shield-halved"></i>
+                </span>
+                <h3>Role‑Based Access</h3>
+                <p>
+                    Managers see everything. Employees see what matters. Granular
+                    permissions, zero clutter.
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <!-- =========================================================
+         STATS
+    ========================================================= -->
+    <section class="landing-stats">
+        <div class="landing-stat">
+            <strong>9K+</strong>
+            <span>Active Teams</span>
+        </div>
+        <div class="landing-stat">
+            <strong>120K+</strong>
+            <span>Tasks Completed</span>
+        </div>
+        <div class="landing-stat">
+            <strong>4.9★</strong>
+            <span>Average Rating</span>
+        </div>
+        <div class="landing-stat">
+            <strong>99.9%</strong>
+            <span>Uptime</span>
+        </div>
+    </section>
+
+    <!-- =========================================================
+         HOW IT WORKS
+    ========================================================= -->
+    <section class="landing-section landing-how">
+        <header class="landing-section-head">
+            <span class="landing-eyebrow">How it works</span>
+            <h2>Up and running in 3 minutes.</h2>
+            <p>No onboarding calls. No setup fees. Just open and go.</p>
+        </header>
+
+        <ol class="landing-steps">
+            <li class="landing-step">
+                <span class="landing-step-number">01</span>
+                <h3>Create your workspace</h3>
+                <p>Sign up as a manager or employee and invite your team in seconds.</p>
+            </li>
+            <li class="landing-step">
+                <span class="landing-step-number">02</span>
+                <h3>Spin up a project</h3>
+                <p>Define scope, deadline, and members. Add tasks and set priorities.</p>
+            </li>
+            <li class="landing-step">
+                <span class="landing-step-number">03</span>
+                <h3>Ship with confidence</h3>
+                <p>Track progress, discuss in‑context, and deliver on time — every time.</p>
+            </li>
+        </ol>
+    </section>
+
+    <!-- =========================================================
+         CTA
+    ========================================================= -->
+    <section class="landing-cta">
+        <div class="landing-cta-inner">
+            <h2>Ready to move your team forward?</h2>
+            <p>
+                Join thousands of managers and teams using TaskDrobe to ship better
+                work — faster.
+            </p>
+            <div class="landing-hero-cta">
+                <a href="/signup" class="btn-glow landing-btn landing-btn-primary">
+                    <span>Start for free</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="/login" class="landing-btn landing-btn-ghost">
+                    <span>I already have an account</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</main>
 
 <%- include('layout/footer') %>
