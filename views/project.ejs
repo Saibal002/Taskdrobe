@@ -54,7 +54,7 @@
                         </p>
                     </div>
 
-                    <div class="project-status-panel">
+                    <div class="project-status-panel" style="--progress: <%= Number(project.progress || 0) %>;">
                         <span class="project-status-label">Current Status</span>
                         <span class="project-status-badge shadow-sm
                         <%= project.status === 'Completed' ? 'project-status-completed' : 
