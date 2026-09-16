@@ -13,244 +13,154 @@
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">
-    
-    <style>
-        /* =========================================================
-           ADMIN DASHBOARD SPECIFIC STYLES
-           ========================================================= */
-        .admin-header {
-            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-            color: white;
-            padding: 2.5rem;
-            border-radius: 24px;
-            margin-bottom: 2rem;
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .admin-header::after {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            top: -100px;
-            right: -50px;
-            pointer-events: none;
-        }
-        
-        .admin-stat-card {
-            padding: 1.5rem 2rem;
-            border-radius: 20px;
-            border: none;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-            z-index: 1;
-        }
-        
-        .admin-stat-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .admin-stat-card i.bg-icon {
-            position: absolute;
-            right: -15px;
-            bottom: -20px;
-            font-size: 6rem;
-            opacity: 0.15;
-            z-index: -1;
-            transform: rotate(-10deg);
-        }
-        
-        /* Vibrant SaaS Gradients */
-        .bg-gradient-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.25); }
-        .bg-gradient-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 10px 25px rgba(139, 92, 246, 0.25); }
-        .bg-gradient-green { background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25); }
-        .bg-gradient-orange { background: linear-gradient(135deg, #f59e0b, #b45309); box-shadow: 0 10px 25px rgba(245, 158, 11, 0.25); }
-        .bg-gradient-red { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 10px 25px rgba(239, 68, 68, 0.25); }
-        .bg-gradient-dark { background: linear-gradient(135deg, #1e293b, #0f172a); box-shadow: 0 10px 25px rgba(30, 41, 59, 0.25); }
-
-        .stat-label {
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-value {
-            font-size: 2.75rem;
-            font-weight: 800;
-            line-height: 1;
-            margin: 0;
-            letter-spacing: -0.02em;
-        }
-        
-        /* Premium Glass Container */
-        .glass-container {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.04);
-        }
-    </style>
 </head>
-<body>
+<body class="admin-dashboard-page app-sidebar-layout">
 
-    <%- include("../layout/navBar") %>
+    <!-- Unified Navbar (Handles Sidebar & Notifications) -->
+    <%- include("../layout/navBar", { user: user, page: "dashboard" }) %>
+    <script src="/js/navbar.js"></script>
 
-    <div class="container-fluid">
-        <div class="row">
+    <!-- Main Content Area -->
+    <main class="app-page-main admin-main">
+        <div class="admin-page-shell fade-in">
             
-            <%- include("../layout/sideBar") %>
+            <!-- Admin Hero -->
+            <div class="admin-hero mb-5">
+                <div class="admin-hero-content">
+                    <div class="admin-hero-badge">Administration</div>
+                    <h1>System Overview</h1>
+                    <p>Welcome back, <%= user.full_name %>. Here is the real-time operational status across TaskDrobe.</p>
+                </div>
+            </div>
 
-            <!-- Main Content Area -->
-            <main class="col-lg-9 col-xl-10 ms-sm-auto px-4 pt-4 pb-5 main-content">
-                
-                <!-- Admin Header -->
-                <div class="admin-header fade-in">
-                    <div class="position-relative z-1">
-                        <div class="d-inline-block px-3 py-1 bg-white bg-opacity-25 rounded-pill small fw-bold tracking-wide mb-3">ADMINISTRATION</div>
-                        <h2 class="fw-bold mb-1">System Overview</h2>
-                        <p class="mb-0 text-white text-opacity-75 fs-6">Welcome back, <%= user.full_name %>. Here is the real-time operational status across TaskDrobe.</p>
+            <!-- Platform Engagement Grid -->
+            <div class="admin-section-header">
+                <div class="admin-section-icon blue"><i class="fas fa-users"></i></div>
+                <h4>Platform Engagement</h4>
+            </div>
+            
+            <div class="admin-stat-grid mb-5">
+                <div class="admin-stat-card blue">
+                    <div class="admin-stat-content">
+                        <span class="admin-stat-label">Total Users</span>
+                        <strong class="admin-stat-value"><%= userStats.totalUsers %></strong>
                     </div>
+                    <div class="admin-stat-bg-icon"><i class="fas fa-users"></i></div>
                 </div>
+                <div class="admin-stat-card purple">
+                    <div class="admin-stat-content">
+                        <span class="admin-stat-label">Active Users</span>
+                        <strong class="admin-stat-value"><%= userStats.activeUsers %></strong>
+                    </div>
+                    <div class="admin-stat-bg-icon"><i class="fas fa-user-check"></i></div>
+                </div>
+                <div class="admin-stat-card dark">
+                    <div class="admin-stat-content">
+                        <span class="admin-stat-label">Inactive Users</span>
+                        <strong class="admin-stat-value"><%= userStats.inactiveUsers %></strong>
+                    </div>
+                    <div class="admin-stat-bg-icon"><i class="fas fa-user-minus"></i></div>
+                </div>
+            </div>
 
-                <!-- User Statistics Grid -->
-                <div class="d-flex align-items-center gap-2 mb-3 mt-4 fade-in">
-                    <div class="p-2 bg-primary bg-opacity-10 rounded-3 text-primary"><i class="fas fa-users"></i></div>
-                    <h5 class="fw-bold text-dark mb-0">Platform Engagement</h5>
-                </div>
-                
-                <div class="row g-4 mb-5 fade-in">
-                    <div class="col-md-4">
-                        <div class="admin-stat-card bg-gradient-blue h-100">
-                            <div class="stat-label">Total Users</div>
-                            <div class="stat-value"><%= userStats.totalUsers %></div>
-                            <i class="fas fa-users bg-icon"></i>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="admin-stat-card bg-gradient-purple h-100">
-                            <div class="stat-label">Active Users</div>
-                            <div class="stat-value"><%= userStats.activeUsers %></div>
-                            <i class="fas fa-user-check bg-icon"></i>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="admin-stat-card bg-gradient-dark h-100">
-                            <div class="stat-label">Inactive Users</div>
-                            <div class="stat-value"><%= userStats.inactiveUsers %></div>
-                            <i class="fas fa-user-minus bg-icon"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project & Task Operations Grid -->
-                <div class="d-flex align-items-center gap-2 mb-3 fade-in">
-                    <div class="p-2 bg-success bg-opacity-10 rounded-3 text-success"><i class="fas fa-layer-group"></i></div>
-                    <h5 class="fw-bold text-dark mb-0">Operations & Productivity</h5>
-                </div>
-                
-                <div class="row g-4 mb-5 fade-in">
-                    <!-- Project Breakdown (Glass List) -->
-                    <div class="col-xl-5">
-                        <div class="glass-container h-100">
-                            <h6 class="fw-bold text-secondary mb-4 text-uppercase tracking-wide small">Project Status</h6>
-                            <div class="d-flex flex-column gap-3">
-                                <div class="d-flex justify-content-between align-items-center p-3 rounded-4 bg-white shadow-sm border border-light transition hover-lift">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-circle bg-primary bg-opacity-10 p-2 text-primary" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-folder-open"></i></div>
-                                        <span class="fw-bold text-dark">Total Projects</span>
-                                    </div>
-                                    <span class="fs-4 fw-bold text-primary"><%= stats.totalProjects %></span>
-                                </div>
-                                
-                                <div class="d-flex justify-content-between align-items-center p-3 rounded-4 bg-white shadow-sm border border-light transition hover-lift">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-circle bg-success bg-opacity-10 p-2 text-success" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-spinner"></i></div>
-                                        <span class="fw-bold text-dark">Active Projects</span>
-                                    </div>
-                                    <span class="fs-4 fw-bold text-success"><%= stats.activeProjects %></span>
-                                </div>
-                                
-                                <div class="d-flex justify-content-between align-items-center p-3 rounded-4 bg-white shadow-sm border border-light transition hover-lift">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-circle bg-dark bg-opacity-10 p-2 text-dark" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-check-double"></i></div>
-                                        <span class="fw-bold text-dark">Completed Projects</span>
-                                    </div>
-                                    <span class="fs-4 fw-bold text-dark"><%= stats.completedProjects %></span>
-                                </div>
+            <!-- Project & Task Operations Grid -->
+            <div class="admin-section-header">
+                <div class="admin-section-icon green"><i class="fas fa-layer-group"></i></div>
+                <h4>Operations & Productivity</h4>
+            </div>
+            
+            <div class="admin-ops-grid mb-5">
+                <!-- Project Breakdown -->
+                <div class="admin-glass-panel h-100">
+                    <h6 class="admin-panel-title">Project Status</h6>
+                    <div class="admin-list-group">
+                        <div class="admin-list-item">
+                            <div class="admin-list-left">
+                                <div class="admin-list-icon blue"><i class="fas fa-folder-open"></i></div>
+                                <span>Total Projects</span>
                             </div>
+                            <strong class="admin-list-value blue"><%= stats.totalProjects %></strong>
                         </div>
-                    </div>
-
-                    <!-- Task KPI Block -->
-                    <div class="col-xl-7">
-                        <div class="row g-3 h-100">
-                            <div class="col-sm-6">
-                                <div class="admin-stat-card bg-gradient-green h-100 d-flex flex-column justify-content-center">
-                                    <div class="stat-label">Tasks Completed</div>
-                                    <div class="stat-value"><%= stats.completedTasks %></div>
-                                    <div class="mt-2 text-white text-opacity-75 small fw-semibold">Out of <%= stats.totalTasks %> total tasks</div>
-                                    <i class="fas fa-check-circle bg-icon"></i>
-                                </div>
+                        
+                        <div class="admin-list-item">
+                            <div class="admin-list-left">
+                                <div class="admin-list-icon green"><i class="fas fa-spinner"></i></div>
+                                <span>Active Projects</span>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="admin-stat-card bg-gradient-orange h-100 d-flex flex-column justify-content-center">
-                                    <div class="stat-label">Tasks Pending</div>
-                                    <div class="stat-value"><%= stats.pendingTasks %></div>
-                                    <i class="fas fa-clock bg-icon"></i>
-                                </div>
+                            <strong class="admin-list-value green"><%= stats.activeProjects %></strong>
+                        </div>
+                        
+                        <div class="admin-list-item">
+                            <div class="admin-list-left">
+                                <div class="admin-list-icon dark"><i class="fas fa-check-double"></i></div>
+                                <span>Completed Projects</span>
                             </div>
-                            <div class="col-12">
-                                <div class="admin-stat-card bg-gradient-red">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="stat-label text-white text-opacity-75">Critical / Overdue</div>
-                                            <div class="stat-value"><%= stats.overdueTasks %></div>
-                                        </div>
-                                        <div class="text-end border-start border-white border-opacity-25 ps-4">
-                                            <div class="stat-label text-white text-opacity-75">Global Completion</div>
-                                            <div class="fs-3 fw-bold"><%= stats.completionRate %>%</div>
-                                        </div>
-                                    </div>
-                                    <i class="fas fa-exclamation-triangle bg-icon"></i>
-                                </div>
-                            </div>
+                            <strong class="admin-list-value dark"><%= stats.completedProjects %></strong>
                         </div>
                     </div>
                 </div>
 
-                <!-- Analytics / Charts -->
-                <div class="glass-container fade-in">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <div>
-                            <h5 class="fw-bold mb-1"><i class="fas fa-chart-pie me-2" style="color: #6366f1;"></i>System Analytics</h5>
-                            <p class="text-muted small fw-semibold mb-0">Visual distribution of tasks and project timelines</p>
+                <!-- Task KPI Block -->
+                <div class="admin-tasks-grid h-100">
+                    <div class="admin-stat-card green">
+                        <div class="admin-stat-content">
+                            <span class="admin-stat-label">Tasks Completed</span>
+                            <strong class="admin-stat-value"><%= stats.completedTasks %></strong>
+                            <span class="admin-stat-meta">Out of <%= stats.totalTasks %> total tasks</span>
                         </div>
+                        <div class="admin-stat-bg-icon"><i class="fas fa-check-circle"></i></div>
                     </div>
                     
-                    <div class="bg-white rounded-4 p-4 shadow-sm border border-light">
-                        <%- include("../layout/charts") %>
+                    <div class="admin-stat-card orange">
+                        <div class="admin-stat-content">
+                            <span class="admin-stat-label">Tasks Pending</span>
+                            <strong class="admin-stat-value"><%= stats.pendingTasks %></strong>
+                        </div>
+                        <div class="admin-stat-bg-icon"><i class="fas fa-clock"></i></div>
+                    </div>
+                    
+                    <div class="admin-stat-card red span-full">
+                        <div class="admin-stat-content split">
+                            <div>
+                                <span class="admin-stat-label">Critical / Overdue</span>
+                                <strong class="admin-stat-value"><%= stats.overdueTasks %></strong>
+                            </div>
+                            <div class="admin-stat-divider">
+                                <span class="admin-stat-label">Global Completion</span>
+                                <strong class="admin-stat-value"><%= stats.completionRate %>%</strong>
+                            </div>
+                        </div>
+                        <div class="admin-stat-bg-icon"><i class="fas fa-exclamation-triangle"></i></div>
                     </div>
                 </div>
+            </div>
 
-            </main>
+            <!-- Analytics / Charts -->
+            <div class="admin-glass-panel">
+                <div class="admin-panel-header">
+                    <div>
+                        <h5 class="admin-panel-heading"><i class="fas fa-chart-pie me-2 text-primary"></i>System Analytics</h5>
+                        <p class="admin-panel-subtext">Visual distribution of tasks and project timelines</p>
+                    </div>
+                </div>
+                
+                <div class="admin-chart-container">
+                    <%- include("../layout/charts") %>
+                </div>
+            </div>
+
         </div>
-    </div>
+    </main>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Socket.IO is required by the navbar for system notifications -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Renders the Chart.js canvases -->
     <script src="/js/dashboard.js"></script>
 </body>
 </html>

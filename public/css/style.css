@@ -682,3 +682,163 @@ html[data-theme="dark"] .profile-btn-cancel:hover { background: rgba(255, 255, 2
     .profile-form-footer { flex-direction: column; }
     .profile-form-footer .btn { width: 100%; }
 }
+
+/* =========================================================
+   12. ADMIN DASHBOARD (HARDENED STYLES)
+========================================================= */
+
+/* --- Neutralize Legacy Dashboard CSS Bleed --- */
+body.admin-dashboard-page {
+    background-color: var(--bg-main) !important;
+    background-image: none !important;
+}
+
+html[data-theme="dark"] body.admin-dashboard-page {
+    background-image: 
+        radial-gradient(circle at 10% 80%, rgba(255, 0, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 40%) !important;
+    background-attachment: fixed !important;
+}
+
+/* Offset Fix for the Admin Page Layout */
+body.app-sidebar-layout .admin-main {
+    padding-top: 120px; padding-left: 2rem; padding-right: 2rem;
+    margin-left: var(--layout-offset); transition: margin-left 0.4s ease, padding 0.3s ease;
+}
+
+.admin-page-shell { max-width: 1400px; margin: 0 auto 4rem; }
+
+/* --- Admin Hero --- */
+.admin-hero {
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #4F46E5 100%) !important;
+    border-radius: var(--radius-lg) !important; padding: 3rem !important; color: #fff !important;
+    position: relative; overflow: hidden; box-shadow: var(--shadow-soft) !important;
+    border: none !important;
+}
+
+.admin-hero-badge {
+    display: inline-block; background: rgba(255,255,255,0.2) !important; color: #fff !important;
+    padding: 0.4rem 1rem; border-radius: var(--radius-pill); font-size: 0.75rem;
+    font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;
+}
+
+.admin-hero-content { position: relative; z-index: 2; }
+.admin-hero h1 { font-size: 2.2rem !important; margin-bottom: 0.25rem !important; color: #fff !important; }
+.admin-hero p { font-size: 1.1rem !important; opacity: 0.9 !important; margin: 0 !important; color: #fff !important;}
+.admin-hero::after {
+    content: ""; position: absolute; width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    top: -100px; right: -100px; border-radius: 50%; pointer-events: none;
+}
+
+/* --- Section Headers --- */
+.admin-section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.admin-section-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 1.25rem; }
+.admin-section-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.admin-section-icon.green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.admin-section-header h4 { margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-primary) !important; }
+
+/* --- SaaS Gradient Stat Cards --- */
+.admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.admin-stat-card {
+    border-radius: var(--radius-lg) !important; padding: 1.75rem !important; color: #fff !important;
+    position: relative; overflow: hidden; box-shadow: var(--shadow-soft) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; border: none !important;
+}
+
+.admin-stat-card * { color: #fff !important; }
+.admin-stat-card:hover { transform: translateY(-4px); }
+.admin-stat-card.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; }
+.admin-stat-card.purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important; }
+.admin-stat-card.dark { background: linear-gradient(135deg, #1e293b, #0f172a) !important; }
+.admin-stat-card.green { background: linear-gradient(135deg, #10b981, #047857) !important; }
+.admin-stat-card.orange { background: linear-gradient(135deg, #f59e0b, #b45309) !important; }
+.admin-stat-card.red { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; }
+
+.admin-stat-content { position: relative; z-index: 2; }
+.admin-stat-content.split { display: flex; justify-content: space-between; align-items: center; }
+.admin-stat-divider { padding-left: 2rem; border-left: 1px solid rgba(255,255,255,0.2); text-align: right; }
+
+.admin-stat-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; display: block; margin-bottom: 0.25rem; }
+.admin-stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; }
+.admin-stat-meta { display: block; font-size: 0.85rem; opacity: 0.8; margin-top: 0.5rem; font-weight: 600; }
+.admin-stat-bg-icon { position: absolute; right: -15px; bottom: -20px; font-size: 6rem; opacity: 0.15; z-index: 1; transform: rotate(-10deg); }
+
+/* --- Secondary Layout Grids --- */
+.admin-ops-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; }
+.admin-tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.admin-stat-card.span-full { grid-column: span 2; }
+
+/* --- Glass Panels & Lists --- */
+.admin-glass-panel {
+    background: var(--surface-base) !important; border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-lg) !important; padding: 2rem !important; box-shadow: var(--shadow-soft) !important;
+}
+
+.admin-panel-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary) !important; margin-bottom: 1.5rem; }
+.admin-panel-heading { font-size: 1.25rem; font-weight: 800; color: var(--text-primary) !important; margin: 0; }
+.admin-panel-subtext { font-size: 0.85rem; color: var(--text-secondary) !important; margin: 0.25rem 0 0; }
+.admin-panel-header { margin-bottom: 2rem; }
+
+.admin-list-group { display: flex; flex-direction: column; gap: 1rem; }
+.admin-list-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-radius: var(--radius-md) !important;
+    background: var(--surface-glass) !important; border: 1px solid var(--border-color) !important;
+    transition: all 0.2s ease;
+}
+
+.admin-list-item:hover { transform: translateY(-2px); border-color: rgba(90, 75, 209, 0.3) !important; }
+.admin-list-left { display: flex; align-items: center; gap: 1rem; }
+.admin-list-left span { font-weight: 700; color: var(--text-primary) !important; }
+
+.admin-list-icon { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 1rem; }
+.admin-list-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.admin-list-icon.green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.admin-list-icon.dark { background: rgba(30, 41, 59, 0.1); color: #1e293b; }
+
+.admin-list-value { font-size: 1.25rem; font-weight: 800; }
+.admin-list-value.blue { color: #3b82f6 !important; }
+.admin-list-value.green { color: #10b981 !important; }
+.admin-list-value.dark { color: var(--text-primary) !important; }
+
+.admin-chart-container { background: var(--bg-main) !important; border-radius: var(--radius-md) !important; padding: 1.5rem; border: 1px solid var(--border-color) !important; }
+
+/* --- Dark Theme Overrides --- */
+html[data-theme="dark"] .admin-hero { background: rgba(30, 30, 35, 0.5) !important; border: 1px solid rgba(0, 255, 255, 0.2) !important; backdrop-filter: blur(24px) saturate(120%); }
+html[data-theme="dark"] .admin-hero h1 { color: #00ffff !important; text-shadow: 0 0 15px rgba(0, 255, 255, 0.4); }
+html[data-theme="dark"] .admin-hero p { color: rgba(255, 255, 255, 0.8) !important; }
+html[data-theme="dark"] .admin-hero-badge { background: rgba(0, 255, 255, 0.1) !important; color: #00ffff !important; border: 1px solid rgba(0, 255, 255, 0.2) !important; }
+html[data-theme="dark"] .admin-section-header h4 { color: #fff !important; }
+html[data-theme="dark"] .admin-section-icon.blue, html[data-theme="dark"] .admin-section-icon.green { background: rgba(0, 255, 255, 0.1) !important; color: #00ffff !important; }
+
+html[data-theme="dark"] .admin-glass-panel { background: rgba(25, 25, 30, 0.6) !important; border-color: rgba(0, 255, 255, 0.15) !important; backdrop-filter: blur(16px); }
+html[data-theme="dark"] .admin-panel-heading, html[data-theme="dark"] .admin-list-item span { color: #fff !important; }
+html[data-theme="dark"] .admin-panel-title { color: #00ffff !important; }
+html[data-theme="dark"] .admin-panel-subtext { color: rgba(255, 255, 255, 0.6) !important; }
+
+html[data-theme="dark"] .admin-list-item { background: rgba(0, 0, 0, 0.2) !important; border-color: rgba(255, 255, 255, 0.1) !important; }
+html[data-theme="dark"] .admin-list-item:hover { border-color: #00ffff !important; }
+html[data-theme="dark"] .admin-list-icon.blue, html[data-theme="dark"] .admin-list-icon.green, html[data-theme="dark"] .admin-list-icon.dark { background: rgba(0, 255, 255, 0.1) !important; color: #00ffff !important; }
+html[data-theme="dark"] .admin-list-value.blue, html[data-theme="dark"] .admin-list-value.green, html[data-theme="dark"] .admin-list-value.dark { color: #00ffff !important; }
+
+html[data-theme="dark"] .admin-chart-container { background: rgba(0, 0, 0, 0.2) !important; border-color: rgba(255, 255, 255, 0.1) !important; }
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 1199px) {
+    .admin-ops-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 991px) {
+    body.app-sidebar-layout .admin-main { padding-top: 100px; padding-left: 1rem; padding-right: 1rem; margin-left: 0; }
+}
+
+@media (max-width: 768px) {
+    .admin-hero { padding: 1.5rem !important; border-radius: 28px !important; }
+    .admin-hero h1 { font-size: 1.75rem !important; }
+    .admin-tasks-grid { grid-template-columns: 1fr; }
+    .admin-stat-card.span-full { grid-column: span 1; }
+    .admin-stat-content.split { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .admin-stat-divider { padding-left: 0; border-left: none; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); text-align: left; width: 100%; }
+    .admin-glass-panel { padding: 1.5rem !important; }
+}

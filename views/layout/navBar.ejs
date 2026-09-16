@@ -1,5 +1,6 @@
 <% const role = (user && user.role_name) || "employee"; %>
 <% const isManager = role === "manager"; %>
+<% const isAdmin = role === "admin"; %>
 
 <%- include("sideBar", { user: user, page: page || "" }) %>
 

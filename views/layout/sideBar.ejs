@@ -1,6 +1,9 @@
 <% const currentPage = typeof page !== "undefined" ? page : ""; %>
+<% const role = (user && user.role_name) || "employee"; %>
+<% const isManager = role === "manager"; %>
+<% const isAdmin = role === "admin"; %>
 
-<aside id="appSidebar" class="app-sidebar" data-sidebar-role="<%= user && user.role_name === 'manager' ? 'manager' : 'employee' %>">
+<aside id="appSidebar" class="app-sidebar" data-sidebar-role="<%= role %>">
 
     <div class="app-sidebar-brand">
         <a href="/" class="app-sidebar-brand-link">
@@ -16,35 +19,46 @@
         <div class="app-sidebar-group">
             <div class="app-sidebar-label">Workspace</div>
 
-            <a href="<%= user && user.role_name === 'manager' ? '/manager/dashboard' : '/dashboard' %>"
+            <a href="<%= isAdmin ? '/admin/dashboard' : (isManager ? '/manager/dashboard' : '/dashboard') %>"
                class="app-sidebar-item <%= currentPage === 'dashboard' ? 'active' : '' %>" title="Dashboard">
                 <i class="bi bi-grid-1x2 app-sidebar-icon"></i>
                 <span>Dashboard</span>
             </a>
 
-            <a href="/projects" class="app-sidebar-item <%= currentPage === 'projects' || currentPage === 'project' ? 'active' : '' %>" title="Projects">
-                <i class="bi bi-folder2-open app-sidebar-icon"></i>
-                <span>Projects</span>
-            </a>
+            <!-- Hide standard project/task views from Admins -->
+            <% if (!isAdmin) { %>
+                <a href="/projects" class="app-sidebar-item <%= currentPage === 'projects' || currentPage === 'project' ? 'active' : '' %>" title="Projects">
+                    <i class="bi bi-folder2-open app-sidebar-icon"></i>
+                    <span>Projects</span>
+                </a>
 
-            <a href="/tasks" class="app-sidebar-item <%= currentPage === 'tasks' ? 'active' : '' %>" title="Tasks">
-                <i class="bi bi-check2-square app-sidebar-icon"></i>
-                <span>Tasks</span>
-            </a>
+                <a href="/tasks" class="app-sidebar-item <%= currentPage === 'tasks' ? 'active' : '' %>" title="Tasks">
+                    <i class="bi bi-check2-square app-sidebar-icon"></i>
+                    <span>Tasks</span>
+                </a>
+            <% } %>
         </div>
 
-        <% if (user && user.role_name === 'manager') { %>
+        <% if (isManager) { %>
             <div class="app-sidebar-group">
                 <div class="app-sidebar-label">Management</div>
-
                 <a href="/teams" class="app-sidebar-item <%= currentPage === 'teams' ? 'active' : '' %>" title="Teams">
                     <i class="bi bi-people app-sidebar-icon"></i>
                     <span>Teams</span>
                 </a>
+            </div>
+        <% } %>
 
-                <a href="#" class="app-sidebar-item app-sidebar-disabled" aria-disabled="true" tabindex="-1" title="Reports (Coming Soon)">
-                    <i class="bi bi-bar-chart app-sidebar-icon"></i>
-                    <span>Reports</span>
+        <% if (isAdmin) { %>
+            <div class="app-sidebar-group">
+                <div class="app-sidebar-label">System</div>
+                <a href="/admin/users" class="app-sidebar-item <%= currentPage === 'users' ? 'active' : '' %>" title="Users">
+                    <i class="bi bi-people app-sidebar-icon"></i>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="app-sidebar-item app-sidebar-disabled" aria-disabled="true" tabindex="-1" title="Settings (Coming Soon)">
+                    <i class="bi bi-gear app-sidebar-icon"></i>
+                    <span>Settings</span>
                     <span class="app-sidebar-coming-soon">Soon</span>
                 </a>
             </div>
@@ -52,7 +66,7 @@
     </div>
 
     <div class="app-sidebar-bottom">
-        <a href="/<%= user.role_name %>/profile" class="app-sidebar-item <%= currentPage === 'profile' ? 'active' : '' %>" title="Profile">
+        <a href="/<%= role %>/profile" class="app-sidebar-item <%= currentPage === 'profile' ? 'active' : '' %>" title="Profile">
             <i class="bi bi-person-circle app-sidebar-icon"></i>
             <span>Profile</span>
         </a>
