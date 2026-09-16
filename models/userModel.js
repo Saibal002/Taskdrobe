@@ -161,14 +161,14 @@ const getAllEmployees = async () => {
 /**
  * Admin: Update User
  */
-const updateUserAdmin = async (userId, fullName, email, roleId) => {
+const updateUserAdmin = async (userId, fullName, email, roleId, isActive) => {
     const sql = `
         UPDATE users 
-        SET full_name = $1, email = $2, role_id = $3, updated_at = CURRENT_TIMESTAMP 
-        WHERE user_id = $4 
-        RETURNING user_id, full_name, email, role_id;
+        SET full_name = $1, email = $2, role_id = $3, is_active = $4, updated_at = CURRENT_TIMESTAMP 
+        WHERE user_id = $5 
+        RETURNING user_id, full_name, email, role_id, is_active, profile_image;
     `;
-    const { rows } = await query(sql, [fullName, email, roleId, userId]);
+    const { rows } = await query(sql, [fullName, email, roleId, isActive, userId]);
     return rows[0];
 };
 

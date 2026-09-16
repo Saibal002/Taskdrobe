@@ -13,6 +13,8 @@
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">
+
+    pt src="/socket.io/socket.io.js"></script>
 </head>
 <body class="admin-dashboard-page app-sidebar-layout">
 
@@ -148,7 +150,10 @@
                     <%- include("../layout/charts") %>
                 </div>
             </div>
-
+            
+           
+   
+    </button>
         </div>
     </main>
 
@@ -162,5 +167,6 @@
     
     <!-- Renders the Chart.js canvases -->
     <script src="/js/dashboard.js"></script>
+     <%- include("../layout/globalChat.ejs") %>
 </body>
 </html>

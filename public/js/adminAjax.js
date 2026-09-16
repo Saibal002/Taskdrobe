@@ -139,6 +139,8 @@ $(document).ready(function () {
     // ==========================================
     // 3. EDIT USER
     // ==========================================
+
+
     const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
     const $editUserForm = $("#editUserForm");
     const $editUserBtn = $("#editUserBtn");
@@ -149,6 +151,7 @@ $(document).ready(function () {
         $("#editFullName").val($(this).data("name"));
         $("#editEmail").val($(this).data("email"));
         $("#editRoleName").val($(this).data("role"));
+        $("#editIsActive").val(String($(this).data("active"))); // Set Active/Inactive
         editUserModal.show();
     });
 
@@ -160,7 +163,8 @@ $(document).ready(function () {
         const formData = {
             fullName: $("#editFullName").val(),
             email: $("#editEmail").val(),
-            roleName: $("#editRoleName").val()
+            roleName: $("#editRoleName").val(),
+            isActive: $("#editIsActive").val() // Pass the status to the backend
         };
 
         const originalBtnText = $editUserBtn.html();
@@ -176,20 +180,27 @@ $(document).ready(function () {
                     editUserModal.hide();
                     showAdminAlert(res.message, "success");
 
-                    // Update UI row without reloading
                     const u = res.data;
                     const roleColor = u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green');
                     const roleIcon = u.role_name === 'admin' ? 'fa-user-shield' : (u.role_name === 'manager' ? 'fa-user-tie' : 'fa-user');
                     const $row = $(`#user-row-${userId}`);
 
+                    // Create the badge HTML
+                    const statusBadge = u.is_active 
+                        ? `<span class="badge bg-success bg-opacity-10 text-success ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Active</span>`
+                        : `<span class="badge bg-danger bg-opacity-10 text-danger ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Inactive</span>`;
+
+                    // Update UI row
                     $row.find(".admin-list-icon").attr("class", `admin-list-icon ${roleColor}`);
-                    $row.find(".admin-list-icon i").attr("class", `fas ${roleIcon}`);
-                    $row.find(".d-block.mb-1").text(u.full_name);
+                    if (!u.profile_image) {
+                        $row.find(".admin-list-icon i").attr("class", `fas ${roleIcon}`);
+                    }
+                    $row.find(".d-block.mb-1").html(`${u.full_name} ${statusBadge}`);
                     $row.find("small.text-secondary").html(`${u.email} · Updated`);
                     $row.find(".admin-list-value").attr("class", `admin-list-value ${roleColor} fs-6 text-uppercase tracking-wide`).text(u.role_name);
                     
-                    // Update button data attributes for future edits
-                    $row.find(".edit-user-btn").data("name", u.full_name).data("email", u.email).data("role", u.role_name);
+                    // Update button data attributes
+                    $row.find(".edit-user-btn").data("name", u.full_name).data("email", u.email).data("role", u.role_name).data("active", u.is_active);
                 } else {
                     showAdminAlert(res.message, "danger");
                 }

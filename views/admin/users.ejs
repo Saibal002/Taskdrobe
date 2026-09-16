@@ -10,17 +10,24 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
+    <!-- Custom CSS (Only V2 Style) -->
     <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/dashboard.css" rel="stylesheet">
+    
+    <style>
+        /* Force Neutralize the green bleed on this specific page */
+        body.admin-users-page { background-color: var(--bg-main) !important; background-image: none !important; }
+        html[data-theme="dark"] body.admin-users-page {
+            background-image: radial-gradient(circle at 10% 80%, rgba(255, 0, 255, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 40%) !important;
+            background-attachment: fixed !important;
+        }
+    </style>
 </head>
 <body class="admin-users-page app-sidebar-layout">
 
-    <!-- Unified Navbar -->
     <%- include("../layout/navBar", { user: user, page: "users" }) %>
     <script src="/js/navbar.js"></script>
 
-    <!-- Main Content Area -->
     <main class="app-page-main admin-main">
         <div class="admin-page-shell fade-in">
             
@@ -35,7 +42,6 @@
                 </button>
             </div>
 
-            <!-- Users List Panel -->
             <div class="admin-glass-panel">
                 <div id="adminAlert" class="alert d-none rounded-pill text-center shadow-sm"></div>
                 
@@ -44,27 +50,39 @@
                         <% users.forEach(u => { %>
                             <div class="admin-list-item" id="user-row-<%= u.user_id %>">
                                 <div class="admin-list-left">
-                                    <div class="admin-list-icon <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %>">
-                                        <i class="fas <%= u.role_name === 'admin' ? 'fa-user-shield' : (u.role_name === 'manager' ? 'fa-user-tie' : 'fa-user') %>"></i>
+                                    <div class="admin-list-icon <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %>" style="overflow: hidden;">
+                                        <% if (u.profile_image) { %>
+                                            <img src="<%= u.profile_image %>" alt="avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                                        <% } else { %>
+                                            <i class="fas <%= u.role_name === 'admin' ? 'fa-user-shield' : (u.role_name === 'manager' ? 'fa-user-tie' : 'fa-user') %>"></i>
+                                        <% } %>
                                     </div>
                                     <div>
-                                        <span class="d-block mb-1"><%= u.full_name %></span>
+                                        <span class="d-block mb-1 fw-bold">
+                                            <%= u.full_name %>
+                                            <% if (u.is_active) { %>
+                                                <span class="badge bg-success bg-opacity-10 text-success ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Active</span>
+                                            <% } else { %>
+                                                <span class="badge bg-danger bg-opacity-10 text-danger ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Inactive</span>
+                                            <% } %>
+                                        </span>
                                         <small class="text-secondary"><%= u.email %> · <%= u.phone || 'No phone' %></small>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center gap-4">
                                     <div class="admin-list-value <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %> fs-6 text-uppercase tracking-wide">
-                                        <%= u.role_name %>
+                                        <%= u.role_name ? u.role_name : 'UNDEFINED' %>
                                     </div>
                                     <div class="d-flex gap-2">
                                         <button class="btn btn-sm btn-light rounded-circle text-primary hover-lift edit-user-btn" 
-        data-id="<%= u.user_id %>" 
-        data-name="<%= u.full_name %>" 
-        data-email="<%= u.email %>" 
-        data-role="<%= u.role_name %>" 
-        title="Edit User">
-    <i class="fas fa-pen"></i>
-</button>
+                                                data-id="<%= u.user_id %>" 
+                                                data-name="<%= u.full_name %>" 
+                                                data-email="<%= u.email %>" 
+                                                data-role="<%= u.role_name || '' %>" 
+                                                data-active="<%= u.is_active %>"
+                                                title="Edit User">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
                                         <button class="btn btn-sm btn-light rounded-circle text-danger hover-lift delete-user-btn" data-id="<%= u.user_id %>" title="Revoke Access">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -143,12 +161,19 @@
                             <label class="form-label fw-bold text-secondary small text-uppercase">Email Address</label>
                             <input type="email" name="email" id="editEmail" class="form-control bg-light border-0" required>
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label class="form-label fw-bold text-secondary small text-uppercase">System Role</label>
                             <select name="roleName" id="editRoleName" class="form-select bg-light border-0" required>
                                 <% roles.forEach(r => { %>
                                     <option value="<%= r.role_name %>"><%= r.role_name.charAt(0).toUpperCase() + r.role_name.slice(1) %></option>
                                 <% }); %>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">Account Status</label>
+                            <select name="isActive" id="editIsActive" class="form-select bg-light border-0" required>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
                             </select>
                         </div>
                         <button type="submit" id="editUserBtn" class="btn btn-primary w-100 rounded-pill fw-bold hover-lift">
@@ -163,9 +188,9 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Sockets & Admin AJAX -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/adminAjax.js"></script>
+
+     <%- include("../layout/globalChat.ejs") %>
 </body>
 </html>

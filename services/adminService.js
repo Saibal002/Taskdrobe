@@ -62,12 +62,15 @@ class AdminService {
     static async getAllRoles() {
         return await RoleModel.getAllRoles();
     }
-    static async updateUser(userId, data) {
+   static async updateUser(userId, data) {
         // Find the correct role_id from the role_name provided in the form
         const role = await RoleModel.findRoleByName(data.roleName);
         if (!role) throw new AppError("Invalid role selected.", 400);
 
-        const updatedUser = await UserModel.updateUserAdmin(userId, data.fullName, data.email, role.role_id);
+        // Convert the string "true"/"false" from the form into a boolean
+        const isActive = data.isActive === 'true' || data.isActive === true;
+
+        const updatedUser = await UserModel.updateUserAdmin(userId, data.fullName, data.email, role.role_id, isActive);
         if (!updatedUser) throw new AppError("User not found or update failed.", 404);
         
         return updatedUser;
