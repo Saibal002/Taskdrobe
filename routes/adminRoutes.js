@@ -11,6 +11,9 @@ router.use(authMiddleware, requireRole("admin"));
 
 // 1. Dashboard View
 router.get("/dashboard", dashboardController.adminDashboard);
+// Add these Views (At the top near Dashboard)
+router.get("/teams-view", AdminController.renderTeamsView);
+router.get("/teams-view/:teamId", AdminController.renderTeamInsightView);
 
 // 2. User Management Views & AJAX
 router.get("/users", AdminController.renderUserManagement);
@@ -23,5 +26,10 @@ router.delete("/teams/:teamId", AdminController.forceDeleteTeam);
 
 router.put("/users/:userId", AdminController.adminUpdateUser);
 router.delete("/users/:userId", AdminController.adminDeleteUser);
+
+// Add these API endpoints (At the bottom)
+router.get("/api/teams/:teamId/members", AdminController.getTeamMembers);
+router.get("/api/teams/:teamId/projects", AdminController.getTeamProjects);
+router.get("/api/teams/:teamId/tasks", AdminController.getTeamTasks);
 
 module.exports = router;

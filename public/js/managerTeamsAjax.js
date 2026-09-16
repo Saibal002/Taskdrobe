@@ -493,10 +493,23 @@ $(document).ready(function () {
       success: function (res) {
         if (res.success && res.data && res.data.length > 0) {
           $list.empty();
-          const pendingCount = res.data.filter((t) => t.status !== "Completed").length;
-          $("#stat-pending-tasks").text(pendingCount);
+          
+          let pendingCount = 0;
+          let completedCount = 0;
+          let overdueCount = 0;
+          const today = new Date();
 
           res.data.forEach((task) => {
+            // Chart calculations
+            if (task.status === 'Completed') {
+                completedCount++;
+            } else if (task.due_date && new Date(task.due_date) < today) {
+                overdueCount++;
+                pendingCount++;
+            } else {
+                pendingCount++;
+            }
+
             // Map styling
             let statusClass = task.status === 'Completed' ? 'completed' : 'in-progress';
             let priorityClass = task.priority === 'High' || task.priority === 'Critical' ? 'attention' : 'healthy';
@@ -522,6 +535,35 @@ $(document).ready(function () {
                 </div>
             `);
           });
+
+          $("#stat-pending-tasks").text(pendingCount);
+
+          // DRAW THE CHART
+          const ctx = document.getElementById('teamPerformanceChart');
+          if (ctx) {
+              if(window.teamChart) window.teamChart.destroy(); // Prevent overlapping charts on reload
+              window.teamChart = new Chart(ctx, {
+                  type: 'doughnut',
+                  data: {
+                      labels: ['Completed', 'In Progress', 'Overdue'],
+                      datasets: [{
+                          data: [completedCount, (pendingCount - overdueCount), overdueCount],
+                          backgroundColor: ['#10b981', '#3b82f6', '#ef4444'],
+                          borderWidth: 0,
+                          hoverOffset: 4
+                      }]
+                  },
+                  options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      cutout: '75%',
+                      plugins: {
+                          legend: { position: 'bottom' }
+                      }
+                  }
+              });
+          }
+
         } else {
           $list.html('<div class="text-center manager-insight-meta py-5"><i class="bi bi-check2-circle fs-1 d-block mb-3"></i>No tasks assigned to this team.</div>');
           $("#stat-pending-tasks").text("0");

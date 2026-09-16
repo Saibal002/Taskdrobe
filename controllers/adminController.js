@@ -105,6 +105,38 @@ class AdminController {
             next(error);
         }
     }
+    // ===================================
+    // GOD MODE: TEAM INSIGHTS
+    // ===================================
+    static async renderTeamsView(req, res, next) {
+        res.render("admin/teams", { title: "Global Teams", user: req.user, page: "teams" });
+    }
+
+    static async renderTeamInsightView(req, res, next) {
+        res.render("admin/team_insight", { title: "Team Insight", user: req.user, page: "teams", teamId: req.params.teamId });
+    }
+
+    static async getTeamMembers(req, res, next) {
+        try {
+            // Bypasses the manager verification check
+            const members = await require("../models/teamModel").findTeamMembers(req.params.teamId);
+            return res.status(200).json({ success: true, data: members });
+        } catch (error) { next(error); }
+    }
+
+    static async getTeamProjects(req, res, next) {
+        try {
+            const projects = await require("../models/teamModel").getTeamProjects(req.params.teamId);
+            return res.status(200).json({ success: true, data: projects });
+        } catch (error) { next(error); }
+    }
+
+    static async getTeamTasks(req, res, next) {
+        try {
+            const tasks = await require("../models/teamModel").getTeamTasks(req.params.teamId);
+            return res.status(200).json({ success: true, data: tasks });
+        } catch (error) { next(error); }
+    }
 }
 
 module.exports = AdminController;
