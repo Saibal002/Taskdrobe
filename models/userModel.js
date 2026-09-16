@@ -158,11 +158,35 @@ const getAllEmployees = async () => {
 
     return rows;
 };
+/**
+ * Admin: Update User
+ */
+const updateUserAdmin = async (userId, fullName, email, roleId) => {
+    const sql = `
+        UPDATE users 
+        SET full_name = $1, email = $2, role_id = $3, updated_at = CURRENT_TIMESTAMP 
+        WHERE user_id = $4 
+        RETURNING user_id, full_name, email, role_id;
+    `;
+    const { rows } = await query(sql, [fullName, email, roleId, userId]);
+    return rows[0];
+};
+
+/**
+ * Admin: Delete User
+ */
+const deleteUser = async (userId) => {
+    const sql = `DELETE FROM users WHERE user_id = $1 RETURNING user_id;`;
+    const { rows } = await query(sql, [userId]);
+    return rows[0];
+};
 
 module.exports = {
   createUser,
   findUserByEmail,
   upsertUserProfile,
+  updateUserAdmin,
+  deleteUser,
   findUserById,
   updateLastLogin,
   getAllEmployees,

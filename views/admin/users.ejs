@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | TaskDrobe</title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
+</head>
+<body class="admin-users-page app-sidebar-layout">
+
+    <!-- Unified Navbar -->
+    <%- include("../layout/navBar", { user: user, page: "users" }) %>
+    <script src="/js/navbar.js"></script>
+
+    <!-- Main Content Area -->
+    <main class="app-page-main admin-main">
+        <div class="admin-page-shell fade-in">
+            
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <div class="admin-section-icon blue mb-3"><i class="fas fa-users-cog"></i></div>
+                    <h2 class="fw-bold mb-1 text-primary">User Management</h2>
+                    <p class="text-secondary mb-0">Provision and manage platform access for all roles.</p>
+                </div>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm hover-lift" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                    <i class="fas fa-user-plus me-2"></i> Provision User
+                </button>
+            </div>
+
+            <!-- Users List Panel -->
+            <div class="admin-glass-panel">
+                <div id="adminAlert" class="alert d-none rounded-pill text-center shadow-sm"></div>
+                
+                <div class="admin-list-group" id="userListContainer">
+                    <% if (users && users.length > 0) { %>
+                        <% users.forEach(u => { %>
+                            <div class="admin-list-item" id="user-row-<%= u.user_id %>">
+                                <div class="admin-list-left">
+                                    <div class="admin-list-icon <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %>">
+                                        <i class="fas <%= u.role_name === 'admin' ? 'fa-user-shield' : (u.role_name === 'manager' ? 'fa-user-tie' : 'fa-user') %>"></i>
+                                    </div>
+                                    <div>
+                                        <span class="d-block mb-1"><%= u.full_name %></span>
+                                        <small class="text-secondary"><%= u.email %> · <%= u.phone || 'No phone' %></small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-4">
+                                    <div class="admin-list-value <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %> fs-6 text-uppercase tracking-wide">
+                                        <%= u.role_name %>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-light rounded-circle text-primary hover-lift edit-user-btn" 
+        data-id="<%= u.user_id %>" 
+        data-name="<%= u.full_name %>" 
+        data-email="<%= u.email %>" 
+        data-role="<%= u.role_name %>" 
+        title="Edit User">
+    <i class="fas fa-pen"></i>
+</button>
+                                        <button class="btn btn-sm btn-light rounded-circle text-danger hover-lift delete-user-btn" data-id="<%= u.user_id %>" title="Revoke Access">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="text-center py-5 text-secondary">
+                            <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
+                            <p>No users found in the system.</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Create User Modal -->
+    <div class="modal fade" id="createUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-panel border-0">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary"><i class="fas fa-user-plus me-2"></i> Provision New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-4">
+                    <form id="createUserForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">Full Name</label>
+                            <input type="text" name="fullName" class="form-control bg-light border-0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">Email Address</label>
+                            <input type="email" name="email" class="form-control bg-light border-0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">Temporary Password</label>
+                            <input type="password" name="password" class="form-control bg-light border-0" required minlength="6">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">System Role</label>
+                            <select name="roleName" class="form-select bg-light border-0" required>
+                                <option value="" disabled selected>Select a role...</option>
+                                <% roles.forEach(r => { %>
+                                    <option value="<%= r.role_name %>"><%= r.role_name.charAt(0).toUpperCase() + r.role_name.slice(1) %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <button type="submit" id="createUserBtn" class="btn btn-primary w-100 rounded-pill fw-bold hover-lift">
+                            Create User
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-panel border-0">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary"><i class="fas fa-user-edit me-2"></i> Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-4">
+                    <form id="editUserForm">
+                        <input type="hidden" name="userId" id="editUserId">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">Full Name</label>
+                            <input type="text" name="fullName" id="editFullName" class="form-control bg-light border-0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">Email Address</label>
+                            <input type="email" name="email" id="editEmail" class="form-control bg-light border-0" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary small text-uppercase">System Role</label>
+                            <select name="roleName" id="editRoleName" class="form-select bg-light border-0" required>
+                                <% roles.forEach(r => { %>
+                                    <option value="<%= r.role_name %>"><%= r.role_name.charAt(0).toUpperCase() + r.role_name.slice(1) %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <button type="submit" id="editUserBtn" class="btn btn-primary w-100 rounded-pill fw-bold hover-lift">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sockets & Admin AJAX -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/adminAjax.js"></script>
+</body>
+</html>

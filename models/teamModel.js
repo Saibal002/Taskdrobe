@@ -74,6 +74,24 @@ class TeamModel {
         return result.rows;
     }
 
+    //for admin god-mode
+    static async findAllTeamsGlobal() {
+        const query = `
+            SELECT
+                t.team_id,
+                t.manager_id,
+                t.team_name,
+                t.description,
+                t.created_at,
+                t.updated_at,
+                u.full_name AS manager_name
+            FROM teams t
+            LEFT JOIN users u ON t.manager_id = u.user_id
+            ORDER BY t.created_at DESC
+        `;
+        const result = await db.query(query);
+        return result.rows;
+    }
 
     static async updateTeam(teamId, teamName, description) {
         const query = `
