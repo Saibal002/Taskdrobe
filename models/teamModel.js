@@ -277,27 +277,24 @@ class TeamModel {
     // =========================
     // Team Insight Metrics
     // =========================
-
-    static async getTeamProjects(teamId) {
+static async getTeamProjects(teamId) {
         const query = `
-            SELECT DISTINCT 
-                p.project_id, 
-                p.project_name, 
-                p.status, 
-                p.progress, 
-                p.deadline,
-                p.created_at
-            FROM projects p
-            INNER JOIN project_members pm ON p.project_id = pm.project_id
-            INNER JOIN team_members tm ON pm.user_id = tm.user_id
-            WHERE tm.team_id = $1
-            ORDER BY p.created_at DESC
+            SELECT 
+                project_id, 
+                project_name, 
+                status, 
+                progress, 
+                deadline, 
+                created_at
+            FROM projects
+            WHERE team_id = $1
+            ORDER BY created_at DESC
         `;
         const result = await db.query(query, [teamId]);
         return result.rows;
     }
 
-    static async getTeamTasks(teamId) {
+static async getTeamTasks(teamId) {
         const query = `
             SELECT 
                 t.task_id, 
@@ -309,18 +306,17 @@ class TeamModel {
                 p.project_name, 
                 u.full_name AS assigned_user
             FROM tasks t
-            INNER JOIN team_members tm ON t.assigned_to = tm.user_id
             INNER JOIN projects p ON t.project_id = p.project_id
-            INNER JOIN users u ON t.assigned_to = u.user_id
-            WHERE tm.team_id = $1
+            LEFT JOIN users u ON t.assigned_to = u.user_id
+            WHERE p.team_id = $1
             ORDER BY t.due_date ASC NULLS LAST
         `;
         const result = await db.query(query, [teamId]);
         return result.rows;
     }
 
-    static async getTeamAnalytics(teamId) {
-        // 1. Member Contribution & Distribution (Tasks per user)
+   static async getTeamAnalytics(teamId) {
+        // 1. Member Contribution (Only counts tasks from projects owned by THIS team)
         const memberQuery = `
             SELECT 
                 u.user_id,
@@ -329,23 +325,23 @@ class TeamModel {
                 COALESCE(SUM(CASE WHEN t.status = 'Completed' THEN 1 ELSE 0 END), 0) AS completed_tasks
             FROM team_members tm
             INNER JOIN users u ON tm.user_id = u.user_id
-            LEFT JOIN tasks t ON t.assigned_to = u.user_id
+            LEFT JOIN tasks t ON t.assigned_to = u.user_id 
+                AND t.project_id IN (SELECT project_id FROM projects WHERE team_id = $1)
             WHERE tm.team_id = $1
             GROUP BY u.user_id, u.full_name
         `;
         const memberStats = await db.query(memberQuery, [teamId]);
 
-        // 2. Team Effort per Project (Tasks per project)
+        // 2. Team Effort per Project 
         const projectQuery = `
             SELECT 
                 p.project_id,
                 p.project_name,
                 COUNT(t.task_id) AS total_tasks,
                 COALESCE(SUM(CASE WHEN t.status = 'Completed' THEN 1 ELSE 0 END), 0) AS completed_tasks
-            FROM tasks t
-            INNER JOIN team_members tm ON t.assigned_to = tm.user_id
-            INNER JOIN projects p ON t.project_id = p.project_id
-            WHERE tm.team_id = $1
+            FROM projects p
+            LEFT JOIN tasks t ON t.project_id = p.project_id
+            WHERE p.team_id = $1
             GROUP BY p.project_id, p.project_name
         `;
         const projectStats = await db.query(projectQuery, [teamId]);
