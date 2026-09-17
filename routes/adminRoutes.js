@@ -31,5 +31,6 @@ router.delete("/users/:userId", AdminController.adminDeleteUser);
 router.get("/api/teams/:teamId/members", AdminController.getTeamMembers);
 router.get("/api/teams/:teamId/projects", AdminController.getTeamProjects);
 router.get("/api/teams/:teamId/tasks", AdminController.getTeamTasks);
+router.get("/api/teams/:teamId/analytics", AdminController.getTeamAnalytics);
 
 module.exports = router;

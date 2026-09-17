@@ -109,11 +109,11 @@ class AdminController {
     // GOD MODE: TEAM INSIGHTS
     // ===================================
     static async renderTeamsView(req, res, next) {
-        res.render("admin/teams", { title: "Global Teams", user: req.user, page: "teams" });
+        res.render("teams/teams", { title: "Global Teams", user: req.user, page: "teams" });
     }
 
     static async renderTeamInsightView(req, res, next) {
-        res.render("admin/team_insight", { title: "Team Insight", user: req.user, page: "teams", teamId: req.params.teamId });
+        res.render("teams/team_insight", { title: "Team Insight", user: req.user, page: "teams", teamId: req.params.teamId });
     }
 
     static async getTeamMembers(req, res, next) {
@@ -135,6 +135,12 @@ class AdminController {
         try {
             const tasks = await require("../models/teamModel").getTeamTasks(req.params.teamId);
             return res.status(200).json({ success: true, data: tasks });
+        } catch (error) { next(error); }
+    }
+    static async getTeamAnalytics(req, res, next) {
+        try {
+            const analytics = await require("../models/teamModel").getTeamAnalytics(req.params.teamId);
+            return res.status(200).json({ success: true, data: analytics });
         } catch (error) { next(error); }
     }
 }

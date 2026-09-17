@@ -47,6 +47,7 @@ router.get(
     requireRole("manager"),
     TeamController.getTeamProjects
 );
+router.get("/:teamId/analytics", requireRole("manager"), TeamController.getTeamAnalytics);
 
 router.get(
     "/:teamId/tasks",

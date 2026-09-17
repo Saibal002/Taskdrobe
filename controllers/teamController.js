@@ -349,6 +349,20 @@ class TeamController {
             next(error);
         }
     }
+
+    static async getTeamAnalytics(req, res, next) {
+        try {
+            const { teamId } = req.params;
+            const analytics = await TeamModel.getTeamAnalytics(teamId);
+            
+            return res.status(200).json({
+                success: true,
+                data: analytics
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = TeamController;

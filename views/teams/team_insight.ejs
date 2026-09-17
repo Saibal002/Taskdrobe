@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | TaskDrobe</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/manager_dashboard.css" rel="stylesheet">
+</head>
+<body class="app-sidebar-layout" data-user-role="<%= user.role_name %>">
+
+    <%- include("../layout/navBar", { user: user, page: "teams" }) %>
+    <script src="/js/navbar.js"></script>
+
+    <main class="app-page-main admin-main">
+        <div class="admin-page-shell fade-in">
+            
+            <!-- Smart Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="<%= user.role_name === 'admin' ? '/admin/teams-view' : '/manager/teams' %>" class="text-decoration-none fw-bold text-primary">
+                            <%= user.role_name === 'admin' ? 'Global Teams' : 'Teams' %>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active text-muted fw-bold" aria-current="page" id="breadcrumbName">Loading...</li>
+                </ol>
+            </nav>
+
+            <!-- Hero Header -->
+            <div class="admin-hero mb-4">
+                <div class="position-relative z-index-1">
+                    <div class="d-flex align-items-center gap-4 mb-3">
+                        <div id="teamAvatar" class="rounded-circle shadow-lg d-flex align-items-center justify-content-center fw-bold bg-white" style="width: 80px; height: 80px; font-size: 2rem; color: #4f46e5;">
+                            --
+                        </div>
+                        <div>
+                            <% if (user.role_name === 'admin') { %>
+                                <span class="badge bg-white text-primary rounded-pill px-3 py-1 mb-2 fw-bold" id="managerNameBadge">Manager: Verified</span>
+                            <% } %>
+                            <h1 id="teamName" class="fw-bold mb-1 text-white">Loading Team...</h1>
+                            <p id="teamDescription" class="mb-0 text-white opacity-75">Please wait while we fetch the team details.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <ul class="nav nav-pills mb-4 gap-2" id="teamTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold rounded-pill px-4" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">Overview & Analytics</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-pill px-4" id="members-tab" data-bs-toggle="pill" data-bs-target="#members" type="button" role="tab">Roster</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-pill px-4" id="projects-tab" data-bs-toggle="pill" data-bs-target="#projects" type="button" role="tab">Assigned Projects</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-pill px-4" id="tasks-tab" data-bs-toggle="pill" data-bs-target="#tasks" type="button" role="tab">Tasks</button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="teamTabsContent">
+                
+                <!-- 1. Overview Tab -->
+                <!-- 1. Overview Tab -->
+                <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                    
+                    <!-- Top Stat Cards -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-3">
+                            <div class="admin-glass-panel text-center p-4 h-100">
+                                <h6 class="text-muted fw-bold text-uppercase mb-2">Total Members</h6>
+                                <h2 class="fw-bold text-primary mb-0" id="stat-total-members">--</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="admin-glass-panel text-center p-4 h-100">
+                                <h6 class="text-muted fw-bold text-uppercase mb-2">Active Projects</h6>
+                                <h2 class="fw-bold text-success mb-0" id="stat-active-projects">--</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="admin-glass-panel text-center p-4 h-100">
+                                <h6 class="text-muted fw-bold text-uppercase mb-2">Pending Tasks</h6>
+                                <h2 class="fw-bold text-warning mb-0" id="stat-pending-tasks">--</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="admin-glass-panel text-center p-4 h-100">
+                                <h6 class="text-muted fw-bold text-uppercase mb-2">Completion Rate</h6>
+                                <h2 class="fw-bold text-info mb-0" id="stat-completion-rate">--%</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Charts Grid -->
+                    <div class="row g-4 mb-4">
+                        <!-- Chart 1: Member Workload Distribution (Doughnut) -->
+                        <div class="col-md-5">
+                            <div class="admin-glass-panel p-4 h-100">
+                                <h6 class="fw-bold mb-4">Workload Distribution</h6>
+                                <div style="height: 280px; position: relative;">
+                                    <canvas id="memberDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart 2: Team Effort per Project (Bar) -->
+                        <div class="col-md-7">
+                            <div class="admin-glass-panel p-4 h-100">
+                                <h6 class="fw-bold mb-4">Effort by Project</h6>
+                                <div style="height: 280px; position: relative;">
+                                    <canvas id="projectEffortChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart 3: Individual Contribution (Horizontal Bar) -->
+                    <div class="admin-glass-panel p-4">
+                        <h6 class="fw-bold mb-4">Individual Contribution (Assigned vs Completed)</h6>
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="individualContributionChart"></canvas>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- 2. Members Tab -->
+                <div class="tab-pane fade" id="members" role="tabpanel">
+                    <div class="admin-glass-panel p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0">Team Roster</h5>
+                            
+                            <!-- Only Managers can add members -->
+                            <% if (user.role_name === 'manager') { %>
+                                <button class="btn btn-primary btn-sm rounded-pill fw-bold" data-bs-toggle="modal" data-bs-target="#addTeamMemberModal">
+                                    <i class="bi bi-person-plus-fill me-1"></i> Add Member
+                                </button>
+                            <% } %>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Email</th>
+                                        <th>Joined</th>
+                                        <% if (user.role_name === 'manager') { %>
+                                            <th class="text-end">Actions</th>
+                                        <% } %>
+                                    </tr>
+                                </thead>
+                                <tbody id="teamMembersTableBody">
+                                    <tr><td colspan="<%= user.role_name === 'manager' ? 4 : 3 %>" class="text-center text-muted">Loading members...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Projects Tab -->
+                <div class="tab-pane fade" id="projects" role="tabpanel">
+                    <div class="row g-4" id="teamProjectsGrid">
+                        <div class="col-12 text-center text-muted py-4">Loading projects...</div>
+                    </div>
+                </div>
+
+                <!-- 4. Tasks Tab -->
+                <div class="tab-pane fade" id="tasks" role="tabpanel">
+                    <div class="admin-glass-panel p-4">
+                        <h5 class="fw-bold mb-4">Recent Team Tasks</h5>
+                        <div class="list-group list-group-flush" id="teamTasksList">
+                            <div class="text-center text-muted py-4">Loading tasks...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <% if (user.role_name === 'manager') { %>
+        <!-- Add Team Member Modal -->
+        <div class="modal fade" id="addTeamMemberModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+                    <div class="modal-header bg-light border-0 px-4 py-3">
+                        <h5 class="modal-title fw-bold">
+                            <i class="bi bi-person-plus-fill me-2 text-primary"></i> Add Team Member
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="addTeamMemberForm">
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-muted small text-uppercase">Select Employee</label>
+                                <select class="form-select form-select-lg bg-light border-0" id="newMemberUserId" required>
+                                    <option value="" disabled selected>Loading employees...</option>
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="button" class="btn btn-light fw-bold px-4 rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary fw-bold px-4 rounded-pill">Add Member</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <script>const CURRENT_TEAM_ID = "<%= teamId %>";</script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Unified Script -->
+    <script src="/js/sharedTeamsAjax.js"></script>
+</body>
+</html>

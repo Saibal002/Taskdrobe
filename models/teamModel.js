@@ -318,6 +318,58 @@ class TeamModel {
         const result = await db.query(query, [teamId]);
         return result.rows;
     }
+
+    static async getTeamAnalytics(teamId) {
+        // 1. Member Contribution & Distribution (Tasks per user)
+        const memberQuery = `
+            SELECT 
+                u.user_id,
+                u.full_name,
+                COUNT(t.task_id) AS total_tasks,
+                COALESCE(SUM(CASE WHEN t.status = 'Completed' THEN 1 ELSE 0 END), 0) AS completed_tasks
+            FROM team_members tm
+            INNER JOIN users u ON tm.user_id = u.user_id
+            LEFT JOIN tasks t ON t.assigned_to = u.user_id
+            WHERE tm.team_id = $1
+            GROUP BY u.user_id, u.full_name
+        `;
+        const memberStats = await db.query(memberQuery, [teamId]);
+
+        // 2. Team Effort per Project (Tasks per project)
+        const projectQuery = `
+            SELECT 
+                p.project_id,
+                p.project_name,
+                COUNT(t.task_id) AS total_tasks,
+                COALESCE(SUM(CASE WHEN t.status = 'Completed' THEN 1 ELSE 0 END), 0) AS completed_tasks
+            FROM tasks t
+            INNER JOIN team_members tm ON t.assigned_to = tm.user_id
+            INNER JOIN projects p ON t.project_id = p.project_id
+            WHERE tm.team_id = $1
+            GROUP BY p.project_id, p.project_name
+        `;
+        const projectStats = await db.query(projectQuery, [teamId]);
+
+        // 3. Overall Performance
+        let totalTeamTasks = 0;
+        let totalCompleted = 0;
+        memberStats.rows.forEach(m => {
+            totalTeamTasks += Number(m.total_tasks);
+            totalCompleted += Number(m.completed_tasks);
+        });
+
+        const overallCompletionRate = totalTeamTasks === 0 ? 0 : Math.round((totalCompleted / totalTeamTasks) * 100);
+
+        return {
+            memberStats: memberStats.rows,
+            projectStats: projectStats.rows,
+            overall: {
+                totalTasks: totalTeamTasks,
+                completedTasks: totalCompleted,
+                completionRate: overallCompletionRate
+            }
+        };
+    }
 }
 
 

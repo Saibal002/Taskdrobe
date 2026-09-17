@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | TaskDrobe</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/manager_dashboard.css" rel="stylesheet">
+</head>
+
+<!-- We attach the user role directly to the body so our JS can read it -->
+<body class="app-sidebar-layout" data-user-role="<%= user.role_name %>">
+
+    <%- include("../layout/navBar", { user: user, page: "teams" }) %>
+    <script src="/js/navbar.js"></script>
+
+    <main class="app-page-main admin-main">
+        <div class="admin-page-shell fade-in">
+
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <div class="admin-section-icon blue mb-3"><i class="fas fa-network-wired"></i></div>
+                    <h2 class="fw-bold mb-1 text-primary"><%= user.role_name === 'admin' ? 'Global Teams' : 'Your Teams' %></h2>
+                    <p class="text-secondary mb-0">
+                        <%= user.role_name === 'admin' ? 'System-wide directory of all workspace groups.' : 'Manage your workspace groups and assign members.' %>
+                    </p>
+                </div>
+
+                <!-- Only Managers get to create teams -->
+                <% if (user.role_name === 'manager') { %>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm hover-lift" data-bs-toggle="modal" data-bs-target="#addTeamModal">
+                        <i class="bi bi-plus-lg me-2"></i> New Team
+                    </button>
+                <% } %>
+            </div>
+
+            <div class="admin-glass-panel">
+                <div class="row g-4" id="fullTeamGrid">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2 text-muted">Loading teams...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Only render the creation modal for Managers -->
+    <% if (user.role_name === 'manager') { %>
+        <%- include("../layout/addTeamModal") %>
+    <% } %>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Unified Script -->
+    <script src="/js/sharedTeamsAjax.js"></script>
+</body>
+</html>

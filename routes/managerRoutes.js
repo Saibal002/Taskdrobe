@@ -64,7 +64,7 @@ router.get("/teams", (req, res) => {
         weekday: 'short', month: 'short', day: 'numeric' 
     });
 
-    res.render("manager/teams", {
+    res.render("teams/teams", {
         title: "Teams Directory",
         user: req.user,
         today: today
@@ -73,7 +73,7 @@ router.get("/teams", (req, res) => {
 
 // Render Single Team Insight Page
 router.get("/teams/:teamId", (req, res) => {
-    res.render("manager/team_insight", {
+    res.render("teams/team_insight", {
         title: "Team Insight",
         user: req.user,
         teamId: req.params.teamId
