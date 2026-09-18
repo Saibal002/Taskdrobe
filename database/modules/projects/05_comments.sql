@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS comments
     user_id BIGINT NOT NULL,
     
     content TEXT NOT NULL,
+
+    reply_to_id BIGINT,
     
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -28,5 +30,11 @@ CREATE TABLE IF NOT EXISTS comments
         FOREIGN KEY(user_id)
         REFERENCES users(user_id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT
+        ON DELETE RESTRICT,
+
+    CONSTRAINT fk_comment_reply
+        FOREIGN KEY(reply_to_id)
+        REFERENCES comments(comment_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );

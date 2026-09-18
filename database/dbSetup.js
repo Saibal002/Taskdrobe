@@ -3,16 +3,15 @@ const path = require("path");
 const pool = require("../plugins/db");
 
 async function runSQLFile(filePath) {
-  try {
-    const sql = fs.readFileSync(filePath, "utf8");
-
-    await pool.query(sql);
-
-    console.log(`✅ Executed: ${path.basename(filePath)}`);
-  } catch (err) {
-    console.error(`❌ Failed: ${path.basename(filePath)}`);
-    throw err;
-  }
+    try {
+        const sql = fs.readFileSync(filePath, "utf8");
+        await pool.query(sql);
+        console.log(`✅ Executed: ${path.basename(filePath)}`);
+    } catch (err) {
+        console.error(`❌ Failed: ${path.basename(filePath)}`);
+        console.error(err);
+        throw err;
+    }
 }
 
 async function setupDatabase() {
@@ -24,8 +23,7 @@ async function setupDatabase() {
     const authFolder = path.join(
         __dirname,
         "modules",
-        "auth",
-        
+        "auth"
     );
 
     const authFiles = fs
@@ -53,7 +51,51 @@ async function setupDatabase() {
         .readdirSync(projectFolder)
         .sort();
 
+    // Run projects first, except files that depend on tasks
     for (const file of projectFiles) {
+
+        if (
+            file === "04_attachments.sql" ||
+            file === "05_comments.sql"
+        ) {
+            continue;
+        }
+
+        await runSQLFile(
+            path.join(projectFolder, file)
+        );
+    }
+
+
+    // ======================
+    // Tasks Module
+    // ======================
+
+    const taskFolder = path.join(
+        __dirname,
+        "modules",
+        "tasks"
+    );
+
+    const taskFiles = fs
+        .readdirSync(taskFolder)
+        .sort();
+
+    for (const file of taskFiles) {
+        await runSQLFile(
+            path.join(taskFolder, file)
+        );
+    }
+
+
+    // ======================
+    // Remaining Projects Files
+    // ======================
+
+    for (const file of [
+        "04_attachments.sql",
+        "05_comments.sql"
+    ]) {
         await runSQLFile(
             path.join(projectFolder, file)
         );
@@ -82,26 +124,6 @@ async function setupDatabase() {
 
 
     // ======================
-    // Tasks Module
-    // ======================
-
-    const taskFolder = path.join(
-        __dirname,
-        "modules",
-        "tasks"
-    );
-
-    const taskFiles = fs
-        .readdirSync(taskFolder)
-        .sort();
-
-    for (const file of taskFiles) {
-        await runSQLFile(
-            path.join(taskFolder, file)
-        );
-    }
-
-      // ======================
     // Activity Module
     // ======================
 
@@ -125,7 +147,8 @@ async function setupDatabase() {
 
     process.exit(0);
 }
+
 setupDatabase().catch((err) => {
-  console.error(err.message);
-  process.exit(1);
+    console.error(err.message);
+    process.exit(1);
 });
