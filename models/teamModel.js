@@ -276,15 +276,15 @@ class TeamModel {
 
     // =========================
     // Team Insight Metrics
-    // =========================
 static async getTeamProjects(teamId) {
+        // Only pull projects explicitly owned by this team
         const query = `
             SELECT 
                 project_id, 
                 project_name, 
                 status, 
                 progress, 
-                deadline, 
+                deadline,
                 created_at
             FROM projects
             WHERE team_id = $1
@@ -295,6 +295,7 @@ static async getTeamProjects(teamId) {
     }
 
 static async getTeamTasks(teamId) {
+        // Only pull tasks belonging to projects owned by this team
         const query = `
             SELECT 
                 t.task_id, 
@@ -316,7 +317,7 @@ static async getTeamTasks(teamId) {
     }
 
    static async getTeamAnalytics(teamId) {
-        // 1. Member Contribution (Only counts tasks from projects owned by THIS team)
+        // 1. Member Contribution (Only count tasks within THIS team's projects)
         const memberQuery = `
             SELECT 
                 u.user_id,
@@ -332,7 +333,7 @@ static async getTeamTasks(teamId) {
         `;
         const memberStats = await db.query(memberQuery, [teamId]);
 
-        // 2. Team Effort per Project 
+        // 2. Team Effort per Project (Only count THIS team's projects)
         const projectQuery = `
             SELECT 
                 p.project_id,
@@ -346,7 +347,6 @@ static async getTeamTasks(teamId) {
         `;
         const projectStats = await db.query(projectQuery, [teamId]);
 
-        // 3. Overall Performance
         let totalTeamTasks = 0;
         let totalCompleted = 0;
         memberStats.rows.forEach(m => {

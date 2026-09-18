@@ -3,7 +3,11 @@ const query = require("../plugins/query");
 /**
  * Create Project
  */
+/**
+ * Create Project
+ */
 const createProject = async ({
+    teamId, // <-- Expects teamId from the service
     projectName,
     description,
     status,
@@ -11,10 +15,10 @@ const createProject = async ({
     deadline,
     createdBy,
 }) => {
-
     const sql = `
         INSERT INTO projects
         (
+            team_id,
             project_name,
             description,
             status,
@@ -22,19 +26,12 @@ const createProject = async ({
             deadline,
             created_by
         )
-        VALUES
-        (
-            $1,
-            $2,
-            $3,
-            $4,
-            $5,
-            $6
-        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *;
     `;
 
     const values = [
+        teamId,
         projectName,
         description,
         status,
@@ -44,7 +41,6 @@ const createProject = async ({
     ];
 
     const { rows } = await query(sql, values);
-
     return rows[0];
 };
 
@@ -375,26 +371,21 @@ const getManagerProjectStats = async (managerId) => {
  * Get Projects Assigned To Employee
  */
 const getProjectsByMember = async (userId) => {
-
+    // Route through team_members instead of project_members
     const sql = `
         SELECT
             p.*,
             u.full_name
-        FROM project_members pm
-
-        INNER JOIN projects p
-            ON pm.project_id = p.project_id
-
+        FROM projects p
+        INNER JOIN team_members tm
+            ON p.team_id = tm.team_id
         INNER JOIN users u
             ON p.created_by = u.user_id
-
-        WHERE pm.user_id = $1
-
+        WHERE tm.user_id = $1
         ORDER BY p.created_at DESC;
     `;
 
     const { rows } = await query(sql, [userId]);
-
     return rows;
 };
 

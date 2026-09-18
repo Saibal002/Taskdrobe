@@ -121,36 +121,29 @@ const notifyProjectMembers = async (
 /**
  * Create Project
  */
-
 const createProject = async (req, res, next) => {
   try {
-    // 1. Create the base project
+    const { 
+        teamId, 
+        projectName, 
+        description, 
+        deadline, 
+        status, 
+        progress 
+    } = req.body;
+
+    // 1. Create the base project bound to the team
     const project = await projectService.createProject({
-      ...req.body,
+      teamId,
+      projectName,
+      description,
+      deadline,
+      status,
+      progress,
       createdBy: req.user.user_id,
     });
 
-    // 2. Automatically assign the selected team members
-    if (req.body.employees) {
-      // Ensure it's an array (if only one is selected, it might come as a string)
-      const employees = Array.isArray(req.body.employees) 
-          ? req.body.employees 
-          : [req.body.employees];
-
-      for (const employeeId of employees) {
-        try {
-          await projectMemberService.addMember(
-            project.project_id,
-            employeeId,
-            req.user.user_id
-          );
-        } catch (err) {
-          console.error(`Failed to assign member ${employeeId}:`, err.message);
-        }
-      }
-    }
-
-    // 3. Automatically generate the quick-added tasks
+    // 2. Automatically generate the quick-added tasks
     if (req.body.tasks) {
       const tasks = Array.isArray(req.body.tasks) 
           ? req.body.tasks 
@@ -162,7 +155,7 @@ const createProject = async (req, res, next) => {
             await taskService.createTask({
               projectId: project.project_id,
               title: taskTitle.trim(),
-              assignedTo: null // Left unassigned initially
+              assignedTo: null 
             }, req.user);
           } catch (err) {
             console.error(`Failed to create task ${taskTitle}:`, err.message);

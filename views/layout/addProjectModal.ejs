@@ -44,13 +44,14 @@
             <input type="number" class="form-control" name="progress" min="0" max="100" value="0">
           </div>
 
-          <!-- Assign Team Members (AJAX Loaded) -->
+          <!-- Assign to Team (Replaces Employee Select) -->
           <div class="mb-3">
-            <label class="form-label">Assign Team Members</label>
-            <select class="form-select manager-subordinate-select" name="employees[]" multiple>
-                <!-- Loaded via AJAX -->
+            <label class="form-label">Assign to Team</label>
+            <!-- Changed class to manager-team-select for your AJAX to target -->
+            <select class="form-select manager-team-select" name="teamId" required>
+                <option value="" disabled selected>Loading teams...</option>
             </select>
-            <div class="form-text">Hold CTRL (or CMD) to select multiple.</div>
+            <div class="form-text">Select the team that will own this project.</div>
           </div>
 
           <!-- Tasks -->

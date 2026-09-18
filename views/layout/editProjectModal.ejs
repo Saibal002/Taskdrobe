@@ -32,6 +32,8 @@
                 action="/projects/<%= project.project_id %>/update"
                 method="POST">
 
+                <input type="hidden" name="teamId" value="<%= project.team_id %>">
+
                 <div class="modal-body">
 
                     <!-- Project Name -->

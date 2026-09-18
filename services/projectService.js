@@ -6,9 +6,12 @@ const AppError = require("../utils/AppError");
 /**
  * Create Project
  */
+/**
+ * Create Project
+ */
 const createProject = async (projectData) => {
-
     const {
+        teamId, // <-- Extract teamId here
         projectName,
         description,
         status,
@@ -21,8 +24,13 @@ const createProject = async (projectData) => {
     if (!projectName || projectName.trim() === "") {
         throw new AppError("Project name is required.", 400);
     }
+    if (!teamId) {
+        throw new AppError("A Team must be selected to create a project.", 400);
+    }
 
+    // Pass everything, including teamId, to the Model
     const project = await projectModel.createProject({
+        teamId,
         projectName,
         description,
         status,

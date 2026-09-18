@@ -450,24 +450,39 @@ $(document).ready(function () {
         });
 
         // 5.7 Dynamic Assignment Dropdowns (Project / Task Modals)
+   // 5.7 Dynamic Assignment Dropdowns (Project / Task Modals)
         $("#addProjectModal").on("show.bs.modal", function () {
-            const $select = $(this).find(".manager-subordinate-select");
-            if (!$select.length || $select.children().length > 0) return;
-            $select.html("<option disabled>Loading...</option>");
+            const $select =$(this).find(".manager-team-select");
+            
+            // Only fetch if we haven't loaded the teams yet (more than 1 option)
+            if (!$select.length || $select.children().length > 1) return;
+            
+            $select.html("<option disabled selected>Loading teams...</option>");
+            
             $.ajax({
-                url: "/teams/manager/subordinates",
+                url: "/teams/manager", // <-- Updated to fetch teams instead of subordinates
                 type: "GET",
                 success: function (res) {
                     if (res.success) {
                         $select.empty();
-                        res.data.forEach((emp) => {
-                            $select.append(`<option value="${emp.user_id}">${emp.full_name}</option>`);
-                        });
+                        if (res.data.length === 0) {
+                            $select.append('<option value="" disabled selected>No teams found. Create a team first.</option>');
+                        } else {
+                            $select.append('<option value="" disabled selected>Select a team...</option>');
+                            res.data.forEach((team) => {
+                                // Maps the team_id as the value to be submitted to the backend
+                                $select.append(`<option value="${team.team_id}">${team.team_name}</option>`);
+                            });
+                        }
+                    } else {
+                        $select.html("<option disabled selected>Failed to load teams</option>");
                     }
+                },
+                error: function() {
+                    $select.html("<option disabled selected>Error loading teams</option>");
                 }
             });
         });
-
         $("#addTaskModal").on("show.bs.modal", function () {
             const $select = $(this).find(".project-member-select");
             if (!$select.length || $select.children().length > 1) return;
