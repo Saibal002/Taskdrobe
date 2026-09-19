@@ -11,10 +11,8 @@
 
 <!-- jQuery is required by project/task/member/file/comment AJAX. -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 <!-- Bootstrap JS is required by Bootstrap modals and collapse controls. -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <!-- Socket.IO is required by the shared notification navbar. -->
 <script src="/socket.io/socket.io.js"></script>
 
@@ -27,8 +25,8 @@
         <div class="project-page-shell">
 
             <!-- =====================================================
-             PROJECT OVERVIEW
-        ====================================================== -->
+                 PROJECT OVERVIEW
+            ====================================================== -->
             <section class="project-overview-card">
                 <div class="project-overview-top">
                     <div class="project-overview-heading">
@@ -67,14 +65,13 @@
                 </div>
 
                 <!-- =================================================
-                 PROJECT KPI CARDS
-            ================================================== -->
+                     PROJECT KPI CARDS
+                ================================================== -->
                 <div class="project-kpi-grid">
                     <div class="project-kpi-card">
                         <div class="project-kpi-icon"><i class="fas fa-chart-line"></i></div>
                         <div class="project-kpi-content">
                             <span class="project-kpi-label">Progress</span>
-                            <!-- Added id="kpiProgressValue" -->
                             <strong class="project-kpi-value" id="kpiProgressValue">
                                 <%= Number(project.progress || 0) %>%
                             </strong>
@@ -114,1489 +111,370 @@
             </section>
 
             <!-- =================================================
-             PROJECT PROGRESS
-        ================================================== -->
+                 PROJECT PROGRESS
+            ================================================== -->
             <div class="project-progress-section">
                 <div class="project-progress-header">
                     <div>
                         <span class="project-progress-title">Project Progress</span>
                         <span class="text-muted small ms-2">Overall completion</span>
                     </div>
-                    <!-- Added id="barProgressValue" -->
                     <strong class="project-progress-value" id="barProgressValue">
                         <%= Number(project.progress || 0) %>%
                     </strong>
                 </div>
                 <div class="project-progress-bar shadow-inner">
-                    <!-- Added id="progressBarFill" -->
                     <div id="progressBarFill" style="width: <%= Number(project.progress || 0) %>%;"></div>
                 </div>
             </div>
 
             <!-- =====================================================
-             PROJECT MEMBERS (MANAGER ONLY)
-        ====================================================== -->
-            <% if (user && user.role_name==="manager" ) { %>
-                <section class="project-members-section mt-5" id="projectMembersSection"
-                    data-members-url="/projects/<%= project.project_id %>/members/data"
-                    data-add-url="/projects/<%= project.project_id %>/members"
-                    data-remove-url="/projects/<%= project.project_id %>/members" data-role="<%= user.role_name %>">
-
-                    <div class="project-members-card">
-                        <div class="project-members-header border-bottom pb-4 mb-4">
-                            <div class="project-members-heading">
-                                <div class="project-section-icon shadow-sm"><i class="fas fa-users"></i></div>
-                                <div>
-                                    <div class="project-section-eyebrow">Collaboration</div>
-                                    <h3 class="project-section-title">Project Members</h3>
-                                    <p class="project-section-subtitle mb-0">People currently assigned to this project.
-                                    </p>
-                                </div>
-                            </div>
-                            <span class="project-members-permission-badge shadow-sm">
-                                <i class="fas fa-user-shield me-1"></i> Manager Access
-                            </span>
-                        </div>
-
-                        <div id="projectMembersMessage"
-                            class="project-members-message alert d-none rounded-pill text-center shadow-sm"
-                            role="alert"></div>
-
-                        <div class="row g-4">
-                            <div class="col-lg-7">
-                                <div id="projectMembersList" class="project-members-list pe-lg-3" aria-live="polite">
-                                    <div class="project-members-loading">
-                                        <span class="spinner-border spinner-border-sm text-primary"
-                                            aria-hidden="true"></span>
-                                        <span class="ms-2">Loading members...</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-5 border-start">
-                                <div class="project-add-member-panel border-0 bg-transparent p-0 ps-lg-3">
-                                    <div class="project-add-member-heading mb-4">
-                                        <div class="project-add-member-icon shadow-sm"><i class="fas fa-user-plus"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="mb-1">Add Employee</h4>
-                                            <p class="text-muted small mb-0">Select an active team member.</p>
-                                        </div>
-                                    </div>
-
-                                    <form id="addProjectMemberForm" novalidate>
-                                        <div class="mb-4">
-                                            <label for="projectMemberUserId"
-                                                class="form-label fw-bold text-secondary small text-uppercase tracking-wide">Select
-                                                Employee</label>
-                                            <select class="form-select form-select-lg shadow-sm border-0 bg-light"
-                                                id="projectMemberUserId" name="userId" required>
-                                                <option value="">Choose...</option>
-                                            </select>
-                                            <div class="invalid-feedback fw-bold mt-2" id="projectMemberUserIdError">
-                                                Please select an employee.</div>
-                                        </div>
-                                        <button type="submit" id="addProjectMemberBtn"
-                                            class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm hover-lift">
-                                            <i class="fas fa-user-plus me-2"></i> Add to Project
-                                        </button>
-                                    </form>
-                                </div>
+                 PROJECT MEMBERS (TEAM ROSTER)
+            ====================================================== -->
+            <section class="project-members-section mt-5">
+                <div class="project-members-card">
+                    <div class="project-members-header border-bottom pb-4 mb-4">
+                        <div class="project-members-heading">
+                            <div class="project-section-icon shadow-sm"><i class="fas fa-users"></i></div>
+                            <div>
+                                <div class="project-section-eyebrow">Collaboration</div>
+                                <h3 class="project-section-title">Team Roster</h3>
+                                <p class="project-section-subtitle mb-0">Members of the team assigned to this project.</p>
                             </div>
                         </div>
                     </div>
-                </section>
-                <% } %>
 
-
-                    <hr class="my-5 border-light">
-                    <%- include("manager/partials/projectTasks", { project: project, user: user }) %>
-                        <%- include("layout/addTaskModal") %>
-                            <%- include("layout/editTaskModal") %>
-                                <%- include("layout/assignTaskModal") %>
-        <!-- Project shell intentionally stays open through files and discussion so all project sections share the same content width. -->
-
-    <!-- =====================================================
-             PROJECT FILES
-        ====================================================== -->
-   <!-- Add data-user-id to the section -->
-<section class="project-files-section mt-5" id="projectFilesSection" 
-    data-files-url="/projects/<%= project.project_id %>/files/data"
-    data-upload-url="/projects/<%= project.project_id %>/files"
-    data-user-role="<%= user.role_name %>"
-    data-user-id="<%= user.user_id %>">
-    
-    <div class="project-members-card">
-        <div class="d-flex align-items-start justify-content-between border-bottom pb-4 mb-4 flex-wrap gap-3">
-            <div class="d-flex gap-3 align-items-center">
-                <div class="project-section-icon shadow-sm" style="background: linear-gradient(135deg, #10b981, #047857);"><i class="fas fa-folder-open"></i></div>
-                <div>
-                    <div class="project-section-eyebrow text-success">Resources</div>
-                    <h3 class="project-section-title mb-0">Project Files</h3>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="project-members-list pe-lg-3">
+                                <% if (projectMembers && projectMembers.length > 0) { %>
+                                    <% projectMembers.forEach(member => { 
+                                        const initials = (member.full_name || 'U').substring(0, 2).toUpperCase();
+                                    %>
+                                        <div class="project-member-row">
+                                            <div class="project-member-identity">
+                                                <% if (member.profile_image) { %>
+                                                    <img src="<%= member.profile_image %>" alt="<%= member.full_name %>" class="project-member-avatar">
+                                                <% } else { %>
+                                                    <div class="project-member-avatar project-member-avatar-placeholder"><%= initials %></div>
+                                                <% } %>
+                                                <div class="project-member-details">
+                                                    <strong><%= member.full_name %></strong>
+                                                    <span><%= member.email %></span>
+                                                </div>
+                                            </div>
+                                            <div class="project-member-actions">
+                                                <span class="project-member-role">
+                                                    <i class="fas fa-user me-1"></i> <%= member.role_name || 'Employee' %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <div class="project-members-empty">
+                                        <div class="project-members-empty-icon"><i class="fas fa-user-slash"></i></div>
+                                        <h5>No employees found</h5>
+                                        <p>This team currently has no members.</p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Removed the role check wrapper so project members (employees) can upload -->
-            <form id="uploadFileForm" class="d-flex gap-2">
-                <input type="file" name="projectFile" id="projectFile" class="form-control form-control-sm border-0 bg-light rounded-pill px-3" required>
-                <button type="submit" id="uploadFileBtn" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift d-flex align-items-center gap-2">
-                    <i class="fas fa-cloud-upload-alt"></i> Upload
-                </button>
-            </form>
-        </div>
+            </section>
 
-            <div id="projectFilesMessage" class="alert d-none rounded-pill text-center shadow-sm"></div>
+            <hr class="my-5 border-light">
+            <%- include("manager/partials/projectTasks", { project: project, user: user }) %>
+            <%- include("layout/addTaskModal") %>
+            <%- include("layout/editTaskModal") %>
+            <%- include("layout/assignTaskModal") %>
 
-            <!-- Grid for Files -->
-            <div class="row g-3" id="projectFilesList">
-                <div class="col-12 text-center py-4">
-                    <span class="spinner-border spinner-border-sm text-success" aria-hidden="true"></span>
-                    <span class="ms-2 text-muted">Loading files...</span>
+            <!-- =====================================================
+                 PROJECT FILES
+            ====================================================== -->
+            <section class="project-files-section mt-5" id="projectFilesSection" 
+                data-files-url="/projects/<%= project.project_id %>/files/data"
+                data-upload-url="/projects/<%= project.project_id %>/files"
+                data-user-role="<%= user.role_name %>"
+                data-user-id="<%= user.user_id %>">
+                
+                <div class="project-members-card">
+                    <div class="d-flex align-items-start justify-content-between border-bottom pb-4 mb-4 flex-wrap gap-3">
+                        <div class="d-flex gap-3 align-items-center">
+                            <div class="project-section-icon shadow-sm" style="background: linear-gradient(135deg, #10b981, #047857);"><i class="fas fa-folder-open"></i></div>
+                            <div>
+                                <div class="project-section-eyebrow text-success">Resources</div>
+                                <h3 class="project-section-title mb-0">Project Files</h3>
+                            </div>
+                        </div>
+                        
+                        <form id="uploadFileForm" class="d-flex gap-2">
+                            <input type="file" name="projectFile" id="projectFile" class="form-control form-control-sm border-0 bg-light rounded-pill px-3" required>
+                            <button type="submit" id="uploadFileBtn" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift d-flex align-items-center gap-2">
+                                <i class="fas fa-cloud-upload-alt"></i> Upload
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="projectFilesMessage" class="alert d-none rounded-pill text-center shadow-sm"></div>
+
+                    <!-- Grid for Files -->
+                    <div class="row g-3" id="projectFilesList">
+                        <div class="col-12 text-center py-4">
+                            <span class="spinner-border spinner-border-sm text-success" aria-hidden="true"></span>
+                            <span class="ms-2 text-muted">Loading files...</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- =====================================================
-             PROJECT CHAT / COMMENTS
-        ====================================================== -->
-     <%- include("layout/discussionComments", {
-    comments: comments,
-    currentUser: user,
-    contextType: "project",
-    contextId: project.project_id,
-    listUrl: `/projects/${project.project_id}/comments`,
-    createUrl: `/projects/${project.project_id}/comments`,
-    deleteUrl: `/projects/comments/:commentId`
-}) %>
+            <!-- =====================================================
+                 PROJECT CHAT / COMMENTS
+            ====================================================== -->
+            <%- include("layout/discussionComments", {
+                comments: comments,
+                currentUser: user,
+                contextType: "project",
+                contextId: project.project_id,
+                listUrl: `/projects/${project.project_id}/comments`,
+                createUrl: `/projects/${project.project_id}/comments`,
+                deleteUrl: `/projects/comments/:commentId`
+            }) %>
 
         </div>
     </div>
 </main>
 
-    <!-- =========================================================
-     PROJECT MEMBERS AJAX
+
+<!-- =========================================================
+     PROJECT FILES AJAX
 ========================================================= -->
-
-    <script>
-
-        $(document).ready(function () {
-
-
-            /* =========================================================
-               ELEMENTS
-            ========================================================= */
-
-            const $section =
-                $("#projectMembersSection");
-
-
-            if (!$section.length) {
-                return;
-            }
-
-
-            const $membersList =
-                $("#projectMembersList");
-
-
-            const $messageBox =
-                $("#projectMembersMessage");
-
-
-            const $addForm =
-                $("#addProjectMemberForm");
-
-
-            const $employeeSelect =
-                $("#projectMemberUserId");
-
-
-            const $addButton =
-                $("#addProjectMemberBtn");
-
-
-            /* =========================================================
-               URLS
-            ========================================================= */
-
-            const membersUrl =
-                $section.attr("data-members-url");
-
-
-            const addUrl =
-                $section.attr("data-add-url");
-
-
-            const removeBaseUrl =
-                $section.attr("data-remove-url");
-
-
-            const role =
-                $section.attr("data-role");
-
-
-            /* =========================================================
-               ESCAPE HTML
-            ========================================================= */
-
-            function escapeHtml(value) {
-
-                return $("<div>")
-                    .text(
-                        value == null
-                            ? ""
-                            : String(value)
-                    )
-                    .html();
-
-            }
-
-
-            /* =========================================================
-               MESSAGE
-            ========================================================= */
-
-            function showMessage(
-                message,
-                type = "success"
-            ) {
-
-                $messageBox
-                    .removeClass(
-                        "d-none alert-success alert-danger alert-warning alert-info"
-                    )
-                    .addClass(
-                        "alert-" + type
-                    )
-                    .text(message);
-
-            }
-
-
-            function clearMessage() {
-
-                $messageBox
-                    .addClass("d-none")
-                    .removeClass(
-                        "alert-success alert-danger alert-warning alert-info"
-                    )
-                    .text("");
-
-            }
-
-
-            /* =========================================================
-               ERROR MESSAGE
-            ========================================================= */
-
-            function getErrorMessage(
-                xhr,
-                fallback
-            ) {
-
-                if (
-                    xhr.responseJSON &&
-                    xhr.responseJSON.message
-                ) {
-
-                    return xhr.responseJSON.message;
-
-                }
-
-                return fallback;
-
-            }
-
-
-            /* =========================================================
-               LOADING
-            ========================================================= */
-
-            function showLoading() {
-
-                $membersList.html(`
-
-            <div class="project-members-loading">
-
-                <span
-                    class="spinner-border spinner-border-sm"
-                    aria-hidden="true">
-                </span>
-
-                <span>
-                    Loading latest members...
-                </span>
-
-            </div>
-
-        `);
-
-            }
-
-
-            /* =========================================================
-               ERROR STATE
-            ========================================================= */
-
-            function showError(message) {
-
-                $membersList.html(`
-
-            <div
-                class="
-                    project-members-empty
-                    project-members-error
-                ">
-
-                <div
-                    class="project-members-empty-icon">
-
-                    <i
-                        class="fas fa-triangle-exclamation">
-                    </i>
-
-                </div>
-
-
-                <h5>
-                    Could not load members
-                </h5>
-
-
-                <p>
-                    ${escapeHtml(message)}
-                </p>
-
-
-                <button
-                    type="button"
-                    class="btn btn-outline-primary btn-sm"
-                    id="retryProjectMembers">
-
-                    <i
-                        class="fas fa-rotate-right me-1">
-                    </i>
-
-                    Try Again
-
-                </button>
-
-            </div>
-
-        `);
-
-            }
-
-
-            /* =========================================================
-               RENDER MEMBERS
-            ========================================================= */
-
-            function renderMembers(
-                members
-            ) {
-
-                if (
-                    !Array.isArray(members) ||
-                    members.length === 0
-                ) {
-
-                    $membersList.html(`
-
-                <div class="project-members-empty">
-
-                    <div
-                        class="project-members-empty-icon">
-
-                        <i
-                            class="fas fa-user-slash">
-                        </i>
-
-                    </div>
-
-
-                    <h5>
-                        No employees assigned
-                    </h5>
-
-
-                    <p>
-                        Add an employee to start collaborating.
-                    </p>
-
-                </div>
-
-            `);
-
-                    return;
-                }
-
-
-                const html =
-                    members
-                        .map(function (member) {
-
-
-                            const fullName =
-                                String(
-                                    member.full_name || "Unknown User"
-                                ).trim();
-
-
-                            const email =
-                                String(
-                                    member.email || "No email"
-                                ).trim();
-
-
-                            const roleName =
-                                String(
-                                    member.role_name || "User"
-                                ).trim();
-
-
-                            const initials =
-                                fullName
-                                    .split(/\s+/)
-                                    .slice(0, 2)
-                                    .map(
-                                        name =>
-                                            name.charAt(0)
-                                    )
-                                    .join("")
-                                    .toUpperCase();
-
-
-                            let avatar;
-
-
-                            if (member.profile_image) {
-
-                                avatar = `
-
-                            <img
-                                src="${escapeHtml(
-                                    member.profile_image
-                                )}"
-
-                                alt="${escapeHtml(
-                                    fullName
-                                )}"
-
-                                class="project-member-avatar">
-
-                        `;
-
-                            } else {
-
-                                avatar = `
-
-                            <div
-                                class="
-                                    project-member-avatar
-                                    project-member-avatar-placeholder
-                                ">
-
-                                ${escapeHtml(
-                                    initials
-                                )}
-
-                            </div>
-
-                        `;
-
-                            }
-
-
-                            let removeButton = "";
-
-
-                            /*
-                             * Only manager gets Remove.
-                             * Backend remains the authority.
-                             */
-
-                            if (
-                                role === "manager"
-                            ) {
-
-                                removeButton = `
-
-                            <button
-                                type="button"
-
-                                class="
-                                    btn
-                                    btn-outline-danger
-                                    btn-sm
-                                    project-remove-member-btn
-                                "
-
-                                data-user-id="${escapeHtml(
-                                    member.user_id
-                                )}"
-
-                                data-user-name="${escapeHtml(
-                                    fullName
-                                )}">
-
-                                <i
-                                    class="fas fa-user-minus me-1">
-                                </i>
-
-                                Remove
-
-                            </button>
-
-                        `;
-
-                            }
-
-
-                            return `
-
-                        <div
-                            class="project-member-row"
-                            data-user-id="${escapeHtml(
-                                member.user_id
-                            )}">
-
-
-                            <div
-                                class="project-member-identity">
-
-                                ${avatar}
-
-
-                                <div
-                                    class="project-member-details">
-
-                                    <strong>
-                                        ${escapeHtml(
-                                fullName
-                            )}
-                                    </strong>
-
-
-                                    <span>
-                                        ${escapeHtml(
-                                email
-                            )}
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-
-                            <div
-                                class="project-member-actions">
-
-
-                                <span
-                                    class="project-member-role">
-
-                                    <i
-                                        class="fas fa-user me-1">
-                                    </i>
-
-                                    ${escapeHtml(
-                                roleName
-                            )}
-
-                                </span>
-
-
-                                ${removeButton}
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                        })
-                        .join("");
-
-
-                $membersList.html(
-                    html
-                );
-
-            }
-
-
-            /* =========================================================
-               RENDER AVAILABLE EMPLOYEES
-            ========================================================= */
-
-            function renderAvailableEmployees(
-                employees
-            ) {
-
-                if (!$employeeSelect.length) {
-                    return;
-                }
-
-
-                $employeeSelect.empty();
-
-
-                $employeeSelect.append(
-                    $("<option>", {
-                        value: "",
-                        text: "Select an employee"
-                    })
-                );
-
-
-                if (
-                    !Array.isArray(employees) ||
-                    employees.length === 0
-                ) {
-
-                    $employeeSelect.append(
-                        $("<option>", {
-
-                            value: "",
-
-                            text:
-                                "No employees available",
-
-                            disabled:
-                                true
-
-                        })
-                    );
-
-                    return;
-                }
-
-
-                $.each(
-                    employees,
-                    function (
-                        index,
-                        employee
-                    ) {
-
-                        $employeeSelect.append(
-                            $("<option>", {
-
-                                value:
-                                    employee.user_id,
-
-                                text:
-                                    `${String(
-                                        employee.full_name || ""
-                                    ).trim()} — ${String(
-                                        employee.email || ""
-                                    ).trim()}`
-                            })
-                        );
-
-                    }
-                );
-
-            }
-
-
-            /* =========================================================
-               LOAD MEMBERS
-            ========================================================= */
-
-            function loadMembers() {
-
-                clearMessage();
-
-                showLoading();
-
-
-                $.ajax({
-
-                    url:
-                        membersUrl,
-
-                    type:
-                        "GET",
-
-                    dataType:
-                        "json",
-
-                    cache:
-                        false,
-
-                    headers: {
-
-                        "Accept":
-                            "application/json",
-
-                        "X-Requested-With":
-                            "XMLHttpRequest"
-
-                    },
-
-
-                    success: function (
-                        response
-                    ) {
-
-
-                        if (
-                            !response ||
-                            response.success !== true
-                        ) {
-
-                            showError(
-                                response &&
-                                    response.message
-                                    ? response.message
-                                    : "Unable to load project members."
-                            );
-
-                            return;
-                        }
-
-
-                        renderMembers(
-                            response.members
-                        );
-
-
-                        /*
-                         * The backend returns this only for managers.
-                         */
-                        renderAvailableEmployees(
-                            response.availableEmployees || []
-                        );
-
-                    },
-
-
-                    error: function (
-                        xhr
-                    ) {
-
-                        console.error(
-                            "Project members AJAX error:",
-                            xhr
-                        );
-
-
-                        showError(
-                            getErrorMessage(
-                                xhr,
-                                "Unable to load project members."
-                            )
-                        );
-
-                    }
-
-                });
-
-            }
-
-
-            /* =========================================================
-               VALIDATE ADD MEMBER
-            ========================================================= */
-
-            function validateAddMember() {
-
-                if (!$employeeSelect.length) {
-                    return false;
-                }
-
-
-                $employeeSelect.removeClass(
-                    "is-invalid"
-                );
-
-
-                if (!$employeeSelect.val()) {
-
-                    $employeeSelect.addClass(
-                        "is-invalid"
-                    );
-
-
-                    $("#projectMemberUserIdError")
-                        .text(
-                            "Please select an employee."
-                        );
-
-
-                    $employeeSelect.focus();
-
-
-                    return false;
-                }
-
-
-                return true;
-
-            }
-
-
-            /* =========================================================
-               REMOVE SELECT ERROR WHEN CHANGED
-            ========================================================= */
-
-            $employeeSelect.on(
-                "change",
-                function () {
-
-                    if ($(this).val()) {
-
-                        $(this).removeClass(
-                            "is-invalid"
-                        );
-
-                        $("#projectMemberUserIdError")
-                            .text("");
-
-                    }
-
-                }
-            );
-
-
-            /* =========================================================
-               ADD MEMBER
-            ========================================================= */
-
-            $addForm.on(
-                "submit",
-                function (event) {
-
-                    event.preventDefault();
-
-
-                    if (
-                        !validateAddMember()
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    clearMessage();
-
-
-                    const originalHtml =
-                        $addButton.html();
-
-
-                    $addButton
-                        .prop(
-                            "disabled",
-                            true
-                        )
-                        .html(`
-
-                    <span
-                        class="
-                            spinner-border
-                            spinner-border-sm
-                            me-2
-                        "
-                        aria-hidden="true">
-                    </span>
-
-                    Adding...
-
-                `);
-
-
-                    $.ajax({
-
-                        url:
-                            addUrl,
-
-                        type:
-                            "POST",
-
-                        data:
-                            $addForm.serialize(),
-
-                        dataType:
-                            "json",
-
-                        headers: {
-
-                            "Accept":
-                                "application/json",
-
-                            "X-Requested-With":
-                                "XMLHttpRequest"
-
-                        },
-
-
-                        success: function (
-                            response
-                        ) {
-
-
-                            if (
-                                !response ||
-                                response.success !== true
-                            ) {
-
-                                showMessage(
-
-                                    response &&
-                                        response.message
-                                        ? response.message
-                                        : "Unable to add employee.",
-
-                                    "danger"
-
-                                );
-
-                                return;
-                            }
-
-
-                            /*
-                             * Clear form after successful add.
-                             */
-                            $addForm[0].reset();
-
-
-                            $employeeSelect
-                                .removeClass(
-                                    "is-invalid"
-                                );
-
-
-                            $("#projectMemberUserIdError")
-                                .text("");
-
-
-                            showMessage(
-
-                                response.message ||
-                                "Employee added successfully.",
-
-                                "success"
-
-                            );
-
-
-                            /*
-                             * IMPORTANT:
-                             *
-                             * Don't manually append the employee.
-                             *
-                             * Get the newest database state.
-                             */
-                            loadMembers();
-
-                        },
-
-
-                        error: function (
-                            xhr
-                        ) {
-
-                            console.error(
-                                "Add member AJAX error:",
-                                xhr
-                            );
-
-
-                            showMessage(
-
-                                getErrorMessage(
-                                    xhr,
-                                    "Unable to add employee."
-                                ),
-
-                                "danger"
-
-                            );
-
-                        },
-
-
-                        complete: function () {
-
-                            $addButton
-                                .prop(
-                                    "disabled",
-                                    false
-                                )
-                                .html(
-                                    originalHtml
-                                );
-
-                        }
-
-                    });
-
-                }
-            );
-
-
-            /* =========================================================
-               REMOVE MEMBER
-            ========================================================= */
-
-            $(document).on(
-                "click",
-                ".project-remove-member-btn",
-                function () {
-
-
-                    const $button =
-                        $(this);
-
-
-                    const userId =
-                        $button.attr(
-                            "data-user-id"
-                        );
-
-
-                    const userName =
-                        $button.attr(
-                            "data-user-name"
-                        ) ||
-                        "this employee";
-
-
-                    if (!userId) {
-
-                        showMessage(
-                            "Invalid employee.",
-                            "danger"
-                        );
-
-                        return;
-                    }
-
-
-                    if (
-                        !window.confirm(
-                            `Remove ${userName} from this project?`
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    clearMessage();
-
-
-                    const originalHtml =
-                        $button.html();
-
-
-                    $button
-                        .prop(
-                            "disabled",
-                            true
-                        )
-                        .html(`
-
-                    <span
-                        class="
-                            spinner-border
-                            spinner-border-sm
-                            me-1
-                        "
-                        aria-hidden="true">
-                    </span>
-
-                    Removing...
-
-                `);
-
-
-                    const removeUrl =
-                        `${removeBaseUrl}/${encodeURIComponent(
-                            userId
-                        )}`;
-
-
-                    $.ajax({
-
-                        url:
-                            removeUrl,
-
-                        type:
-                            "DELETE",
-
-                        dataType:
-                            "json",
-
-                        headers: {
-
-                            "Accept":
-                                "application/json",
-
-                            "X-Requested-With":
-                                "XMLHttpRequest"
-
-                        },
-
-
-                        success: function (
-                            response
-                        ) {
-
-
-                            if (
-                                !response ||
-                                response.success !== true
-                            ) {
-
-                                showMessage(
-
-                                    response &&
-                                        response.message
-                                        ? response.message
-                                        : "Unable to remove employee.",
-
-                                    "danger"
-
-                                );
-
-
-                                $button
-                                    .prop(
-                                        "disabled",
-                                        false
-                                    )
-                                    .html(
-                                        originalHtml
-                                    );
-
-
-                                return;
-                            }
-
-
-                            showMessage(
-
-                                response.message ||
-                                "Employee removed successfully.",
-
-                                "success"
-
-                            );
-
-
-                            /*
-                             * Reload from DB.
-                             *
-                             * This updates:
-                             * - Current Members
-                             * - Available Employees
-                             */
-                            loadMembers();
-
-                        },
-
-
-                        error: function (
-                            xhr
-                        ) {
-
-                            console.error(
-                                "Remove member AJAX error:",
-                                xhr
-                            );
-
-
-                            showMessage(
-
-                                getErrorMessage(
-                                    xhr,
-                                    "Unable to remove employee."
-                                ),
-
-                                "danger"
-
-                            );
-
-
-                            $button
-                                .prop(
-                                    "disabled",
-                                    false
-                                )
-                                .html(
-                                    originalHtml
-                                );
-
-                        }
-
-                    });
-
-                }
-            );
-
-
-            /* =========================================================
-               RETRY
-            ========================================================= */
-
-            $(document).on(
-                "click",
-                "#retryProjectMembers",
-                function () {
-
-                    loadMembers();
-
-                }
-            );
-
-
-            /* =========================================================
-               INITIAL LOAD
-            ========================================================= */
-
-            loadMembers();
-
-        });
-
-        /* =========================================================
-       PROJECT FILES AJAX
-    ========================================================= */
-        const $filesSection = $("#projectFilesSection");
-        if ($filesSection.length) {
-            const filesUrl = $filesSection.attr("data-files-url");
-            const uploadUrl = $filesSection.attr("data-upload-url");
-            const $filesList = $("#projectFilesList");
-            const $fileMessage = $("#projectFilesMessage");
-           const userRole = $filesSection.attr("data-user-role");
+<script>
+    const $filesSection =$("#projectFilesSection");
+    if ($filesSection.length) {
+        const filesUrl = $filesSection.attr("data-files-url");
+        const uploadUrl = $filesSection.attr("data-upload-url");
+        const $filesList =$("#projectFilesList");
+        const $fileMessage =$("#projectFilesMessage");
+        const userRole = $filesSection.attr("data-user-role");
         const currentUserId = String($filesSection.attr("data-user-id"));
         const canManageAllFiles = userRole === 'admin' || userRole === 'manager';
-            // Format bytes to KB/MB
-            const formatBytes = (bytes, decimals = 2) => {
-                if (bytes === 0) return '0 Bytes';
-                const k = 1024, dm = decimals < 0 ? 0 : decimals, sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-            };
 
-            // Determine icon based on mimetype
-            const getFileIcon = (mimeType) => {
-                if (mimeType.includes('image')) return '<i class="fas fa-image text-purple"></i>';
-                if (mimeType.includes('pdf')) return '<i class="fas fa-file-pdf text-danger"></i>';
-                if (mimeType.includes('word') || mimeType.includes('document')) return '<i class="fas fa-file-word text-primary"></i>';
-                if (mimeType.includes('excel') || mimeType.includes('sheet')) return '<i class="fas fa-file-excel text-success"></i>';
-                return '<i class="fas fa-file-alt text-secondary"></i>';
-            };
+        // Format bytes to KB/MB
+        const formatBytes = (bytes, decimals = 2) => {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024, dm = decimals < 0 ? 0 : decimals, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        };
 
-            const loadFiles = () => {
-            $.ajax({
-                url: filesUrl,
-                type: "GET",
-                success: function(res) {
-                    if (res.success && res.files.length > 0) {
-                        let html = '';
-                        res.files.forEach(file => {
-                            
-                            // Check if the current user is the uploader
-                            const isUploader = String(file.uploaded_by) === currentUserId;
-                            
-                            // Render delete button if they have global rights OR own the file
-                            let deleteBtn = (canManageAllFiles || isUploader) ? `
-                                <button type="button" class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle ms-2 delete-file-btn hover-lift" data-id="${file.attachment_id}" title="Delete File" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            ` : '';
+        // Determine icon based on mimetype
+        const getFileIcon = (mimeType) => {
+            if (mimeType.includes('image')) return '<i class="fas fa-image text-purple"></i>';
+            if (mimeType.includes('pdf')) return '<i class="fas fa-file-pdf text-danger"></i>';
+            if (mimeType.includes('word') || mimeType.includes('document')) return '<i class="fas fa-file-word text-primary"></i>';
+            if (mimeType.includes('excel') || mimeType.includes('sheet')) return '<i class="fas fa-file-excel text-success"></i>';
+            return '<i class="fas fa-file-alt text-secondary"></i>';
+        };
 
-                            html += `
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="d-flex align-items-center p-3 rounded-4 bg-white shadow-sm border border-light transition hover-lift h-100">
-                                        <div class="fs-2 me-3">${getFileIcon(file.file_type)}</div>
-                                        <div class="flex-grow-1 min-w-0">
-                                            <a href="${file.file_path}" target="_blank" class="fw-bold text-dark text-decoration-none text-truncate d-block" title="${file.original_name}">${file.original_name}</a>
-                                            <div class="small text-muted d-flex justify-content-between mt-1">
-                                                <span>${formatBytes(file.file_size)}</span>
-                                                <span>By ${file.uploaded_by_name}</span>
-                                            </div>
+        const loadFiles = () => {
+        $.ajax({
+            url: filesUrl,
+            type: "GET",
+            success: function(res) {
+                if (res.success && res.files.length > 0) {
+                    let html = '';
+                    res.files.forEach(file => {
+                        const isUploader = String(file.uploaded_by) === currentUserId;
+                        let deleteBtn = (canManageAllFiles || isUploader) ? `
+                            <button type="button" class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle ms-2 delete-file-btn hover-lift" data-id="${file.attachment_id}" title="Delete File" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : '';
+
+                        html += `
+                            <div class="col-md-6 col-lg-4">
+                                <div class="d-flex align-items-center p-3 rounded-4 bg-white shadow-sm border border-light transition hover-lift h-100">
+                                    <div class="fs-2 me-3">${getFileIcon(file.file_type)}</div>
+                                    <div class="flex-grow-1 min-w-0">
+                                        <a href="${file.file_path}" target="_blank" class="fw-bold text-dark text-decoration-none text-truncate d-block" title="${file.original_name}">${file.original_name}</a>
+                                        <div class="small text-muted d-flex justify-content-between mt-1">
+                                            <span>${formatBytes(file.file_size)}</span>
+                                            <span>By ${file.uploaded_by_name}</span>
                                         </div>
-                                        ${deleteBtn}
                                     </div>
+                                    ${deleteBtn}
                                 </div>
-                            `;
-                        });
-                        $filesList.html(html);
+                            </div>
+                        `;
+                    });
+                    $filesList.html(html);
+                } else {
+                    $filesList.html(`<div class="col-12 text-center py-5 text-muted"><i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i><p>No files uploaded yet.</p></div>`);
+                }
+            }
+        });
+    };
+       
+        // Handle File Upload
+        $("#uploadFileForm").on("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const $btn =$("#uploadFileBtn");
+            const originalBtnHtml = $btn.html();
+
+            $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span> Uploading...');
+            $fileMessage.addClass("d-none");
+
+            $.ajax({
+                url: uploadUrl,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    if (res.success) {
+                        $("#uploadFileForm")[0].reset();
+                        loadFiles();
                     } else {
-                        $filesList.html(`<div class="col-12 text-center py-5 text-muted"><i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i><p>No files uploaded yet.</p></div>`);
+                        $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text(res.message);
                     }
+                },
+                error: function (err) {
+                    $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text("Error uploading file. Check type and size.");
+                },
+                complete: function () {
+                    $btn.prop("disabled", false).html(originalBtnHtml);
                 }
             });
-        };
-           
-            // Handle File Upload
-            $("#uploadFileForm").on("submit", function (e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                const $btn = $("#uploadFileBtn");
-                const originalBtnHtml = $btn.html();
+        });
+        
+        // Handle File Deletion
+        $(document).on("click", ".delete-file-btn", function () {
+            const attachmentId = $(this).attr("data-id");
 
-                $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span> Uploading...');
-                $fileMessage.addClass("d-none");
+            if (window.confirm("Are you sure you want to delete this file? This cannot be undone.")) {
+                const $btn = $(this);$btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
 
                 $.ajax({
-                    url: uploadUrl,
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
+                    url: `/projects/files/${attachmentId}`,
+                    type: "DELETE",
                     success: function (res) {
                         if (res.success) {
-                            $("#uploadFileForm")[0].reset();
-                            loadFiles();
+                            loadFiles(); // Refresh the list
                         } else {
-                            $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text(res.message);
-                        }
-                    },
-                    error: function (err) {
-                        $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text("Error uploading file. Check type and size.");
-                    },
-                    complete: function () {
-                        $btn.prop("disabled", false).html(originalBtnHtml);
-                    }
-                });
-            });
-            // Handle File Deletion
-            $(document).on("click", ".delete-file-btn", function () {
-                const attachmentId = $(this).attr("data-id");
-
-                if (window.confirm("Are you sure you want to delete this file? This cannot be undone.")) {
-                    const $btn = $(this);
-                    $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
-
-                    $.ajax({
-                        url: `/projects/files/${attachmentId}`,
-                        type: "DELETE",
-                        success: function (res) {
-                            if (res.success) {
-                                loadFiles(); // Refresh the list
-                            } else {
-                                alert(res.message || "Unable to delete file.");
-                                $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
-                            }
-                        },
-                        error: function () {
-                            alert("An error occurred while trying to delete the file.");
+                            alert(res.message || "Unable to delete file.");
                             $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
                         }
-                    });
-                }
-            });
+                    },
+                    error: function () {
+                        alert("An error occurred while trying to delete the file.");
+                        $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
+                    }
+                });
+            }
+        });
 
-            // Init
-            loadFiles();
-        }
-    </script>
+        // Init
+        loadFiles();
+    }
+</script>
+
 <!-- =========================================================
      PROJECT CHAT AJAX (Replaces Sockets)
 ========================================================= -->
-    <script>
-        $(document).ready(function () {
-            const $chatSection = $("#projectCommentsSection");
+<script>
+    $(document).ready(function () {
+        const $chatSection =$("#projectCommentsSection");
+        
+        if ($chatSection.length) {
+            const projectId = $chatSection.attr("data-project-id");
+            const currentUserId = $chatSection.attr("data-user-id");
+            const $feed =$("#commentsFeed");
             
-            if ($chatSection.length) {
-                const projectId = $chatSection.attr("data-project-id");
-                const currentUserId = $chatSection.attr("data-user-id");
-                const $feed = $("#commentsFeed");
-                
-                const scrollToBottom = () => $feed.scrollTop($feed[0].scrollHeight);
-                scrollToBottom();
+            const scrollToBottom = () => $feed.scrollTop($feed[0].scrollHeight);
+            scrollToBottom();
 
-                let currentReplyId = null;
+            let currentReplyId = null;
 
-                // 1. Submit Comment
-                $("#commentForm").on("submit", function (e) {
-                    e.preventDefault();
-                    const content = $("#commentInput").val();
-                    if (!content.trim()) return;
+            // 1. Submit Comment
+            $("#commentForm").on("submit", function (e) {
+                e.preventDefault();
+                const content = $("#commentInput").val();
+                if (!content.trim()) return;
 
-                    const $btn = $(this).find('button[type="submit"]');
-                    const originalHtml = $btn.html();
-                    $btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i>');
+                const $btn =$(this).find('button[type="submit"]');
+                const originalHtml = $btn.html();$btn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i>');
 
-                    $.ajax({
-                        url: `/projects/${projectId}/comments`,
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                            content,
-                            replyToId: currentReplyId
-                        }),
-                        success: function(res) {
-                            if (res.success) {
-                                renderNewComment(res.comment);
-                                $("#commentInput").val("");
-                                currentReplyId = null; // Clear reply state
-                            } else {
-                                alert(res.message || "Error posting comment.");
-                            }
-                        },
-                        complete: function() {
-                            $btn.prop("disabled", false).html(originalHtml);
+                $.ajax({
+                    url: `/projects/${projectId}/comments`,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        content,
+                        replyToId: currentReplyId
+                    }),
+                    success: function(res) {
+                        if (res.success) {
+                            renderNewComment(res.comment);
+                            $("#commentInput").val("");
+                            currentReplyId = null; // Clear reply state
+                        } else {
+                            alert(res.message || "Error posting comment.");
                         }
-                    });
-                });
-
-                // 2. Delete Comment
-                $(document).on("click", ".delete-msg-btn", function() {
-                    if(window.confirm("Delete this message?")) {
-                        const commentId = $(this).attr("data-id");
-                        
-                        $.ajax({
-                            url: `/projects/comments/${commentId}`,
-                            type: "DELETE",
-                            success: function(res) {
-                                if (res.success) {
-                                    $(`#comment-${commentId}`).fadeOut(300, function() { 
-                                        $(this).remove(); 
-                                    });
-                                }
-                            }
-                        });
+                    },
+                    complete: function() {
+                        $btn.prop("disabled", false).html(originalHtml);
                     }
                 });
+            });
 
-                // 3. Render Helper
-                function renderNewComment(comment) {
-                    $(".no-comments-msg").remove();
-                    const isMe = String(comment.user_id) === String(currentUserId);
+            // 2. Delete Comment
+            $(document).on("click", ".delete-msg-btn", function() {
+                if(window.confirm("Delete this message?")) {
+                    const commentId = $(this).attr("data-id");
                     
-                    const avatar = comment.profile_image
-                        ? `<img src="${comment.profile_image}" class="rounded-circle shadow-sm" width="40" height="40" style="object-fit: cover; border: 2px solid #fff;">`
-                        : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; border: 2px solid #fff; background: ${isMe ? '#6366f1' : '#e2e8f0'}; color: ${isMe ? '#fff' : '#475569'};">${comment.full_name.charAt(0).toUpperCase()}</div>`;
-
-                    const html = `
-                        <div class="d-flex gap-3 ${isMe ? 'flex-row-reverse text-end' : ''}" id="comment-${comment.comment_id}">
-                            <div>${avatar}</div>
-                            <div class="d-flex flex-column ${isMe ? 'align-items-end' : 'align-items-start'}" style="max-width: 75%;">
-                                <div class="p-3 rounded-4 shadow-sm ${isMe ? 'bg-primary text-white' : 'bg-white text-dark border border-light'}">
-                                    <div class="small fw-bold mb-1 ${isMe ? 'opacity-75' : 'text-muted'}">${comment.full_name}</div>
-                                    <div class="fs-6 lh-sm">${comment.content}</div>
-                                </div>
-                                ${isMe ? `<div class="mt-1"><button type="button" class="btn btn-link text-danger p-0 text-decoration-none delete-msg-btn" style="font-size: 0.75rem;" data-id="${comment.comment_id}">Delete</button></div>` : ''}
-                            </div>
-                        </div>
-                    `;
-
-                    $feed.append(html);
-                    scrollToBottom();
+                    $.ajax({
+                        url: `/projects/comments/${commentId}`,
+                        type: "DELETE",
+                        success: function(res) {
+                            if (res.success) {
+                                $(`#comment-${commentId}`).fadeOut(300, function() { 
+                                    $(this).remove(); 
+                                });
+                            }
+                        }
+                    });
                 }
+            });
+
+            // 3. Render Helper
+            function renderNewComment(comment) {
+                $(".no-comments-msg").remove();
+                const isMe = String(comment.user_id) === String(currentUserId);
+                
+                const avatar = comment.profile_image
+                    ? `<img src="${comment.profile_image}" class="rounded-circle shadow-sm" width="40" height="40" style="object-fit: cover; border: 2px solid #fff;">`
+                    : `<div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; border: 2px solid #fff; background: ${isMe ? '#6366f1' : '#e2e8f0'}; color: ${isMe ? '#fff' : '#475569'};">${comment.full_name.charAt(0).toUpperCase()}</div>`;
+
+                const html = `
+                    <div class="d-flex gap-3 ${isMe ? 'flex-row-reverse text-end' : ''}" id="comment-${comment.comment_id}">
+                        <div>${avatar}</div>
+                        <div class="d-flex flex-column ${isMe ? 'align-items-end' : 'align-items-start'}" style="max-width: 75%;">
+                            <div class="p-3 rounded-4 shadow-sm ${isMe ? 'bg-primary text-white' : 'bg-white text-dark border border-light'}">
+                                <div class="small fw-bold mb-1 ${isMe ? 'opacity-75' : 'text-muted'}">${comment.full_name}</div>
+                                <div class="fs-6 lh-sm">${comment.content}</div>
+                            </div>
+                            ${isMe ? `<div class="mt-1"><button type="button" class="btn btn-link text-danger p-0 text-decoration-none delete-msg-btn" style="font-size: 0.75rem;" data-id="${comment.comment_id}">Delete</button></div>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                $feed.append(html);
+                scrollToBottom();
             }
-        });
-    </script>
-    <script src="/js/discussion-comments.js"></script>
-    <%- include("layout/footer") %>
+        }
+    });
+</script>
+<script src="/js/discussion-comments.js"></script>
+<%- include("layout/footer") %>

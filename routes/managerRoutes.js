@@ -1,18 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
 
-const dashboardController =
-    require("../controllers/dashboardController");
-
-const projectMemberController =
-    require("../controllers/projectMemberController");
-
-const authMiddleware =
-    require("../middleware/authMiddleware");
-
-const requireRole =
-    require("../middleware/roleMiddleware");
+const dashboardController = require("../controllers/dashboardController");
+const authMiddleware = require("../middleware/authMiddleware");
+const requireRole = require("../middleware/roleMiddleware");
 
 
 // ===========================
@@ -26,36 +17,9 @@ router.get(
     dashboardController.managerDashboard
 );
 
-
 // ===========================
-// Project Members
+// Teams Dashboard & Insights
 // ===========================
-
-// View members
-// router.get(
-//     "/projects/:projectId/members",
-//     authMiddleware,
-//     requireRole("manager"),
-//     projectMemberController.getMembers
-// );
-
-
-// Add employee
-router.post(
-    "/projects/:projectId/members",
-    authMiddleware,
-    requireRole("manager"),
-    projectMemberController.addMember
-);
-
-
-// Remove employee
-router.post(
-    "/projects/:projectId/members/:userId/remove",
-    authMiddleware,
-    requireRole("manager"),
-    projectMemberController.removeMember
-);
 
 // Render the Teams Dashboard Page
 router.get("/teams", (req, res) => {
@@ -79,4 +43,5 @@ router.get("/teams/:teamId", (req, res) => {
         teamId: req.params.teamId
     });
 });
+
 module.exports = router;

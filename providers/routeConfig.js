@@ -7,7 +7,7 @@ const dashboardRoute = require("../routes/dashboardRoute");
 const adminRoute = require("../routes/adminRoutes");
 const managerRoute = require("../routes/managerRoutes");
 const projectRoute = require("../routes/projectRoute");
-const projectMemberRoutes = require("../routes/projectMemberRoutes");
+// const projectMemberRoutes = require("../routes/projectMemberRoutes");
 const teamRoute = require("../routes/teamRoute");
 const taskRoute = require("../routes/taskRoute");
 const searchRoute = require("../routes/searchRoute");
@@ -52,10 +52,10 @@ module.exports = {
       path: "/",
       router: dashboardRoute,
     },
-    {
-      path: "/",
-      router: projectMemberRoutes,
-    },
+    // {
+    //   path: "/",
+    //   router: projectMemberRoutes,
+    // },
     {
       path: "/",
       router: profileRoute,
