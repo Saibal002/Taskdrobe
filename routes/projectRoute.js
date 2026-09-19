@@ -54,6 +54,16 @@ router.post(
 );
 
 // ===========================
+// View All Projects (Unified RBAC)
+// Authenticated users
+// ===========================
+router.get(
+  "/",
+  authMiddleware,
+  projectController.getProjects
+);
+
+// ===========================
 // View Project
 // Authenticated users
 // ===========================

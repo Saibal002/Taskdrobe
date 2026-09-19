@@ -704,17 +704,26 @@ const viewProject = async (req, res, next) => {
     next(err);
   }
 };
-
 const getProjects = async (req, res, next) => {
   try {
-    let projects;
-    if (req.user.role_name === "employee") {
-      projects = await projectService.getProjectsByMember(req.user.user_id);
-    } else {
+    let projects = [];
+
+    // 1. Admin gets EVERYTHING
+    if (req.user.role_name === "admin") {
       projects = await projectService.getAllProjects();
+    } 
+    // 2. Manager gets ONLY projects they created
+    else if (req.user.role_name === "manager") {
+      projects = await projectService.getProjectsByManager(req.user.user_id);
+    } 
+    // 3. Employee gets ONLY projects assigned to their Team
+    else if (req.user.role_name === "employee") {
+      projects = await projectService.getProjectsByMember(req.user.user_id);
     }
-    return res.render("dashboard", {
-      title: "Dashboard",
+
+    // Render the unified projects grid
+    return res.render("projects", {
+      title: "All Projects",
       projects,
       user: req.user,
     });
