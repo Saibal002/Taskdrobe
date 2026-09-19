@@ -10,6 +10,9 @@ const {
 } = require("../middleware/documentUploadMiddleware");
 const attachmentController = require("../controllers/attachmentController");
 
+// View All Tasks (Unified RBAC)
+router.get("/", authMiddleware, taskController.getTasks);
+
 router.post("/", authMiddleware, taskController.createTask);
 
 router.post("/:id/update", authMiddleware, taskController.updateTask);

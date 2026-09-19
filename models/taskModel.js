@@ -267,6 +267,53 @@ const getTaskInsightData = async (taskId) => {
     const { rows } = await query(sql, [taskId]);
     return rows[0];
 };
+/**
+ * Admin: Get ALL tasks in the system
+ */
+const getAllTasks = async () => {
+    const sql = `
+        SELECT t.*, p.project_name, u.full_name AS assigned_to_name
+        FROM tasks t
+        LEFT JOIN projects p ON t.project_id = p.project_id
+        LEFT JOIN users u ON t.assigned_to = u.user_id
+        ORDER BY t.created_at DESC;
+    `;
+    const { rows } = await query(sql);
+    return rows;
+};
+
+/**
+ * Manager: Get tasks for projects they created
+ */
+const getTasksByManager = async (managerId) => {
+    const sql = `
+        SELECT t.*, p.project_name, u.full_name AS assigned_to_name
+        FROM tasks t
+        INNER JOIN projects p ON t.project_id = p.project_id
+        LEFT JOIN users u ON t.assigned_to = u.user_id
+        WHERE p.created_by = $1
+        ORDER BY t.created_at DESC;
+    `;
+    const { rows } = await query(sql, [managerId]);
+    return rows;
+};
+
+/**
+ * Employee: Get all tasks in projects assigned to their Team
+ */
+const getTasksByEmployeeProjects = async (userId) => {
+    const sql = `
+        SELECT t.*, p.project_name, u.full_name AS assigned_to_name
+        FROM tasks t
+        INNER JOIN projects p ON t.project_id = p.project_id
+        INNER JOIN team_members tm ON p.team_id = tm.team_id
+        LEFT JOIN users u ON t.assigned_to = u.user_id
+        WHERE tm.user_id = $1
+        ORDER BY t.created_at DESC;
+    `;
+    const { rows } = await query(sql, [userId]);
+    return rows;
+};
 module.exports = {
   createTask,
   getTasksByProject,
@@ -279,4 +326,7 @@ module.exports = {
   getUpcomingTasks,
   searchTasks,
   getTaskInsightData,
+  getAllTasks,
+  getTasksByManager,
+  getTasksByEmployeeProjects,
 };

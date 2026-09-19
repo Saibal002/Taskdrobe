@@ -1113,7 +1113,17 @@ const toggleTaskStatus = async (
 
 };
 
+const getAllTasks = async () => {
+    return await taskModel.getAllTasks();
+};
 
+const getTasksByManager = async (managerId) => {
+    return await taskModel.getTasksByManager(managerId);
+};
+
+const getTasksByEmployeeProjects = async (userId) => {
+    return await taskModel.getTasksByEmployeeProjects(userId);
+};
 module.exports = {
     createTask,
     getTasksByProject,
@@ -1122,4 +1132,7 @@ module.exports = {
     deleteTask,
     toggleTaskStatus,
     updateTaskAssignment,
+    getAllTasks,
+    getTasksByManager,
+    getTasksByEmployeeProjects
 };

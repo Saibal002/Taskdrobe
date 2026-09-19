@@ -906,7 +906,31 @@ const deleteTaskComment = async (
         });
     }
 };
+// =====================================================
+// VIEW ALL TASKS (Unified RBAC)
+// =====================================================
 
+const getTasks = async (req, res, next) => {
+    try {
+        let tasks = [];
+
+        if (req.user.role_name === "admin") {
+            tasks = await taskService.getAllTasks();
+        } else if (req.user.role_name === "manager") {
+            tasks = await taskService.getTasksByManager(req.user.user_id);
+        } else if (req.user.role_name === "employee") {
+            tasks = await taskService.getTasksByEmployeeProjects(req.user.user_id);
+        }
+
+        return res.render("tasks", {
+            title: "All Tasks",
+            tasks,
+            user: req.user
+        });
+    } catch (err) {
+        next(err);
+    }
+};
 
 // =====================================================
 // EXPORTS
@@ -922,6 +946,7 @@ module.exports = {
     getTaskInsight,
     getTaskComments,
     addTaskComment,
-    deleteTaskComment
+    deleteTaskComment,
+    getTasks,
 };
 

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | TaskDrobe</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Global Styles -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/project.css" rel="stylesheet"> <!-- Using project.css for the table styling -->
+</head>
+
+<body class="app-sidebar-layout">
+
+    <%- include("layout/navBar", { user: user, page: "tasks" }) %>
+    <script src="/js/navbar.js"></script>
+
+    <main class="main-content" style="padding-top: 100px; padding-left: 2rem; padding-right: 2rem;">
+        <div class="container-fluid max-w-1400 mx-auto">
+            
+            <header class="section-heading mb-4">
+                <div>
+                    <p class="section-kicker">
+                        <%= user.role_name === 'admin' ? 'Global System' : (user.role_name === 'manager' ? 'Management' : 'Team Visibility') %>
+                    </p>
+                    <h2 class="fw-bold m-0">
+                        <%= user.role_name === 'admin' ? 'All System Tasks' : 'Workspace Tasks' %>
+                    </h2>
+                </div>
+            </header>
+
+            <div class="project-members-card" id="projectTasksSection">
+                <% if (tasks && tasks.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;" class="text-center"><i class="bi bi-check2-square"></i></th>
+                                    <th>Task Name</th>
+                                    <th>Project</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Assigned To</th>
+                                    <th>Due Date</th>
+                                    <% if (user.role_name !== 'employee') { %>
+                                        <th class="text-end">Actions</th>
+                                    <% } %>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% tasks.forEach((task) => { 
+                                    // Security logic: Can this user toggle the status?
+                                    const isAssignee = String(task.assigned_to) === String(user.user_id);
+                                    const canToggle = user.role_name === 'admin' || user.role_name === 'manager' || isAssignee;
+                                    
+                                    const priorityVal = String(task.priority || '').toLowerCase();
+                                    const priorityBadge = priorityVal === 'high' || priorityVal === 'critical' ? 'danger' : (priorityVal === 'medium' ? 'warning text-dark' : 'success');
+                                    
+                                    const deadlineDate = task.due_date ? new Date(task.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "None";
+                                %>
+                                    <tr class="<%= !canToggle ? 'opacity-75' : '' %>">
+                                        
+                                        <!-- Toggle Status Column -->
+                                        <td class="text-center">
+                                            <% if (canToggle) { %>
+                                                <form action="/tasks/<%= task.task_id %>/toggle-status" method="POST" class="d-inline m-0 p-0">
+                                                    <button type="submit" class="btn p-0 border-0 bg-transparent text-<%= task.status === 'Completed' ? 'success' : 'secondary' %>" title="Toggle Status">
+                                                        <i class="bi bi-<%= task.status === 'Completed' ? 'check-circle-fill fs-5' : 'circle fs-5' %>"></i>
+                                                    </button>
+                                                </form>
+                                            <% } else { %>
+                                                <span class="text-muted" title="Only the assigned user can update this task">
+                                                    <i class="bi bi-lock-fill fs-6"></i>
+                                                </span>
+                                            <% } %>
+                                        </td>
+                                        
+                                        <!-- Task Title -->
+                                        <td class="fw-bold"><%= task.title %></td>
+                                        
+                                        <!-- Project Name -->
+                                        <td>
+                                            <a href="/projects/<%= task.project_id %>" class="text-decoration-none text-primary fw-medium">
+                                                <i class="bi bi-folder2 me-1"></i> <%= task.project_name %>
+                                            </a>
+                                        </td>
+                                        
+                                        <!-- Priority -->
+                                        <td><span class="badge bg-<%= priorityBadge %> bg-opacity-10 text-<%= priorityBadge.split(' ')[0] %> border border-<%= priorityBadge.split(' ')[0] %>"><%= task.priority || 'Normal' %></span></td>
+                                        
+                                        <!-- Status -->
+                                        <td><span class="badge bg-light text-dark border"><%= task.status %></span></td>
+                                        
+                                        <!-- Assignee -->
+                                        <td>
+                                            <% if (task.assigned_to_name) { %>
+                                                <span class="<%= isAssignee ? 'text-primary fw-bold' : 'text-muted' %>">
+                                                    <i class="bi bi-person-circle me-1"></i> <%= task.assigned_to_name %>
+                                                </span>
+                                            <% } else { %>
+                                                <span class="text-muted fst-italic">Unassigned</span>
+                                            <% } %>
+                                        </td>
+                                        
+                                        <!-- Due Date -->
+                                        <td class="text-muted small fw-medium">
+                                            <i class="bi bi-calendar me-1"></i> <%= deadlineDate %>
+                                        </td>
+                                        
+                                        <!-- Actions (Managers & Admins only) -->
+                                        <% if (user.role_name !== 'employee') { %>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light border" type="button" data-bs-toggle="dropdown">
+                                                        <i class="bi bi-three-dots"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                                        <li>
+                                                            <form action="/tasks/<%= task.task_id %>/delete" method="POST" onsubmit="return confirm('Delete this task?');">
+                                                                <button class="dropdown-item text-danger fw-bold" type="submit"><i class="bi bi-trash3 me-2"></i> Delete</button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        <% } %>
+                                        
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-5">
+                        <i class="bi bi-check2-circle display-1 text-muted mb-3 d-block opacity-25"></i>
+                        <h4 class="fw-bold">No tasks found</h4>
+                        <p class="text-muted">There are currently no tasks to display.</p>
+                    </div>
+                <% } %>
+            </div>
+            
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <%- include("layout/globalChat") %>
+</body>
+</html>
