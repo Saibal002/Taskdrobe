@@ -26,17 +26,15 @@
             </a>
 
             <!-- Hide standard project/task views from Admins -->
-            <% if (!isAdmin) { %>
-                <a href="/projects" class="app-sidebar-item <%= currentPage === 'projects' || currentPage === 'project' ? 'active' : '' %>" title="Projects">
-                    <i class="bi bi-folder2-open app-sidebar-icon"></i>
-                    <span>Projects</span>
-                </a>
+           <a href="/projects" class="app-sidebar-item <%= currentPage === 'projects' || currentPage === 'project' ? 'active' : '' %>" title="Projects">
+                <i class="bi bi-folder2-open app-sidebar-icon"></i>
+                <span>Projects</span>
+            </a>
 
-                <a href="/tasks" class="app-sidebar-item <%= currentPage === 'tasks' ? 'active' : '' %>" title="Tasks">
-                    <i class="bi bi-check2-square app-sidebar-icon"></i>
-                    <span>Tasks</span>
-                </a>
-            <% } %>
+            <a href="/tasks" class="app-sidebar-item <%= currentPage === 'tasks' ? 'active' : '' %>" title="Tasks">
+                <i class="bi bi-check2-square app-sidebar-icon"></i>
+                <span>Tasks</span>
+            </a>
         </div>
 
         <% if (isManager) { %>
