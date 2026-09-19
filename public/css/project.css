@@ -1,10 +1,11 @@
 /* =========================================================
-   PROJECT PAGE — V4 · DYNAMIC RING · AJAX-SAFE · RESPONSIVE
+   PROJECT PAGE — V5 · CLEAN · TOKEN-DRIVEN
+   Depends on style.css tokens + utilities
    ========================================================= */
 
-/* =========================================================
+/* ---------------------------------------------------------
    SHELL
-   ========================================================= */
+   --------------------------------------------------------- */
 .project-page-shell {
     max-width: 1400px;
     margin: 0 auto 3rem;
@@ -12,21 +13,15 @@
     flex-direction: column;
     gap: 1.5rem;
 }
-
 .project-page-shell > .project-members-section,
 .project-page-shell > .project-files-section,
 .project-page-shell > #projectCommentsSection,
-.project-page-shell > #projectTasksSection {
-    margin-top: 0 !important;
-}
-.project-page-shell > hr.border-light {
-    margin: 0 !important;
-    opacity: 0.15;
-}
+.project-page-shell > #projectTasksSection { margin-top: 0 !important; }
+.project-page-shell > hr.border-light { margin: 0 !important; opacity: 0.15; }
 
-/* =========================================================
-   HERO PILL — title left · dynamic progress ring right
-   ========================================================= */
+/* ---------------------------------------------------------
+   HERO — title left · dynamic progress ring right
+   --------------------------------------------------------- */
 .project-overview-card {
     position: relative;
     overflow: hidden;
@@ -37,56 +32,38 @@
     box-shadow: 0 20px 50px rgba(90, 75, 209, 0.22);
     border: none;
 }
-
 .project-overview-card::before {
-    content: '';
-    position: absolute;
+    content: ''; position: absolute;
     width: 320px; height: 320px;
     left: -120px; bottom: -170px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.10) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 70%);
+    pointer-events: none; z-index: 0;
 }
-
 .project-overview-card::after {
-    content: '';
-    position: absolute;
+    content: ''; position: absolute;
     width: 260px; height: 260px;
     right: -100px; top: -120px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+    pointer-events: none; z-index: 0;
 }
 
 .project-overview-top {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2.5rem;
-    flex-wrap: wrap;
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2.5rem; flex-wrap: wrap;
 }
-
-.project-overview-heading {
-    flex: 1 1 380px;
-    min-width: 0;
-}
+.project-overview-heading { flex: 1 1 380px; min-width: 0; }
 
 .project-back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.45rem 1.05rem;
-    margin-bottom: 1.25rem;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.45rem 1.05rem; margin-bottom: 1.25rem;
     border-radius: var(--radius-pill);
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.18);
     color: rgba(255, 255, 255, 0.92);
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-size: 0.82rem; font-weight: 600;
     text-decoration: none;
     transition: all 0.25s ease;
 }
@@ -96,65 +73,43 @@
     transform: translateX(-3px);
 }
 
-.project-title-row {
-    display: flex;
-    align-items: center;
-    gap: 1.15rem;
-}
-
+.project-title-row { display: flex; align-items: center; gap: 1.15rem; }
 .project-title-icon {
     width: 56px; height: 56px;
     display: grid; place-items: center;
-    flex-shrink: 0;
-    border-radius: 18px;
+    flex-shrink: 0; border-radius: 18px;
     background: rgba(255, 255, 255, 0.16);
     border: 1px solid rgba(255, 255, 255, 0.24);
-    color: #ffffff;
-    font-size: 1.35rem;
+    color: #ffffff; font-size: 1.35rem;
     backdrop-filter: blur(8px);
 }
-
 .project-eyebrow {
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    font-size: 0.7rem; font-weight: 800;
+    letter-spacing: 0.15em; text-transform: uppercase;
     color: rgba(255, 255, 255, 0.72);
     margin-bottom: 0.15rem;
 }
-
 .project-page-title {
     font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-    font-weight: 800;
-    line-height: 1.05;
+    font-weight: 800; line-height: 1.05;
     letter-spacing: -0.03em;
-    color: #ffffff;
-    margin: 0;
+    color: #ffffff; margin: 0;
 }
-
 .project-page-description {
-    max-width: 560px;
-    margin: 1rem 0 0;
-    font-size: 0.98rem;
-    line-height: 1.6;
+    max-width: 560px; margin: 1rem 0 0;
+    font-size: 0.98rem; line-height: 1.6;
     color: rgba(255, 255, 255, 0.85);
 }
 
 /* ---------- DYNAMIC PROGRESS RING ---------- */
 .project-status-panel {
-    position: relative;
-    z-index: 2;
+    position: relative; z-index: 2;
     flex-shrink: 0;
-    width: 160px;
-    height: 160px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    width: 160px; height: 160px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     gap: 0.35rem;
-    border-radius: 50%;
-    padding: 8px;
-    /* Ring reads --progress (0–100) → fill arc, remainder is track */
+    border-radius: 50%; padding: 8px;
     background: conic-gradient(
         from 0deg,
         rgba(255, 255, 255, 0.95) 0deg,
@@ -165,55 +120,34 @@
     transition: background 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.10);
 }
-
 .project-status-panel::before {
-    content: '';
-    position: absolute;
-    inset: 8px;
+    content: ''; position: absolute; inset: 8px;
     border-radius: 50%;
     background: rgba(15, 15, 25, 0.78);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: 0;
 }
-
 .project-status-label {
-    position: relative;
-    z-index: 1;
-    font-size: 0.58rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    position: relative; z-index: 1;
+    font-size: 0.58rem; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
     color: rgba(255, 255, 255, 0.65);
-    margin: 0;
-    text-align: center;
+    margin: 0; text-align: center;
 }
-
 .project-status-badge {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: 0;
-    border: none;
-    background: transparent;
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: #ffffff;
-    text-align: center;
-    line-height: 1.15;
-    max-width: 110px;
+    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 0.4rem; padding: 0;
+    border: none; background: transparent;
+    font-size: 0.85rem; font-weight: 800;
+    color: #ffffff; text-align: center;
+    line-height: 1.15; max-width: 110px;
 }
-
 .project-status-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0;
 }
-
 .project-status-completed .project-status-badge { color: #6ee7b7; }
 .project-status-progress  .project-status-badge { color: #a5b4fc; }
 .project-status-cancelled .project-status-badge { color: #fca5a5; }
@@ -221,76 +155,52 @@
 
 /* ---------- KPI GRID ---------- */
 .project-kpi-grid {
-    position: relative;
-    z-index: 2;
+    position: relative; z-index: 2;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.85rem;
-    margin-top: 2.25rem;
+    gap: 0.85rem; margin-top: 2.25rem;
 }
-
 .project-kpi-card {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
+    display: flex; align-items: center; gap: 0.85rem;
     padding: 0.95rem 1.15rem;
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.10);
     border: 1px solid rgba(255, 255, 255, 0.14);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    transition: all 0.25s ease;
-    min-width: 0;
+    transition: all 0.25s ease; min-width: 0;
 }
 .project-kpi-card:hover {
     background: rgba(255, 255, 255, 0.16);
     transform: translateY(-3px);
     box-shadow: 0 12px 26px rgba(0, 0, 0, 0.15);
 }
-
 .project-kpi-icon {
     width: 42px; height: 42px;
     display: grid; place-items: center;
-    flex-shrink: 0;
-    border-radius: 50%;
+    flex-shrink: 0; border-radius: 50%;
     background: rgba(255, 255, 255, 0.16);
-    color: #ffffff;
-    font-size: 1rem;
+    color: #ffffff; font-size: 1rem;
 }
-
 .project-kpi-content { min-width: 0; }
-
 .project-kpi-label {
     display: block;
-    font-size: 0.6rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-size: 0.6rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase;
     color: rgba(255, 255, 255, 0.72);
     margin-bottom: 0.1rem;
 }
-
 .project-kpi-value {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    display: block; font-size: 1.25rem; font-weight: 800;
+    line-height: 1.15; letter-spacing: -0.02em;
     color: #ffffff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.project-kpi-value-small { font-size: 0.95rem; white-space: normal; line-height: 1.2; }
 
-.project-kpi-value-small {
-    font-size: 0.95rem;
-    white-space: normal;
-    line-height: 1.2;
-}
-
-/* =========================================================
-   PROGRESS BAR SECTION
-   ========================================================= */
+/* ---------------------------------------------------------
+   PROGRESS BAR
+   --------------------------------------------------------- */
 .project-progress-section {
     background: var(--surface-base);
     border: 1px solid var(--border-color);
@@ -298,27 +208,12 @@
     padding: 1.5rem 2rem;
     box-shadow: var(--shadow-soft);
 }
-
 .project-progress-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.85rem;
-    flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin-bottom: 0.85rem; flex-wrap: wrap;
 }
-
-.project-progress-title {
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: var(--text-primary);
-}
-
-.project-progress-value {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--accent-primary);
-}
+.project-progress-title { font-size: 0.95rem; font-weight: 800; color: var(--text-primary); }
+.project-progress-value { font-size: 1.25rem; font-weight: 800; color: var(--accent-primary); }
 
 .project-progress-bar {
     height: 10px;
@@ -327,18 +222,16 @@
     overflow: hidden;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
 }
-
 .project-progress-bar > div {
-    height: 100%;
-    border-radius: inherit;
+    height: 100%; border-radius: inherit;
     background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
     transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     min-width: 4px;
 }
 
-/* =========================================================
+/* ---------------------------------------------------------
    SHARED SECTION CARDS
-   ========================================================= */
+   --------------------------------------------------------- */
 .project-members-card,
 #projectTasksSection,
 .project-files-section .project-members-card,
@@ -350,72 +243,43 @@
     box-shadow: var(--shadow-soft);
     transition: border-color 0.25s ease;
 }
-.project-members-card:hover {
-    border-color: rgba(90, 75, 209, 0.20);
-}
+.project-members-card:hover { border-color: rgba(90, 75, 209, 0.20); }
 
 .project-members-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 1rem; padding-bottom: 1.5rem; margin-bottom: 1.5rem;
     border-bottom: 1px solid var(--border-color);
     flex-wrap: wrap;
 }
-
-.project-members-heading {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    min-width: 0;
-}
-
+.project-members-heading { display: flex; align-items: center; gap: 1rem; min-width: 0; }
 .project-section-icon {
     width: 50px; height: 50px;
     display: grid; place-items: center;
-    flex-shrink: 0;
-    border-radius: 16px;
+    flex-shrink: 0; border-radius: 16px;
     background: linear-gradient(135deg, var(--accent-primary), #4F46E5);
-    color: #ffffff;
-    font-size: 1.25rem;
+    color: #ffffff; font-size: 1.25rem;
     box-shadow: 0 8px 20px rgba(90, 75, 209, 0.25);
 }
-
 .project-section-eyebrow {
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    font-size: 0.7rem; font-weight: 800;
+    letter-spacing: 0.15em; text-transform: uppercase;
     color: var(--accent-primary);
     margin-bottom: 0.15rem;
 }
-
 .project-section-title {
-    font-size: 1.35rem;
-    font-weight: 800;
+    font-size: 1.35rem; font-weight: 800;
     letter-spacing: -0.02em;
-    color: var(--text-primary);
-    margin: 0;
+    color: var(--text-primary); margin: 0;
 }
-
-.project-section-subtitle {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin: 0.15rem 0 0;
-}
+.project-section-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin: 0.15rem 0 0; }
 
 .project-members-permission-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+    display: inline-flex; align-items: center; gap: 0.4rem;
     padding: 0.45rem 1rem;
     border-radius: var(--radius-pill);
     background: rgba(90, 75, 209, 0.10);
     color: var(--accent-primary);
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 0.75rem; font-weight: 700;
     border: 1px solid var(--border-color);
     white-space: nowrap;
 }
@@ -424,12 +288,8 @@
 .project-members-list { min-height: 80px; }
 
 .project-member-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.85rem 1rem;
-    margin-bottom: 0.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; padding: 0.85rem 1rem; margin-bottom: 0.5rem;
     border-radius: var(--radius-sm);
     background: var(--surface-glass);
     border: 1px solid var(--border-color);
@@ -440,189 +300,113 @@
     border-color: rgba(90, 75, 209, 0.25);
     transform: translateX(3px);
 }
-
-.project-member-identity {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    min-width: 0;
-}
+.project-member-identity { display: flex; align-items: center; gap: 0.85rem; min-width: 0; }
 
 .project-member-avatar,
 .project-member-avatar-placeholder {
     width: 42px; height: 42px;
-    border-radius: 50%;
-    flex-shrink: 0;
+    border-radius: 50%; flex-shrink: 0;
     object-fit: cover;
 }
-.project-member-avatar {
-    border: 2px solid rgba(90, 75, 209, 0.15);
-}
+.project-member-avatar { border: 2px solid rgba(90, 75, 209, 0.15); }
 .project-member-avatar-placeholder {
     display: grid; place-items: center;
     background: linear-gradient(135deg, var(--accent-primary), #4F46E5);
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 800;
+    color: #ffffff; font-size: 0.85rem; font-weight: 800;
 }
-
 .project-member-details { min-width: 0; }
 .project-member-details strong {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1.2;
+    display: block; font-size: 0.9rem; font-weight: 700;
+    color: var(--text-primary); line-height: 1.2;
 }
 .project-member-details span {
-    display: block;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-top: 0.15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: block; font-size: 0.75rem;
+    color: var(--text-secondary); margin-top: 0.15rem;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
 .project-member-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-shrink: 0;
+    display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;
 }
-
 .project-member-role {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-secondary);
-    text-transform: capitalize;
+    font-size: 0.75rem; font-weight: 700;
+    color: var(--text-secondary); text-transform: capitalize;
 }
-
 .project-remove-member-btn {
     padding: 0.35rem 0.85rem;
     border-radius: var(--radius-pill);
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-size: 0.72rem; font-weight: 700;
     transition: all 0.2s ease;
 }
 
 /* ---------- Empty / loading ---------- */
 .project-members-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    padding: 2rem 1rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center;
+    gap: 0.6rem; padding: 2rem 1rem;
+    color: var(--text-secondary); font-size: 0.9rem;
 }
-
 .project-members-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    display: flex; flex-direction: column;
+    align-items: center; text-align: center;
     padding: 2.5rem 1rem;
-    color: var(--text-secondary);
-    gap: 0.35rem;
+    color: var(--text-secondary); gap: 0.35rem;
     border: 1px dashed var(--border-color);
     border-radius: var(--radius-md);
 }
-
 .project-members-empty-icon {
     width: 52px; height: 52px;
     display: grid; place-items: center;
     border-radius: 50%;
     background: rgba(90, 75, 209, 0.10);
     color: var(--accent-primary);
-    font-size: 1.35rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.35rem; margin-bottom: 0.5rem;
 }
-
-.project-members-empty h5 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-}
+.project-members-empty h5 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0; }
 .project-members-empty p { font-size: 0.85rem; margin: 0; }
-
-.project-members-message {
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
+.project-members-message { font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
 
 /* ---------- Add member ---------- */
 .project-add-member-panel { padding-left: 1.5rem; }
-
 .project-add-member-heading {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.25rem;
 }
-
 .project-add-member-icon {
     width: 44px; height: 44px;
     display: grid; place-items: center;
-    flex-shrink: 0;
-    border-radius: 12px;
+    flex-shrink: 0; border-radius: 12px;
     background: linear-gradient(135deg, var(--accent-primary), #4F46E5);
-    color: #ffffff;
-    font-size: 1rem;
+    color: #ffffff; font-size: 1rem;
     box-shadow: 0 6px 16px rgba(90, 75, 209, 0.22);
 }
+.project-add-member-heading h4 { font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin: 0; }
 
-.project-add-member-heading h4 {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin: 0;
-}
-
-/* =========================================================
+/* ---------------------------------------------------------
    FILES
-   ========================================================= */
+   --------------------------------------------------------- */
 .project-files-section { margin-top: 0 !important; }
 .project-files-section .project-section-icon {
     background: linear-gradient(135deg, #10b981, #047857);
     box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
 }
-
-#uploadFileForm {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
+#uploadFileForm { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
 #uploadFileForm input[type="file"] {
-    flex: 1 1 200px;
-    min-width: 0;
+    flex: 1 1 200px; min-width: 0;
     padding: 0.4rem 1rem;
     border-radius: var(--radius-pill);
     background: var(--surface-glass);
     border: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    color: var(--text-primary);
+    font-size: 0.85rem; color: var(--text-primary);
 }
 #uploadFileForm input[type="file"]:focus {
-    outline: none;
-    border-color: var(--accent-primary);
+    outline: none; border-color: var(--accent-primary);
     box-shadow: 0 0 0 3px rgba(90, 75, 209, 0.10);
 }
-
 #uploadFileBtn {
     background: linear-gradient(135deg, #10b981, #047857);
-    border: none;
-    border-radius: var(--radius-pill);
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 0.85rem;
+    border: none; border-radius: var(--radius-pill);
+    color: #ffffff; font-weight: 700; font-size: 0.85rem;
     padding: 0.5rem 1.25rem;
-    transition: all 0.25s ease;
-    white-space: nowrap;
+    transition: all 0.25s ease; white-space: nowrap;
 }
 #uploadFileBtn:hover {
     color: #ffffff;
@@ -630,71 +414,22 @@
     box-shadow: 0 8px 20px rgba(16, 185, 129, 0.30);
 }
 
-/* =========================================================
-   AJAX-SAFE OVERRIDES
-   Scoped to injected containers so JS can keep emitting
-   Bootstrap classes without breaking the new theme.
-   ========================================================= */
+/* ---------------------------------------------------------
+   AJAX-INJECTED CONTAINERS
+   Rely on the global .app-ajax-* utility. These only bridge
+   legacy Bootstrap classes still emitted by older JS.
+   --------------------------------------------------------- */
+#projectFilesList .text-purple { color: var(--accent-primary) !important; }
+#projectFilesList .bg-danger   { background: rgba(255, 71, 87, 0.12) !important; }
+#projectFilesList .rounded-4,
+#commentsFeed .rounded-4       { border-radius: var(--radius-md) !important; }
 
-/* File items injected by JS use bg-white / text-dark / border-light */
-#projectFilesList .bg-white {
-    background: var(--surface-base) !important;
-    border-color: var(--border-color) !important;
-}
-#projectFilesList .text-dark {
-    color: var(--text-primary) !important;
-}
-#projectFilesList .text-muted {
-    color: var(--text-secondary) !important;
-}
-#projectFilesList .border-light {
-    border-color: var(--border-color) !important;
-}
-#projectFilesList .text-purple {
-    color: var(--accent-primary) !important;
-}
-#projectFilesList .bg-danger {
-    background: rgba(255, 71, 87, 0.12) !important;
-}
-#projectFilesList .text-danger {
-    color: #d63031 !important;
-}
-#projectFilesList .rounded-4 {
-    border-radius: var(--radius-md) !important;
-}
-#projectFilesList .file-item,
-#projectFilesList > div > div {
-    background: var(--surface-base) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-primary);
-}
-
-/* Comments injected by JS */
 #commentsFeed .bg-primary {
     background: linear-gradient(135deg, var(--accent-primary), #4F46E5) !important;
     color: #ffffff !important;
 }
-#commentsFeed .bg-white {
-    background: var(--surface-base) !important;
-}
-#commentsFeed .text-dark {
-    color: var(--text-primary) !important;
-}
-#commentsFeed .text-white {
-    color: #ffffff !important;
-}
-#commentsFeed .border-light {
-    border-color: var(--border-color) !important;
-}
-#commentsFeed .text-danger {
-    color: #ff4757 !important;
-}
-#commentsFeed .text-muted {
-    color: var(--text-secondary) !important;
-}
-#commentsFeed .rounded-4 {
-    border-radius: var(--radius-md) !important;
-}
+#commentsFeed .text-white { color: #ffffff !important; }
+
 .no-comments-msg {
     color: var(--text-secondary);
     font-size: 0.9rem;
@@ -714,15 +449,11 @@
     border: 1px solid rgba(255, 71, 87, 0.25);
 }
 
-/* Retry button inside error state */
-#retryProjectMembers {
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-}
+#retryProjectMembers { border-radius: var(--radius-pill); font-weight: 700; }
 
-/* =========================================================
-   TASKS — table safety (partial renders a table)
-   ========================================================= */
+/* ---------------------------------------------------------
+   TASKS
+   --------------------------------------------------------- */
 #projectTasksSection .table,
 #projectTasksSection table {
     width: 100%;
@@ -730,20 +461,15 @@
     border-collapse: separate;
     border-spacing: 0;
 }
-
 #projectTasksSection .table thead th,
 #projectTasksSection table thead th {
     color: var(--text-secondary);
-    font-size: 0.72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: 0.72rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.08em;
     border-bottom: 1px solid var(--border-color);
-    padding: 0.75rem 0.75rem;
-    white-space: nowrap;
+    padding: 0.75rem; white-space: nowrap;
     background: transparent;
 }
-
 #projectTasksSection .table tbody td,
 #projectTasksSection table tbody td {
     border-bottom: 1px solid var(--border-color);
@@ -752,19 +478,14 @@
     color: var(--text-primary);
     font-size: 0.85rem;
 }
-
 #projectTasksSection .table tbody tr:hover td,
 #projectTasksSection table tbody tr:hover td {
     background: rgba(90, 75, 209, 0.04);
 }
-
-/* Table wrapper — horizontal scroll on small screens */
 #projectTasksSection .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
 
-/* Task cards (grid layout) */
 .task-card {
     background: var(--surface-base);
     border: 1px solid var(--border-color);
@@ -779,16 +500,12 @@
     box-shadow: 0 15px 30px rgba(90, 75, 209, 0.10);
 }
 
-/* Add New Task button */
 #projectTasksSection .btn-primary,
 #projectTasksSection .btn-theme {
     background: linear-gradient(135deg, var(--accent-primary), #4F46E5);
-    border: none;
-    border-radius: var(--radius-pill);
-    color: #ffffff;
-    font-weight: 700;
-    padding: 0.5rem 1.1rem;
-    transition: all 0.25s ease;
+    border: none; border-radius: var(--radius-pill);
+    color: #ffffff; font-weight: 700;
+    padding: 0.5rem 1.1rem; transition: all 0.25s ease;
 }
 #projectTasksSection .btn-primary:hover,
 #projectTasksSection .btn-theme:hover {
@@ -796,35 +513,29 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(90, 75, 209, 0.30);
 }
-
-/* Task filter controls */
 #projectTasksSection .form-select,
 #projectTasksSection .form-control {
     background: var(--surface-glass);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-pill);
     color: var(--text-primary);
-    padding: 0.45rem 1rem;
-    font-size: 0.85rem;
+    padding: 0.45rem 1rem; font-size: 0.85rem;
 }
 #projectTasksSection .form-select:focus,
 #projectTasksSection .form-control:focus {
-    outline: none;
-    border-color: var(--accent-primary);
+    outline: none; border-color: var(--accent-primary);
     box-shadow: 0 0 0 3px rgba(90, 75, 209, 0.10);
 }
 
-/* =========================================================
-   COMMENTS CARD
-   ========================================================= */
+/* ---------------------------------------------------------
+   COMMENTS
+   --------------------------------------------------------- */
 #projectCommentsSection { padding: 2rem; }
 
-/* =========================================================
+/* ---------------------------------------------------------
    HOVER LIFT
-   ========================================================= */
-.hover-lift {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+   --------------------------------------------------------- */
+.hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .hover-lift:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(90, 75, 209, 0.15);
@@ -836,20 +547,12 @@
 html[data-theme="dark"] .project-overview-card {
     background: rgba(20, 22, 28, 0.78);
     border: 1px solid rgba(0, 255, 255, 0.20);
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.55),
-        inset 0 0 40px rgba(0, 255, 255, 0.04);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), inset 0 0 40px rgba(0, 255, 255, 0.04);
     backdrop-filter: blur(24px) saturate(140%);
     -webkit-backdrop-filter: blur(24px) saturate(140%);
 }
-
-html[data-theme="dark"] .project-page-title {
-    color: #00ffff;
-    text-shadow: 0 0 26px rgba(0, 255, 255, 0.42);
-}
-html[data-theme="dark"] .project-page-description {
-    color: rgba(255, 255, 255, 0.70);
-}
+html[data-theme="dark"] .project-page-title { color: #00ffff; }
+html[data-theme="dark"] .project-page-description { color: rgba(255, 255, 255, 0.70); }
 
 html[data-theme="dark"] .project-title-icon {
     background: rgba(0, 255, 255, 0.08);
@@ -857,7 +560,6 @@ html[data-theme="dark"] .project-title-icon {
     color: #00ffff;
     box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.15), 0 0 20px rgba(0, 255, 255, 0.10);
 }
-
 html[data-theme="dark"] .project-back-link {
     background: rgba(0, 255, 255, 0.06);
     border-color: rgba(0, 255, 255, 0.22);
@@ -868,7 +570,7 @@ html[data-theme="dark"] .project-back-link:hover {
     color: #00ffff;
 }
 
-/* Dynamic ring in dark — cyan fill, dark track */
+/* Dynamic ring — dark */
 html[data-theme="dark"] .project-status-panel {
     background: conic-gradient(
         from 0deg,
@@ -877,35 +579,15 @@ html[data-theme="dark"] .project-status-panel {
         rgba(0, 255, 255, 0.14) calc(var(--progress, 0) * 3.6deg),
         rgba(0, 255, 255, 0.14) 360deg
     );
-    box-shadow:
-        0 0 40px rgba(0, 255, 255, 0.40),
-        inset 0 0 20px rgba(0, 255, 255, 0.18);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.40), inset 0 0 20px rgba(0, 255, 255, 0.18);
 }
-
-html[data-theme="dark"] .project-status-panel::before {
-    background: rgba(10, 12, 18, 0.92);
-}
-html[data-theme="dark"] .project-status-label {
-    color: rgba(0, 255, 255, 0.65);
-}
-
+html[data-theme="dark"] .project-status-panel::before { background: rgba(10, 12, 18, 0.92); }
+html[data-theme="dark"] .project-status-label { color: rgba(0, 255, 255, 0.65); }
 html[data-theme="dark"] .project-status-badge,
-html[data-theme="dark"] .project-status-default .project-status-badge {
-    color: #00ffff;
-    text-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
-}
-html[data-theme="dark"] .project-status-completed .project-status-badge {
-    color: #6ee7b7;
-    text-shadow: 0 0 12px rgba(110, 231, 183, 0.5);
-}
-html[data-theme="dark"] .project-status-progress .project-status-badge {
-    color: #a5b4fc;
-    text-shadow: 0 0 12px rgba(165, 180, 252, 0.5);
-}
-html[data-theme="dark"] .project-status-cancelled .project-status-badge {
-    color: #fca5a5;
-    text-shadow: 0 0 12px rgba(252, 165, 165, 0.5);
-}
+html[data-theme="dark"] .project-status-default .project-status-badge { color: #00ffff; }
+html[data-theme="dark"] .project-status-completed .project-status-badge { color: #6ee7b7; }
+html[data-theme="dark"] .project-status-progress  .project-status-badge { color: #a5b4fc; }
+html[data-theme="dark"] .project-status-cancelled .project-status-badge { color: #fca5a5; }
 
 /* KPI cards */
 html[data-theme="dark"] .project-kpi-card {
@@ -938,14 +620,11 @@ html[data-theme="dark"] .task-card {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
-
 html[data-theme="dark"] .project-progress-value,
 html[data-theme="dark"] .project-section-title,
 html[data-theme="dark"] .project-member-details strong,
 html[data-theme="dark"] .project-members-empty h5,
-html[data-theme="dark"] .project-add-member-heading h4 {
-    color: var(--accent-primary);
-}
+html[data-theme="dark"] .project-add-member-heading h4 { color: var(--accent-primary); }
 
 html[data-theme="dark"] .project-progress-bar {
     background: rgba(0, 255, 255, 0.06);
@@ -955,7 +634,6 @@ html[data-theme="dark"] .project-progress-bar > div {
     background: linear-gradient(90deg, #00ffff, #ff00ff);
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.55);
 }
-
 html[data-theme="dark"] .project-member-row {
     background: rgba(0, 255, 255, 0.03);
     border-color: rgba(0, 255, 255, 0.10);
@@ -964,7 +642,6 @@ html[data-theme="dark"] .project-member-row:hover {
     background: rgba(0, 255, 255, 0.06);
     border-color: rgba(0, 255, 255, 0.25);
 }
-
 html[data-theme="dark"] .project-section-icon {
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.20), rgba(255, 0, 255, 0.15));
     color: #00ffff;
@@ -977,16 +654,11 @@ html[data-theme="dark"] .project-files-section .project-section-icon {
     color: #00ffcc;
     box-shadow: 0 8px 20px rgba(0, 255, 200, 0.15);
 }
-
 html[data-theme="dark"] .project-add-member-icon {
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.20), rgba(255, 0, 255, 0.15));
-    color: #00ffff;
-    border: 1px solid rgba(0, 255, 255, 0.30);
+    color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.30);
 }
-html[data-theme="dark"] .project-members-empty-icon {
-    background: rgba(0, 255, 255, 0.08);
-    color: #00ffff;
-}
+html[data-theme="dark"] .project-members-empty-icon { background: rgba(0, 255, 255, 0.08); color: #00ffff; }
 html[data-theme="dark"] .project-member-avatar-placeholder {
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.30), rgba(255, 0, 255, 0.25));
     color: #ffffff;
@@ -997,51 +669,24 @@ html[data-theme="dark"] .task-card:hover {
 }
 html[data-theme="dark"] .project-members-permission-badge {
     background: rgba(0, 255, 255, 0.08);
-    color: #00ffff;
-    border-color: rgba(0, 255, 255, 0.20);
+    color: #00ffff; border-color: rgba(0, 255, 255, 0.20);
 }
-html[data-theme="dark"] .project-members-empty {
-    border-color: rgba(0, 255, 255, 0.15);
-}
+html[data-theme="dark"] .project-members-empty { border-color: rgba(0, 255, 255, 0.15); }
 
-/* Dark overrides for AJAX-injected Bootstrap classes */
-html[data-theme="dark"] #projectFilesList .bg-white,
-html[data-theme="dark"] #projectFilesList > div > div {
-    background: rgba(25, 25, 30, 0.55) !important;
-    border-color: rgba(0, 255, 255, 0.12) !important;
-}
-html[data-theme="dark"] #projectFilesList .text-dark {
-    color: #f0f9ff !important;
-}
-html[data-theme="dark"] #projectFilesList .text-muted {
-    color: rgba(255, 255, 255, 0.55) !important;
-}
-html[data-theme="dark"] #projectFilesList .border-light {
-    border-color: rgba(0, 255, 255, 0.12) !important;
-}
-html[data-theme="dark"] #projectFilesList .text-purple {
-    color: #00ffff !important;
-}
+/* Dark overrides — AJAX legacy classes */
+html[data-theme="dark"] #projectFilesList .text-dark { color: #f0f9ff !important; }
+html[data-theme="dark"] #projectFilesList .text-muted { color: rgba(255, 255, 255, 0.55) !important; }
+html[data-theme="dark"] #projectFilesList .border-light { border-color: rgba(0, 255, 255, 0.12) !important; }
+html[data-theme="dark"] #projectFilesList .text-purple { color: #00ffff !important; }
 
-html[data-theme="dark"] #commentsFeed .bg-white {
-    background: rgba(0, 255, 255, 0.06) !important;
-}
-html[data-theme="dark"] #commentsFeed .text-dark {
-    color: #f0f9ff !important;
-}
-html[data-theme="dark"] #commentsFeed .border-light {
-    border-color: rgba(0, 255, 255, 0.12) !important;
-}
-html[data-theme="dark"] #commentsFeed .text-muted {
-    color: rgba(255, 255, 255, 0.55) !important;
-}
+html[data-theme="dark"] #commentsFeed .text-dark { color: #f0f9ff !important; }
+html[data-theme="dark"] #commentsFeed .border-light { border-color: rgba(0, 255, 255, 0.12) !important; }
+html[data-theme="dark"] #commentsFeed .text-muted { color: rgba(255, 255, 255, 0.55) !important; }
 html[data-theme="dark"] #commentsFeed .bg-primary {
     background: linear-gradient(135deg, #00ffff, #ff00ff) !important;
     color: #121214 !important;
 }
-html[data-theme="dark"] .no-comments-msg {
-    color: rgba(255, 255, 255, 0.55);
-}
+html[data-theme="dark"] .no-comments-msg { color: rgba(255, 255, 255, 0.55); }
 
 html[data-theme="dark"] #projectTasksSection .table thead th,
 html[data-theme="dark"] #projectTasksSection table thead th {
@@ -1076,206 +721,226 @@ html[data-theme="dark"] .project-members-message.alert-danger {
 }
 
 /* =========================================================
-   RESPONSIVE — TIGHTENED
+   FIX · TABLE ROWS (Bootstrap box-shadow leak)
+   Place inside the dark theme block of project.css
    ========================================================= */
 
-/* Laptop */
-@media (max-width: 1199px) {
-    .project-overview-card {
-        padding: 2.25rem 2.5rem;
-        border-radius: 48px;
-    }
-    .project-kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+/* Reset Bootstrap's table CSS variables so nothing leaks */
+html[data-theme="dark"] .table,
+html[data-theme="dark"] #projectTasksSection .table,
+html[data-theme="dark"] #projectTasksSection table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #f0f9ff;
+    --bs-table-hover-bg: rgba(0, 255, 255, 0.06);
+    --bs-table-hover-color: #f0f9ff;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-striped-color: #f0f9ff;
+    --bs-table-border-color: rgba(0, 255, 255, 0.10);
+    --bs-table-accent-bg: transparent;
 }
 
-/* Tablet */
+/* Kill the box-shadow that Bootstrap paints over every cell */
+html[data-theme="dark"] #projectTasksSection .table > :not(caption) > * > *,
+html[data-theme="dark"] #projectTasksSection table > :not(caption) > * > * {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: #f0f9ff !important;
+}
+
+/* Rest state */
+html[data-theme="dark"] #projectTasksSection .table tbody td,
+html[data-theme="dark"] #projectTasksSection table tbody td {
+    background-color: transparent !important;
+    color: #f0f9ff !important;
+    border-bottom-color: rgba(0, 255, 255, 0.08) !important;
+}
+
+/* Hover state — cyan wash instead of white */
+html[data-theme="dark"] #projectTasksSection .table tbody tr:hover > *,
+html[data-theme="dark"] #projectTasksSection .table tbody tr:hover td,
+html[data-theme="dark"] #projectTasksSection table tbody tr:hover > *,
+html[data-theme="dark"] #projectTasksSection table tbody tr:hover td {
+    background-color: rgba(0, 255, 255, 0.06) !important;
+    color: #f0f9ff !important;
+    box-shadow: none !important;
+}
+
+/* Faded secondary text inside rows (muted, dates, meta) */
+html[data-theme="dark"] #projectTasksSection .table tbody td .text-muted,
+html[data-theme="dark"] #projectTasksSection .table tbody td small {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* Action icons inside rows — make them visible */
+html[data-theme="dark"] #projectTasksSection .table tbody td .btn,
+html[data-theme="dark"] #projectTasksSection .table tbody td .btn-link,
+html[data-theme="dark"] #projectTasksSection .table tbody td a {
+    color: #00ffff !important;
+    background: transparent !important;
+    border-color: transparent !important;
+}
+html[data-theme="dark"] #projectTasksSection .table tbody td .btn:hover,
+html[data-theme="dark"] #projectTasksSection .table tbody td a:hover {
+    background: rgba(0, 255, 255, 0.10) !important;
+    border-radius: 8px;
+}
+
+/* Checkbox cell — keep it visible */
+html[data-theme="dark"] #projectTasksSection .table tbody td .form-check-input {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(0, 255, 255, 0.30) !important;
+}
+html[data-theme="dark"] #projectTasksSection .table tbody td .form-check-input:checked {
+    background-color: #00ffff !important;
+    border-color: #00ffff !important;
+}
+
+/* =========================================================
+   FIX · FILE INPUT (native ::file-selector-button)
+   ========================================================= */
+
+/* Dark theme */
+html[data-theme="dark"] input[type="file"],
+html[data-theme="dark"] #uploadFileForm input[type="file"] {
+    color: rgba(255, 255, 255, 0.70) !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    border: 1px solid rgba(0, 255, 255, 0.15) !important;
+    border-radius: var(--radius-pill) !important;
+    padding: 0.4rem 0.5rem 0.4rem 0.4rem !important;
+    cursor: pointer;
+}
+
+html[data-theme="dark"] input[type="file"]::file-selector-button {
+    background: rgba(0, 255, 255, 0.10);
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 1rem;
+    margin-right: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+html[data-theme="dark"] input[type="file"]::file-selector-button:hover {
+    background: rgba(0, 255, 255, 0.20);
+    border-color: rgba(0, 255, 255, 0.45);
+}
+
+/* Firefox legacy pseudo */
+html[data-theme="dark"] input[type="file"]::-webkit-file-upload-button {
+    background: rgba(0, 255, 255, 0.10);
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 1rem;
+    margin-right: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Light theme — match the pill geometry */
+input[type="file"],
+#uploadFileForm input[type="file"] {
+    border-radius: var(--radius-pill);
+}
+input[type="file"]::file-selector-button {
+    background: rgba(90, 75, 209, 0.10);
+    color: var(--accent-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 1rem;
+    margin-right: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+input[type="file"]::file-selector-button:hover {
+    background: rgba(90, 75, 209, 0.18);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1199px) {
+    .project-overview-card { padding: 2.25rem 2.5rem; border-radius: 48px; }
+    .project-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 991px) {
-    .project-overview-card {
-        padding: 1.75rem;
-        border-radius: 32px;
-    }
-    .project-overview-top {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1.5rem;
-    }
-    /* Ring aligns right of title */
-    .project-status-panel {
-        width: 130px;
-        height: 130px;
-        align-self: flex-end;
-    }
-    .project-kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .project-add-member-panel {
-        padding-left: 0;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--border-color);
-    }
-
+    .project-overview-card { padding: 1.75rem; border-radius: 32px; }
+    .project-overview-top { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+    .project-status-panel { width: 130px; height: 130px; align-self: flex-end; }
+    .project-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .project-add-member-panel { padding-left: 0; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
     .project-members-card,
     #projectTasksSection,
-    #projectCommentsSection {
-        padding: 1.5rem;
-    }
-
-    .project-section-icon {
-        width: 44px; height: 44px;
-        font-size: 1.1rem;
-        border-radius: 12px;
-    }
+    #projectCommentsSection { padding: 1.5rem; }
+    .project-section-icon { width: 44px; height: 44px; font-size: 1.1rem; border-radius: 12px; }
     .project-section-title { font-size: 1.15rem; }
 }
 
-/* Mobile landscape */
 @media (max-width: 768px) {
     .project-page-shell { gap: 1rem; }
-
-    .project-overview-card {
-        padding: 1.5rem;
-        border-radius: 26px;
-    }
-
-    .project-title-icon {
-        width: 46px; height: 46px;
-        font-size: 1.1rem;
-        border-radius: 14px;
-    }
+    .project-overview-card { padding: 1.5rem; border-radius: 26px; }
+    .project-title-icon { width: 46px; height: 46px; font-size: 1.1rem; border-radius: 14px; }
     .project-title-row { gap: 0.85rem; }
     .project-page-title { font-size: 1.55rem; }
     .project-page-description { font-size: 0.9rem; }
-
-    /* Ring shrinks and floats to the right of the title block */
-    .project-status-panel {
-        width: 110px;
-        height: 110px;
-        padding: 6px;
-    }
+    .project-status-panel { width: 110px; height: 110px; padding: 6px; }
     .project-status-panel::before { inset: 6px; }
     .project-status-badge { font-size: 0.72rem; max-width: 84px; }
     .project-status-label { font-size: 0.5rem; }
-
-    .project-kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.65rem;
-        margin-top: 1.5rem;
-    }
-    .project-kpi-card {
-        padding: 0.75rem 0.9rem;
-        gap: 0.6rem;
-        border-radius: 16px;
-    }
+    .project-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; margin-top: 1.5rem; }
+    .project-kpi-card { padding: 0.75rem 0.9rem; gap: 0.6rem; border-radius: 16px; }
     .project-kpi-icon { width: 34px; height: 34px; font-size: 0.85rem; }
     .project-kpi-value { font-size: 1.05rem; }
     .project-kpi-value-small { font-size: 0.82rem; }
     .project-kpi-label { font-size: 0.55rem; }
-
     .project-progress-section { padding: 1.25rem; }
     .project-progress-title { font-size: 0.85rem; }
     .project-progress-value { font-size: 1.05rem; }
-
     .project-members-card,
     #projectTasksSection,
-    #projectCommentsSection {
-        padding: 1.25rem;
-        border-radius: var(--radius-md);
-    }
-
-    .project-member-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.65rem;
-    }
-    .project-member-actions {
-        width: 100%;
-        justify-content: space-between;
-    }
-
+    #projectCommentsSection { padding: 1.25rem; border-radius: var(--radius-md); }
+    .project-member-row { flex-direction: column; align-items: flex-start; gap: 0.65rem; }
+    .project-member-actions { width: 100%; justify-content: space-between; }
     #uploadFileForm { flex-direction: column; align-items: stretch; }
     #uploadFileForm input[type="file"],
     #uploadFileBtn { width: 100%; }
-
-    /* Tasks table horizontal scroll */
     #projectTasksSection .table-responsive,
-    #projectTasksSection {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    #projectTasksSection table {
-        min-width: 640px;
-    }
+    #projectTasksSection { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    #projectTasksSection table { min-width: 640px; }
 }
 
-/* Small phone */
 @media (max-width: 480px) {
-    .project-overview-card {
-        padding: 1.15rem;
-        border-radius: 20px;
-    }
+    .project-overview-card { padding: 1.15rem; border-radius: 20px; }
     .project-page-title { font-size: 1.35rem; }
     .project-title-row { gap: 0.75rem; }
-    .project-title-icon {
-        width: 40px; height: 40px;
-        font-size: 0.95rem;
-        border-radius: 12px;
-    }
-    .project-back-link {
-        font-size: 0.72rem;
-        padding: 0.38rem 0.8rem;
-        margin-bottom: 0.85rem;
-    }
-
-    .project-status-panel {
-        width: 96px;
-        height: 96px;
-        padding: 5px;
-    }
+    .project-title-icon { width: 40px; height: 40px; font-size: 0.95rem; border-radius: 12px; }
+    .project-back-link { font-size: 0.72rem; padding: 0.38rem 0.8rem; margin-bottom: 0.85rem; }
+    .project-status-panel { width: 96px; height: 96px; padding: 5px; }
     .project-status-panel::before { inset: 5px; }
     .project-status-badge { font-size: 0.65rem; max-width: 72px; }
     .project-status-label { font-size: 0.45rem; letter-spacing: 0.1em; }
-
-    .project-kpi-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 0.5rem;
-        margin-top: 1.25rem;
-    }
-    .project-kpi-card {
-        padding: 0.6rem 0.75rem;
-        gap: 0.5rem;
-        border-radius: 13px;
-    }
+    .project-kpi-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1.25rem; }
+    .project-kpi-card { padding: 0.6rem 0.75rem; gap: 0.5rem; border-radius: 13px; }
     .project-kpi-icon { width: 28px; height: 28px; font-size: 0.72rem; }
     .project-kpi-value { font-size: 0.9rem; }
     .project-kpi-value-small { font-size: 0.72rem; }
     .project-kpi-label { font-size: 0.48rem; letter-spacing: 0.06em; }
-
     .project-progress-section { padding: 1rem; }
     .project-members-card,
     #projectTasksSection,
     #projectCommentsSection { padding: 1rem; }
-
-    .project-members-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .project-section-icon {
-        width: 40px; height: 40px;
-        font-size: 1rem;
-    }
+    .project-members-header { flex-direction: column; align-items: flex-start; }
+    .project-section-icon { width: 40px; height: 40px; font-size: 1rem; }
     .project-section-title { font-size: 1.05rem; }
     .project-section-subtitle { font-size: 0.78rem; }
-
-    #projectTasksSection table {
-        min-width: 560px;
-    }
+    #projectTasksSection table { min-width: 560px; }
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     .project-page-shell *,
     .project-page-shell *::before,

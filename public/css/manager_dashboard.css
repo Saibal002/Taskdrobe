@@ -1,55 +1,39 @@
 /* =========================================================
-   TASKDROBE V2 · MANAGER DASHBOARD
-   Cleaned · Responsive · Token-consistent
+   TASKDROBE V3 · MANAGER DASHBOARD
+   Depends on style.css tokens + utilities
+   Team member cards now use .app-team-card (from style.css)
    ========================================================= */
 
 /* ---------------------------------------------------------
    SHELL
    --------------------------------------------------------- */
-.manager-main {
-    padding-bottom: 4rem;
-    min-height: 100vh;
-}
-.manager-container {
-    max-width: 1600px;
-    margin: 0 auto;
-}
+.manager-main { padding-bottom: 4rem; min-height: 100vh; }
+.manager-container { max-width: 1600px; margin: 0 auto; }
 
 /* ---------------------------------------------------------
    PAGE CONTEXT
    --------------------------------------------------------- */
 .manager-page-context {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;
 }
 .manager-page-context span {
     color: var(--accent-primary);
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.75rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px;
     display: block;
 }
 .manager-page-context strong {
-    font-size: 1.5rem;
-    color: var(--text-primary);
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    font-size: 1.5rem; color: var(--text-primary);
+    font-weight: 800; letter-spacing: -0.5px;
 }
 .manager-date-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+    display: inline-flex; align-items: center; gap: 0.5rem;
     background: var(--surface-glass);
     border: 1px solid var(--border-color);
     padding: 0.5rem 1rem;
     border-radius: var(--radius-pill);
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.85rem; font-weight: 600;
     color: var(--text-primary);
     box-shadow: var(--shadow-soft);
     backdrop-filter: blur(12px);
@@ -67,40 +51,22 @@
     border: 1px solid var(--border-color);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
-
 .manager-panel {
     padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+    display: flex; flex-direction: column; min-width: 0;
 }
 .manager-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;
 }
 .manager-section-eyebrow {
     color: var(--accent-primary);
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: block;
-    margin-bottom: 0.25rem;
+    font-size: 0.75rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px;
+    display: block; margin-bottom: 0.25rem;
 }
-.manager-panel-header h2 {
-    font-size: 1.5rem;
-    color: var(--text-primary);
-    margin: 0;
-}
-.manager-panel-header p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin: 0.25rem 0 0;
-}
+.manager-panel-header h2 { font-size: 1.5rem; color: var(--text-primary); margin: 0; }
+.manager-panel-header p { color: var(--text-secondary); font-size: 0.9rem; margin: 0.25rem 0 0; }
 
 /* ---------------------------------------------------------
    GRIDS
@@ -116,32 +82,27 @@
     gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
-.manager-main-grid { grid-template-columns: 1.5fr 1fr; }
+.manager-main-grid      { grid-template-columns: 1.5fr 1fr; }
 .manager-secondary-grid { grid-template-columns: 1fr 1.5fr; }
-.manager-bottom-grid { grid-template-columns: 1.5fr 1fr; }
+.manager-bottom-grid    { grid-template-columns: 1.5fr 1fr; }
 
 /* ---------------------------------------------------------
    STAT CARDS
    --------------------------------------------------------- */
 .manager-stat-card {
     padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    min-width: 0;
+    display: flex; align-items: center;
+    gap: 1.25rem; min-width: 0;
 }
 .manager-stat-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 20px 40px rgba(90, 75, 209, 0.12);
 }
 .manager-stat-icon {
-    width: 54px;
-    height: 54px;
+    width: 54px; height: 54px;
     border-radius: 16px;
-    display: grid;
-    place-items: center;
-    font-size: 1.5rem;
-    flex-shrink: 0;
+    display: grid; place-items: center;
+    font-size: 1.5rem; flex-shrink: 0;
 }
 .manager-stat-icon.purple { background: rgba(108, 92, 231, 0.15); color: #6C5CE7; }
 .manager-stat-icon.teal   { background: rgba(0, 206, 201, 0.15); color: #00cec9; }
@@ -149,30 +110,18 @@
 .manager-stat-icon.red    { background: rgba(214, 48, 49, 0.15); color: #d63031; }
 .manager-stat-icon.green  { background: rgba(0, 184, 148, 0.15); color: #00b894; }
 
-.manager-stat-content {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
+.manager-stat-content { display: flex; flex-direction: column; min-width: 0; }
 .manager-stat-label {
     color: var(--text-secondary);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    font-size: 0.8rem; text-transform: uppercase;
+    font-weight: 700; letter-spacing: 0.05em;
 }
 .manager-stat-value {
     color: var(--text-primary);
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1.2;
-    word-break: break-word;
+    font-size: 2rem; font-weight: 800;
+    line-height: 1.2; word-break: break-word;
 }
-.manager-stat-meta {
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-}
+.manager-stat-meta { color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem; }
 
 /* ---------------------------------------------------------
    PROJECTS
@@ -189,9 +138,7 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    display: flex; flex-direction: column; height: 100%;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .manager-project-link:hover .manager-project-card {
@@ -201,26 +148,19 @@
 }
 
 .manager-project-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 0.75rem; margin-bottom: 1rem;
 }
 .manager-project-status {
     padding: 0.3rem 0.75rem;
     border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 0.75rem; font-weight: 700;
     text-transform: uppercase;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+    display: inline-flex; align-items: center; gap: 0.4rem;
     white-space: nowrap;
 }
 .manager-project-status span {
-    width: 6px; height: 6px;
-    border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background: currentColor;
 }
 .manager-project-status.completed   { background: rgba(0, 184, 148, 0.15); color: #00b894; }
@@ -228,11 +168,7 @@
 .manager-project-status.on-hold     { background: rgba(253, 203, 110, 0.15); color: #e1b12c; }
 .manager-project-status.not-started { background: rgba(9, 132, 227, 0.15); color: #0984e3; }
 
-.manager-project-actions {
-    display: flex;
-    gap: 0.5rem;
-    flex-shrink: 0;
-}
+.manager-project-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
 .manager-project-action {
     width: 32px; height: 32px;
     display: grid; place-items: center;
@@ -250,11 +186,7 @@
     box-shadow: 0 4px 10px rgba(90, 75, 209, 0.2);
 }
 
-.manager-project-body h3 {
-    font-size: 1.15rem;
-    color: var(--text-primary);
-    margin: 0 0 0.5rem;
-}
+.manager-project-body h3 { font-size: 1.15rem; color: var(--text-primary); margin: 0 0 0.5rem; }
 .manager-project-body p {
     font-size: 0.85rem;
     color: var(--text-secondary);
@@ -288,21 +220,14 @@
     border-top: 1px solid var(--border-color);
 }
 .manager-project-health-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;
 }
 .manager-project-health-state {
     padding: 0.5rem 1rem;
     border-radius: var(--radius-pill);
-    font-size: 0.85rem;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+    font-size: 0.85rem; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 0.5rem;
     white-space: nowrap;
 }
 .manager-project-health-state.healthy   { background: rgba(0, 184, 148, 0.1); color: #00b894; }
@@ -319,10 +244,7 @@
     border-left: 2px solid var(--border-color);
     min-width: 0;
 }
-.manager-project-health-metric:first-child {
-    padding-left: 0;
-    border-left: none;
-}
+.manager-project-health-metric:first-child { padding-left: 0; border-left: none; }
 .manager-project-health-metric strong {
     display: block;
     font-size: 1.5rem;
@@ -340,9 +262,7 @@
 }
 
 .manager-project-health-action {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    display: flex; align-items: center; gap: 1rem;
     padding: 1rem 1.5rem;
     background: rgba(90, 75, 209, 0.05);
     border-radius: var(--radius-md);
@@ -352,8 +272,7 @@
     width: 40px; height: 40px;
     border-radius: 50%;
     display: grid; place-items: center;
-    font-size: 1.25rem;
-    flex-shrink: 0;
+    font-size: 1.25rem; flex-shrink: 0;
 }
 .manager-project-health-action-icon.healthy   { background: #00b894; color: #ffffff; }
 .manager-project-health-action-icon.attention { background: #ff4757; color: #ffffff; }
@@ -375,12 +294,9 @@
    --------------------------------------------------------- */
 .manager-task-chart-wrapper {
     position: relative;
-    width: 220px;
-    height: 220px;
+    width: 220px; height: 220px;
     margin: 0 auto 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
 }
 .manager-chart-ring { position: relative; width: 100%; height: 100%; }
 .manager-chart-center-fallback { display: none !important; }
@@ -388,15 +304,12 @@
     display: flex !important;
     position: absolute; inset: 0;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: center; justify-content: center;
     pointer-events: none;
 }
 .manager-task-chart-wrapper canvas {
-    position: relative;
-    z-index: 2;
-    max-width: 100%;
-    height: auto !important;
+    position: relative; z-index: 2;
+    max-width: 100%; height: auto !important;
 }
 .manager-task-legend {
     display: grid;
@@ -406,9 +319,7 @@
     padding-top: 1.5rem;
 }
 .manager-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    display: flex; align-items: center; gap: 0.5rem;
     background: var(--surface-glass);
     padding: 0.75rem;
     border-radius: var(--radius-sm);
@@ -418,16 +329,10 @@
 .manager-legend-dot.completed { background: #00b894; }
 .manager-legend-dot.pending   { background: #e1b12c; }
 .manager-legend-dot.overdue   { background: #d63031; }
-.manager-legend-item strong {
-    display: block;
-    font-size: 1.1rem;
-    color: var(--text-primary);
-}
+.manager-legend-item strong { display: block; font-size: 1.1rem; color: var(--text-primary); }
 .manager-legend-item span:not(.manager-legend-dot) {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
+    display: block; font-size: 0.7rem;
+    color: var(--text-secondary); text-transform: uppercase;
 }
 
 /* ---------------------------------------------------------
@@ -437,9 +342,7 @@
 .manager-deadline-item,
 .manager-attention-item,
 .manager-team-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    display: flex; align-items: center; gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid var(--border-color);
     transition: background 0.3s ease, border-radius 0.3s ease;
@@ -471,16 +374,13 @@
 .manager-attention-content { min-width: 0; flex: 1; }
 .manager-activity-content p,
 .manager-attention-content strong {
-    margin: 0;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    font-weight: 600;
+    margin: 0; color: var(--text-primary);
+    font-size: 0.9rem; font-weight: 600;
 }
 .manager-activity-content span,
 .manager-attention-content span {
     color: var(--text-secondary);
-    font-size: 0.8rem;
-    display: block;
+    font-size: 0.8rem; display: block;
 }
 
 .manager-deadline-date {
@@ -489,36 +389,36 @@
     border-radius: var(--radius-sm);
     padding: 0.5rem;
     text-align: center;
-    min-width: 50px;
-    flex-shrink: 0;
+    min-width: 50px; flex-shrink: 0;
 }
-.manager-deadline-date strong {
-    display: block;
-    font-size: 1.25rem;
-    color: var(--text-primary);
-    line-height: 1;
-}
+.manager-deadline-date strong { display: block; font-size: 1.25rem; color: var(--text-primary); line-height: 1; }
 .manager-deadline-date span {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--accent-primary);
-    font-weight: 700;
+    display: block; font-size: 0.7rem;
+    color: var(--accent-primary); font-weight: 700;
     text-transform: uppercase;
 }
+
+/* ---------------------------------------------------------
+   TEAM GRID — bridges to global .app-team-card
+   --------------------------------------------------------- */
+.manager-team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem;
+}
+.manager-team-grid .app-team-card { padding: 1.5rem 1rem 1.2rem; }
+.manager-team-grid .app-team-avatar { width: 64px; height: 64px; font-size: 1.25rem; }
 
 /* ---------------------------------------------------------
    BUTTONS
    --------------------------------------------------------- */
 .manager-primary-button {
     background: var(--accent-primary);
-    color: #fff;
-    border: none;
+    color: #fff; border: none;
     padding: 0.75rem 1.5rem;
     border-radius: var(--radius-pill);
     font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+    display: inline-flex; align-items: center; gap: 0.5rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(90, 75, 209, 0.3);
     cursor: pointer;
@@ -530,7 +430,7 @@
 }
 
 /* ---------------------------------------------------------
-   DARK THEME
+   DARK THEME (no text-shadow glow)
    --------------------------------------------------------- */
 html[data-theme="dark"] .manager-stat-card,
 html[data-theme="dark"] .manager-panel,
@@ -555,8 +455,7 @@ html[data-theme="dark"] .manager-panel-header h2,
 html[data-theme="dark"] .manager-project-body h3,
 html[data-theme="dark"] .manager-project-health-metric strong {
     color: var(--accent-primary);
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-    font-weight: 300;
+    /* no text-shadow */
 }
 html[data-theme="dark"] .manager-stat-icon {
     background: transparent;
@@ -565,62 +464,49 @@ html[data-theme="dark"] .manager-stat-icon {
 }
 html[data-theme="dark"] .manager-progress-track { background: rgba(255, 255, 255, 0.05); }
 html[data-theme="dark"] .manager-progress-fill { box-shadow: 0 0 10px var(--accent-primary); }
+
+/* Chart halo — subtle ring, no text glow */
 html[data-theme="dark"] .manager-task-chart-wrapper::before {
     content: '';
     position: absolute;
     inset: 15px;
     border-radius: 50%;
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.25);
     z-index: 0;
     pointer-events: none;
 }
 
-/* =========================================================
+/* ---------------------------------------------------------
    RESPONSIVE
-   ========================================================= */
-
-/* Large tablet — stack dashboard grids */
+   --------------------------------------------------------- */
 @media (max-width: 1199px) {
     .manager-main-grid,
     .manager-secondary-grid,
     .manager-bottom-grid { grid-template-columns: 1fr; }
 }
 
-/* Tablet */
 @media (max-width: 991px) {
     .manager-container { padding: 0; }
     .manager-stat-card { padding: 1.25rem; gap: 1rem; }
     .manager-stat-icon { width: 48px; height: 48px; font-size: 1.25rem; }
     .manager-stat-value { font-size: 1.75rem; }
-
     .manager-panel { padding: 1.5rem; }
     .manager-panel-header h2 { font-size: 1.25rem; }
 }
 
-/* Mobile landscape / large phone */
 @media (max-width: 768px) {
     .manager-page-context {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
+        flex-direction: column; align-items: flex-start;
+        gap: 0.75rem; margin-bottom: 1.5rem;
     }
     .manager-page-context strong { font-size: 1.25rem; }
 
     .manager-stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
-        margin-bottom: 1.5rem;
+        gap: 1rem; margin-bottom: 1.5rem;
     }
-    .manager-stat-card {
-        padding: 1rem;
-        gap: 0.85rem;
-    }
-    .manager-stat-icon {
-        width: 42px; height: 42px;
-        font-size: 1.1rem;
-        border-radius: 12px;
-    }
+    .manager-stat-card { padding: 1rem; gap: 0.85rem; }
+    .manager-stat-icon { width: 42px; height: 42px; font-size: 1.1rem; border-radius: 12px; }
     .manager-stat-value { font-size: 1.5rem; }
     .manager-stat-label { font-size: 0.7rem; }
     .manager-stat-meta { font-size: 0.75rem; }
@@ -632,40 +518,24 @@ html[data-theme="dark"] .manager-task-chart-wrapper::before {
 
     .manager-project-grid { grid-template-columns: 1fr; }
 
-    .manager-project-health-metrics {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-    .manager-project-health-metric:nth-child(3) {
-        padding-left: 0;
-        border-left: none;
-    }
+    .manager-project-health-metrics { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .manager-project-health-metric:nth-child(3) { padding-left: 0; border-left: none; }
 
     .manager-task-chart-wrapper { width: 180px; height: 180px; }
     .manager-task-legend { grid-template-columns: 1fr; gap: 0.4rem; }
 
-    .manager-project-health-action {
-        padding: 0.85rem 1rem;
-        gap: 0.75rem;
-    }
+    .manager-project-health-action { padding: 0.85rem 1rem; gap: 0.75rem; }
+
+    .manager-team-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }
 
-/* Small phone */
 @media (max-width: 480px) {
     .manager-page-context strong { font-size: 1.1rem; }
     .manager-date-chip { font-size: 0.75rem; padding: 0.4rem 0.75rem; }
 
     .manager-stats-grid { gap: 0.75rem; }
-    .manager-stat-card {
-        padding: 0.85rem;
-        gap: 0.7rem;
-        border-radius: var(--radius-md);
-    }
-    .manager-stat-icon {
-        width: 38px; height: 38px;
-        font-size: 1rem;
-        border-radius: 10px;
-    }
+    .manager-stat-card { padding: 0.85rem; gap: 0.7rem; border-radius: var(--radius-md); }
+    .manager-stat-icon { width: 38px; height: 38px; font-size: 1rem; border-radius: 10px; }
     .manager-stat-value { font-size: 1.35rem; }
     .manager-stat-label { font-size: 0.65rem; letter-spacing: 0.03em; }
     .manager-stat-meta { font-size: 0.7rem; }
@@ -691,10 +561,7 @@ html[data-theme="dark"] .manager-task-chart-wrapper::before {
     .manager-activity-item,
     .manager-deadline-item,
     .manager-attention-item,
-    .manager-team-item {
-        padding: 0.75rem;
-        gap: 0.75rem;
-    }
+    .manager-team-item { padding: 0.75rem; gap: 0.75rem; }
     .manager-activity-avatar,
     .manager-attention-icon { width: 34px; height: 34px; font-size: 0.85rem; }
     .manager-activity-content p,
@@ -705,9 +572,604 @@ html[data-theme="dark"] .manager-task-chart-wrapper::before {
     .manager-deadline-date { min-width: 44px; padding: 0.35rem; }
     .manager-deadline-date strong { font-size: 1rem; }
     .manager-deadline-date span { font-size: 0.6rem; }
+
+    .manager-team-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 }
 
-/* Reduced motion */
+
+/* =========================================================
+   TEAMS PAGES · PATCH v1
+   Covers: team cards, roster table, tasks list, hero avatar
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. TEAM CARDS — #fullTeamGrid
+   Targets JS-rendered cards regardless of inner markup.
+   Excludes .admin-glass-panel to avoid double-styling.
+   --------------------------------------------------------- */
+#fullTeamGrid > [class*="col-"] {
+    display: flex;
+}
+
+#fullTeamGrid > [class*="col-"] > *:not(.admin-glass-panel) {
+    width: 100%;
+    background: var(--surface-base);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    color: var(--text-primary);
+    position: relative;
+}
+
+#fullTeamGrid > [class*="col-"] > *:not(.admin-glass-panel):hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 20px 40px rgba(90, 75, 209, 0.15);
+}
+
+/* The initial circle/box with team initials (first inner div) */
+#fullTeamGrid > [class*="col-"] > * > div:first-child > div:first-child,
+#fullTeamGrid > [class*="col-"] > * > div:first-child > span:first-child,
+#fullTeamGrid .team-avatar,
+#fullTeamGrid .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--accent-primary), #4F46E5);
+    color: #ffffff !important;
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* Team name */
+#fullTeamGrid > [class*="col-"] > * h5,
+#fullTeamGrid > [class*="col-"] > * h4,
+#fullTeamGrid .team-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-primary) !important;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+/* Description */
+#fullTeamGrid > [class*="col-"] > * p {
+    font-size: 0.85rem;
+    color: var(--text-secondary) !important;
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Footer row: members count + Insights button */
+#fullTeamGrid > [class*="col-"] > * > div:last-child {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+#fullTeamGrid .btn,
+#fullTeamGrid a.btn,
+#fullTeamGrid a[class*="btn"] {
+    border-radius: var(--radius-pill) !important;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.35rem 0.9rem;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+/* Kebab / dropdown menu in top-right corner — keep it visible */
+#fullTeamGrid [data-bs-toggle="dropdown"],
+#fullTeamGrid .dropdown-toggle {
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+#fullTeamGrid [data-bs-toggle="dropdown"]:hover {
+    background: rgba(90, 75, 209, 0.10) !important;
+    color: var(--accent-primary) !important;
+}
+
+/* Dark theme */
+html[data-theme="dark"] #fullTeamGrid > [class*="col-"] > *:not(.admin-glass-panel) {
+    background: rgba(25, 25, 30, 0.6);
+    border-color: rgba(0, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+}
+html[data-theme="dark"] #fullTeamGrid > [class*="col-"] > *:not(.admin-glass-panel):hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(0, 255, 255, 0.05);
+}
+html[data-theme="dark"] #fullTeamGrid > [class*="col-"] > * > div:first-child > div:first-child,
+html[data-theme="dark"] #fullTeamGrid .team-avatar {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(255, 0, 255, 0.20));
+    color: #00ffff !important;
+    border: 1px solid rgba(0, 255, 255, 0.25);
+}
+html[data-theme="dark"] #fullTeamGrid > [class*="col-"] > * h5,
+html[data-theme="dark"] #fullTeamGrid > [class*="col-"] > * h4 {
+    color: #f0f9ff !important;
+}
+html[data-theme="dark"] #fullTeamGrid > [class*="col-"] > * p {
+    color: rgba(255, 255, 255, 0.62) !important;
+}
+html[data-theme="dark"] #fullTeamGrid > [class*="col-"] > * > div:last-child {
+    border-top-color: rgba(0, 255, 255, 0.12);
+}
+
+/* ---------------------------------------------------------
+   2. TEAM DETAIL HERO — polish #teamAvatar
+   --------------------------------------------------------- */
+#teamAvatar {
+    background: linear-gradient(135deg, var(--accent-primary), #4F46E5) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
+    border: 3px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+html[data-theme="dark"] #teamAvatar {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(255, 0, 255, 0.20)) !important;
+    color: #00ffff !important;
+    border-color: rgba(0, 255, 255, 0.30) !important;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+}
+
+/* ---------------------------------------------------------
+   3. GLOBAL TABLE DARK-MODE HARDENING
+   Promotes the earlier fix so ANY .table respects dark tokens.
+   --------------------------------------------------------- */
+html[data-theme="dark"] .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #f0f9ff;
+    --bs-table-hover-bg: rgba(0, 255, 255, 0.06);
+    --bs-table-hover-color: #f0f9ff;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-striped-color: #f0f9ff;
+    --bs-table-border-color: rgba(0, 255, 255, 0.10);
+    --bs-table-accent-bg: transparent;
+    color: #f0f9ff !important;
+}
+
+html[data-theme="dark"] .table > :not(caption) > * > * {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: #f0f9ff !important;
+}
+
+html[data-theme="dark"] .table thead th {
+    color: rgba(0, 255, 255, 0.70) !important;
+    border-bottom-color: rgba(0, 255, 255, 0.15) !important;
+    background: transparent !important;
+}
+
+html[data-theme="dark"] .table tbody tr:hover > *,
+html[data-theme="dark"] .table tbody tr:hover td {
+    background-color: rgba(0, 255, 255, 0.06) !important;
+    color: #f0f9ff !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark"] .table tbody td .text-muted,
+html[data-theme="dark"] .table tbody td small {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* Buttons inside table rows */
+html[data-theme="dark"] .table tbody td .btn,
+html[data-theme="dark"] .table tbody td a.btn {
+    color: #00ffff !important;
+    border-color: rgba(0, 255, 255, 0.25) !important;
+    background: transparent !important;
+    border-radius: var(--radius-pill) !important;
+    font-weight: 700;
+}
+html[data-theme="dark"] .table tbody td .btn:hover {
+    background: rgba(0, 255, 255, 0.10) !important;
+}
+html[data-theme="dark"] .table tbody td .btn-danger,
+html[data-theme="dark"] .table tbody td .btn-outline-danger {
+    color: #ff7799 !important;
+    border-color: rgba(255, 100, 130, 0.35) !important;
+}
+html[data-theme="dark"] .table tbody td .btn-danger:hover,
+html[data-theme="dark"] .table tbody td .btn-outline-danger:hover {
+    background: rgba(255, 100, 130, 0.15) !important;
+    color: #ffaabb !important;
+}
+
+/* ---------------------------------------------------------
+   4. LIST-GROUP + #teamTasksList DARK HARDENING
+   Fixes the invisible "Recent Team Tasks" items.
+   --------------------------------------------------------- */
+html[data-theme="dark"] .list-group {
+    --bs-list-group-bg: transparent;
+    --bs-list-group-color: #f0f9ff;
+    --bs-list-group-border-color: rgba(0, 255, 255, 0.10);
+    --bs-list-group-action-hover-bg: rgba(0, 255, 255, 0.06);
+    --bs-list-group-action-hover-color: #f0f9ff;
+}
+
+html[data-theme="dark"] .list-group-item {
+    background-color: transparent !important;
+    color: #f0f9ff !important;
+    border-color: rgba(0, 255, 255, 0.10) !important;
+}
+html[data-theme="dark"] .list-group-item:hover {
+    background-color: rgba(0, 255, 255, 0.06) !important;
+    color: #f0f9ff !important;
+}
+html[data-theme="dark"] .list-group-item h5,
+html[data-theme="dark"] .list-group-item h6,
+html[data-theme="dark"] .list-group-item strong,
+html[data-theme="dark"] .list-group-item .text-dark {
+    color: #f0f9ff !important;
+}
+html[data-theme="dark"] .list-group-item .text-muted,
+html[data-theme="dark"] .list-group-item small {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* Custom rows inside #teamTasksList (JS-emitted divs) */
+#teamTasksList > div:not(.text-center) {
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+    background: var(--surface-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    color: var(--text-primary);
+}
+#teamTasksList > div:not(.text-center):hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(90, 75, 209, 0.10);
+}
+#teamTasksList > div:not(.text-center) strong,
+#teamTasksList > div:not(.text-center) h5,
+#teamTasksList > div:not(.text-center) h6 {
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] #teamTasksList > div:not(.text-center) {
+    background: rgba(0, 255, 255, 0.03);
+    border-color: rgba(0, 255, 255, 0.10);
+    color: #f0f9ff;
+}
+html[data-theme="dark"] #teamTasksList > div:not(.text-center):hover {
+    background: rgba(0, 255, 255, 0.06);
+    border-color: rgba(0, 255, 255, 0.25);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+html[data-theme="dark"] #teamTasksList > div:not(.text-center) strong,
+html[data-theme="dark"] #teamTasksList > div:not(.text-center) h5,
+html[data-theme="dark"] #teamTasksList > div:not(.text-center) h6,
+html[data-theme="dark"] #teamTasksList > div:not(.text-center) .text-dark {
+    color: #f0f9ff !important;
+}
+html[data-theme="dark"] #teamTasksList > div:not(.text-center) .text-muted,
+html[data-theme="dark"] #teamTasksList > div:not(.text-center) small {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* ---------------------------------------------------------
+   5. BREADCRUMB + PAGE HEADING DARK MODE
+   --------------------------------------------------------- */
+html[data-theme="dark"] .breadcrumb-item,
+html[data-theme="dark"] .breadcrumb-item.active {
+    color: rgba(255, 255, 255, 0.60) !important;
+}
+html[data-theme="dark"] .breadcrumb-item a {
+    color: #00ffff !important;
+}
+html[data-theme="dark"] .breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.35) !important;
+}
+
+html[data-theme="dark"] .text-primary {
+    color: #00ffff !important;
+}
+html[data-theme="dark"] .text-secondary {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* ---------------------------------------------------------
+   6. NAV PILLS (Team detail tabs)
+   --------------------------------------------------------- */
+html[data-theme="dark"] .nav-pills .nav-link {
+    color: rgba(255, 255, 255, 0.70) !important;
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.10);
+    transition: all 0.2s ease;
+}
+html[data-theme="dark"] .nav-pills .nav-link:hover {
+    background: rgba(0, 255, 255, 0.10);
+    color: #00ffff !important;
+    border-color: rgba(0, 255, 255, 0.25);
+}
+html[data-theme="dark"] .nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #00ffff, #00c8c8) !important;
+    color: #121214 !important;
+    border-color: transparent !important;
+    box-shadow: 0 6px 18px rgba(0, 255, 255, 0.30);
+}
+
+/* =========================================================
+   TEAMS PAGES · CLEAN PATCH v2
+   ---------------------------------------------------------
+   Root fix: JS emits inline styles referencing --md-* tokens
+   that were never defined. Defining them here makes every
+   JS-rendered card / avatar / badge theme-aware without
+   touching sharedTeamsAjax.js.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. TOKENS — define the --md-* contract used by the JS
+   --------------------------------------------------------- */
+:root {
+    --md-surface:        #ffffff;
+    --md-surface-hover:  #fafbff;
+    --md-border:         rgba(90, 75, 209, 0.12);
+    --md-border-hover:   #5a4bd1;
+    --md-radius-lg:      24px;
+    --md-primary:        #5a4bd1;
+    --md-primary-soft:   rgba(90, 75, 209, 0.12);
+    --md-primary-ink:    #ffffff;
+    --md-text:           #1e1e2f;
+    --md-text-muted:     #64748b;
+    --md-shadow:         0 12px 36px rgba(90, 75, 209, 0.08);
+}
+
+html[data-theme="dark"] {
+    --md-surface:        rgba(25, 25, 30, 0.62);
+    --md-surface-hover:  rgba(0, 255, 255, 0.05);
+    --md-border:         rgba(0, 255, 255, 0.14);
+    --md-border-hover:   #00ffff;
+    --md-radius-lg:      24px;
+    --md-primary:        #00ffff;
+    --md-primary-soft:   rgba(0, 255, 255, 0.14);
+    --md-primary-ink:    #00ffff;
+    --md-text:           #f0f9ff;
+    --md-text-muted:     rgba(255, 255, 255, 0.60);
+    --md-shadow:         0 15px 35px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------------------------------------------------------
+   2. TEAM CARD — visual polish (JS already sets border/bg via
+   tokens, we only layer on hover + backdrop + transitions)
+   --------------------------------------------------------- */
+.manager-team-card {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    color: var(--md-text);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+.manager-team-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--md-border-hover) !important;
+    box-shadow: 0 20px 40px rgba(90, 75, 209, 0.14) !important;
+}
+html[data-theme="dark"] .manager-team-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.05) !important;
+}
+
+/* Avatar — JS already sets 48x48 bg/color, we refine shape + shadow */
+.manager-team-card-avatar {
+    font-size: 0.95rem !important;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 14px rgba(90, 75, 209, 0.20);
+    flex-shrink: 0;
+}
+html[data-theme="dark"] .manager-team-card-avatar {
+    border: 1px solid rgba(0, 255, 255, 0.30);
+    box-shadow: 0 6px 14px rgba(0, 255, 255, 0.15), inset 0 0 10px rgba(0, 255, 255, 0.10);
+}
+
+/* Title + description */
+.manager-team-card-title {
+    color: var(--md-text) !important;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+}
+.manager-team-card-description {
+    color: var(--md-text-muted) !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+/* Kebab menu (⋮) — targeted by its actual class */
+.manager-team-card-menu {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--md-text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.manager-team-card-menu:hover,
+.manager-team-card-menu[aria-expanded="true"] {
+    background: var(--md-primary-soft);
+    border-color: var(--md-border);
+    color: var(--md-primary);
+}
+.manager-team-card-menu::after { display: none; }  /* kill Bootstrap caret */
+
+/* Dropdown attached to kebab */
+.manager-team-card-dropdown {
+    background: var(--surface-elevated, var(--md-surface)) !important;
+    border: 1px solid var(--md-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--md-shadow) !important;
+    padding: 0.35rem !important;
+    min-width: 160px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+.manager-team-card-dropdown .dropdown-item {
+    border-radius: 10px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--md-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.15s ease;
+}
+.manager-team-card-dropdown .dropdown-item:hover {
+    background: var(--md-primary-soft);
+    color: var(--md-primary);
+}
+.manager-team-card-dropdown .dropdown-item.text-danger { color: #d63031; }
+.manager-team-card-dropdown .dropdown-item.text-danger:hover {
+    background: rgba(255, 71, 87, 0.10);
+    color: #ff4757;
+}
+html[data-theme="dark"] .manager-team-card-dropdown .dropdown-item.text-danger { color: #ff7799; }
+html[data-theme="dark"] .manager-team-card-dropdown .dropdown-item.text-danger:hover {
+    background: rgba(255, 100, 130, 0.12);
+    color: #ffaabb;
+}
+.manager-team-card-dropdown .dropdown-divider {
+    border-color: var(--md-border);
+    margin: 0.25rem 0;
+}
+
+/* Insights button */
+.manager-team-card .btn-light.text-primary {
+    background: var(--md-primary-soft) !important;
+    color: var(--md-primary) !important;
+    border: 1px solid var(--md-border) !important;
+    border-radius: var(--radius-pill, 9999px) !important;
+    padding: 0.35rem 0.9rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease;
+}
+.manager-team-card .btn-light.text-primary:hover {
+    background: var(--md-primary) !important;
+    color: var(--md-primary-ink) !important;
+    border-color: var(--md-primary) !important;
+    box-shadow: 0 6px 14px rgba(90, 75, 209, 0.30);
+    transform: translateY(-1px);
+}
+html[data-theme="dark"] .manager-team-card .btn-light.text-primary:hover {
+    color: #121214 !important;
+    box-shadow: 0 6px 14px rgba(0, 255, 255, 0.30);
+}
+
+/* "N Members" span */
+.manager-team-card .text-muted.small.fw-bold,
+.manager-team-card .text-muted.small {
+    color: var(--md-text-muted) !important;
+    font-size: 0.78rem !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Admin badge on cards (Managed by: X) */
+.manager-team-card .badge.bg-primary.bg-opacity-10 {
+    background: var(--md-primary-soft) !important;
+    color: var(--md-primary) !important;
+    border: 1px solid var(--md-border);
+    border-radius: var(--radius-pill, 9999px);
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   3. MANAGER WIDGET LIST (sidebar mini-list, if used)
+   --------------------------------------------------------- */
+.manager-team-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 14px;
+    background: var(--md-surface);
+    border: 1px solid var(--md-border);
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+.manager-team-item:hover {
+    border-color: var(--md-border-hover);
+    transform: translateX(3px);
+}
+.manager-team-main { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+.manager-team-avatar {
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    background: var(--md-primary-soft);
+    color: var(--md-primary);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 0.8rem;
+    flex-shrink: 0;
+}
+.manager-team-info { display: flex; flex-direction: column; min-width: 0; }
+.manager-team-info strong { font-size: 0.9rem; color: var(--md-text); }
+.manager-team-info span { font-size: 0.75rem; color: var(--md-text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.manager-team-manage {
+    font-size: 0.75rem; font-weight: 700;
+    color: var(--md-primary);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-pill, 9999px);
+    border: 1px solid var(--md-border);
+    transition: all 0.2s ease;
+}
+.manager-team-manage:hover {
+    background: var(--md-primary);
+    color: var(--md-primary-ink);
+    border-color: var(--md-primary);
+}
+html[data-theme="dark"] .manager-team-manage:hover { color: #121214; }
+
+.manager-team-empty,
+.manager-team-error {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0.5rem; padding: 2rem 1rem; text-align: center;
+    color: var(--md-text-muted); font-size: 0.85rem;
+}
+.manager-team-empty i { font-size: 1.75rem; color: var(--md-primary); }
+.manager-team-empty strong { color: var(--md-text); font-size: 0.95rem; }
+/* ---------------------------------------------------------
+   REDUCED MOTION
+   --------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
     .manager-main *,
     .manager-main *::before,
