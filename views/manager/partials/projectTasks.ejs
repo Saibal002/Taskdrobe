@@ -176,30 +176,19 @@ $(document).ready(function () {
     }
 
 
-    function showMessage(
-        message,
-        type = "success"
-    ) {
+function showMessage(message, type = "success") {
+        // Map bootstrap classes (danger) to Swal icons (error)
+        const iconType = type === "danger" ? "error" : (type === "warning" ? "warning" : "success");
+        
+        Toast.fire({
+            icon: iconType,
+            title: message
+        });
+}
 
-        $message
-            .removeClass(
-                "d-none alert-success alert-danger alert-warning alert-info"
-            )
-            .addClass(
-                "alert-" + type
-            )
-            .text(message);
-    }
-
-
-    function clearMessage() {
-
-        $message
-            .addClass("d-none")
-            .removeClass(
-                "alert-success alert-danger alert-warning alert-info"
-            )
-            .text("");
+   function clearMessage() {
+        // Left intentionally blank. 
+        // Toasts handle their own cleanup, and we no longer use the #projectTasksMessage div.
     }
 
 
@@ -430,9 +419,9 @@ function getPriorityClass(priority) {
             const assignedToVal = task.assigned_to ? String(task.assigned_to) : "";
 
             let statusHtml = canChangeStatus ? `
-                <button type="button" class="task-toggle-btn m-0 ${task.status === 'Completed' ? 'is-completed' : ''}" 
+                <button type="button" class="task-toggle-btn btn p-0 border-0 bg-transparent text-${task.status === 'Completed' ? 'success' : 'secondary'} m-0" 
                     data-task-id="${taskId}">
-                    <i class="fas fa-check"></i>
+                    <i class="bi ${task.status === 'Completed' ? 'bi-check-circle-fill' : 'bi-circle'} fs-5"></i>
                 </button>
             ` : `<span class="badge bg-secondary">${status}</span>`;
 
@@ -1021,71 +1010,39 @@ function getPriorityClass(priority) {
     /* =========================================================
        DELETE TASK
     ========================================================= */
-
     $(document).on(
         "click",
         ".deleteTaskBtn",
         function () {
-
-            const $button =
-                $(this);
-
-
-            const taskId =
-                $button.attr(
-                    "data-task-id"
-                );
-
-
-            const title =
-                $button.attr(
-                    "data-task-title"
-                ) ||
-                "this task";
-
+            const $button =$(this);
+            const taskId = $button.attr("data-task-id");
+            const title = $button.attr("data-task-title") || "this task";
 
             if (!taskId) {
                 return;
             }
 
-
-            if (
-                !window.confirm(
-                    `Delete "${title}"?`
-                )
-            ) {
-                return;
-            }
-
-
-            runTaskMutation({
-
-                url:
-                    `/tasks/${encodeURIComponent(
-                        taskId
-                    )}/delete`,
-
-                button:
-                    $button,
-
-                loadingHtml: `
-                    <span
-                        class="spinner-border
-                               spinner-border-sm"
-                        aria-hidden="true">
-                    </span>
-                `,
-
-                successFallback:
-                    "Task deleted successfully.",
-
-                errorFallback:
-                    "Unable to delete task."
+            Swal.fire({
+                title: `Delete "${title}"?`,
+                text: "This action cannot be undone.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, delete it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    runTaskMutation({
+                        url: `/tasks/${encodeURIComponent(taskId)}/delete`,
+                        button: $button,
+                        loadingHtml: `<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>`,
+                        successFallback: "Task deleted successfully.",
+                        errorFallback: "Unable to delete task."
+                    });
+                }
             });
         }
     );
-
-
     /* =========================================================
        TOGGLE TASK STATUS
     ========================================================= */

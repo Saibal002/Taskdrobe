@@ -260,7 +260,6 @@
         const currentUserId = String($filesSection.attr("data-user-id"));
         const canManageAllFiles = userRole === 'admin' || userRole === 'manager';
 
-        // Format bytes to KB/MB
         const formatBytes = (bytes, decimals = 2) => {
             if (bytes === 0) return '0 Bytes';
             const k = 1024, dm = decimals < 0 ? 0 : decimals, sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -268,7 +267,6 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         };
 
-        // Determine icon based on mimetype
         const getFileIcon = (mimeType) => {
             if (mimeType.includes('image')) return '<i class="fas fa-image text-purple"></i>';
             if (mimeType.includes('pdf')) return '<i class="fas fa-file-pdf text-danger"></i>';
@@ -278,43 +276,43 @@
         };
 
         const loadFiles = () => {
-        $.ajax({
-            url: filesUrl,
-            type: "GET",
-            success: function(res) {
-                if (res.success && res.files.length > 0) {
-                    let html = '';
-                    res.files.forEach(file => {
-                        const isUploader = String(file.uploaded_by) === currentUserId;
-                        let deleteBtn = (canManageAllFiles || isUploader) ? `
-                            <button type="button" class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle ms-2 delete-file-btn hover-lift" data-id="${file.attachment_id}" title="Delete File" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        ` : '';
+            $.ajax({
+                url: filesUrl,
+                type: "GET",
+                success: function(res) {
+                    if (res.success && res.files.length > 0) {
+                        let html = '';
+                        res.files.forEach(file => {
+                            const isUploader = String(file.uploaded_by) === currentUserId;
+                            let deleteBtn = (canManageAllFiles || isUploader) ? `
+                                <button type="button" class="btn btn-sm text-danger bg-danger bg-opacity-10 rounded-circle ms-2 delete-file-btn hover-lift" data-id="${file.attachment_id}" title="Delete File" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : '';
 
-                        html += `
-                            <div class="col-md-6 col-lg-4">
-                                <div class="d-flex align-items-center p-3 rounded-4 bg-white shadow-sm border border-light transition hover-lift h-100">
-                                    <div class="fs-2 me-3">${getFileIcon(file.file_type)}</div>
-                                    <div class="flex-grow-1 min-w-0">
-                                        <a href="${file.file_path}" target="_blank" class="fw-bold text-dark text-decoration-none text-truncate d-block" title="${file.original_name}">${file.original_name}</a>
-                                        <div class="small text-muted d-flex justify-content-between mt-1">
-                                            <span>${formatBytes(file.file_size)}</span>
-                                            <span>By ${file.uploaded_by_name}</span>
+                            html += `
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="d-flex align-items-center p-3 rounded-4 bg-white shadow-sm border border-light transition hover-lift h-100">
+                                        <div class="fs-2 me-3">${getFileIcon(file.file_type)}</div>
+                                        <div class="flex-grow-1 min-w-0">
+                                            <a href="${file.file_path}" target="_blank" class="fw-bold text-dark text-decoration-none text-truncate d-block" title="${file.original_name}">${file.original_name}</a>
+                                            <div class="small text-muted d-flex justify-content-between mt-1">
+                                                <span>${formatBytes(file.file_size)}</span>
+                                                <span>By ${file.uploaded_by_name}</span>
+                                            </div>
                                         </div>
+                                        ${deleteBtn}
                                     </div>
-                                    ${deleteBtn}
                                 </div>
-                            </div>
-                        `;
-                    });
-                    $filesList.html(html);
-                } else {
-                    $filesList.html(`<div class="col-12 text-center py-5 text-muted"><i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i><p>No files uploaded yet.</p></div>`);
+                            `;
+                        });
+                        $filesList.html(html);
+                    } else {
+                        $filesList.html(`<div class="col-12 text-center py-5 text-muted"><i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i><p>No files uploaded yet.</p></div>`);
+                    }
                 }
-            }
-        });
-    };
+            });
+        };
        
         // Handle File Upload
         $("#uploadFileForm").on("submit", function (e) {
@@ -335,13 +333,14 @@
                 success: function (res) {
                     if (res.success) {
                         $("#uploadFileForm")[0].reset();
+                        Toast.fire({ icon: 'success', title: 'File uploaded successfully' });
                         loadFiles();
                     } else {
-                        $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text(res.message);
+                        Toast.fire({ icon: 'error', title: res.message || 'Upload failed' });
                     }
                 },
                 error: function (err) {
-                    $fileMessage.removeClass("d-none alert-success").addClass("alert-danger").text("Error uploading file. Check type and size.");
+                    Toast.fire({ icon: 'error', title: 'Error uploading file. Check type and size.' });
                 },
                 complete: function () {
                     $btn.prop("disabled", false).html(originalBtnHtml);
@@ -349,33 +348,44 @@
             });
         });
         
-        // Handle File Deletion
+        // Handle File Deletion with Swal
         $(document).on("click", ".delete-file-btn", function () {
             const attachmentId = $(this).attr("data-id");
+            const $btn =$(this);
 
-            if (window.confirm("Are you sure you want to delete this file? This cannot be undone.")) {
-                const $btn = $(this);$btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
+            Swal.fire({
+                title: 'Delete this file?',
+                text: "This action cannot be undone.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, delete it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
 
-                $.ajax({
-                    url: `/projects/files/${attachmentId}`,
-                    type: "DELETE",
-                    success: function (res) {
-                        if (res.success) {
-                            loadFiles(); // Refresh the list
-                        } else {
-                            alert(res.message || "Unable to delete file.");
+                    $.ajax({
+                        url: `/projects/files/${attachmentId}`,
+                        type: "DELETE",
+                        success: function (res) {
+                            if (res.success) {
+                                Toast.fire({ icon: 'success', title: 'File deleted' });
+                                loadFiles(); 
+                            } else {
+                                Toast.fire({ icon: 'error', title: res.message || 'Unable to delete file' });
+                                $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
+                            }
+                        },
+                        error: function () {
+                            Toast.fire({ icon: 'error', title: 'An error occurred during deletion' });
                             $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
                         }
-                    },
-                    error: function () {
-                        alert("An error occurred while trying to delete the file.");
-                        $btn.prop("disabled", false).html('<i class="fas fa-trash"></i>');
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
 
-        // Init
         loadFiles();
     }
 </script>
@@ -419,8 +429,9 @@
                             renderNewComment(res.comment);
                             $("#commentInput").val("");
                             currentReplyId = null; // Clear reply state
+                            Toast.fire({ icon: 'success', title: 'Comment posted!' });
                         } else {
-                            alert(res.message || "Error posting comment.");
+                            Toast.fire({ icon: 'error', title: res.message || "Error posting comment." });
                         }
                     },
                     complete: function() {
