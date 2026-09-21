@@ -1,3 +1,4 @@
+const ActivityService = require("../services/activityService");
 const taskService = require("../services/taskService");
 const taskModel = require("../models/taskModel");
 const projectService = require("../services/projectService");
@@ -107,6 +108,13 @@ const createTask = async (req, res, next) => {
             task.task_id,
             `${req.user.full_name} created task "${task.title}".`
         );
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "CREATE",
+            entityType: "Task",
+            entityId: task.task_id,
+            description: `Created task: ${task.title}`
+        }).catch(err => console.error(err));
 
         // AJAX JSON RESPONSE
         if (req.xhr || (req.headers.accept && req.headers.accept.includes("application/json"))) {
@@ -151,6 +159,13 @@ const updateTask = async (req, res, next) => {
             task.task_id,
             `${req.user.full_name} updated task "${task.title}".`
         );
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "UPDATE",
+            entityType: "Task",
+            entityId: task.task_id,
+            description: `Updated task: ${task.title}`
+        }).catch(err => console.error(err));
 
         // AJAX JSON RESPONSE
         if (req.xhr || (req.headers.accept && req.headers.accept.includes("application/json"))) {
@@ -184,7 +199,13 @@ const deleteTask = async (req, res, next) => {
             task.task_id,
             `${req.user.full_name} deleted task "${task.title}".`
         );
-
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "DELETE",
+            entityType: "Task",
+            entityId: task.task_id,
+            description: `Deleted task: ${task.title}`
+        }).catch(err => console.error(err));
         // AJAX JSON RESPONSE
         if (req.xhr || (req.headers.accept && req.headers.accept.includes("application/json"))) {
             return res.json({
@@ -228,6 +249,14 @@ const toggleTaskStatus = async (req, res, next) => {
             task.task_id,
             `Task "${task.title}" was marked as ${task.status} by ${req.user.full_name}.`
         );
+        
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "UPDATE STATUS",
+            entityType: "Task",
+            entityId: task.task_id,
+            description: `Status Updated task: ${task.title}`
+        }).catch(err => console.error(err));
 
         // AJAX JSON RESPONSE
         if (req.xhr || (req.headers.accept && req.headers.accept.includes("application/json"))) {
@@ -262,6 +291,14 @@ const updateTaskAssignment = async (req, res, next) => {
             task.task_id,
             "You were assigned a new task."
         );
+
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "UPDATE",
+            entityType: "Task",
+            entityId: task.task_id,
+            description: `Assignment Updated task: ${task.title}`
+        }).catch(err => console.error(err));
 
         // AJAX JSON RESPONSE
         if (req.xhr || (req.headers.accept && req.headers.accept.includes("application/json"))) {
