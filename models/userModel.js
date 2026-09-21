@@ -181,6 +181,42 @@ const deleteUser = async (userId) => {
     return rows[0];
 };
 
+
+// Save the reset token and expiration date
+const setPasswordResetToken = async (email, token, expiresAt) => {
+    const sql = `
+        UPDATE users 
+        SET reset_password_token = $1, reset_password_expires = $2 
+        WHERE email = $3 
+        RETURNING *;
+    `;
+    const { rows } = await query(sql, [token, expiresAt, email]);
+    return rows[0];
+};
+
+// Find a user by a valid token that hasn't expired yet
+const getUserByValidResetToken = async (token) => {
+    const sql = `
+        SELECT * FROM users 
+        WHERE reset_password_token = $1 
+        AND reset_password_expires > CURRENT_TIMESTAMP;
+    `;
+    const { rows } = await query(sql, [token]);
+    return rows[0];
+};
+
+// Clear the token after a successful reset
+const clearPasswordResetToken = async (userId, newHashedPassword) => {
+    const sql = `
+        UPDATE users 
+        SET password = $1, reset_password_token = NULL, reset_password_expires = NULL 
+        WHERE user_id = $2 
+        RETURNING *;
+    `;
+    const { rows } = await query(sql, [newHashedPassword, userId]);
+    return rows[0];
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
@@ -190,4 +226,7 @@ module.exports = {
   findUserById,
   updateLastLogin,
   getAllEmployees,
+    setPasswordResetToken,
+    getUserByValidResetToken,
+    clearPasswordResetToken
 };

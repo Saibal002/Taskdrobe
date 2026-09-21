@@ -52,10 +52,7 @@ module.exports = {
       path: "/",
       router: dashboardRoute,
     },
-    // {
-    //   path: "/",
-    //   router: projectMemberRoutes,
-    // },
+    
     {
       path: "/",
       router: profileRoute,

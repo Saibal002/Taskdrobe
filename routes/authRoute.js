@@ -35,5 +35,9 @@ router.get(
 
     }
 );
+// Forgot & Reset Password Flows
+router.post("/forgot-password", authController.forgotPassword);
+router.get("/reset-password/:token", authController.renderResetPasswordPage);
+router.post("/reset-password/:token", authController.resetPassword);
 router.get("/logout", authController.logout);
 module.exports = router;
