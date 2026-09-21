@@ -1,5 +1,6 @@
 const attachmentModel = require("../models/attachmentModel");
 const taskModel = require("../models/taskModel");
+const ActivityService = require("../services/activityService"); // INJECTED LOGGER
 
 const uploadProjectFile = async (req, res, next) => {
     try {
@@ -16,6 +17,15 @@ const uploadProjectFile = async (req, res, next) => {
             fileType: req.file.mimetype,
             fileSize: req.file.size
         });
+
+        // Log the upload
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "CREATE",
+            entityType: "File",
+            entityId: attachment.attachment_id || req.params.projectId,
+            description: `Uploaded project file: ${req.file.originalname}`
+        }).catch(err => console.error(err));
 
         return res.status(201).json({ success: true, message: "File uploaded successfully.", attachment });
     } catch (err) {
@@ -50,6 +60,16 @@ const deleteProjectFile = async (req, res, next) => {
 
         // 3. Delete the file
         await attachmentModel.deleteAttachment(req.params.attachmentId);
+
+        // Log the deletion
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "DELETE",
+            entityType: "File",
+            entityId: req.params.attachmentId,
+            description: `Deleted file: ${attachment.original_name}`
+        }).catch(err => console.error(err));
+
         return res.json({ success: true, message: "File deleted successfully." });
     } catch (err) {
         next(err);
@@ -76,11 +96,21 @@ const uploadTaskFile = async (req, res, next) => {
             fileSize: req.file.size
         });
 
+        // Log the task file upload
+        ActivityService.log({
+            userId: req.user.user_id,
+            action: "CREATE",
+            entityType: "File",
+            entityId: attachment.attachment_id || req.params.taskId,
+            description: `Uploaded file to task: ${req.file.originalname}`
+        }).catch(err => console.error(err));
+
         return res.status(201).json({ success: true, attachment });
     } catch (err) {
         next(err);
     }
 };
+
 module.exports = {
     uploadProjectFile,
     getProjectFiles,

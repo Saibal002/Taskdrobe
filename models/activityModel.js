@@ -40,7 +40,7 @@ const ActivityModel = {
     },
 
     /**
-     * Get the most recent activities.
+     * Get the most recent activities with Role data.
      */
     async getRecent(limit = 10) {
         const query = `
@@ -49,14 +49,15 @@ const ActivityModel = {
                 a.user_id,
                 u.full_name AS user_name,
                 u.profile_image,
+                r.role_name, 
                 a.action,
                 a.entity_type,
                 a.entity_id,
                 a.description,
                 a.created_at
             FROM activities a
-            INNER JOIN users u
-                ON u.user_id = a.user_id
+            INNER JOIN users u ON u.user_id = a.user_id
+            INNER JOIN roles r ON u.role_id = r.role_id 
             ORDER BY a.created_at DESC
             LIMIT $1
         `;
