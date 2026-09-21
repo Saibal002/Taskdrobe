@@ -94,6 +94,25 @@ class AdminController {
     static async getTeamAnalytics(req, res, next) {
         try { const analytics = await require("../models/teamModel").getTeamAnalytics(req.params.teamId); return res.status(200).json({ success: true, data: analytics }); } catch (error) { next(error); }
     }
+    // ===================================
+    // GOD MODE: AUDIT LOGS
+    // ===================================
+    static async renderAuditLogs(req, res, next) {
+        try {
+            // Fetch the 50 most recent platform activities
+            const ActivityService = require("../services/activityService");
+            const activities = await ActivityService.getRecent(50);
+            
+            res.render("admin/activities", { 
+                title: "System Audit Logs", 
+                user: req.user, 
+                page: "activities",
+                activities 
+            });
+        } catch (error) { 
+            next(error); 
+        }
+    }
 }
 
 module.exports = AdminController;

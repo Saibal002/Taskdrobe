@@ -14,6 +14,7 @@ router.get("/dashboard", dashboardController.adminDashboard);
 // Add these Views (At the top near Dashboard)
 router.get("/teams-view", AdminController.renderTeamsView);
 router.get("/teams-view/:teamId", AdminController.renderTeamInsightView);
+router.get("/activities", AdminController.renderAuditLogs);
 
 // 2. User Management Views & AJAX
 router.get("/users", AdminController.renderUserManagement);

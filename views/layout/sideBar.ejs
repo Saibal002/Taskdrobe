@@ -47,22 +47,22 @@
             </div>
         <% } %>
 
-        <% if (isAdmin) { %>
+       <% if (isAdmin) { %>
             <div class="app-sidebar-group">
                 <div class="app-sidebar-label">System</div>
                 <a href="/admin/users" class="app-sidebar-item <%= currentPage === 'users' ? 'active' : '' %>" title="Users">
                     <i class="bi bi-people app-sidebar-icon"></i>
                     <span>Users</span>
                 </a>
-                <a href="#" class="app-sidebar-item app-sidebar-disabled" aria-disabled="true" tabindex="-1" title="Settings (Coming Soon)">
-                    <i class="bi bi-gear app-sidebar-icon"></i>
-                    <span>Settings</span>
-                    <span class="app-sidebar-coming-soon">Soon</span>
-                </a>
                 <a href="/admin/teams-view" class="app-sidebar-item <%= currentPage === 'teams' ? 'active' : '' %>" title="Global Teams">
-    <i class="bi bi-microsoft-teams app-sidebar-icon"></i>
-    <span>Teams</span>
-</a>
+                    <i class="bi bi-microsoft-teams app-sidebar-icon"></i>
+                    <span>Teams</span>
+                </a>
+                <!-- NEW: Audit Logs Link -->
+                <a href="/admin/activities" class="app-sidebar-item <%= currentPage === 'activities' ? 'active' : '' %>" title="Audit Logs">
+                    <i class="bi bi-clock-history app-sidebar-icon"></i>
+                    <span>Audit Logs</span>
+                </a>
             </div>
         <% } %>
     </div>
