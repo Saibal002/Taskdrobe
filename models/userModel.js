@@ -217,6 +217,18 @@ const clearPasswordResetToken = async (userId, newHashedPassword) => {
     return rows[0];
 };
 
+/**
+ * Update User Password from profile page (for logged-in users)
+ */
+const updatePassword = async (userId, hashedPassword) => {
+    const sql = `
+        UPDATE users 
+        SET password = $1, updated_at = CURRENT_TIMESTAMP 
+        WHERE user_id = $2;
+    `;
+    await query(sql, [hashedPassword, userId]);
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
@@ -228,5 +240,6 @@ module.exports = {
   getAllEmployees,
     setPasswordResetToken,
     getUserByValidResetToken,
-    clearPasswordResetToken
+    clearPasswordResetToken,
+    updatePassword,
 };

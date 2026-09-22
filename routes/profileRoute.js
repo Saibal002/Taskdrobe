@@ -30,5 +30,10 @@ router.post(
     uploadProfileImage, 
     profileController.updateProfile
 );
-
+router.post(
+    "/:role/profile/change-password", 
+    authMiddleware, 
+    verifyProfileRoleUrl, 
+    profileController.changePassword
+);
 module.exports = router;
