@@ -42,60 +42,83 @@
                 </button>
             </div>
 
-            <div class="admin-glass-panel">
+          <div class="admin-glass-panel">
                 <div id="adminAlert" class="alert d-none rounded-pill text-center shadow-sm"></div>
                 
-                <div class="admin-list-group" id="userListContainer">
-                    <% if (users && users.length > 0) { %>
-                        <% users.forEach(u => { %>
-                            <div class="admin-list-item" id="user-row-<%= u.user_id %>">
-                                <div class="admin-list-left">
-                                    <div class="admin-list-icon <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %>" style="overflow: hidden;">
-                                        <% if (u.profile_image) { %>
-                                            <img src="<%= u.profile_image %>" alt="avatar" style="width: 100%; height: 100%; object-fit: cover;">
-                                        <% } else { %>
-                                            <i class="fas <%= u.role_name === 'admin' ? 'fa-user-shield' : (u.role_name === 'manager' ? 'fa-user-tie' : 'fa-user') %>"></i>
-                                        <% } %>
-                                    </div>
-                                    <div>
-                                        <span class="d-block mb-1 fw-bold">
-                                            <%= u.full_name %>
-                                            <% if (u.is_active) { %>
-                                                <span class="badge bg-success bg-opacity-10 text-success ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Active</span>
+                <!-- NEW: Filter & Sort Toolbar -->
+                <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+                    <div class="d-flex gap-3">
+                        <select id="roleFilter" class="form-select form-select-sm bg-light border-0 shadow-sm rounded-pill px-3 py-2 fw-bold text-secondary">
+                            <option value="all">All Roles</option>
+                            <option value="admin">Admin</option>
+                            <option value="manager">Manager</option>
+                            <option value="employee">Employee</option>
+                        </select>
+                        <select id="sortFilter" class="form-select form-select-sm bg-light border-0 shadow-sm rounded-pill px-3 py-2 fw-bold text-secondary">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill" id="userCountBadge">
+                        <%= users ? users.length : 0 %> Users
+                    </span>
+                </div>
+
+                <!-- NEW: Scrollable Wrapper -->
+                <div class="admin-scrollable-container" style="max-height: 60vh; overflow-y: auto; padding-right: 5px;">
+                    <div class="admin-list-group" id="userListContainer">
+                        <% if (users && users.length > 0) { %>
+                            <% users.forEach(u => { %>
+                                <!-- Added data-role attribute for filtering -->
+                                <div class="admin-list-item user-row-item" id="user-row-<%= u.user_id %>" data-role="<%= u.role_name ? u.role_name.toLowerCase() : '' %>">
+                                    <div class="admin-list-left">
+                                        <div class="admin-list-icon <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %>" style="overflow: hidden;">
+                                            <% if (u.profile_image) { %>
+                                                <img src="<%= u.profile_image %>" alt="avatar" style="width: 100%; height: 100%; object-fit: cover;">
                                             <% } else { %>
-                                                <span class="badge bg-danger bg-opacity-10 text-danger ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Inactive</span>
+                                                <i class="fas <%= u.role_name === 'admin' ? 'fa-user-shield' : (u.role_name === 'manager' ? 'fa-user-tie' : 'fa-user') %>"></i>
                                             <% } %>
-                                        </span>
-                                        <small class="text-secondary"><%= u.email %> · <%= u.phone || 'No phone' %></small>
+                                        </div>
+                                        <div>
+                                            <span class="d-block mb-1 fw-bold">
+                                                <%= u.full_name %>
+                                                <% if (u.is_active) { %>
+                                                    <span class="badge bg-success bg-opacity-10 text-success ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Active</span>
+                                                <% } else { %>
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger ms-2 px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Inactive</span>
+                                                <% } %>
+                                            </span>
+                                            <small class="text-secondary"><%= u.email %> · <%= u.phone || 'No phone' %></small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-4">
+                                        <div class="admin-list-value <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %> fs-6 text-uppercase tracking-wide">
+                                            <%= u.role_name ? u.role_name : 'UNDEFINED' %>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-light rounded-circle text-primary hover-lift edit-user-btn" 
+                                                    data-id="<%= u.user_id %>" 
+                                                    data-name="<%= u.full_name %>" 
+                                                    data-email="<%= u.email %>" 
+                                                    data-role="<%= u.role_name || '' %>" 
+                                                    data-active="<%= u.is_active %>"
+                                                    title="Edit User">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-light rounded-circle text-danger hover-lift delete-user-btn" data-id="<%= u.user_id %>" title="Revoke Access">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center gap-4">
-                                    <div class="admin-list-value <%= u.role_name === 'admin' ? 'dark' : (u.role_name === 'manager' ? 'blue' : 'green') %> fs-6 text-uppercase tracking-wide">
-                                        <%= u.role_name ? u.role_name : 'UNDEFINED' %>
-                                    </div>
-                                    <div class="d-flex gap-2">
-                                        <button class="btn btn-sm btn-light rounded-circle text-primary hover-lift edit-user-btn" 
-                                                data-id="<%= u.user_id %>" 
-                                                data-name="<%= u.full_name %>" 
-                                                data-email="<%= u.email %>" 
-                                                data-role="<%= u.role_name || '' %>" 
-                                                data-active="<%= u.is_active %>"
-                                                title="Edit User">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-light rounded-circle text-danger hover-lift delete-user-btn" data-id="<%= u.user_id %>" title="Revoke Access">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="text-center py-5 text-secondary">
+                                <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
+                                <p>No users found in the system.</p>
                             </div>
-                        <% }); %>
-                    <% } else { %>
-                        <div class="text-center py-5 text-secondary">
-                            <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
-                            <p>No users found in the system.</p>
-                        </div>
-                    <% } %>
+                        <% } %>
+                    </div>
                 </div>
             </div>
 

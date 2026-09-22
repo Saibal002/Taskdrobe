@@ -1316,3 +1316,8 @@ body.app-sidebar-layout .app-page-main {
     }
     .app-page-shell { gap: 1rem; }
 }
+
+/* Admin scrollable container */
+.admin-scrollable-container::-webkit-scrollbar { width: 6px; }
+.admin-scrollable-container::-webkit-scrollbar-track { background: transparent; }
+.admin-scrollable-container::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
