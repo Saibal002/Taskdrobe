@@ -163,9 +163,8 @@ const getProjectTaskStats = async (projectId) => {
 /**
  * Get upcoming tasks for dashboard calendar
  */
-const getUpcomingTasks = async (limit = 10) => {
-
-    const sql = `
+const getUpcomingTasks = async (limit = 10, userId, role) => {
+    let sql = `
         SELECT
             t.task_id,
             t.title,
@@ -175,22 +174,30 @@ const getUpcomingTasks = async (limit = 10) => {
             t.due_date,
             p.project_name
         FROM tasks t
-
-        LEFT JOIN projects p
-            ON t.project_id = p.project_id
-
+        LEFT JOIN projects p ON t.project_id = p.project_id
         WHERE t.due_date IS NOT NULL
           AND t.due_date >= CURRENT_DATE
-
-        ORDER BY
-            t.due_date ASC
-
-        LIMIT $1;
     `;
 
-    const result = await query(sql, [limit]);
+    const params = [];
+    let paramIndex = 1;
 
-    return result.rows;
+    // Scope the tasks based on the user's role
+    if (role === "employee") {
+        sql += ` AND t.assigned_to = $${paramIndex}`;
+        params.push(userId);
+        paramIndex++;
+    } else if (role === "manager") {
+        sql += ` AND p.created_by = $${paramIndex}`;
+        params.push(userId);
+        paramIndex++;
+    }
+
+    sql += ` ORDER BY t.due_date ASC LIMIT $${paramIndex}`;
+    params.push(limit);
+
+    const { rows } = await query(sql, params);
+    return rows;
 };
 /**
  * Search Tasks

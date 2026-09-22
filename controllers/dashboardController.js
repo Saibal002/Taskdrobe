@@ -1,36 +1,34 @@
 const projectService = require("../services/projectService");
 const dashboardService = require("../services/dashboardService");
 const taskModel = require("../models/taskModel");
-
 /**
  * Employee Dashboard
  */
 const dashboard = async (req, res, next) => {
   try {
+    const userId = req.user.user_id;
+    const role = req.user.role_name;
     let projects;
 
-    if (req.user.role_name === "employee") {
-      projects = await projectService.getProjectsByMember(req.user.user_id);
+    // Filter projects
+    if (role === "employee") {
+      projects = await projectService.getProjectsByMember(userId);
     } else {
       projects = await projectService.getAllProjects();
     }
 
-    const stats = await dashboardService.getDashboardStats();
-    const chartData = await dashboardService.getTaskChartData();
-    const projectChartData = await dashboardService.getProjectChartData();
-    const upcomingTasks = await taskModel.getUpcomingTasks(10);
+    // Pass userId and role into the services to scope the data
+    const stats = await dashboardService.getDashboardStats(userId, role);
+    const chartData = await dashboardService.getTaskChartData(userId, role);
+    const projectChartData = await dashboardService.getProjectChartData(userId, role);
+    const upcomingTasks = await taskModel.getUpcomingTasks(10, userId, role);
 
     res.render("emp_dashboard", {
       title: "Dashboard",
-
       user: req.user,
-
       today: new Date().toDateString(),
-
       projects,
-
       stats,
-
       chartData,
       projectChartData,
       upcomingTasks,
@@ -39,7 +37,6 @@ const dashboard = async (req, res, next) => {
     next(err);
   }
 };
-
 
 
 /**
