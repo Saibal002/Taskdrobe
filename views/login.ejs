@@ -179,50 +179,36 @@
 
                         <div class="input-group">
 
-    <input
-        type="password"
-        id="password"
-        name="password"
-        class="form-control"
-        placeholder="Enter your password"
-        autocomplete="current-password"
-        required>
+                            <input type="password" id="password" name="password" class="form-control"
+                                placeholder="Enter your password" autocomplete="current-password" required>
 
-    <button
-        class="btn btn-outline-secondary"
-        type="button"
-        id="togglePassword">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
 
-        👁️
+                                👁️
 
-    </button>
+                            </button>
 
-</div>
-<div class="d-flex justify-content-between align-items-center mb-3">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
 
-    <div class="form-check">
+                            <div class="form-check">
 
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="rememberMe"
-            name="rememberMe">
+                                <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
 
-        <label
-            class="form-check-label"
-            for="rememberMe">
+                                <label class="form-check-label" for="rememberMe">
 
-            Remember Me
+                                    Remember Me
 
-        </label>
+                                </label>
 
-    </div>
+                            </div>
 
-   <div class="text-end mb-3">
-    <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal" class="text-primary text-decoration-none small fw-semibold">Forgot Password?</a>
-</div>
+                            <div class="text-end mb-3">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal"
+                                    class="text-primary text-decoration-none small fw-semibold">Forgot Password?</a>
+                            </div>
 
-</div>
+                        </div>
 
                         <div id="passwordError" class="invalid-feedback">
 
@@ -230,9 +216,20 @@
 
                     </div>
 
-                    
+
 
                     <div class="d-flex flex-column gap-3">
+                        <div class="position-relative my-4">
+                            <hr class="text-muted">
+                            <span
+                                class="position-absolute top-50 start-50 translate-middle bg-white px-2 small text-muted">OR</span>
+                        </div>
+
+                        <a href="/auth/google"
+                            class="btn btn-outline-dark w-100 rounded-pill d-flex align-items-center justify-content-center gap-2 fw-semibold">
+                            <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="Google" width="20">
+                            Continue with Google
+                        </a>
 
                         <button class="login-btn" type="submit">
 
@@ -298,84 +295,88 @@
 
 
 
-    <!-- =========================================================
+        <!-- =========================================================
      FORGOT PASSWORD MODAL
 ========================================================= -->
-<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold">Reset Password</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <p class="text-muted small mb-4">Enter the email address associated with your account, and we'll send you a secure link to reset your password.</p>
-                <form id="forgotPasswordForm">
-                    <div class="mb-4">
-                        <label for="resetEmail" class="form-label fw-semibold">Email Address</label>
-                        <div class="input-group shadow-sm rounded-3">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-envelope"></i></span>
-                            <input type="email" class="form-control border-start-0" id="resetEmail" name="email" placeholder="name@company.com" required>
-                        </div>
+        <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold">Reset Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm" id="forgotPasswordBtn">
-                        Send Reset Link
-                    </button>
-                </form>
+                    <div class="modal-body p-4">
+                        <p class="text-muted small mb-4">Enter the email address associated with your account, and we'll
+                            send you a secure link to reset your password.</p>
+                        <form id="forgotPasswordForm">
+                            <div class="mb-4">
+                                <label for="resetEmail" class="form-label fw-semibold">Email Address</label>
+                                <div class="input-group shadow-sm rounded-3">
+                                    <span class="input-group-text bg-white border-end-0 text-muted"><i
+                                            class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control border-start-0" id="resetEmail" name="email"
+                                        placeholder="name@company.com" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm"
+                                id="forgotPasswordBtn">
+                                Send Reset Link
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- =========================================================
+        <!-- =========================================================
      FORGOT PASSWORD AJAX SCRIPT
 ========================================================= -->
-<script>
-$(document).ready(function() {
-    $("#forgotPasswordForm").on("submit", function(e) {
-        e.preventDefault();
-        const $form = $(this);
-        const $btn = $("#forgotPasswordBtn");
-        const originalHtml = $btn.html();
-        
-        $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm me-2"></span> Sending...');
+        <script>
+            $(document).ready(function () {
+                $("#forgotPasswordForm").on("submit", function (e) {
+                    e.preventDefault();
+                    const $form = $(this);
+                    const $btn = $("#forgotPasswordBtn");
+                    const originalHtml = $btn.html();
 
-        $.ajax({
-            url: "/auth/forgot-password",
-            type: "POST",
-            data: $form.serialize(),
-            success: function(res) {
-                if (res.success) {
-                    // Assuming you have SweetAlert Toast configured globally
-                    if (typeof Toast !== 'undefined') {
-                        Toast.fire({ icon: 'success', title: res.message });
-                    } else {
-                        alert(res.message);
-                    }
-                    $("#forgotPasswordModal").modal('hide');
-                    $form[0].reset();
-                } else {
-                    if (typeof Toast !== 'undefined') {
-                        Toast.fire({ icon: 'error', title: res.message });
-                    } else {
-                        alert(res.message);
-                    }
-                }
-            },
-            error: function() {
-                if (typeof Toast !== 'undefined') {
-                    Toast.fire({ icon: 'error', title: 'A server error occurred. Please try again.' });
-                } else {
-                    alert('A server error occurred. Please try again.');
-                }
-            },
-            complete: function() {
-                $btn.prop("disabled", false).html(originalHtml);
-            }
-        });
-    });
-});
-</script>
+                    $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm me-2"></span> Sending...');
+
+                    $.ajax({
+                        url: "/auth/forgot-password",
+                        type: "POST",
+                        data: $form.serialize(),
+                        success: function (res) {
+                            if (res.success) {
+                                // Assuming you have SweetAlert Toast configured globally
+                                if (typeof Toast !== 'undefined') {
+                                    Toast.fire({ icon: 'success', title: res.message });
+                                } else {
+                                    alert(res.message);
+                                }
+                                $("#forgotPasswordModal").modal('hide');
+                                $form[0].reset();
+                            } else {
+                                if (typeof Toast !== 'undefined') {
+                                    Toast.fire({ icon: 'error', title: res.message });
+                                } else {
+                                    alert(res.message);
+                                }
+                            }
+                        },
+                        error: function () {
+                            if (typeof Toast !== 'undefined') {
+                                Toast.fire({ icon: 'error', title: 'A server error occurred. Please try again.' });
+                            } else {
+                                alert('A server error occurred. Please try again.');
+                            }
+                        },
+                        complete: function () {
+                            $btn.prop("disabled", false).html(originalHtml);
+                        }
+                    });
+                });
+            });
+        </script>
 </body>
 
 </html>
