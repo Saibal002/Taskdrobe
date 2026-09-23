@@ -18,8 +18,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/dashboard.js"></script>
+    <!-- Chart.js removed as we are now using ApexCharts via the component -->
 </head>
 
 <body class="employee-dashboard-page app-sidebar-layout">
@@ -197,62 +196,67 @@
                 </div>
             </section>
 
-            <section class="dashboard-main-grid" aria-label="Tasks, insights, and calendar">
-                <div class="dashboard-main-column">
-                    <section class="dashboard-work-grid" aria-label="Tasks and insights">
-                        
-                        <article class="workspace-card task-queue-card">
-                            <header class="card-heading">
-                                <div>
-                                    <p class="section-kicker">Plan your day</p>
-                                    <h2>Upcoming deadlines</h2>
-                                </div>
-                                <span class="count-chip"><%= taskQueue.length %> task<%= taskQueue.length === 1 ? "" : "s" %></span>
-                            </header>
+            <!-- Refactored Main Grid: 4/8 Split -->
+            <section class="row g-4 mt-2" aria-label="Tasks, insights, and calendar">
+                
+                <!-- Left Column: Planning & Calendar (1/3 width) -->
+                <div class="col-xl-4 col-lg-5 d-flex flex-column gap-4">
+                    
+                    <article class="workspace-card task-queue-card h-100">
+                        <header class="card-heading">
+                            <div>
+                                <p class="section-kicker">Plan your day</p>
+                                <h2>Upcoming deadlines</h2>
+                            </div>
+                            <span class="count-chip"><%= taskQueue.length %> task<%= taskQueue.length === 1 ? "" : "s" %></span>
+                        </header>
 
-                            <% if (visibleTasks.length === 0) { %>
-                                <div class="empty-state">
-                                    <div class="empty-state-icon"><i class="bi bi-calendar-check" aria-hidden="true"></i></div>
-                                    <strong>No upcoming deadlines</strong>
-                                    <span>Enjoy the breathing room or open a project to plan your next task.</span>
-                                </div>
-                            <% } else { %>
-                                <div class="task-queue">
-                                    <% visibleTasks.forEach((task) => {
-                                        const dueDate = task.due_date ? new Date(task.due_date) : null;
-                                        const hasValidDate = dueDate && !Number.isNaN(dueDate.getTime());
-                                        const isOverdue = hasValidDate && dueDate < new Date() && task.status !== "Completed";
-                                    %>
-                                        <div class="task-row">
-                                            <button class="task-checkbox <%= task.status === "Completed" ? "checked" : "" %>" type="button" aria-pressed="<%= task.status === "Completed" ? "true" : "false" %>">
-                                                <% if (task.status === "Completed") { %><i class="fas fa-check" aria-hidden="true"></i><% } %>
-                                            </button>
-                                            <div class="task-main">
-                                                <div class="task-title-line">
-                                                    <h3><%= task.title %></h3>
-                                                    <span class="task-priority <%= priorityClass(task.priority) %>"><%= task.priority || "Normal" %></span>
-                                                </div>
-                                                <p><i class="bi bi-folder2" aria-hidden="true"></i> <%= task.project_name || "No project" %></p>
+                        <% if (visibleTasks.length === 0) { %>
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><i class="bi bi-calendar-check" aria-hidden="true"></i></div>
+                                <strong>No upcoming deadlines</strong>
+                                <span>Enjoy the breathing room or open a project to plan your next task.</span>
+                            </div>
+                        <% } else { %>
+                            <div class="task-queue">
+                                <% visibleTasks.forEach((task) => {
+                                    const dueDate = task.due_date ? new Date(task.due_date) : null;
+                                    const hasValidDate = dueDate && !Number.isNaN(dueDate.getTime());
+                                    const isOverdue = hasValidDate && dueDate < new Date() && task.status !== "Completed";
+                                %>
+                                    <div class="task-row">
+                                        <button class="task-checkbox <%= task.status === "Completed" ? "checked" : "" %>" type="button" aria-pressed="<%= task.status === "Completed" ? "true" : "false" %>">
+                                            <% if (task.status === "Completed") { %><i class="fas fa-check" aria-hidden="true"></i><% } %>
+                                        </button>
+                                        <div class="task-main">
+                                            <div class="task-title-line">
+                                                <h3><%= task.title %></h3>
+                                                <span class="task-priority <%= priorityClass(task.priority) %>"><%= task.priority || "Normal" %></span>
                                             </div>
-                                            <time class="task-deadline <%= isOverdue ? "is-overdue" : "" %>">
-                                                <i class="bi bi-clock" aria-hidden="true"></i>
-                                                <span><%= formatDate(task.due_date, { month: "short", day: "numeric" }) %></span>
-                                            </time>
+                                            <p><i class="bi bi-folder2" aria-hidden="true"></i> <%= task.project_name || "No project" %></p>
                                         </div>
-                                    <% }) %>
-                                </div>
-                            <% } %>
-                        </article>
+                                        <time class="task-deadline <%= isOverdue ? "is-overdue" : "" %>">
+                                            <i class="bi bi-clock" aria-hidden="true"></i>
+                                            <span><%= formatDate(task.due_date, { month: "short", day: "numeric" }) %></span>
+                                        </time>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } %>
+                    </article>
 
-                        <div class="insights-region">
-                            <%- include("layout/charts") %>
-                        </div>
-                    </section>
+                    <aside class="calendar-region flex-grow-1">
+                        <%- include("layout/calendarSidebar", { upcomingTasks }) %>
+                    </aside>
                 </div>
 
-                <aside class="calendar-region">
-                    <%- include("layout/calendarSidebar", { upcomingTasks }) %>
-                </aside>
+                <!-- Right Column: System Analytics (2/3 width) -->
+                <div class="col-xl-8 col-lg-7">
+                    <div class="insights-region h-100">
+                        <%- include("layout/charts") %>
+                    </div>
+                </div>
+
             </section>
         </div>
     </main>
@@ -287,5 +291,6 @@
             }
         });
     </script>
+    <%- include("layout/globalChat.ejs") %>
 </body>
 </html>

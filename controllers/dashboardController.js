@@ -1,6 +1,7 @@
 const projectService = require("../services/projectService");
 const dashboardService = require("../services/dashboardService");
 const taskModel = require("../models/taskModel");
+const dashboardModel = require("../models/dashboardModel");
 /**
  * Employee Dashboard
  */
@@ -50,7 +51,7 @@ const adminDashboard = async (req, res, next) => {
 
     const chartData = await dashboardService.getTaskChartData();
     const projectChartData = await dashboardService.getProjectChartData();
-
+    const topEmployees = await dashboardModel.getTopEmployeesWorkload();
     res.render("admin/dashboard", {
       title: "Admin Dashboard",
 
@@ -61,6 +62,7 @@ const adminDashboard = async (req, res, next) => {
       stats,
       chartData,
       projectChartData,
+      topEmployees,
     });
   } catch (err) {
     next(err);
@@ -76,21 +78,25 @@ const adminDashboard = async (req, res, next) => {
 const managerDashboard = async (req, res, next) => {
   try {
     const managerId = req.user.user_id;
-    const projectStats = await dashboardService.getManagerProjectStats(
-      managerId,
-    );
-     const projects =
-            await projectService.getProjectsByManager(
-                managerId
-            );
+    const role = req.user.role_name; // "manager"
+
+    const projectStats = await dashboardService.getManagerProjectStats(managerId);
+    const projects = await projectService.getProjectsByManager(managerId);
+    
+    // FETCH MISSING CHART DATA
+    const chartData = await dashboardService.getTaskChartData(managerId, role);
+    const projectChartData = await dashboardService.getProjectChartData(managerId, role);
+
     res.render("manager/man_dashboard", {
       title: "Manager Dashboard",
-
       user: req.user,
-      
       projectStats,
       today: new Date().toDateString(),
-      projects, //that the manager has created
+      projects, 
+      
+      // PASS DATA TO THE COMPONENT
+      chartData,
+      projectChartData
     });
   } catch (err) {
     next(err);

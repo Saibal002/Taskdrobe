@@ -60,67 +60,67 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("resize", updateButtons);
         updateButtons();
     }
-
-    // 3. Task Doughnut Chart
-    const chartCanvas = document.getElementById("taskChart");
-    if (chartCanvas) {
-        const completed = Number(chartCanvas.dataset.completed || 0);
-        const pending = Number(chartCanvas.dataset.pending || 0);
-        const overdue = Number(chartCanvas.dataset.overdue || 0);
-
-        new Chart(chartCanvas, {
-            type: "doughnut",
-            data: {
-                labels: ["Completed", "Pending", "Overdue"],
-                datasets: [
-                    {
-                        data: [completed, pending, overdue],
-                        backgroundColor: ["#00b894", "#e1b12c", "#d63031"],
-                        borderWidth: 0,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: "70%",
-                plugins: {
-                    legend: { position: "bottom" },
-                },
-            },
-        });
-    }
-
-    // 4. Project Bar Chart
-    const projectCanvas = document.getElementById("projectChart");
-    if (projectCanvas && projectCanvas.dataset.projects) {
-        try {
-            const projects = JSON.parse(projectCanvas.dataset.projects);
-            new Chart(projectCanvas, {
-                type: "bar",
-                data: {
-                    labels: projects.map((p) => p.status),
-                    datasets: [
-                        {
-                            label: "Projects",
-                            data: projects.map((p) => p.total),
-                            backgroundColor: "#6C5CE7",
-                            borderRadius: 8,
-                        },
-                    ],
-                },
-                options: {
-                    indexAxis: "y",
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { beginAtZero: true, ticks: { precision: 0 } },
-                    },
-                },
-            });
-        } catch (e) {
-            console.error("Error parsing project chart data:", e);
-        }
-    }
 });
+//     // 3. Task Doughnut Chart
+//     const chartCanvas = document.getElementById("taskChart");
+//     if (chartCanvas) {
+//         const completed = Number(chartCanvas.dataset.completed || 0);
+//         const pending = Number(chartCanvas.dataset.pending || 0);
+//         const overdue = Number(chartCanvas.dataset.overdue || 0);
+
+//         new Chart(chartCanvas, {
+//             type: "doughnut",
+//             data: {
+//                 labels: ["Completed", "Pending", "Overdue"],
+//                 datasets: [
+//                     {
+//                         data: [completed, pending, overdue],
+//                         backgroundColor: ["#00b894", "#e1b12c", "#d63031"],
+//                         borderWidth: 0,
+//                     },
+//                 ],
+//             },
+//             options: {
+//                 responsive: true,
+//                 maintainAspectRatio: false,
+//                 cutout: "70%",
+//                 plugins: {
+//                     legend: { position: "bottom" },
+//                 },
+//             },
+//         });
+//     }
+
+//     // 4. Project Bar Chart
+//     const projectCanvas = document.getElementById("projectChart");
+//     if (projectCanvas && projectCanvas.dataset.projects) {
+//         try {
+//             const projects = JSON.parse(projectCanvas.dataset.projects);
+//             new Chart(projectCanvas, {
+//                 type: "bar",
+//                 data: {
+//                     labels: projects.map((p) => p.status),
+//                     datasets: [
+//                         {
+//                             label: "Projects",
+//                             data: projects.map((p) => p.total),
+//                             backgroundColor: "#6C5CE7",
+//                             borderRadius: 8,
+//                         },
+//                     ],
+//                 },
+//                 options: {
+//                     indexAxis: "y",
+//                     responsive: true,
+//                     maintainAspectRatio: false,
+//                     plugins: { legend: { display: false } },
+//                     scales: {
+//                         x: { beginAtZero: true, ticks: { precision: 0 } },
+//                     },
+//                 },
+//             });
+//         } catch (e) {
+//             console.error("Error parsing project chart data:", e);
+//         }
+//     }
+// });

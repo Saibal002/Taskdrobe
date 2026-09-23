@@ -1,36 +1,15 @@
 <%
     const managerStats = projectStats || {};
-
-    /*
-     * Static preview data.
-     * These will eventually come from the team/activity/deadline backend.
-     */
-
     const managerTeamMemberCount = 7;
 
-
     const attentionItems = [
-
         {
-            tone: Number(managerStats.overdueTasks || 0) > 0
-                ? "danger"
-                : "success",
-
-            icon: Number(managerStats.overdueTasks || 0) > 0
-                ? "bi-exclamation-octagon"
-                : "bi-check-circle",
-
-            title: Number(managerStats.overdueTasks || 0) > 0
-                ? `${managerStats.overdueTasks} overdue task${Number(managerStats.overdueTasks) === 1 ? "" : "s"}`
-                : "No overdue tasks",
-
-            text: Number(managerStats.overdueTasks || 0) > 0
-                ? "Review overdue work and reassign where necessary."
-                : "Your current overdue queue is clear.",
-
+            tone: Number(managerStats.overdueTasks || 0) > 0 ? "danger" : "success",
+            icon: Number(managerStats.overdueTasks || 0) > 0 ? "bi-exclamation-octagon" : "bi-check-circle",
+            title: Number(managerStats.overdueTasks || 0) > 0 ? `${managerStats.overdueTasks} overdue task${Number(managerStats.overdueTasks) === 1 ? "" : "s"}` : "No overdue tasks",
+            text: Number(managerStats.overdueTasks || 0) > 0 ? "Review overdue work and reassign where necessary." : "Your current overdue queue is clear.",
             action: "/tasks"
         },
-
         {
             tone: "warning",
             icon: "bi-clock-history",
@@ -38,7 +17,6 @@
             text: "Review upcoming milestones before they become blockers.",
             action: "/projects"
         },
-
         {
             tone: "purple",
             icon: "bi-person-exclamation",
@@ -46,15 +24,8 @@
             text: "Make sure new work has a clear owner.",
             action: "/tasks"
         }
-
     ];
 
-    /*
-     * Dynamic schedule data.
-     * Use the real project deadlines already available to the dashboard.
-     * Keep only projects with a valid deadline, sort by date, and show the
-     * next three items in the manager schedule panel.
-     */
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
@@ -62,270 +33,176 @@
         .filter(project => project && project.deadline)
         .map(project => {
             const deadlineDate = new Date(project.deadline);
+            if (Number.isNaN(deadlineDate.getTime())) return null;
 
-            if (Number.isNaN(deadlineDate.getTime())) {
-                return null;
-            }
+            const dateOnly = new Date(deadlineDate.getFullYear(), deadlineDate.getMonth(), deadlineDate.getDate());
+            const daysUntil = Math.ceil((dateOnly.getTime() - todayStart.getTime()) / (1000 * 60 * 60 * 24));
 
-            const dateOnly = new Date(
-                deadlineDate.getFullYear(),
-                deadlineDate.getMonth(),
-                deadlineDate.getDate()
-            );
-
-            const daysUntil = Math.ceil(
-                (dateOnly.getTime() - todayStart.getTime()) /
-                (1000 * 60 * 60 * 24)
-            );
-
-            let priority = "Planned";
-            let tone = "purple";
+            let priority = "Planned", tone = "purple", relative = "Upcoming";
 
             if (daysUntil < 0) {
-                priority = "Overdue";
-                tone = "danger";
-            } else if (daysUntil <= 3) {
-                priority = "High";
-                tone = "danger";
-            } else if (daysUntil <= 7) {
-                priority = "Medium";
-                tone = "warning";
-            }
-
-            let relative = "Upcoming";
-
-            if (daysUntil < 0) {
+                priority = "Overdue"; tone = "danger";
                 const overdueDays = Math.abs(daysUntil);
                 relative = `${overdueDays} day${overdueDays === 1 ? "" : "s"} overdue`;
-            } else if (daysUntil === 0) {
-                relative = "Due today";
-            } else if (daysUntil === 1) {
-                relative = "Due tomorrow";
-            } else {
-                relative = `Due in ${daysUntil} days`;
+            } else if (daysUntil <= 3) {
+                priority = "High"; tone = "danger";
+            } else if (daysUntil <= 7) {
+                priority = "Medium"; tone = "warning";
             }
+
+            if (daysUntil === 0) relative = "Due today";
+            else if (daysUntil === 1) relative = "Due tomorrow";
+            else if (daysUntil > 1) relative = `Due in ${daysUntil} days`;
 
             return {
                 date: dateOnly,
                 day: String(dateOnly.getDate()).padStart(2, "0"),
-                month: dateOnly.toLocaleDateString(undefined, {
-                    month: "short"
-                }).toUpperCase(),
+                month: dateOnly.toLocaleDateString(undefined, { month: "short" }).toUpperCase(),
                 project: project.project_name || "Untitled project",
                 description: project.description || "Project deadline",
-                priority,
-                tone,
-                relative,
-                projectId: project.project_id
+                priority, tone, relative, projectId: project.project_id
             };
         })
         .filter(Boolean)
         .sort((a, b) => a.date - b.date)
         .slice(0, 3);
-
-
-
-
-
-   
 %>
 
-
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | TaskDrobe</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/project.css" rel="stylesheet">
+    <link href="/css/manager_dashboard.css" rel="stylesheet">
+    
+    <style>
+        /* Force scrollbars ONLY on the bottom vertical list areas */
+        .manager-scrollable-area {
+            max-height: 380px; 
+            overflow-y: auto;
+            padding-right: 8px; 
+        }
+        
+        .manager-scrollable-area::-webkit-scrollbar { width: 6px; }
+        .manager-scrollable-area::-webkit-scrollbar-track { background: transparent; }
+        .manager-scrollable-area::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
+        html[data-theme="dark"] .manager-scrollable-area::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.1); }
 
-    <title>
-        <%= title %> | TaskDrobe
-    </title>
-
-
-    <!-- Bootstrap -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
-
-    <!-- Bootstrap Icons -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-        rel="stylesheet">
-
-
-    <!-- Font Awesome -->
-    <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        rel="stylesheet">
-
-
-    <!-- Global styles -->
-    <link
-        href="/css/style.css"
-        rel="stylesheet">
-
-
-    <!-- Existing project/modal styles -->
-    <link
-        href="/css/project.css"
-        rel="stylesheet">
-
-
-    <!-- Manager-only design -->
-    <link
-        href="/css/manager_dashboard.css"
-        rel="stylesheet">
-
+        /* Force Manager Stats into a 2x2 Grid */
+        .manager-2x2-stats > div,
+        .manager-2x2-stats .metric-grid,
+        .manager-2x2-stats .admin-stat-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1rem !important;
+            margin-bottom: 0 !important;
+        }
+        /* Clear extra margins from the partial's wrapper */
+        .manager-2x2-stats section,
+        .manager-2x2-stats .dashboard-overview {
+            margin-bottom: 0 !important;
+        }
+        .manager-2x2-stats .metric-card {
+            margin-bottom: 0 !important;
+            height: 100%;
+        }
+    </style>
 </head>
-
 
 <body class="manager-dashboard-page app-sidebar-layout">
 
-
-    <!-- Shared authenticated navigation: navbar + sidebar -->
     <%- include("../layout/navBar", { user: user, page: "dashboard" }) %>
     <script src="/js/navbar.js"></script>
 
-
-    <!-- Main Dashboard -->
     <main class="manager-main">
-
         <div class="manager-container">
 
-
-            <!-- Small page context -->
-            <div class="manager-page-context">
-
-                <div>
-
-                    <span>
-                        Workspace
-                    </span>
-
-                    <strong>
-                        Manager Dashboard
-                    </strong>
-
-                </div>
-
-
-                <div class="manager-date-chip">
-
-                    <i class="bi bi-calendar3"></i>
-
-                    <%= today %>
-
-                </div>
-
+            <div class="manager-page-context mb-4">
+                <div><span>Workspace</span><strong>Manager Dashboard</strong></div>
+                <div class="manager-date-chip"><i class="bi bi-calendar3"></i><%= today %></div>
             </div>
 
+            <!-- Top Section: Projects (Left) vs Stats & Deadlines (Right) -->
+            <div class="row g-4 mb-4">
+                
+                <!-- Left Column: Projects -->
+                <div class="col-lg-7 col-xl-8">
+                    <%- include("./partials/managerProjects", { 
+                        projects: (projects || []).slice(0, 3), 
+                        user 
+                    }) %>
+                </div>
 
-            <!-- Statistics -->
-            <%- include("./partials/managerStats", {
-                stats: managerStats,
-                teamMemberCount: managerTeamMemberCount
-            }) %>
+                <!-- Right Column: 2x2 Stats Grid + Deadlines -->
+                <div class="col-lg-5 col-xl-4 d-flex flex-column gap-4">
+                    
+                    <!-- KPI Cards forced into 2x2 Rectangle -->
+                    <div class="manager-2x2-stats">
+                        <%- include("./partials/managerStats", { stats: managerStats, teamMemberCount: managerTeamMemberCount }) %>
+                    </div>
 
+                    <!-- Upcoming Deadlines pinned directly below the stats -->
+                    <%- include("./partials/managerDeadlines", { 
+                        deadlines: upcomingDeadlines 
+                    }) %>
+                    
+                </div>
+            </div>
 
-          <!-- Projects + Upcoming Deadlines -->
-<div class="manager-dashboard-grid manager-main-grid">
+            <!-- Attention + Charts Component -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4">
+                    <%- include("./partials/managerAttention", { items: attentionItems }) %>
+                </div>
+                <div class="col-lg-8">
+                    <%- include("../layout/charts") %>
+                </div>
+            </div>
+            
 
-    <%- include("./partials/managerProjects", {
-        projects,
-        user
-    }) %>
-
-    <%- include("./partials/managerDeadlines", {
-        deadlines: upcomingDeadlines
-    }) %>
-
-</div>
-
-<!-- Attention + Task Overview -->
-<div class="manager-dashboard-grid manager-secondary-grid">
-
-    <%- include("./partials/managerAttention", {
-        items: attentionItems
-    }) %>
-
-    <%- include("./partials/managerTaskOverview", {
-        stats: managerStats
-    }) %>
-
-</div>
-
-
-
-
-            <!-- Activity + Team -->
+            <!-- Activity + Team (Scrollable vertical lists) -->
             <div class="manager-dashboard-grid manager-bottom-grid">
+                
+                <div class="admin-glass-panel d-flex flex-column" style="min-height: 0; padding: 1.5rem;">
+                    <div class="flex-grow-1 min-h-0 manager-scrollable-area">
+                        <%- include("./partials/managerActivity", { activities: [] }) %>
+                    </div>
+                </div>
 
-                <%- include("./partials/managerActivity", {
-                    activities: []
-                }) %>
-
-
-                <%- include("./partials/managerTeamOverview") %>
+                <div class="admin-glass-panel d-flex flex-column" style="min-height: 0; padding: 1.5rem;">
+                    <div class="flex-grow-1 min-h-0 manager-scrollable-area">
+                        <%- include("./partials/managerTeamOverview") %>
+                    </div>
+                </div>
 
             </div>
-
         </div>
-
     </main>
 
-
-    <!-- Existing Add Project Modal -->
     <%- include("../layout/addProjectModal") %>
-
-    <!-- New Add Team Modal -->
     <%- include("../layout/addTeamModal") %>
 
-    <!-- Existing Edit Project Modals -->
     <% if (projects && projects.length > 0) { %>
-
         <% projects.forEach(project => { %>
-
-            <%- include("../layout/editProjectModal", {
-                project
-            }) %>
-
+            <%- include("../layout/editProjectModal", { project }) %>
         <% }) %>
-
     <% } %>
 
-
-    <!-- Libraries -->
-    <script
-        src="https://code.jquery.com/jquery-3.7.1.min.js">
-    </script>
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
-    </script>
-
-   <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
-    <script
-        src="/socket.io/socket.io.js">
-    </script>
-
-
-    <!-- Manager-only JavaScript -->
-    <script
-        src="/js/managerDashboard.js">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <script src="/js/managerDashboard.js"></script>
     <script src="/js/sharedTeamsAjax.js"></script>
-
     <%- include("../layout/globalChat") %>
 
 </body>
-
 </html>

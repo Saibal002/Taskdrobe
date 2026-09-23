@@ -111,10 +111,29 @@ const getAdminUserStats = async () => {
     const { rows } = await query(sql);
     return rows[0];
 };
-
+/**
+ * Get Top 5 Busiest Employees (Admin Global View)
+ */
+const getTopEmployeesWorkload = async () => {
+    const sql = `
+        SELECT 
+            u.full_name,
+            COUNT(t.task_id) AS total_tasks,
+            COALESCE(SUM(CASE WHEN t.status = 'Completed' THEN 1 ELSE 0 END), 0) AS completed_tasks
+        FROM users u
+        JOIN tasks t ON u.user_id = t.assigned_to
+        WHERE u.is_active = TRUE
+        GROUP BY u.user_id, u.full_name
+        ORDER BY total_tasks DESC
+        LIMIT 5;
+    `;
+    const { rows } = await query(sql);
+    return rows;
+};
 module.exports = {
     getDashboardStats,
     getTaskChartData,
     getProjectChartData,
     getAdminUserStats,
+    getTopEmployeesWorkload,
 };

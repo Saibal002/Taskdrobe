@@ -13,8 +13,6 @@
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">
-
-   
 </head>
 <body class="admin-dashboard-page app-sidebar-layout">
 
@@ -137,36 +135,17 @@
                 </div>
             </div>
 
-            <!-- Analytics / Charts -->
-            <div class="admin-glass-panel">
-                <div class="admin-panel-header">
-                    <div>
-                        <h5 class="admin-panel-heading"><i class="fas fa-chart-pie me-2 text-primary"></i>System Analytics</h5>
-                        <p class="admin-panel-subtext">Visual distribution of tasks and project timelines</p>
-                    </div>
-                </div>
-                
-                <div class="admin-chart-container">
-                    <%- include("../layout/charts") %>
-                </div>
-            </div>
+            <!-- Analytics / Charts Component -->
+            <%- include("../layout/charts") %>
             
-           
-   
-    </button>
         </div>
     </main>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Socket.IO is required by the navbar for system notifications -->
     <script src="/socket.io/socket.io.js"></script>
     
-    <!-- Renders the Chart.js canvases -->
-    <script src="/js/dashboard.js"></script>
-     <%- include("../layout/globalChat.ejs") %>
+    <%- include("../layout/globalChat.ejs") %>
 </body>
 </html>

@@ -1,21 +1,149 @@
-<div class="dashboard-card h-100">
-    <div class="card-body">
-        <h5 class="fw-bold mb-3">Task Status</h5>
-        <p class="text-muted small mb-4">Current task distribution</p>
+<!-- Load ApexCharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-        <div class="chart-container-sm mx-auto">
-            <canvas id="taskChart" data-completed="<%= stats.completedTasks %>" data-pending="<%= stats.pendingTasks %>" data-overdue="<%= stats.overdueTasks %>"></canvas>
+<div class="admin-glass-panel">
+    <div class="admin-panel-header mb-4">
+        <div>
+            <h5 class="admin-panel-heading"><i class="fas fa-chart-pie me-2 text-primary"></i>System Analytics</h5>
+            <p class="admin-panel-subtext">Visual distribution of tasks, project lifecycles, and team workload</p>
         </div>
     </div>
     
-    <hr class="my-4">
+    <!-- Row 1: Task Donut & Project Status side-by-side -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-5">
+            <div class="p-4 h-100 rounded-4" style="background: rgba(0,0,0,0.02); border: 1px solid var(--border-color);">
+                <h6 class="fw-bold mb-1 text-primary">Task Status</h6>
+                <p class="text-secondary small mb-3">Current task distribution</p>
+                <div id="taskApexChart" class="d-flex justify-content-center align-items-center" style="min-height: 280px;"></div>
+            </div>
+        </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
-            <h5 class="fw-bold mb-3">Project Status</h5>
-            <div class="chart-container-md">
-                <canvas id="projectChart" data-projects='<%- JSON.stringify(projectChartData) %>'></canvas>
+        <div class="col-lg-7">
+            <div class="p-4 h-100 rounded-4" style="background: rgba(0,0,0,0.02); border: 1px solid var(--border-color);">
+                <h6 class="fw-bold mb-1 text-primary">Project Status</h6>
+                <p class="text-secondary small mb-3">Workspace project lifecycles</p>
+                <div id="projectApexChart" style="min-height: 280px;"></div>
             </div>
         </div>
     </div>
+
+    <!-- Row 2: Top Employee Workload (Renders conditionally if data is passed) -->
+    <% if (typeof topEmployees !== 'undefined' && topEmployees && topEmployees.length > 0) { %>
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="p-4 rounded-4" style="background: rgba(0,0,0,0.02); border: 1px solid var(--border-color);">
+                <h6 class="fw-bold mb-1 text-primary">Top Employee Workload</h6>
+                <p class="text-secondary small mb-3">Most active employees across the entire workspace</p>
+                <div id="workloadApexChart" style="min-height: 320px;"></div>
+            </div>
+        </div>
+    </div>
+    <% } %>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Safely parse backend data
+    const taskData = <%- JSON.stringify(typeof chartData !== 'undefined' ? chartData : { completed: 0, pending: 0, overdue: 0 }) %>;
+    const rawProjectData = <%- JSON.stringify(typeof projectChartData !== 'undefined' ? projectChartData : []) %>;
+    const workloadData = <%- JSON.stringify(typeof topEmployees !== 'undefined' ? topEmployees : []) %>;
+    
+    const isDarkMode = () => document.documentElement.getAttribute('data-theme') === 'dark';
+
+    /* =========================================
+       CHART 1: TASK DONUT CHART
+    ========================================= */
+    const taskOptions = {
+        series: [taskData.completed, taskData.pending, taskData.overdue],
+        labels: ['Completed', 'Pending', 'Overdue'],
+        chart: {
+            type: 'donut',
+            height: 300,
+            fontFamily: 'Inter, sans-serif',
+            background: 'transparent',
+            animations: { enabled: true, easing: 'easeinout', speed: 800 }
+        },
+        colors: ['#10b981', '#f59e0b', '#ef4444'],
+        stroke: { width: 0 },
+        dataLabels: { enabled: false },
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '82%',
+                    labels: {
+                        show: true,
+                        name: { color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 600 },
+                        value: { color: 'var(--text-primary)', fontSize: '28px', fontWeight: 800 },
+                        total: {
+                            show: true,
+                            label: 'Total Tasks',
+                            color: 'var(--text-secondary)',
+                            formatter: function (w) { return w.globals.seriesTotals.reduce((a, b) => a + b, 0); }
+                        }
+                    }
+                }
+            }
+        },
+        legend: { position: 'bottom', markers: { radius: 12 }, labels: { colors: 'var(--text-secondary)' } },
+        tooltip: { theme: isDarkMode() ? 'dark' : 'light' }
+    };
+    const taskChart = new ApexCharts(document.querySelector("#taskApexChart"), taskOptions);
+    taskChart.render();
+
+    /* =========================================
+       CHART 2: PROJECT BAR CHART
+    ========================================= */
+    if (document.querySelector("#projectApexChart") && rawProjectData.length > 0) {
+        const projectCategories = rawProjectData.map(p => p.status);
+        const projectSeriesData = rawProjectData.map(p => p.total);
+
+        const projectOptions = {
+            series: [{ name: 'Projects', data: projectSeriesData }],
+            chart: { type: 'bar', height: 300, fontFamily: 'Inter, sans-serif', background: 'transparent', toolbar: { show: false } },
+            colors: ['#5a4bd1'],
+            fill: { type: 'gradient', gradient: { shade: 'dark', type: 'horizontal', gradientToColors: ['#8b5cf6'], stops: [0, 100] } },
+            plotOptions: { bar: { borderRadius: 6, horizontal: true, barHeight: '40%' } },
+            dataLabels: { enabled: false },
+            xaxis: {
+                categories: projectCategories,
+                labels: { style: { colors: 'var(--text-secondary)', fontWeight: 600 }, formatter: function (val) { return Math.floor(val); } },
+                axisBorder: { show: false }, axisTicks: { show: false }
+            },
+            yaxis: { labels: { style: { colors: 'var(--text-primary)', fontWeight: 700 } } },
+            grid: { borderColor: 'var(--border-color)', strokeDashArray: 4, xaxis: { lines: { show: true } }, yaxis: { lines: { show: false } } },
+            tooltip: { theme: isDarkMode() ? 'dark' : 'light' }
+        };
+        const projectChart = new ApexCharts(document.querySelector("#projectApexChart"), projectOptions);
+        projectChart.render();
+    }
+
+    /* =========================================
+       CHART 3: EMPLOYEE WORKLOAD (If Exists)
+    ========================================= */
+    if (document.querySelector("#workloadApexChart") && workloadData.length > 0) {
+        const employeeNames = workloadData.map(emp => emp.full_name);
+        const totalTasksData = workloadData.map(emp => parseInt(emp.total_tasks, 10));
+        const completedTasksData = workloadData.map(emp => parseInt(emp.completed_tasks, 10));
+
+        const workloadOptions = {
+            series: [
+                { name: 'Total Assigned', data: totalTasksData },
+                { name: 'Completed', data: completedTasksData }
+            ],
+            chart: { type: 'bar', height: 320, fontFamily: 'Inter, sans-serif', background: 'transparent', toolbar: { show: false } },
+            colors: ['#3b82f6', '#10b981'],
+            plotOptions: { bar: { horizontal: false, columnWidth: '45%', borderRadius: 4 } },
+            dataLabels: { enabled: false },
+            stroke: { show: true, width: 2, colors: ['transparent'] },
+            xaxis: { categories: employeeNames, labels: { style: { colors: 'var(--text-secondary)', fontWeight: 600 } }, axisBorder: { show: false }, axisTicks: { show: false } },
+            yaxis: { labels: { style: { colors: 'var(--text-primary)', fontWeight: 700 }, formatter: function(val) { return Math.floor(val); } } },
+            grid: { borderColor: 'var(--border-color)', strokeDashArray: 4, yaxis: { lines: { show: true } } },
+            legend: { position: 'top', horizontalAlign: 'right', labels: { colors: 'var(--text-secondary)' } },
+            tooltip: { theme: isDarkMode() ? 'dark' : 'light' }
+        };
+        const workloadChart = new ApexCharts(document.querySelector("#workloadApexChart"), workloadOptions);
+        workloadChart.render();
+    }
+});
+</script>
