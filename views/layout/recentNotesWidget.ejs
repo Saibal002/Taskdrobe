@@ -1,0 +1,31 @@
+<div class="admin-glass-panel p-4 d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0 text-primary">
+            <i class="bi bi-journal-text me-2"></i>Recent Notes
+        </h6>
+        <a href="/notes" class="text-decoration-none small fw-semibold">View all <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+    
+    <div class="d-flex flex-column gap-2 mt-1">
+        <% if (typeof recentNotes !== 'undefined' && recentNotes && recentNotes.length > 0) { %>
+            <% recentNotes.forEach(note => { %>
+                <a href="/notes" class="text-decoration-none text-dark p-3 rounded-3 border" style="background: rgba(0,0,0,0.015); transition: all 0.2s;" onmouseover="this.style.background='var(--bg-card)'; this.style.borderColor='var(--accent-primary)';" onmouseout="this.style.background='rgba(0,0,0,0.015)'; this.style.borderColor='var(--border-color)';">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong class="small text-truncate pe-2"><%= note.title %></strong>
+                        <span class="badge <%= note.is_public ? 'bg-primary' : 'bg-secondary' %> bg-opacity-10 <%= note.is_public ? 'text-primary' : 'text-secondary' %> rounded-pill" style="font-size: 0.65rem;">
+                            <%= note.is_public ? 'Public' : 'Private' %>
+                        </span>
+                    </div>
+                    <div class="text-secondary small text-truncate" style="font-size: 0.8rem;">
+                        <%= note.description || note.body.substring(0, 45) + '...' %>
+                    </div>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <div class="text-center text-muted small py-3">
+                <i class="bi bi-journal-x fs-4 d-block mb-2 opacity-25"></i>
+                No recent notes available.
+            </div>
+        <% } %>
+    </div>
+</div>

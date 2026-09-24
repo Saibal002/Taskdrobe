@@ -244,7 +244,17 @@
                             </div>
                         <% } %>
                     </article>
-
+                    <!-- Attention, Notes Widget & Charts Component -->
+            <div class="row g-4 mb-4">
+                    <!-- THE GAP IS NOW FILLED WITH THE GLOBAL COMPONENT -->
+                    <div class="flex-grow-1">
+                        <%- include("./layout/recentNotesWidget", { recentNotes }) %>
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
                     <aside class="calendar-region flex-grow-1">
                         <%- include("layout/calendarSidebar", { upcomingTasks }) %>
                     </aside>

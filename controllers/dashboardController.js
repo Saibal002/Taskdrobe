@@ -2,6 +2,7 @@ const projectService = require("../services/projectService");
 const dashboardService = require("../services/dashboardService");
 const taskModel = require("../models/taskModel");
 const dashboardModel = require("../models/dashboardModel");
+const NoteModel = require("../models/noteModel");
 /**
  * Employee Dashboard
  */
@@ -23,7 +24,8 @@ const dashboard = async (req, res, next) => {
     const chartData = await dashboardService.getTaskChartData(userId, role);
     const projectChartData = await dashboardService.getProjectChartData(userId, role);
     const upcomingTasks = await taskModel.getUpcomingTasks(10, userId, role);
-
+    const allNotes = await NoteModel.getVisibleNotes(userId);
+    const recentNotes = allNotes.slice(0, 3);
     res.render("emp_dashboard", {
       title: "Dashboard",
       user: req.user,
@@ -33,6 +35,7 @@ const dashboard = async (req, res, next) => {
       chartData,
       projectChartData,
       upcomingTasks,
+      recentNotes
     });
   } catch (err) {
     next(err);
@@ -86,7 +89,9 @@ const managerDashboard = async (req, res, next) => {
     // FETCH MISSING CHART DATA
     const chartData = await dashboardService.getTaskChartData(managerId, role);
     const projectChartData = await dashboardService.getProjectChartData(managerId, role);
-
+    // FETCH RECENT NOTES (Limit to 3 for the widget)
+    const allNotes = await NoteModel.getVisibleNotes(managerId);
+    const recentNotes = allNotes.slice(0, 3);
     res.render("manager/man_dashboard", {
       title: "Manager Dashboard",
       user: req.user,
@@ -96,7 +101,8 @@ const managerDashboard = async (req, res, next) => {
       
       // PASS DATA TO THE COMPONENT
       chartData,
-      projectChartData
+      projectChartData,
+      recentNotes
     });
   } catch (err) {
     next(err);

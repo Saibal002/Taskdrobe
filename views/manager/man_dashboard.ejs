@@ -157,14 +157,26 @@
                 </div>
             </div>
 
-            <!-- Attention + Charts Component -->
+          <!-- Attention, Notes Widget & Charts Component -->
             <div class="row g-4 mb-4">
-                <div class="col-lg-4">
+                
+                <!-- Left Column: Alerts & Notes stacked vertically -->
+                <div class="col-lg-4 d-flex flex-column gap-4">
+                    
                     <%- include("./partials/managerAttention", { items: attentionItems }) %>
+                    
+                    <!-- THE GAP IS NOW FILLED WITH THE GLOBAL COMPONENT -->
+                    <div class="flex-grow-1">
+                        <%- include("../layout/recentNotesWidget", { recentNotes }) %>
+                    </div>
+                    
                 </div>
+                
+                <!-- Right Column: Analytics -->
                 <div class="col-lg-8">
                     <%- include("../layout/charts") %>
                 </div>
+                
             </div>
             
 
