@@ -3,6 +3,7 @@ const dashboardService = require("../services/dashboardService");
 const taskModel = require("../models/taskModel");
 const dashboardModel = require("../models/dashboardModel");
 const NoteModel = require("../models/noteModel");
+const meetingModel = require("../models/meetingModel");
 /**
  * Employee Dashboard
  */
@@ -92,6 +93,7 @@ const managerDashboard = async (req, res, next) => {
     // FETCH RECENT NOTES (Limit to 3 for the widget)
     const allNotes = await NoteModel.getVisibleNotes(managerId);
     const recentNotes = allNotes.slice(0, 3);
+    const workspaceMeetings = await meetingModel.getUpcomingMeetings();
     res.render("manager/man_dashboard", {
       title: "Manager Dashboard",
       user: req.user,
@@ -102,7 +104,8 @@ const managerDashboard = async (req, res, next) => {
       // PASS DATA TO THE COMPONENT
       chartData,
       projectChartData,
-      recentNotes
+      recentNotes,
+      workspaceMeetings
     });
   } catch (err) {
     next(err);

@@ -1,11 +1,13 @@
 const express = require("express");
 const http = require("http"); // Add this
 const { Server } = require("socket.io"); // Add this
+const CronService = require('./services/cronService');
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const passport = require("./config/passport");
+
 
 const { app: appConfig } = require("./config/environment");
 const pool = require("./plugins/db");
@@ -25,7 +27,8 @@ const {
 const app = express();
 const server = http.createServer(app); // Create HTTP server
 const io = new Server(server); // Initialize Socket.IO
-
+// Immediately after initializing 'io', add this line:
+CronService.init(io);
 // ======================
 // Test Database Connection
 // ======================

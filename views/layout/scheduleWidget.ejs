@@ -1,0 +1,39 @@
+<div class="admin-glass-panel p-4 d-flex flex-column h-100" style="min-height: 250px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0 text-primary">
+            <i class="bi bi-calendar-event me-2"></i>Upcoming Meetings
+        </h6>
+        <a href="/meetings" class="text-decoration-none small fw-semibold">View schedule <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+    
+    <div class="flex-grow-1 d-flex flex-column gap-2 mt-2">
+        <% if (typeof workspaceMeetings !== 'undefined' && workspaceMeetings && workspaceMeetings.length > 0) { %>
+            <% workspaceMeetings.slice(0, 3).forEach(meeting => { 
+                const start = new Date(meeting.start_time);
+            %>
+                <div class="p-3 rounded-3 border d-flex align-items-center gap-3" style="background: rgba(0,0,0,0.015);">
+                    <div class="text-center px-2 border-end" style="min-width: 65px;">
+                        <div class="fw-bold text-primary small"><%= start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %></div>
+                        <div class="small fw-semibold" style="font-size: 0.75rem;"><%= start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></div>
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden">
+                        <strong class="d-block small text-truncate"><%= meeting.title %></strong>
+                        <span class="text-secondary small text-truncate d-block" style="font-size: 0.75rem;">
+                            By <%= meeting.organizer_name %>
+                        </span>
+                    </div>
+                    <% if (meeting.meeting_link) { %>
+                        <a href="<%= meeting.meeting_link %>" target="_blank" class="btn btn-sm btn-light rounded-circle shadow-none text-primary" title="Join Call">
+                            <i class="fas fa-video"></i>
+                        </a>
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="text-center text-muted small py-4 my-auto d-flex flex-column align-items-center justify-content-center h-100">
+                <i class="bi bi-calendar-check fs-3 d-block mb-2 opacity-25"></i>
+                No upcoming meetings.
+            </div>
+        <% } %>
+    </div>
+</div>

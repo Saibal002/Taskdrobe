@@ -16,6 +16,7 @@ const chatRoutes = require("../routes/chatRoute");
 const notificationRoute = require("../routes/notificationRoute");
 const activityRoute = require("../routes/activityRoute");
 const noteRoute = require("../routes/noteRoutes");
+const meetingRoute = require("../routes/meetingRoute");
 
 module.exports = {
   public: [
@@ -62,6 +63,10 @@ module.exports = {
       path: "/notes",
       router: noteRoute,
     },
+    {
+      path: "/meetings",
+      router: meetingRoute,
+    }
   ],
   api: [
     {

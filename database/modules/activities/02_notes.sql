@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS notes (
 );
 
 -- Index for faster search filtering
-CREATE INDEX idx_notes_title ON notes(title);
-CREATE INDEX idx_notes_user_visibility ON notes(user_id, is_public);
+CREATE INDEX IF NOT EXISTS idx_notes_title ON notes(title);
+CREATE INDEX IF NOT EXISTS idx_notes_user_visibility ON notes(user_id, is_public);
