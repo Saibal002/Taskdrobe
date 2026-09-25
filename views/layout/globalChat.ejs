@@ -304,3 +304,76 @@ $(document).ready(function() {
     }
 });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function () {
+        const currentUserId = Number("<%= typeof user !== 'undefined' && user ? user.user_id : 0 %>");
+        const globalSocket = typeof socket !== 'undefined' ? socket : io();
+
+        function isTargetRecipient(recipientIds) {
+            if (!Array.isArray(recipientIds) || !currentUserId) return false;
+            return recipientIds.map(Number).includes(currentUserId);
+        }
+
+        function incrementNotificationBell() {
+            const $badge = $('#notificationBadge, .notification-badge, .fa-bell + .badge, .bi-bell + .badge').first();
+            if ($badge.length) {
+                $badge.removeClass('d-none').show();
+                const currentCount = parseInt($badge.text(), 10) || 0;
+                $badge.text(currentCount + 1);
+            }
+            if (typeof loadNotifications === 'function') loadNotifications();
+            if (typeof fetchNotifications === 'function') fetchNotifications();
+        }
+
+        globalSocket.on('meetingReminder', function (data) {
+            if (!isTargetRecipient(data.recipientIds)) return;
+
+            incrementNotificationBell();
+
+            Swal.fire({
+                icon: 'info',
+                title: 'Meeting Starting Soon!',
+                html: '<b>' + data.title + '</b> begins in <b>15 minutes</b>.',
+                showCancelButton: true,
+                confirmButtonText: data.meetingLink ? '<i class="fas fa-video me-1"></i> Join Call' : 'View Schedule',
+                cancelButtonText: 'Dismiss',
+                confirmButtonColor: '#0d6efd',
+                timer: 45000,
+                timerProgressBar: true
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    if (data.meetingLink) {
+                        window.open(data.meetingLink, '_blank');
+                    } else {
+                        window.location.href = '/meetings';
+                    }
+                }
+            });
+        });
+
+        globalSocket.on('newMeetingScheduled', function (data) {
+            if (!isTargetRecipient(data.recipientIds)) return;
+
+            incrementNotificationBell();
+
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'New Team Meeting: ' + data.title,
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
+
+            if (window.location.pathname === '/meetings') {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1500);
+            }
+        });
+    });
+</script>

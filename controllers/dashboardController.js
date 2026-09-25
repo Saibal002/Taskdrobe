@@ -93,7 +93,7 @@ const managerDashboard = async (req, res, next) => {
     // FETCH RECENT NOTES (Limit to 3 for the widget)
     const allNotes = await NoteModel.getVisibleNotes(managerId);
     const recentNotes = allNotes.slice(0, 3);
-    const workspaceMeetings = await meetingModel.getUpcomingMeetings();
+    const workspaceMeetings = await meetingModel.getUpcomingMeetings(managerId);
     res.render("manager/man_dashboard", {
       title: "Manager Dashboard",
       user: req.user,
