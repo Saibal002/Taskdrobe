@@ -105,7 +105,6 @@
             gap: 1rem !important;
             margin-bottom: 0 !important;
         }
-        /* Clear extra margins from the partial's wrapper */
         .manager-2x2-stats section,
         .manager-2x2-stats .dashboard-overview {
             margin-bottom: 0 !important;
@@ -113,6 +112,37 @@
         .manager-2x2-stats .metric-card {
             margin-bottom: 0 !important;
             height: 100%;
+        }
+/* Stretch System Analytics and its inner chart cards cleanly */
+        .manager-analytics-stretch {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .manager-analytics-stretch > div:first-of-type {
+            flex: 1 1 auto;
+            height: 100% !important;
+            margin-bottom: 0 !important;
+            display: flex;
+            flex-direction: column;
+        }
+        .manager-analytics-stretch > div:first-of-type > .row {
+            flex: 1 1 auto;
+            align-items: stretch;
+        }
+        .manager-analytics-stretch > div:first-of-type > .row > [class*="col-"] {
+            display: flex;
+            flex-direction: column;
+        }
+        .manager-analytics-stretch > div:first-of-type > .row > [class*="col-"] > div {
+            flex: 1 1 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .manager-analytics-stretch > script {
+            display: none !important;
         }
     </style>
 </head>
@@ -130,55 +160,57 @@
                 <div class="manager-date-chip"><i class="bi bi-calendar3"></i><%= today %></div>
             </div>
 
-            <!-- Top Section: Projects (Left) vs Stats & Deadlines (Right) -->
-            <div class="row g-4 mb-4">
+            <!-- Top Section: Projects + Upcoming Meetings (Left) vs Stats & Deadlines (Right) -->
+            <div class="row g-4 mb-4 align-items-stretch">
                 
-                <!-- Left Column: Projects -->
-                <div class="col-lg-7 col-xl-8">
+                <!-- Left Column: Projects + Schedule Widget filling the gap -->
+                <div class="col-lg-7 col-xl-8 d-flex flex-column gap-4">
                     <%- include("./partials/managerProjects", { 
                         projects: (projects || []).slice(0, 3), 
                         user 
                     }) %>
+
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <%- include("../layout/scheduleWidget", { workspaceMeetings }) %>
+                    </div>
                 </div>
 
                 <!-- Right Column: 2x2 Stats Grid + Deadlines -->
                 <div class="col-lg-5 col-xl-4 d-flex flex-column gap-4">
                     
-                    <!-- KPI Cards forced into 2x2 Rectangle -->
                     <div class="manager-2x2-stats">
                         <%- include("./partials/managerStats", { stats: managerStats, teamMemberCount: managerTeamMemberCount }) %>
                     </div>
 
-                    <!-- Upcoming Deadlines pinned directly below the stats -->
-                    <%- include("./partials/managerDeadlines", { 
-                        deadlines: upcomingDeadlines 
-                    }) %>
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <%- include("./partials/managerDeadlines", { 
+                            deadlines: upcomingDeadlines 
+                        }) %>
+                    </div>
                     
                 </div>
             </div>
 
-          <!-- Attention, Notes Widget & Charts Component -->
-            <div class="row g-4 mb-4">
+            <!-- Middle Section: Attention + Recent Notes (Left) vs Full-Height Analytics (Right) -->
+            <div class="row g-4 mb-4 align-items-stretch">
                 
                 <!-- Left Column: Alerts & Notes stacked vertically -->
                 <div class="col-lg-4 d-flex flex-column gap-4">
-                    
                     <%- include("./partials/managerAttention", { items: attentionItems }) %>
                     
-                    <!-- THE GAP IS NOW FILLED WITH THE GLOBAL COMPONENT -->
-                    <div class="flex-grow-1">
+                    <div class="flex-grow-1 d-flex flex-column">
                         <%- include("../layout/recentNotesWidget", { recentNotes }) %>
                     </div>
-                    <%- include("../layout/scheduleWidget", { workspaceMeetings }) %>
                 </div>
                 
-                <!-- Right Column: Analytics -->
-                <div class="col-lg-8">
-                    <%- include("../layout/charts") %>
+                <!-- Right Column: Analytics stretched to match left column height -->
+                <div class="col-lg-8 d-flex flex-column">
+                    <div class="manager-analytics-stretch">
+                        <%- include("../layout/charts") %>
+                    </div>
                 </div>
                 
             </div>
-            
 
             <!-- Activity + Team (Scrollable vertical lists) -->
             <div class="manager-dashboard-grid manager-bottom-grid">
