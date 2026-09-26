@@ -1,5 +1,6 @@
 const query = require("../plugins/query");
 const AppError = require("../utils/AppError");
+const cacheService = require("../services/cacheService");
 
 class MeetingModel {
     /**
@@ -15,7 +16,7 @@ class MeetingModel {
     }
 
     /**
-     * Create a new team meeting
+     * Create a new team meeting & invalidate meeting caches
      */
     static async createMeeting({ organizerId, teamId, title, description, meetingLink, startTime, endTime }) {
         const hasOverlap = await this.checkOverlap(teamId, startTime, endTime);
@@ -30,43 +31,55 @@ class MeetingModel {
         `;
         const values = [Number(organizerId), Number(teamId), title, description, meetingLink, startTime, endTime];
         const { rows } = await query(sql, values);
+
+        // Clear cached meeting lists so all dashboards/schedules see the new meeting immediately
+        await cacheService.invalidatePrefix("meetings:");
+
         return rows[0];
     }
 
     /**
-     * Get upcoming meetings for teams the user manages, belongs to, or organized
+     * Get upcoming meetings for teams the user manages, belongs to, or organized (Cached 60s)
      */
     static async getUpcomingMeetings(userId) {
-        const sql = `
-            SELECT DISTINCT
-                m.*, 
-                u.full_name AS organizer_name,
-                t.team_name
-            FROM meetings m
-            JOIN users u ON m.organizer_id = u.user_id
-            JOIN teams t ON m.team_id = t.team_id
-            LEFT JOIN team_members tm ON m.team_id = tm.team_id
-            WHERE m.end_time > CURRENT_TIMESTAMP
-              AND (m.organizer_id = $1 OR t.manager_id = $1 OR tm.user_id = $1)
-            ORDER BY m.start_time ASC;
-        `;
-        const { rows } = await query(sql, [Number(userId)]);
-        return rows;
+        const cacheKey = `meetings:upcoming:user_${userId}`;
+
+        return await cacheService.getOrSet(cacheKey, 60, async () => {
+            const sql = `
+                SELECT DISTINCT
+                    m.*, 
+                    u.full_name AS organizer_name,
+                    t.team_name
+                FROM meetings m
+                JOIN users u ON m.organizer_id = u.user_id
+                JOIN teams t ON m.team_id = t.team_id
+                LEFT JOIN team_members tm ON m.team_id = tm.team_id
+                WHERE m.end_time > CURRENT_TIMESTAMP
+                  AND (m.organizer_id = $1 OR t.manager_id = $1 OR tm.user_id = $1)
+                ORDER BY m.start_time ASC;
+            `;
+            const { rows } = await query(sql, [Number(userId)]);
+            return rows;
+        });
     }
 
     /**
-     * Get teams the user manages or belongs to (for the modal dropdown)
+     * Get teams the user manages or belongs to (Cached 120s)
      */
     static async getUserTeams(userId) {
-        const sql = `
-            SELECT DISTINCT t.team_id, t.team_name
-            FROM teams t
-            LEFT JOIN team_members tm ON t.team_id = tm.team_id
-            WHERE t.manager_id = $1 OR tm.user_id = $1
-            ORDER BY t.team_name ASC;
-        `;
-        const { rows } = await query(sql, [Number(userId)]);
-        return rows;
+        const cacheKey = `meetings:teams:user_${userId}`;
+
+        return await cacheService.getOrSet(cacheKey, 120, async () => {
+            const sql = `
+                SELECT DISTINCT t.team_id, t.team_name
+                FROM teams t
+                LEFT JOIN team_members tm ON t.team_id = tm.team_id
+                WHERE t.manager_id = $1 OR tm.user_id = $1
+                ORDER BY t.team_name ASC;
+            `;
+            const { rows } = await query(sql, [Number(userId)]);
+            return rows;
+        });
     }
 
     /**
@@ -83,66 +96,58 @@ class MeetingModel {
     }
 
     /**
-     * Hard delete a meeting from the database
-     */
-    static async deleteMeeting(meetingId, userId) {
-        const sql = `
-            DELETE FROM meetings
-            WHERE meeting_id = $1 AND organizer_id = $2
-            RETURNING meeting_id;
-        `;
-        const { rows } = await query(sql, [Number(meetingId), Number(userId)]);
-        return rows[0];
-    }
-
-
-    /**
      * GOD MODE: Get all meetings across all teams (past & upcoming) with optional filters
      */
     static async getAllMeetingsAdmin({ organizerId, date } = {}) {
-        const params = [];
-        const conditions = [];
+        const cacheKey = `meetings:admin:org_${organizerId || "all"}:date_${date || "all"}`;
 
-        if (organizerId) {
-            params.push(Number(organizerId));
-            conditions.push(`m.organizer_id = $${params.length}`);
-        }
+        return await cacheService.getOrSet(cacheKey, 30, async () => {
+            const params = [];
+            const conditions = [];
 
-        if (date) {
-            params.push(date);
-            conditions.push(`DATE(m.start_time) = $${params.length}::date`);
-        }
+            if (organizerId) {
+                params.push(Number(organizerId));
+                conditions.push(`m.organizer_id = $${params.length}`);
+            }
 
-        const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+            if (date) {
+                params.push(date);
+                conditions.push(`DATE(m.start_time) = $${params.length}::date`);
+            }
 
-        const sql = `
-            SELECT 
-                m.*,
-                u.full_name AS organizer_name,
-                u.email AS organizer_email,
-                t.team_name
-            FROM meetings m
-            JOIN users u ON m.organizer_id = u.user_id
-            JOIN teams t ON m.team_id = t.team_id
-            ${whereClause}
-            ORDER BY m.start_time DESC;
-        `;
-        const { rows } = await query(sql, params);
-        return rows;
+            const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+            const sql = `
+                SELECT 
+                    m.*,
+                    u.full_name AS organizer_name,
+                    u.email AS organizer_email,
+                    t.team_name
+                FROM meetings m
+                JOIN users u ON m.organizer_id = u.user_id
+                JOIN teams t ON m.team_id = t.team_id
+                ${whereClause}
+                ORDER BY m.start_time DESC;
+            `;
+            const { rows } = await query(sql, params);
+            return rows;
+        });
     }
 
     /**
      * Get distinct meeting creators for the Admin "Created By" filter dropdown
      */
     static async getMeetingOrganizers() {
-        const sql = `
-            SELECT DISTINCT u.user_id, u.full_name
-            FROM meetings m
-            JOIN users u ON m.organizer_id = u.user_id
-            ORDER BY u.full_name ASC;
-        `;
-        const { rows } = await query(sql);
-        return rows;
+        return await cacheService.getOrSet("meetings:organizers", 120, async () => {
+            const sql = `
+                SELECT DISTINCT u.user_id, u.full_name
+                FROM meetings m
+                JOIN users u ON m.organizer_id = u.user_id
+                ORDER BY u.full_name ASC;
+            `;
+            const { rows } = await query(sql);
+            return rows;
+        });
     }
 
     /**
@@ -155,6 +160,11 @@ class MeetingModel {
 
         const params = isAdmin ? [Number(meetingId)] : [Number(meetingId), Number(userId)];
         const { rows } = await query(sql, params);
+
+        if (rows[0]) {
+            await cacheService.invalidatePrefix("meetings:");
+        }
+
         return rows[0];
     }
 }

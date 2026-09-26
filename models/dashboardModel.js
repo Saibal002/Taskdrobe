@@ -1,135 +1,166 @@
 const query = require("../plugins/query");
+const cacheService = require("../services/cacheService");
 
 /**
- * Get dashboard statistics
+ * Get dashboard statistics (Optimized with single-pass FILTER + 60s Cache)
  */
 const getDashboardStats = async (userId, role) => {
-    let pJoin = "";
-    let pWhere = "1=1";
-    let tWhere = "1=1";
-    const params = [];
+    const cacheKey = `dashboard:stats:${role}:${userId}`;
 
-    if (role === "employee") {
-        params.push(userId);
-        pJoin = "JOIN team_members tm ON projects.team_id = tm.team_id";
-        pWhere = "tm.user_id = $1";
-        tWhere = "tasks.assigned_to = $1";
-    } else if (role === "manager") {
-        params.push(userId);
-        pWhere = "projects.created_by = $1";
-        tWhere = "tasks.project_id IN (SELECT project_id FROM projects WHERE created_by = $1)";
-    }
+    return await cacheService.getOrSet(cacheKey, 60, async () => {
+        let pJoin = "";
+        let pWhere = "1=1";
+        let tWhere = "1=1";
+        const params = [];
 
-    const sql = `
-        SELECT
-            /* Projects */
-            (SELECT COUNT(*) FROM projects ${pJoin} WHERE ${pWhere}) AS total_projects,
-            (SELECT COUNT(*) FROM projects ${pJoin} WHERE status = 'In Progress' AND ${pWhere}) AS active_projects,
-            (SELECT COUNT(*) FROM projects ${pJoin} WHERE status = 'Completed' AND ${pWhere}) AS completed_projects,
+        if (role === "employee") {
+            params.push(userId);
+            pJoin = "JOIN team_members tm ON projects.team_id = tm.team_id";
+            pWhere = "tm.user_id = $1";
+            tWhere = "tasks.assigned_to = $1";
+        } else if (role === "manager") {
+            params.push(userId);
+            pWhere = "projects.created_by = $1";
+            tWhere = "tasks.project_id IN (SELECT project_id FROM projects WHERE created_by = $1)";
+        }
 
-            /* Tasks */
-            (SELECT COUNT(*) FROM tasks WHERE ${tWhere}) AS total_tasks,
-            (SELECT COUNT(*) FROM tasks WHERE status = 'Completed' AND ${tWhere}) AS completed_tasks,
-            (SELECT COUNT(*) FROM tasks WHERE status <> 'Completed' AND ${tWhere}) AS pending_tasks,
-            (SELECT COUNT(*) FROM tasks WHERE due_date < CURRENT_DATE AND status <> 'Completed' AND ${tWhere}) AS overdue_tasks;
-    `;
+        const sql = `
+            WITH project_counts AS (
+                SELECT
+                    COUNT(*) AS total_projects,
+                    COUNT(*) FILTER (WHERE projects.status = 'In Progress') AS active_projects,
+                    COUNT(*) FILTER (WHERE projects.status = 'Completed') AS completed_projects
+                FROM projects ${pJoin}
+                WHERE ${pWhere}
+            ),
+            task_counts AS (
+                SELECT
+                    COUNT(*) AS total_tasks,
+                    COUNT(*) FILTER (WHERE tasks.status = 'Completed') AS completed_tasks,
+                    COUNT(*) FILTER (WHERE tasks.status <> 'Completed') AS pending_tasks,
+                    COUNT(*) FILTER (WHERE tasks.due_date < CURRENT_DATE AND tasks.status <> 'Completed') AS overdue_tasks
+                FROM tasks
+                WHERE ${tWhere}
+            )
+            SELECT 
+                p.total_projects, p.active_projects, p.completed_projects,
+                t.total_tasks, t.completed_tasks, t.pending_tasks, t.overdue_tasks
+            FROM project_counts p, task_counts t;
+        `;
 
-    const { rows } = await query(sql, params);
-    return rows[0];
+        const { rows } = await query(sql, params);
+        return rows[0];
+    });
 };
 
 /**
- * Task Chart Data
+ * Task Chart Data (Single-pass scan + 60s Cache)
  */
 const getTaskChartData = async (userId, role) => {
-    let tWhere = "1=1";
-    const params = [];
+    const cacheKey = `dashboard:taskChart:${role}:${userId}`;
 
-    if (role === "employee") {
-        params.push(userId);
-        tWhere = "assigned_to = $1";
-    } else if (role === "manager") {
-        params.push(userId);
-        tWhere = "project_id IN (SELECT project_id FROM projects WHERE created_by = $1)";
-    }
+    return await cacheService.getOrSet(cacheKey, 60, async () => {
+        let tWhere = "1=1";
+        const params = [];
 
-    const sql = `
-        SELECT
-            (SELECT COUNT(*) FROM tasks WHERE status = 'Completed' AND ${tWhere}) AS completed,
-            (SELECT COUNT(*) FROM tasks WHERE status <> 'Completed' AND ${tWhere}) AS pending,
-            (SELECT COUNT(*) FROM tasks WHERE due_date < CURRENT_DATE AND status <> 'Completed' AND ${tWhere}) AS overdue;
-    `;
+        if (role === "employee") {
+            params.push(userId);
+            tWhere = "assigned_to = $1";
+        } else if (role === "manager") {
+            params.push(userId);
+            tWhere = "project_id IN (SELECT project_id FROM projects WHERE created_by = $1)";
+        }
 
-    const { rows } = await query(sql, params);
-    return rows[0];
+        const sql = `
+            SELECT
+                COUNT(*) FILTER (WHERE status = 'Completed') AS completed,
+                COUNT(*) FILTER (WHERE status <> 'Completed') AS pending,
+                COUNT(*) FILTER (WHERE due_date < CURRENT_DATE AND status <> 'Completed') AS overdue
+            FROM tasks
+            WHERE ${tWhere};
+        `;
+
+        const { rows } = await query(sql, params);
+        return rows[0];
+    });
 };
 
 /**
- * Project Status Chart
+ * Project Status Chart (60s Cache)
  */
 const getProjectChartData = async (userId, role) => {
-    let pJoin = "";
-    let pWhere = "";
-    const params = [];
+    const cacheKey = `dashboard:projectChart:${role}:${userId}`;
 
-    if (role === "employee") {
-        params.push(userId);
-        pJoin = "JOIN team_members tm ON projects.team_id = tm.team_id";
-        pWhere = "WHERE tm.user_id = $1";
-    } else if (role === "manager") {
-        params.push(userId);
-        pWhere = "WHERE projects.created_by = $1";
-    }
+    return await cacheService.getOrSet(cacheKey, 60, async () => {
+        let pJoin = "";
+        let pWhere = "";
+        const params = [];
 
-    const sql = `
-        SELECT
-            status,
-            COUNT(*) AS total
-        FROM projects
-        ${pJoin}
-        ${pWhere}
-        GROUP BY status
-        ORDER BY status;
-    `;
+        if (role === "employee") {
+            params.push(userId);
+            pJoin = "JOIN team_members tm ON projects.team_id = tm.team_id";
+            pWhere = "WHERE tm.user_id = $1";
+        } else if (role === "manager") {
+            params.push(userId);
+            pWhere = "WHERE projects.created_by = $1";
+        }
 
-    const { rows } = await query(sql, params);
-    return rows;
+        const sql = `
+            SELECT
+                status,
+                COUNT(*) AS total
+            FROM projects
+            ${pJoin}
+            ${pWhere}
+            GROUP BY status
+            ORDER BY status;
+        `;
+
+        const { rows } = await query(sql, params);
+        return rows;
+    });
 };
 
 /**
- * Get Admin User Statistics
+ * Get Admin User Statistics (60s Cache)
  */
 const getAdminUserStats = async () => {
-    const sql = `
-        SELECT
-            COUNT(*) AS total_users,
-            COUNT(CASE WHEN is_active = TRUE THEN 1 END) AS active_users,
-            COUNT(CASE WHEN is_active = FALSE THEN 1 END) AS inactive_users
-        FROM users;
-    `;
+    return await cacheService.getOrSet("dashboard:adminUserStats", 60, async () => {
+        const sql = `
+            SELECT
+                COUNT(*) AS total_users,
+                COUNT(*) FILTER (WHERE is_active = TRUE) AS active_users,
+                COUNT(*) FILTER (WHERE is_active = FALSE) AS inactive_users
+            FROM users;
+        `;
 
-    const { rows } = await query(sql);
-    return rows[0];
+        const { rows } = await query(sql);
+        return rows[0];
+    });
 };
+
 /**
- * Get Top 5 Busiest Employees (Admin Global View)
+ * Get Top 5 Busiest Employees (Admin Global View - 60s Cache)
  */
 const getTopEmployeesWorkload = async () => {
-    const sql = `
-        SELECT 
-            u.full_name,
-            COUNT(t.task_id) AS total_tasks,
-            COALESCE(SUM(CASE WHEN t.status = 'Completed' THEN 1 ELSE 0 END), 0) AS completed_tasks
-        FROM users u
-        JOIN tasks t ON u.user_id = t.assigned_to
-        WHERE u.is_active = TRUE
-        GROUP BY u.user_id, u.full_name
-        ORDER BY total_tasks DESC
-        LIMIT 5;
-    `;
-    const { rows } = await query(sql);
-    return rows;
+    return await cacheService.getOrSet("dashboard:topWorkload", 60, async () => {
+        const sql = `
+            SELECT 
+                u.full_name,
+                COUNT(t.task_id) AS total_tasks,
+                COUNT(*) FILTER (WHERE t.status = 'Completed') AS completed_tasks
+            FROM users u
+            JOIN tasks t ON u.user_id = t.assigned_to
+            WHERE u.is_active = TRUE
+            GROUP BY u.user_id, u.full_name
+            ORDER BY total_tasks DESC
+            LIMIT 5;
+        `;
+        const { rows } = await query(sql);
+        return rows;
+    });
 };
+
 module.exports = {
     getDashboardStats,
     getTaskChartData,

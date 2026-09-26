@@ -1,0 +1,1477 @@
+2026-09-26T22:14:40: ◇ injected env (22) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+2026-09-26T22:14:40: ◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+2026-09-26T22:14:40: ◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+2026-09-26T22:14:40: 📌 MOUNTING: /
+2026-09-26T22:14:40: 📌 MOUNTING: /auth
+2026-09-26T22:14:40: 📌 MOUNTING: /api/chat
+2026-09-26T22:14:40: 📌 MOUNTING: /api/notifications
+2026-09-26T22:14:40: 📌 MOUNTING: /api/activities
+2026-09-26T22:14:40: 📌 MOUNTING ROLE: /admin
+2026-09-26T22:14:40: 📌 MOUNTING ROLE: /manager
+2026-09-26T22:14:40: 🚀 undefined running on http://localhost:3000
+2026-09-26T22:14:41: ⚡ Redis Cache Connected
+2026-09-26T22:14:41: ✅ PostgreSQL Connected
+2026-09-26T22:14:41: ✅ Database Connected
+2026-09-26T22:14:41: 🕒 Server Time: 2026-09-26T16:44:40.599Z
+2026-09-26T22:14:43: 🔔 Notification socket connected: aUhyDNCdWonOcihjAAAD
+2026-09-26T22:14:43: 🔔 Notification socket aUhyDNCdWonOcihjAAAD joined notification_user_1
+2026-09-26T22:14:43: Executing SQL...
+2026-09-26T22:14:43: 
+2026-09-26T22:14:43:         SELECT COUNT(*)
+2026-09-26T22:14:43:         FROM notifications
+2026-09-26T22:14:43:         WHERE user_id = $1
+2026-09-26T22:14:43:           AND is_read = FALSE;
+2026-09-26T22:14:43:     
+2026-09-26T22:14:43: [ '1' ]
+2026-09-26T22:14:43: SQL Finished
+2026-09-26T22:14:44: 🔔 Notification socket connected: 78Oo1b9PoP7G52KfAAAI
+2026-09-26T22:14:44: 🔔 Notification socket 78Oo1b9PoP7G52KfAAAI joined notification_user_3
+2026-09-26T22:14:44: Executing SQL...
+2026-09-26T22:14:44: 
+2026-09-26T22:14:44:         SELECT COUNT(*)
+2026-09-26T22:14:44:         FROM notifications
+2026-09-26T22:14:44:         WHERE user_id = $1
+2026-09-26T22:14:44:           AND is_read = FALSE;
+2026-09-26T22:14:44:     
+2026-09-26T22:14:44: [ '3' ]
+2026-09-26T22:14:44: SQL Finished
+2026-09-26T22:15:00: Executing SQL...
+2026-09-26T22:15:00: 
+2026-09-26T22:15:00:                     SELECT * FROM meetings 
+2026-09-26T22:15:00:                     WHERE start_time >= (CURRENT_TIMESTAMP + INTERVAL '15 minutes')
+2026-09-26T22:15:00:                       AND start_time < (CURRENT_TIMESTAMP + INTERVAL '16 minutes');
+2026-09-26T22:15:00:                 
+2026-09-26T22:15:00: []
+2026-09-26T22:15:00: SQL Finished
+2026-09-26T22:15:07: Executing SQL...
+2026-09-26T22:15:07: 
+2026-09-26T22:15:07:         SELECT
+2026-09-26T22:15:07:             u.user_id,
+2026-09-26T22:15:07:             u.full_name,
+2026-09-26T22:15:07:             u.email,
+2026-09-26T22:15:07:             u.is_active,
+2026-09-26T22:15:07:             r.role_name,
+2026-09-26T22:15:07:             r.description AS role_description,
+2026-09-26T22:15:07:             p.phone,
+2026-09-26T22:15:07:             p.profile_image,
+2026-09-26T22:15:07:             p.bio
+2026-09-26T22:15:07:         FROM users u
+2026-09-26T22:15:07:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:07:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:07:         WHERE u.user_id = $1;
+2026-09-26T22:15:07:     
+2026-09-26T22:15:07: [ '1' ]
+2026-09-26T22:15:07: SQL Finished
+2026-09-26T22:15:07: Executing SQL...
+2026-09-26T22:15:07: 
+2026-09-26T22:15:07:         SELECT
+2026-09-26T22:15:07:             u.user_id,
+2026-09-26T22:15:07:             u.full_name,
+2026-09-26T22:15:07:             u.email,
+2026-09-26T22:15:07:             u.is_active,
+2026-09-26T22:15:07:             r.role_name,
+2026-09-26T22:15:07:             r.description AS role_description,
+2026-09-26T22:15:07:             p.phone,
+2026-09-26T22:15:07:             p.profile_image,
+2026-09-26T22:15:07:             p.bio
+2026-09-26T22:15:07:         FROM users u
+2026-09-26T22:15:07:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:07:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:07:         WHERE u.user_id = $1;
+2026-09-26T22:15:07:     
+2026-09-26T22:15:07: [ '1' ]
+2026-09-26T22:15:07: SQL Finished
+2026-09-26T22:15:07: Executing SQL...
+2026-09-26T22:15:07: 
+2026-09-26T22:15:07:         SELECT
+2026-09-26T22:15:07:             p.*,
+2026-09-26T22:15:07:             u.full_name
+2026-09-26T22:15:07:         FROM projects p
+2026-09-26T22:15:07:         INNER JOIN team_members tm
+2026-09-26T22:15:07:             ON p.team_id = tm.team_id
+2026-09-26T22:15:07:         INNER JOIN users u
+2026-09-26T22:15:07:             ON p.created_by = u.user_id
+2026-09-26T22:15:07:         WHERE tm.user_id = $1
+2026-09-26T22:15:07:         ORDER BY p.created_at DESC;
+2026-09-26T22:15:07:     
+2026-09-26T22:15:07: [ '1' ]
+2026-09-26T22:15:07: SQL Finished
+2026-09-26T22:15:08: Executing SQL...
+2026-09-26T22:15:08: 
+2026-09-26T22:15:08:             WITH project_counts AS (
+2026-09-26T22:15:08:                 SELECT
+2026-09-26T22:15:08:                     COUNT(*) AS total_projects,
+2026-09-26T22:15:08:                     COUNT(*) FILTER (WHERE projects.status = 'In Progress') AS active_projects,
+2026-09-26T22:15:08:                     COUNT(*) FILTER (WHERE projects.status = 'Completed') AS completed_projects
+2026-09-26T22:15:08:                 FROM projects JOIN team_members tm ON projects.team_id = tm.team_id
+2026-09-26T22:15:08:                 WHERE tm.user_id = $1
+2026-09-26T22:15:08:             ),
+2026-09-26T22:15:08:             task_counts AS (
+2026-09-26T22:15:08:                 SELECT
+2026-09-26T22:15:08:                     COUNT(*) AS total_tasks,
+2026-09-26T22:15:08:                     COUNT(*) FILTER (WHERE tasks.status = 'Completed') AS completed_tasks,
+2026-09-26T22:15:08:                     COUNT(*) FILTER (WHERE tasks.status <> 'Completed') AS pending_tasks,
+2026-09-26T22:15:08:                     COUNT(*) FILTER (WHERE tasks.due_date < CURRENT_DATE AND tasks.status <> 'Completed') AS overdue_tasks
+2026-09-26T22:15:08:                 FROM tasks
+2026-09-26T22:15:08:                 WHERE tasks.assigned_to = $1
+2026-09-26T22:15:08:             )
+2026-09-26T22:15:08:             SELECT 
+2026-09-26T22:15:08:                 p.total_projects, p.active_projects, p.completed_projects,
+2026-09-26T22:15:08:                 t.total_tasks, t.completed_tasks, t.pending_tasks, t.overdue_tasks
+2026-09-26T22:15:08:             FROM project_counts p, task_counts t;
+2026-09-26T22:15:08:         
+2026-09-26T22:15:08: [ '1' ]
+2026-09-26T22:15:08: SQL Finished
+2026-09-26T22:15:08: 🟡 [CACHE MISS] dashboard:stats:employee:1 - Queried PostgreSQL (359ms)
+2026-09-26T22:15:09: Executing SQL...
+2026-09-26T22:15:09: 
+2026-09-26T22:15:09:             SELECT
+2026-09-26T22:15:09:                 COUNT(*) FILTER (WHERE status = 'Completed') AS completed,
+2026-09-26T22:15:09:                 COUNT(*) FILTER (WHERE status <> 'Completed') AS pending,
+2026-09-26T22:15:09:                 COUNT(*) FILTER (WHERE due_date < CURRENT_DATE AND status <> 'Completed') AS overdue
+2026-09-26T22:15:09:             FROM tasks
+2026-09-26T22:15:09:             WHERE assigned_to = $1;
+2026-09-26T22:15:09:         
+2026-09-26T22:15:09: [ '1' ]
+2026-09-26T22:15:09: SQL Finished
+2026-09-26T22:15:09: 🟡 [CACHE MISS] dashboard:taskChart:employee:1 - Queried PostgreSQL (355ms)
+2026-09-26T22:15:09: Executing SQL...
+2026-09-26T22:15:09: 
+2026-09-26T22:15:09:             SELECT
+2026-09-26T22:15:09:                 status,
+2026-09-26T22:15:09:                 COUNT(*) AS total
+2026-09-26T22:15:09:             FROM projects
+2026-09-26T22:15:09:             JOIN team_members tm ON projects.team_id = tm.team_id
+2026-09-26T22:15:09:             WHERE tm.user_id = $1
+2026-09-26T22:15:09:             GROUP BY status
+2026-09-26T22:15:09:             ORDER BY status;
+2026-09-26T22:15:09:         
+2026-09-26T22:15:09: [ '1' ]
+2026-09-26T22:15:09: SQL Finished
+2026-09-26T22:15:09: 🟡 [CACHE MISS] dashboard:projectChart:employee:1 - Queried PostgreSQL (353ms)
+2026-09-26T22:15:10: Executing SQL...
+2026-09-26T22:15:10: 
+2026-09-26T22:15:10:         SELECT
+2026-09-26T22:15:10:             t.task_id,
+2026-09-26T22:15:10:             t.title,
+2026-09-26T22:15:10:             t.description,
+2026-09-26T22:15:10:             t.priority,
+2026-09-26T22:15:10:             t.status,
+2026-09-26T22:15:10:             t.due_date,
+2026-09-26T22:15:10:             p.project_name
+2026-09-26T22:15:10:         FROM tasks t
+2026-09-26T22:15:10:         LEFT JOIN projects p ON t.project_id = p.project_id
+2026-09-26T22:15:10:         WHERE t.due_date IS NOT NULL
+2026-09-26T22:15:10:           AND t.due_date >= CURRENT_DATE
+2026-09-26T22:15:10:      AND t.assigned_to = $1 ORDER BY t.due_date ASC LIMIT $2
+2026-09-26T22:15:10: [ '1', 10 ]
+2026-09-26T22:15:10: SQL Finished
+2026-09-26T22:15:10: Executing SQL...
+2026-09-26T22:15:10: 
+2026-09-26T22:15:10:             SELECT 
+2026-09-26T22:15:10:                 n.*, 
+2026-09-26T22:15:10:                 u.full_name AS creator_name,
+2026-09-26T22:15:10:                 u.profile_image
+2026-09-26T22:15:10:             FROM notes n
+2026-09-26T22:15:10:             JOIN users u ON n.user_id = u.user_id
+2026-09-26T22:15:10:             WHERE n.is_public = TRUE OR n.user_id = $1
+2026-09-26T22:15:10:             ORDER BY n.created_at DESC;
+2026-09-26T22:15:10:         
+2026-09-26T22:15:10: [ '1' ]
+2026-09-26T22:15:10: SQL Finished
+2026-09-26T22:15:10: 🔔 Notification socket connected: A4kP7p3Ob9LcI-pRAAAS
+2026-09-26T22:15:10: Executing SQL...
+2026-09-26T22:15:10: 
+2026-09-26T22:15:10:         SELECT
+2026-09-26T22:15:10:             u.user_id,
+2026-09-26T22:15:10:             u.full_name,
+2026-09-26T22:15:10:             u.email,
+2026-09-26T22:15:10:             u.is_active,
+2026-09-26T22:15:10:             r.role_name,
+2026-09-26T22:15:10:             r.description AS role_description,
+2026-09-26T22:15:10:             p.phone,
+2026-09-26T22:15:10:             p.profile_image,
+2026-09-26T22:15:10:             p.bio
+2026-09-26T22:15:10:         FROM users u
+2026-09-26T22:15:10:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:10:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:10:         WHERE u.user_id = $1;
+2026-09-26T22:15:10:     
+2026-09-26T22:15:10: [ '1' ]
+2026-09-26T22:15:10: 💬 Chat socket SAK_r_dNTduHv9NBAAAU joined user_1
+2026-09-26T22:15:10: 🔔 Notification socket A4kP7p3Ob9LcI-pRAAAS joined notification_user_1
+2026-09-26T22:15:10: Executing SQL...
+2026-09-26T22:15:10: 
+2026-09-26T22:15:10:         SELECT COUNT(*)
+2026-09-26T22:15:10:         FROM notifications
+2026-09-26T22:15:10:         WHERE user_id = $1
+2026-09-26T22:15:10:           AND is_read = FALSE;
+2026-09-26T22:15:10:     
+2026-09-26T22:15:10: [ '1' ]
+2026-09-26T22:15:10: 💬 Chat socket V3r5t-dOJ2obcr4dAAAW joined user_1
+2026-09-26T22:15:10: SQL Finished
+2026-09-26T22:15:10: Executing SQL...
+2026-09-26T22:15:10: 
+2026-09-26T22:15:10:         SELECT
+2026-09-26T22:15:10:             u.user_id,
+2026-09-26T22:15:10:             u.full_name,
+2026-09-26T22:15:10:             u.email,
+2026-09-26T22:15:10:             u.is_active,
+2026-09-26T22:15:10:             r.role_name,
+2026-09-26T22:15:10:             r.description AS role_description,
+2026-09-26T22:15:10:             p.phone,
+2026-09-26T22:15:10:             p.profile_image,
+2026-09-26T22:15:10:             p.bio
+2026-09-26T22:15:10:         FROM users u
+2026-09-26T22:15:10:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:10:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:10:         WHERE u.user_id = $1;
+2026-09-26T22:15:10:     
+2026-09-26T22:15:10: [ '1' ]
+2026-09-26T22:15:11: SQL Finished
+2026-09-26T22:15:11: Executing SQL...
+2026-09-26T22:15:11: 
+2026-09-26T22:15:11:         SELECT
+2026-09-26T22:15:11:             n.*,
+2026-09-26T22:15:11:             u.full_name AS sender_name,
+2026-09-26T22:15:11:             p.profile_image AS sender_image
+2026-09-26T22:15:11:         FROM notifications n
+2026-09-26T22:15:11:         LEFT JOIN users u
+2026-09-26T22:15:11:             ON n.sender_id = u.user_id
+2026-09-26T22:15:11:         LEFT JOIN user_profiles p
+2026-09-26T22:15:11:             ON u.user_id = p.user_id
+2026-09-26T22:15:11:         WHERE n.user_id = $1
+2026-09-26T22:15:11:         ORDER BY n.created_at DESC
+2026-09-26T22:15:11:         LIMIT $2;
+2026-09-26T22:15:11:     
+2026-09-26T22:15:11: [ '1', 20 ]
+2026-09-26T22:15:11: SQL Finished
+2026-09-26T22:15:11: ✅ PostgreSQL Connected
+2026-09-26T22:15:11: ✅ PostgreSQL Connected
+2026-09-26T22:15:11: Executing SQL...
+2026-09-26T22:15:11: 
+2026-09-26T22:15:11:         SELECT
+2026-09-26T22:15:11:             u.user_id,
+2026-09-26T22:15:11:             u.full_name,
+2026-09-26T22:15:11:             u.email,
+2026-09-26T22:15:11:             u.is_active,
+2026-09-26T22:15:11:             r.role_name,
+2026-09-26T22:15:11:             r.description AS role_description,
+2026-09-26T22:15:11:             p.phone,
+2026-09-26T22:15:11:             p.profile_image,
+2026-09-26T22:15:11:             p.bio
+2026-09-26T22:15:11:         FROM users u
+2026-09-26T22:15:11:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:11:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:11:         WHERE u.user_id = $1;
+2026-09-26T22:15:11:     
+2026-09-26T22:15:11: [ '1' ]
+2026-09-26T22:15:11: SQL Finished
+2026-09-26T22:15:11: SQL Finished
+2026-09-26T22:15:11: Executing SQL...
+2026-09-26T22:15:11: 
+2026-09-26T22:15:11:         SELECT
+2026-09-26T22:15:11:             u.user_id,
+2026-09-26T22:15:11:             u.full_name,
+2026-09-26T22:15:11:             u.email,
+2026-09-26T22:15:11:             u.is_active,
+2026-09-26T22:15:11:             r.role_name,
+2026-09-26T22:15:11:             r.description AS role_description,
+2026-09-26T22:15:11:             p.phone,
+2026-09-26T22:15:11:             p.profile_image,
+2026-09-26T22:15:11:             p.bio
+2026-09-26T22:15:11:         FROM users u
+2026-09-26T22:15:11:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:11:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:11:         WHERE u.user_id = $1;
+2026-09-26T22:15:11:     
+2026-09-26T22:15:11: [ '1' ]
+2026-09-26T22:15:11: SQL Finished
+2026-09-26T22:15:11: Executing SQL...
+2026-09-26T22:15:11: 
+2026-09-26T22:15:11:         SELECT 
+2026-09-26T22:15:11:             u.user_id, u.full_name, u.email, p.profile_image,
+2026-09-26T22:15:11:             c.last_message_at,
+2026-09-26T22:15:11:             CAST((SELECT COUNT(*) FROM messages m 
+2026-09-26T22:15:11:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:11:              AND m.sender_id = u.user_id 
+2026-09-26T22:15:11:              AND m.is_read = FALSE) AS INTEGER) AS unread_count,
+2026-09-26T22:15:11:             (SELECT content FROM messages m 
+2026-09-26T22:15:11:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:11:              ORDER BY created_at DESC LIMIT 1) as last_msg_content,
+2026-09-26T22:15:11:             (SELECT sender_id FROM messages m 
+2026-09-26T22:15:11:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:11:              ORDER BY created_at DESC LIMIT 1) as last_msg_sender_id,
+2026-09-26T22:15:11:             (SELECT is_read FROM messages m 
+2026-09-26T22:15:11:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:11:              ORDER BY created_at DESC LIMIT 1) as last_msg_is_read
+2026-09-26T22:15:11:         FROM users u
+2026-09-26T22:15:11:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:11:         LEFT JOIN conversations c ON 
+2026-09-26T22:15:11:             (c.user1_id = $1 AND c.user2_id = u.user_id) OR 
+2026-09-26T22:15:11:             (c.user2_id = $1 AND c.user1_id = u.user_id)
+2026-09-26T22:15:11:         WHERE u.user_id != $1
+2026-09-26T22:15:11:         ORDER BY c.last_message_at DESC NULLS LAST, u.full_name ASC;
+2026-09-26T22:15:11:     
+2026-09-26T22:15:11: [ '1' ]
+2026-09-26T22:15:11: SQL Finished
+2026-09-26T22:15:11: Executing SQL...
+2026-09-26T22:15:11: 
+2026-09-26T22:15:11:         SELECT
+2026-09-26T22:15:11:             u.user_id,
+2026-09-26T22:15:11:             u.full_name,
+2026-09-26T22:15:11:             u.email,
+2026-09-26T22:15:11:             u.is_active,
+2026-09-26T22:15:11:             r.role_name,
+2026-09-26T22:15:11:             r.description AS role_description,
+2026-09-26T22:15:11:             p.phone,
+2026-09-26T22:15:11:             p.profile_image,
+2026-09-26T22:15:11:             p.bio
+2026-09-26T22:15:11:         FROM users u
+2026-09-26T22:15:11:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:11:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:11:         WHERE u.user_id = $1;
+2026-09-26T22:15:11:     
+2026-09-26T22:15:11: [ '1' ]
+2026-09-26T22:15:12: SQL Finished
+2026-09-26T22:15:12: Executing SQL...
+2026-09-26T22:15:12: 
+2026-09-26T22:15:12:         SELECT
+2026-09-26T22:15:12:             u.user_id,
+2026-09-26T22:15:12:             u.full_name,
+2026-09-26T22:15:12:             u.email,
+2026-09-26T22:15:12:             u.is_active,
+2026-09-26T22:15:12:             r.role_name,
+2026-09-26T22:15:12:             r.description AS role_description,
+2026-09-26T22:15:12:             p.phone,
+2026-09-26T22:15:12:             p.profile_image,
+2026-09-26T22:15:12:             p.bio
+2026-09-26T22:15:12:         FROM users u
+2026-09-26T22:15:12:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:12:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:12:         WHERE u.user_id = $1;
+2026-09-26T22:15:12:     
+2026-09-26T22:15:12: [ '1' ]
+2026-09-26T22:15:12: SQL Finished
+2026-09-26T22:15:12: Executing SQL...
+2026-09-26T22:15:12: 
+2026-09-26T22:15:12:         SELECT 
+2026-09-26T22:15:12:             u.user_id, u.full_name, u.email, p.profile_image,
+2026-09-26T22:15:12:             c.last_message_at,
+2026-09-26T22:15:12:             CAST((SELECT COUNT(*) FROM messages m 
+2026-09-26T22:15:12:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:12:              AND m.sender_id = u.user_id 
+2026-09-26T22:15:12:              AND m.is_read = FALSE) AS INTEGER) AS unread_count,
+2026-09-26T22:15:12:             (SELECT content FROM messages m 
+2026-09-26T22:15:12:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:12:              ORDER BY created_at DESC LIMIT 1) as last_msg_content,
+2026-09-26T22:15:12:             (SELECT sender_id FROM messages m 
+2026-09-26T22:15:12:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:12:              ORDER BY created_at DESC LIMIT 1) as last_msg_sender_id,
+2026-09-26T22:15:12:             (SELECT is_read FROM messages m 
+2026-09-26T22:15:12:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:12:              ORDER BY created_at DESC LIMIT 1) as last_msg_is_read
+2026-09-26T22:15:12:         FROM users u
+2026-09-26T22:15:12:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:12:         LEFT JOIN conversations c ON 
+2026-09-26T22:15:12:             (c.user1_id = $1 AND c.user2_id = u.user_id) OR 
+2026-09-26T22:15:12:             (c.user2_id = $1 AND c.user1_id = u.user_id)
+2026-09-26T22:15:12:         WHERE u.user_id != $1
+2026-09-26T22:15:12:         ORDER BY c.last_message_at DESC NULLS LAST, u.full_name ASC;
+2026-09-26T22:15:12:     
+2026-09-26T22:15:12: [ '1' ]
+2026-09-26T22:15:12: SQL Finished
+2026-09-26T22:15:14: Executing SQL...
+2026-09-26T22:15:14: 
+2026-09-26T22:15:14:         SELECT
+2026-09-26T22:15:14:             u.user_id,
+2026-09-26T22:15:14:             u.full_name,
+2026-09-26T22:15:14:             u.email,
+2026-09-26T22:15:14:             u.is_active,
+2026-09-26T22:15:14:             r.role_name,
+2026-09-26T22:15:14:             r.description AS role_description,
+2026-09-26T22:15:14:             p.phone,
+2026-09-26T22:15:14:             p.profile_image,
+2026-09-26T22:15:14:             p.bio
+2026-09-26T22:15:14:         FROM users u
+2026-09-26T22:15:14:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:14:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:14:         WHERE u.user_id = $1;
+2026-09-26T22:15:14:     
+2026-09-26T22:15:14: [ '1' ]
+2026-09-26T22:15:14: SQL Finished
+2026-09-26T22:15:14: Executing SQL...
+2026-09-26T22:15:14: 
+2026-09-26T22:15:14:         SELECT
+2026-09-26T22:15:14:             u.user_id,
+2026-09-26T22:15:14:             u.full_name,
+2026-09-26T22:15:14:             u.email,
+2026-09-26T22:15:14:             u.is_active,
+2026-09-26T22:15:14:             r.role_name,
+2026-09-26T22:15:14:             r.description AS role_description,
+2026-09-26T22:15:14:             p.phone,
+2026-09-26T22:15:14:             p.profile_image,
+2026-09-26T22:15:14:             p.bio
+2026-09-26T22:15:14:         FROM users u
+2026-09-26T22:15:14:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:14:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:14:         WHERE u.user_id = $1;
+2026-09-26T22:15:14:     
+2026-09-26T22:15:14: [ '1' ]
+2026-09-26T22:15:14: SQL Finished
+2026-09-26T22:15:14: Executing SQL...
+2026-09-26T22:15:14: 
+2026-09-26T22:15:14:         SELECT
+2026-09-26T22:15:14:             p.*,
+2026-09-26T22:15:14:             u.full_name
+2026-09-26T22:15:14:         FROM projects p
+2026-09-26T22:15:14:         INNER JOIN team_members tm
+2026-09-26T22:15:14:             ON p.team_id = tm.team_id
+2026-09-26T22:15:14:         INNER JOIN users u
+2026-09-26T22:15:14:             ON p.created_by = u.user_id
+2026-09-26T22:15:14:         WHERE tm.user_id = $1
+2026-09-26T22:15:14:         ORDER BY p.created_at DESC;
+2026-09-26T22:15:14:     
+2026-09-26T22:15:14: [ '1' ]
+2026-09-26T22:15:14: SQL Finished
+2026-09-26T22:15:15: 🟢 [CACHE HIT]  dashboard:stats:employee:1 (255ms)
+2026-09-26T22:15:15: 🟢 [CACHE HIT]  dashboard:taskChart:employee:1 (324ms)
+2026-09-26T22:15:15: 🟢 [CACHE HIT]  dashboard:projectChart:employee:1 (385ms)
+2026-09-26T22:15:15: Executing SQL...
+2026-09-26T22:15:15: 
+2026-09-26T22:15:15:         SELECT
+2026-09-26T22:15:15:             t.task_id,
+2026-09-26T22:15:15:             t.title,
+2026-09-26T22:15:15:             t.description,
+2026-09-26T22:15:15:             t.priority,
+2026-09-26T22:15:15:             t.status,
+2026-09-26T22:15:15:             t.due_date,
+2026-09-26T22:15:15:             p.project_name
+2026-09-26T22:15:15:         FROM tasks t
+2026-09-26T22:15:15:         LEFT JOIN projects p ON t.project_id = p.project_id
+2026-09-26T22:15:15:         WHERE t.due_date IS NOT NULL
+2026-09-26T22:15:15:           AND t.due_date >= CURRENT_DATE
+2026-09-26T22:15:15:      AND t.assigned_to = $1 ORDER BY t.due_date ASC LIMIT $2
+2026-09-26T22:15:15: [ '1', 10 ]
+2026-09-26T22:15:15: SQL Finished
+2026-09-26T22:15:15: Executing SQL...
+2026-09-26T22:15:15: 
+2026-09-26T22:15:15:             SELECT 
+2026-09-26T22:15:15:                 n.*, 
+2026-09-26T22:15:15:                 u.full_name AS creator_name,
+2026-09-26T22:15:15:                 u.profile_image
+2026-09-26T22:15:15:             FROM notes n
+2026-09-26T22:15:15:             JOIN users u ON n.user_id = u.user_id
+2026-09-26T22:15:15:             WHERE n.is_public = TRUE OR n.user_id = $1
+2026-09-26T22:15:15:             ORDER BY n.created_at DESC;
+2026-09-26T22:15:15:         
+2026-09-26T22:15:15: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: 🔔 Notification socket connected: sxg2kCGKMytwpbPwAAAY
+2026-09-26T22:15:16: 🔔 Notification socket sxg2kCGKMytwpbPwAAAY joined notification_user_1
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT COUNT(*)
+2026-09-26T22:15:16:         FROM notifications
+2026-09-26T22:15:16:         WHERE user_id = $1
+2026-09-26T22:15:16:           AND is_read = FALSE;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: 💬 Chat socket 1PUHmCgLeBgaDrLHAAAc joined user_1
+2026-09-26T22:15:16: 💬 Chat socket xRLrISp6weAfeO-XAAAe joined user_1
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT
+2026-09-26T22:15:16:             u.user_id,
+2026-09-26T22:15:16:             u.full_name,
+2026-09-26T22:15:16:             u.email,
+2026-09-26T22:15:16:             u.is_active,
+2026-09-26T22:15:16:             r.role_name,
+2026-09-26T22:15:16:             r.description AS role_description,
+2026-09-26T22:15:16:             p.phone,
+2026-09-26T22:15:16:             p.profile_image,
+2026-09-26T22:15:16:             p.bio
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         WHERE u.user_id = $1;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT
+2026-09-26T22:15:16:             u.user_id,
+2026-09-26T22:15:16:             u.full_name,
+2026-09-26T22:15:16:             u.email,
+2026-09-26T22:15:16:             u.is_active,
+2026-09-26T22:15:16:             r.role_name,
+2026-09-26T22:15:16:             r.description AS role_description,
+2026-09-26T22:15:16:             p.phone,
+2026-09-26T22:15:16:             p.profile_image,
+2026-09-26T22:15:16:             p.bio
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         WHERE u.user_id = $1;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT
+2026-09-26T22:15:16:             u.user_id,
+2026-09-26T22:15:16:             u.full_name,
+2026-09-26T22:15:16:             u.email,
+2026-09-26T22:15:16:             u.is_active,
+2026-09-26T22:15:16:             r.role_name,
+2026-09-26T22:15:16:             r.description AS role_description,
+2026-09-26T22:15:16:             p.phone,
+2026-09-26T22:15:16:             p.profile_image,
+2026-09-26T22:15:16:             p.bio
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         WHERE u.user_id = $1;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT
+2026-09-26T22:15:16:             u.user_id,
+2026-09-26T22:15:16:             u.full_name,
+2026-09-26T22:15:16:             u.email,
+2026-09-26T22:15:16:             u.is_active,
+2026-09-26T22:15:16:             r.role_name,
+2026-09-26T22:15:16:             r.description AS role_description,
+2026-09-26T22:15:16:             p.phone,
+2026-09-26T22:15:16:             p.profile_image,
+2026-09-26T22:15:16:             p.bio
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         WHERE u.user_id = $1;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT
+2026-09-26T22:15:16:             n.*,
+2026-09-26T22:15:16:             u.full_name AS sender_name,
+2026-09-26T22:15:16:             p.profile_image AS sender_image
+2026-09-26T22:15:16:         FROM notifications n
+2026-09-26T22:15:16:         LEFT JOIN users u
+2026-09-26T22:15:16:             ON n.sender_id = u.user_id
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p
+2026-09-26T22:15:16:             ON u.user_id = p.user_id
+2026-09-26T22:15:16:         WHERE n.user_id = $1
+2026-09-26T22:15:16:         ORDER BY n.created_at DESC
+2026-09-26T22:15:16:         LIMIT $2;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1', 20 ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT 
+2026-09-26T22:15:16:             u.user_id, u.full_name, u.email, p.profile_image,
+2026-09-26T22:15:16:             c.last_message_at,
+2026-09-26T22:15:16:             CAST((SELECT COUNT(*) FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              AND m.sender_id = u.user_id 
+2026-09-26T22:15:16:              AND m.is_read = FALSE) AS INTEGER) AS unread_count,
+2026-09-26T22:15:16:             (SELECT content FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              ORDER BY created_at DESC LIMIT 1) as last_msg_content,
+2026-09-26T22:15:16:             (SELECT sender_id FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              ORDER BY created_at DESC LIMIT 1) as last_msg_sender_id,
+2026-09-26T22:15:16:             (SELECT is_read FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              ORDER BY created_at DESC LIMIT 1) as last_msg_is_read
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         LEFT JOIN conversations c ON 
+2026-09-26T22:15:16:             (c.user1_id = $1 AND c.user2_id = u.user_id) OR 
+2026-09-26T22:15:16:             (c.user2_id = $1 AND c.user1_id = u.user_id)
+2026-09-26T22:15:16:         WHERE u.user_id != $1
+2026-09-26T22:15:16:         ORDER BY c.last_message_at DESC NULLS LAST, u.full_name ASC;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT
+2026-09-26T22:15:16:             u.user_id,
+2026-09-26T22:15:16:             u.full_name,
+2026-09-26T22:15:16:             u.email,
+2026-09-26T22:15:16:             u.is_active,
+2026-09-26T22:15:16:             r.role_name,
+2026-09-26T22:15:16:             r.description AS role_description,
+2026-09-26T22:15:16:             p.phone,
+2026-09-26T22:15:16:             p.profile_image,
+2026-09-26T22:15:16:             p.bio
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         WHERE u.user_id = $1;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT
+2026-09-26T22:15:16:             u.user_id,
+2026-09-26T22:15:16:             u.full_name,
+2026-09-26T22:15:16:             u.email,
+2026-09-26T22:15:16:             u.is_active,
+2026-09-26T22:15:16:             r.role_name,
+2026-09-26T22:15:16:             r.description AS role_description,
+2026-09-26T22:15:16:             p.phone,
+2026-09-26T22:15:16:             p.profile_image,
+2026-09-26T22:15:16:             p.bio
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         WHERE u.user_id = $1;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:16: Executing SQL...
+2026-09-26T22:15:16: 
+2026-09-26T22:15:16:         SELECT 
+2026-09-26T22:15:16:             u.user_id, u.full_name, u.email, p.profile_image,
+2026-09-26T22:15:16:             c.last_message_at,
+2026-09-26T22:15:16:             CAST((SELECT COUNT(*) FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              AND m.sender_id = u.user_id 
+2026-09-26T22:15:16:              AND m.is_read = FALSE) AS INTEGER) AS unread_count,
+2026-09-26T22:15:16:             (SELECT content FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              ORDER BY created_at DESC LIMIT 1) as last_msg_content,
+2026-09-26T22:15:16:             (SELECT sender_id FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              ORDER BY created_at DESC LIMIT 1) as last_msg_sender_id,
+2026-09-26T22:15:16:             (SELECT is_read FROM messages m 
+2026-09-26T22:15:16:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:16:              ORDER BY created_at DESC LIMIT 1) as last_msg_is_read
+2026-09-26T22:15:16:         FROM users u
+2026-09-26T22:15:16:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:16:         LEFT JOIN conversations c ON 
+2026-09-26T22:15:16:             (c.user1_id = $1 AND c.user2_id = u.user_id) OR 
+2026-09-26T22:15:16:             (c.user2_id = $1 AND c.user1_id = u.user_id)
+2026-09-26T22:15:16:         WHERE u.user_id != $1
+2026-09-26T22:15:16:         ORDER BY c.last_message_at DESC NULLS LAST, u.full_name ASC;
+2026-09-26T22:15:16:     
+2026-09-26T22:15:16: [ '1' ]
+2026-09-26T22:15:16: SQL Finished
+2026-09-26T22:15:19: Executing SQL...
+2026-09-26T22:15:19: 
+2026-09-26T22:15:19:         SELECT
+2026-09-26T22:15:19:             u.user_id,
+2026-09-26T22:15:19:             u.full_name,
+2026-09-26T22:15:19:             u.email,
+2026-09-26T22:15:19:             u.is_active,
+2026-09-26T22:15:19:             r.role_name,
+2026-09-26T22:15:19:             r.description AS role_description,
+2026-09-26T22:15:19:             p.phone,
+2026-09-26T22:15:19:             p.profile_image,
+2026-09-26T22:15:19:             p.bio
+2026-09-26T22:15:19:         FROM users u
+2026-09-26T22:15:19:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:19:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:19:         WHERE u.user_id = $1;
+2026-09-26T22:15:19:     
+2026-09-26T22:15:19: [ '1' ]
+2026-09-26T22:15:20: SQL Finished
+2026-09-26T22:15:20: Executing SQL...
+2026-09-26T22:15:20: 
+2026-09-26T22:15:20:         SELECT
+2026-09-26T22:15:20:             u.user_id,
+2026-09-26T22:15:20:             u.full_name,
+2026-09-26T22:15:20:             u.email,
+2026-09-26T22:15:20:             u.is_active,
+2026-09-26T22:15:20:             r.role_name,
+2026-09-26T22:15:20:             r.description AS role_description,
+2026-09-26T22:15:20:             p.phone,
+2026-09-26T22:15:20:             p.profile_image,
+2026-09-26T22:15:20:             p.bio
+2026-09-26T22:15:20:         FROM users u
+2026-09-26T22:15:20:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:20:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:20:         WHERE u.user_id = $1;
+2026-09-26T22:15:20:     
+2026-09-26T22:15:20: [ '1' ]
+2026-09-26T22:15:20: SQL Finished
+2026-09-26T22:15:20: Executing SQL...
+2026-09-26T22:15:20: 
+2026-09-26T22:15:20:         SELECT
+2026-09-26T22:15:20:             p.*,
+2026-09-26T22:15:20:             u.full_name
+2026-09-26T22:15:20:         FROM projects p
+2026-09-26T22:15:20:         INNER JOIN users u
+2026-09-26T22:15:20:             ON p.created_by = u.user_id
+2026-09-26T22:15:20:         WHERE p.project_id = $1;
+2026-09-26T22:15:20:     
+2026-09-26T22:15:20: [ '6' ]
+2026-09-26T22:15:20: SQL Finished
+2026-09-26T22:15:20: Executing SQL...
+2026-09-26T22:15:20: 
+2026-09-26T22:15:20:             SELECT 
+2026-09-26T22:15:20:                 c.*, 
+2026-09-26T22:15:20:                 u.full_name,
+2026-09-26T22:15:20:                 p.profile_image,
+2026-09-26T22:15:20:                 pc.content AS reply_content,
+2026-09-26T22:15:20:                 pu.full_name AS reply_user_name
+2026-09-26T22:15:20:             FROM comments c
+2026-09-26T22:15:20:             JOIN users u ON c.user_id = u.user_id
+2026-09-26T22:15:20:             LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:20:             LEFT JOIN comments pc ON c.reply_to_id = pc.comment_id
+2026-09-26T22:15:20:             LEFT JOIN users pu ON pc.user_id = pu.user_id
+2026-09-26T22:15:20:             WHERE c.project_id = $1 AND c.task_id IS NULL
+2026-09-26T22:15:20:             ORDER BY c.created_at ASC;
+2026-09-26T22:15:20:         
+2026-09-26T22:15:20: [ '6' ]
+2026-09-26T22:15:20: SQL Finished
+2026-09-26T22:15:20: 🟡 [CACHE MISS] comments:project:6 - Queried PostgreSQL (360ms)
+2026-09-26T22:15:20: Executing SQL...
+2026-09-26T22:15:20: 
+2026-09-26T22:15:20:         SELECT
+2026-09-26T22:15:20:             p.*,
+2026-09-26T22:15:20:             u.full_name
+2026-09-26T22:15:20:         FROM projects p
+2026-09-26T22:15:20:         INNER JOIN users u
+2026-09-26T22:15:20:             ON p.created_by = u.user_id
+2026-09-26T22:15:20:         WHERE p.project_id = $1;
+2026-09-26T22:15:20:     
+2026-09-26T22:15:20: [ '6' ]
+2026-09-26T22:15:20: SQL Finished
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             t.*,
+2026-09-26T22:15:21:             u.full_name AS assigned_user
+2026-09-26T22:15:21:         FROM tasks t
+2026-09-26T22:15:21:         LEFT JOIN users u
+2026-09-26T22:15:21:             ON t.assigned_to = u.user_id
+2026-09-26T22:15:21:         WHERE t.project_id = $1
+2026-09-26T22:15:21:         ORDER BY t.created_at DESC;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '6' ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: 🔔 Notification socket connected: M9lylvh2Wzs7UVmKAAAi
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             u.user_id,
+2026-09-26T22:15:21:             u.full_name,
+2026-09-26T22:15:21:             u.email,
+2026-09-26T22:15:21:             u.is_active,
+2026-09-26T22:15:21:             r.role_name,
+2026-09-26T22:15:21:             r.description AS role_description,
+2026-09-26T22:15:21:             p.phone,
+2026-09-26T22:15:21:             p.profile_image,
+2026-09-26T22:15:21:             p.bio
+2026-09-26T22:15:21:         FROM users u
+2026-09-26T22:15:21:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:21:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:21:         WHERE u.user_id = $1;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1' ]
+2026-09-26T22:15:21: 🔔 Notification socket M9lylvh2Wzs7UVmKAAAi joined notification_user_1
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT COUNT(*)
+2026-09-26T22:15:21:         FROM notifications
+2026-09-26T22:15:21:         WHERE user_id = $1
+2026-09-26T22:15:21:           AND is_read = FALSE;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1' ]
+2026-09-26T22:15:21: 💬 Chat socket 3U08CuoMr0nD1jiUAAAk joined user_1
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             u.user_id,
+2026-09-26T22:15:21:             u.full_name,
+2026-09-26T22:15:21:             u.email,
+2026-09-26T22:15:21:             u.is_active,
+2026-09-26T22:15:21:             r.role_name,
+2026-09-26T22:15:21:             r.description AS role_description,
+2026-09-26T22:15:21:             p.phone,
+2026-09-26T22:15:21:             p.profile_image,
+2026-09-26T22:15:21:             p.bio
+2026-09-26T22:15:21:         FROM users u
+2026-09-26T22:15:21:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:21:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:21:         WHERE u.user_id = $1;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1' ]
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             u.user_id,
+2026-09-26T22:15:21:             u.full_name,
+2026-09-26T22:15:21:             u.email,
+2026-09-26T22:15:21:             u.is_active,
+2026-09-26T22:15:21:             r.role_name,
+2026-09-26T22:15:21:             r.description AS role_description,
+2026-09-26T22:15:21:             p.phone,
+2026-09-26T22:15:21:             p.profile_image,
+2026-09-26T22:15:21:             p.bio
+2026-09-26T22:15:21:         FROM users u
+2026-09-26T22:15:21:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:21:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:21:         WHERE u.user_id = $1;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1' ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             u.user_id,
+2026-09-26T22:15:21:             u.full_name,
+2026-09-26T22:15:21:             u.email,
+2026-09-26T22:15:21:             u.is_active,
+2026-09-26T22:15:21:             r.role_name,
+2026-09-26T22:15:21:             r.description AS role_description,
+2026-09-26T22:15:21:             p.phone,
+2026-09-26T22:15:21:             p.profile_image,
+2026-09-26T22:15:21:             p.bio
+2026-09-26T22:15:21:         FROM users u
+2026-09-26T22:15:21:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:21:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:21:         WHERE u.user_id = $1;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1' ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             u.user_id,
+2026-09-26T22:15:21:             u.full_name,
+2026-09-26T22:15:21:             u.email,
+2026-09-26T22:15:21:             u.is_active,
+2026-09-26T22:15:21:             r.role_name,
+2026-09-26T22:15:21:             r.description AS role_description,
+2026-09-26T22:15:21:             p.phone,
+2026-09-26T22:15:21:             p.profile_image,
+2026-09-26T22:15:21:             p.bio
+2026-09-26T22:15:21:         FROM users u
+2026-09-26T22:15:21:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:21:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:21:         WHERE u.user_id = $1;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1' ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             u.user_id,
+2026-09-26T22:15:21:             u.full_name,
+2026-09-26T22:15:21:             u.email,
+2026-09-26T22:15:21:             u.is_active,
+2026-09-26T22:15:21:             r.role_name,
+2026-09-26T22:15:21:             r.description AS role_description,
+2026-09-26T22:15:21:             p.phone,
+2026-09-26T22:15:21:             p.profile_image,
+2026-09-26T22:15:21:             p.bio
+2026-09-26T22:15:21:         FROM users u
+2026-09-26T22:15:21:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:21:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:21:         WHERE u.user_id = $1;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1' ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT 
+2026-09-26T22:15:21:             a.*, 
+2026-09-26T22:15:21:             u.full_name AS uploaded_by_name
+2026-09-26T22:15:21:         FROM attachments a
+2026-09-26T22:15:21:         JOIN users u ON a.uploaded_by = u.user_id
+2026-09-26T22:15:21:         WHERE a.project_id = $1
+2026-09-26T22:15:21:         ORDER BY a.created_at DESC;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '6' ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             p.*,
+2026-09-26T22:15:21:             u.full_name
+2026-09-26T22:15:21:         FROM projects p
+2026-09-26T22:15:21:         INNER JOIN users u
+2026-09-26T22:15:21:             ON p.created_by = u.user_id
+2026-09-26T22:15:21:         WHERE p.project_id = $1;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '6' ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: Executing SQL...
+2026-09-26T22:15:21: 
+2026-09-26T22:15:21:         SELECT
+2026-09-26T22:15:21:             n.*,
+2026-09-26T22:15:21:             u.full_name AS sender_name,
+2026-09-26T22:15:21:             p.profile_image AS sender_image
+2026-09-26T22:15:21:         FROM notifications n
+2026-09-26T22:15:21:         LEFT JOIN users u
+2026-09-26T22:15:21:             ON n.sender_id = u.user_id
+2026-09-26T22:15:21:         LEFT JOIN user_profiles p
+2026-09-26T22:15:21:             ON u.user_id = p.user_id
+2026-09-26T22:15:21:         WHERE n.user_id = $1
+2026-09-26T22:15:21:         ORDER BY n.created_at DESC
+2026-09-26T22:15:21:         LIMIT $2;
+2026-09-26T22:15:21:     
+2026-09-26T22:15:21: [ '1', 20 ]
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:21: SQL Finished
+2026-09-26T22:15:22: Executing SQL...
+2026-09-26T22:15:22: 
+2026-09-26T22:15:22:         SELECT
+2026-09-26T22:15:22:             t.*,
+2026-09-26T22:15:22:             u.full_name AS assigned_user
+2026-09-26T22:15:22:         FROM tasks t
+2026-09-26T22:15:22:         LEFT JOIN users u
+2026-09-26T22:15:22:             ON t.assigned_to = u.user_id
+2026-09-26T22:15:22:         WHERE t.project_id = $1
+2026-09-26T22:15:22:         ORDER BY t.created_at DESC;
+2026-09-26T22:15:22:     
+2026-09-26T22:15:22: [ '6' ]
+2026-09-26T22:15:22: SQL Finished
+2026-09-26T22:15:22: ✅ PostgreSQL Connected
+2026-09-26T22:15:22: ✅ PostgreSQL Connected
+2026-09-26T22:15:22: ✅ PostgreSQL Connected
+2026-09-26T22:15:22: Executing SQL...
+2026-09-26T22:15:22: 
+2026-09-26T22:15:22:         SELECT
+2026-09-26T22:15:22:             u.user_id,
+2026-09-26T22:15:22:             u.full_name,
+2026-09-26T22:15:22:             u.email,
+2026-09-26T22:15:22:             u.is_active,
+2026-09-26T22:15:22:             r.role_name,
+2026-09-26T22:15:22:             r.description AS role_description,
+2026-09-26T22:15:22:             p.phone,
+2026-09-26T22:15:22:             p.profile_image,
+2026-09-26T22:15:22:             p.bio
+2026-09-26T22:15:22:         FROM users u
+2026-09-26T22:15:22:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:22:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:22:         WHERE u.user_id = $1;
+2026-09-26T22:15:22:     
+2026-09-26T22:15:22: [ '1' ]
+2026-09-26T22:15:22: Executing SQL...
+2026-09-26T22:15:22: 
+2026-09-26T22:15:22:         SELECT
+2026-09-26T22:15:22:             u.user_id,
+2026-09-26T22:15:22:             u.full_name,
+2026-09-26T22:15:22:             u.email,
+2026-09-26T22:15:22:             u.is_active,
+2026-09-26T22:15:22:             r.role_name,
+2026-09-26T22:15:22:             r.description AS role_description,
+2026-09-26T22:15:22:             p.phone,
+2026-09-26T22:15:22:             p.profile_image,
+2026-09-26T22:15:22:             p.bio
+2026-09-26T22:15:22:         FROM users u
+2026-09-26T22:15:22:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:22:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:22:         WHERE u.user_id = $1;
+2026-09-26T22:15:22:     
+2026-09-26T22:15:22: [ '1' ]
+2026-09-26T22:15:22: SQL Finished
+2026-09-26T22:15:22: SQL Finished
+2026-09-26T22:15:22: Executing SQL...
+2026-09-26T22:15:22: 
+2026-09-26T22:15:22:         SELECT
+2026-09-26T22:15:22:             u.user_id,
+2026-09-26T22:15:22:             u.full_name,
+2026-09-26T22:15:22:             u.email,
+2026-09-26T22:15:22:             u.is_active,
+2026-09-26T22:15:22:             r.role_name,
+2026-09-26T22:15:22:             r.description AS role_description,
+2026-09-26T22:15:22:             p.phone,
+2026-09-26T22:15:22:             p.profile_image,
+2026-09-26T22:15:22:             p.bio
+2026-09-26T22:15:22:         FROM users u
+2026-09-26T22:15:22:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:22:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:22:         WHERE u.user_id = $1;
+2026-09-26T22:15:22:     
+2026-09-26T22:15:22: [ '1' ]
+2026-09-26T22:15:22: SQL Finished
+2026-09-26T22:15:22: Executing SQL...
+2026-09-26T22:15:22: 
+2026-09-26T22:15:22:         SELECT
+2026-09-26T22:15:22:             u.user_id,
+2026-09-26T22:15:22:             u.full_name,
+2026-09-26T22:15:22:             u.email,
+2026-09-26T22:15:22:             u.is_active,
+2026-09-26T22:15:22:             r.role_name,
+2026-09-26T22:15:22:             r.description AS role_description,
+2026-09-26T22:15:22:             p.phone,
+2026-09-26T22:15:22:             p.profile_image,
+2026-09-26T22:15:22:             p.bio
+2026-09-26T22:15:22:         FROM users u
+2026-09-26T22:15:22:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:22:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:22:         WHERE u.user_id = $1;
+2026-09-26T22:15:22:     
+2026-09-26T22:15:22: [ '1' ]
+2026-09-26T22:15:22: SQL Finished
+2026-09-26T22:15:22: Executing SQL...
+2026-09-26T22:15:22: 
+2026-09-26T22:15:22:         SELECT 
+2026-09-26T22:15:22:             u.user_id, u.full_name, u.email, p.profile_image,
+2026-09-26T22:15:22:             c.last_message_at,
+2026-09-26T22:15:22:             CAST((SELECT COUNT(*) FROM messages m 
+2026-09-26T22:15:22:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:22:              AND m.sender_id = u.user_id 
+2026-09-26T22:15:22:              AND m.is_read = FALSE) AS INTEGER) AS unread_count,
+2026-09-26T22:15:22:             (SELECT content FROM messages m 
+2026-09-26T22:15:22:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:22:              ORDER BY created_at DESC LIMIT 1) as last_msg_content,
+2026-09-26T22:15:22:             (SELECT sender_id FROM messages m 
+2026-09-26T22:15:22:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:22:              ORDER BY created_at DESC LIMIT 1) as last_msg_sender_id,
+2026-09-26T22:15:22:             (SELECT is_read FROM messages m 
+2026-09-26T22:15:22:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:22:              ORDER BY created_at DESC LIMIT 1) as last_msg_is_read
+2026-09-26T22:15:22:         FROM users u
+2026-09-26T22:15:22:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:22:         LEFT JOIN conversations c ON 
+2026-09-26T22:15:22:             (c.user1_id = $1 AND c.user2_id = u.user_id) OR 
+2026-09-26T22:15:22:             (c.user2_id = $1 AND c.user1_id = u.user_id)
+2026-09-26T22:15:22:         WHERE u.user_id != $1
+2026-09-26T22:15:22:         ORDER BY c.last_message_at DESC NULLS LAST, u.full_name ASC;
+2026-09-26T22:15:22:     
+2026-09-26T22:15:22: [ '1' ]
+2026-09-26T22:15:22: SQL Finished
+2026-09-26T22:15:22: SQL Finished
+2026-09-26T22:15:22: 🟢 [CACHE HIT]  comments:project:6 (270ms)
+2026-09-26T22:15:28: 🔔 Notification socket connected: alj0lWx92bZV5q33AAAm
+2026-09-26T22:15:28: 🔔 Notification socket alj0lWx92bZV5q33AAAm joined notification_user_1
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT COUNT(*)
+2026-09-26T22:15:28:         FROM notifications
+2026-09-26T22:15:28:         WHERE user_id = $1
+2026-09-26T22:15:28:           AND is_read = FALSE;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: SQL Finished
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT
+2026-09-26T22:15:28:             u.user_id,
+2026-09-26T22:15:28:             u.full_name,
+2026-09-26T22:15:28:             u.email,
+2026-09-26T22:15:28:             u.is_active,
+2026-09-26T22:15:28:             r.role_name,
+2026-09-26T22:15:28:             r.description AS role_description,
+2026-09-26T22:15:28:             p.phone,
+2026-09-26T22:15:28:             p.profile_image,
+2026-09-26T22:15:28:             p.bio
+2026-09-26T22:15:28:         FROM users u
+2026-09-26T22:15:28:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:28:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:28:         WHERE u.user_id = $1;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: SQL Finished
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT
+2026-09-26T22:15:28:             u.user_id,
+2026-09-26T22:15:28:             u.full_name,
+2026-09-26T22:15:28:             u.email,
+2026-09-26T22:15:28:             u.is_active,
+2026-09-26T22:15:28:             r.role_name,
+2026-09-26T22:15:28:             r.description AS role_description,
+2026-09-26T22:15:28:             p.phone,
+2026-09-26T22:15:28:             p.profile_image,
+2026-09-26T22:15:28:             p.bio
+2026-09-26T22:15:28:         FROM users u
+2026-09-26T22:15:28:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:28:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:28:         WHERE u.user_id = $1;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: SQL Finished
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT
+2026-09-26T22:15:28:             p.*,
+2026-09-26T22:15:28:             u.full_name
+2026-09-26T22:15:28:         FROM projects p
+2026-09-26T22:15:28:         INNER JOIN team_members tm
+2026-09-26T22:15:28:             ON p.team_id = tm.team_id
+2026-09-26T22:15:28:         INNER JOIN users u
+2026-09-26T22:15:28:             ON p.created_by = u.user_id
+2026-09-26T22:15:28:         WHERE tm.user_id = $1
+2026-09-26T22:15:28:         ORDER BY p.created_at DESC;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: SQL Finished
+2026-09-26T22:15:28: 🔔 Notification socket connected: zYkDuix-Oqud5PPMAAAu
+2026-09-26T22:15:28: 🔔 Notification socket zYkDuix-Oqud5PPMAAAu joined notification_user_1
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT COUNT(*)
+2026-09-26T22:15:28:         FROM notifications
+2026-09-26T22:15:28:         WHERE user_id = $1
+2026-09-26T22:15:28:           AND is_read = FALSE;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: 💬 Chat socket Nu9c-rdpyA6I95JtAAAw joined user_1
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT
+2026-09-26T22:15:28:             u.user_id,
+2026-09-26T22:15:28:             u.full_name,
+2026-09-26T22:15:28:             u.email,
+2026-09-26T22:15:28:             u.is_active,
+2026-09-26T22:15:28:             r.role_name,
+2026-09-26T22:15:28:             r.description AS role_description,
+2026-09-26T22:15:28:             p.phone,
+2026-09-26T22:15:28:             p.profile_image,
+2026-09-26T22:15:28:             p.bio
+2026-09-26T22:15:28:         FROM users u
+2026-09-26T22:15:28:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:28:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:28:         WHERE u.user_id = $1;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT
+2026-09-26T22:15:28:             u.user_id,
+2026-09-26T22:15:28:             u.full_name,
+2026-09-26T22:15:28:             u.email,
+2026-09-26T22:15:28:             u.is_active,
+2026-09-26T22:15:28:             r.role_name,
+2026-09-26T22:15:28:             r.description AS role_description,
+2026-09-26T22:15:28:             p.phone,
+2026-09-26T22:15:28:             p.profile_image,
+2026-09-26T22:15:28:             p.bio
+2026-09-26T22:15:28:         FROM users u
+2026-09-26T22:15:28:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:28:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:28:         WHERE u.user_id = $1;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: SQL Finished
+2026-09-26T22:15:28: SQL Finished
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT
+2026-09-26T22:15:28:             u.user_id,
+2026-09-26T22:15:28:             u.full_name,
+2026-09-26T22:15:28:             u.email,
+2026-09-26T22:15:28:             u.is_active,
+2026-09-26T22:15:28:             r.role_name,
+2026-09-26T22:15:28:             r.description AS role_description,
+2026-09-26T22:15:28:             p.phone,
+2026-09-26T22:15:28:             p.profile_image,
+2026-09-26T22:15:28:             p.bio
+2026-09-26T22:15:28:         FROM users u
+2026-09-26T22:15:28:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:28:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:28:         WHERE u.user_id = $1;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:28: SQL Finished
+2026-09-26T22:15:28: Executing SQL...
+2026-09-26T22:15:28: 
+2026-09-26T22:15:28:         SELECT
+2026-09-26T22:15:28:             u.user_id,
+2026-09-26T22:15:28:             u.full_name,
+2026-09-26T22:15:28:             u.email,
+2026-09-26T22:15:28:             u.is_active,
+2026-09-26T22:15:28:             r.role_name,
+2026-09-26T22:15:28:             r.description AS role_description,
+2026-09-26T22:15:28:             p.phone,
+2026-09-26T22:15:28:             p.profile_image,
+2026-09-26T22:15:28:             p.bio
+2026-09-26T22:15:28:         FROM users u
+2026-09-26T22:15:28:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:15:28:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:28:         WHERE u.user_id = $1;
+2026-09-26T22:15:28:     
+2026-09-26T22:15:28: [ '1' ]
+2026-09-26T22:15:29: SQL Finished
+2026-09-26T22:15:29: Executing SQL...
+2026-09-26T22:15:29: 
+2026-09-26T22:15:29:         SELECT
+2026-09-26T22:15:29:             n.*,
+2026-09-26T22:15:29:             u.full_name AS sender_name,
+2026-09-26T22:15:29:             p.profile_image AS sender_image
+2026-09-26T22:15:29:         FROM notifications n
+2026-09-26T22:15:29:         LEFT JOIN users u
+2026-09-26T22:15:29:             ON n.sender_id = u.user_id
+2026-09-26T22:15:29:         LEFT JOIN user_profiles p
+2026-09-26T22:15:29:             ON u.user_id = p.user_id
+2026-09-26T22:15:29:         WHERE n.user_id = $1
+2026-09-26T22:15:29:         ORDER BY n.created_at DESC
+2026-09-26T22:15:29:         LIMIT $2;
+2026-09-26T22:15:29:     
+2026-09-26T22:15:29: [ '1', 20 ]
+2026-09-26T22:15:29: SQL Finished
+2026-09-26T22:15:29: Executing SQL...
+2026-09-26T22:15:29: 
+2026-09-26T22:15:29:         SELECT 
+2026-09-26T22:15:29:             u.user_id, u.full_name, u.email, p.profile_image,
+2026-09-26T22:15:29:             c.last_message_at,
+2026-09-26T22:15:29:             CAST((SELECT COUNT(*) FROM messages m 
+2026-09-26T22:15:29:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:29:              AND m.sender_id = u.user_id 
+2026-09-26T22:15:29:              AND m.is_read = FALSE) AS INTEGER) AS unread_count,
+2026-09-26T22:15:29:             (SELECT content FROM messages m 
+2026-09-26T22:15:29:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:29:              ORDER BY created_at DESC LIMIT 1) as last_msg_content,
+2026-09-26T22:15:29:             (SELECT sender_id FROM messages m 
+2026-09-26T22:15:29:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:29:              ORDER BY created_at DESC LIMIT 1) as last_msg_sender_id,
+2026-09-26T22:15:29:             (SELECT is_read FROM messages m 
+2026-09-26T22:15:29:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:15:29:              ORDER BY created_at DESC LIMIT 1) as last_msg_is_read
+2026-09-26T22:15:29:         FROM users u
+2026-09-26T22:15:29:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:15:29:         LEFT JOIN conversations c ON 
+2026-09-26T22:15:29:             (c.user1_id = $1 AND c.user2_id = u.user_id) OR 
+2026-09-26T22:15:29:             (c.user2_id = $1 AND c.user1_id = u.user_id)
+2026-09-26T22:15:29:         WHERE u.user_id != $1
+2026-09-26T22:15:29:         ORDER BY c.last_message_at DESC NULLS LAST, u.full_name ASC;
+2026-09-26T22:15:29:     
+2026-09-26T22:15:29: [ '1' ]
+2026-09-26T22:15:29: SQL Finished
+2026-09-26T22:15:29: SQL Finished
+2026-09-26T22:15:36: 🔔 Notification socket connected: CHGE7_9RRvgKso7KAAAy
+2026-09-26T22:15:36: 🔔 Notification socket CHGE7_9RRvgKso7KAAAy joined notification_user_1
+2026-09-26T22:15:36: Executing SQL...
+2026-09-26T22:15:36: 
+2026-09-26T22:15:36:         SELECT COUNT(*)
+2026-09-26T22:15:36:         FROM notifications
+2026-09-26T22:15:36:         WHERE user_id = $1
+2026-09-26T22:15:36:           AND is_read = FALSE;
+2026-09-26T22:15:36:     
+2026-09-26T22:15:36: [ '1' ]
+2026-09-26T22:15:36: SQL Finished
+2026-09-26T22:16:00: Executing SQL...
+2026-09-26T22:16:00: 
+2026-09-26T22:16:00:                     SELECT * FROM meetings 
+2026-09-26T22:16:00:                     WHERE start_time >= (CURRENT_TIMESTAMP + INTERVAL '15 minutes')
+2026-09-26T22:16:00:                       AND start_time < (CURRENT_TIMESTAMP + INTERVAL '16 minutes');
+2026-09-26T22:16:00:                 
+2026-09-26T22:16:00: []
+2026-09-26T22:16:00: SQL Finished
+2026-09-26T22:16:41: ✅ PostgreSQL Connected
+2026-09-26T22:16:41: Executing SQL...
+2026-09-26T22:16:41: 
+2026-09-26T22:16:41:         SELECT
+2026-09-26T22:16:41:             u.user_id,
+2026-09-26T22:16:41:             u.full_name,
+2026-09-26T22:16:41:             u.email,
+2026-09-26T22:16:41:             u.is_active,
+2026-09-26T22:16:41:             r.role_name,
+2026-09-26T22:16:41:             r.description AS role_description,
+2026-09-26T22:16:41:             p.phone,
+2026-09-26T22:16:41:             p.profile_image,
+2026-09-26T22:16:41:             p.bio
+2026-09-26T22:16:41:         FROM users u
+2026-09-26T22:16:41:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:16:41:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:41:         WHERE u.user_id = $1;
+2026-09-26T22:16:41:     
+2026-09-26T22:16:41: [ '1' ]
+2026-09-26T22:16:41: SQL Finished
+2026-09-26T22:16:41: Executing SQL...
+2026-09-26T22:16:41: 
+2026-09-26T22:16:41:         SELECT
+2026-09-26T22:16:41:             u.user_id,
+2026-09-26T22:16:41:             u.full_name,
+2026-09-26T22:16:41:             u.email,
+2026-09-26T22:16:41:             u.is_active,
+2026-09-26T22:16:41:             r.role_name,
+2026-09-26T22:16:41:             r.description AS role_description,
+2026-09-26T22:16:41:             p.phone,
+2026-09-26T22:16:41:             p.profile_image,
+2026-09-26T22:16:41:             p.bio
+2026-09-26T22:16:41:         FROM users u
+2026-09-26T22:16:41:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:16:41:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:41:         WHERE u.user_id = $1;
+2026-09-26T22:16:41:     
+2026-09-26T22:16:41: [ '1' ]
+2026-09-26T22:16:41: SQL Finished
+2026-09-26T22:16:41: Executing SQL...
+2026-09-26T22:16:41: 
+2026-09-26T22:16:41:         SELECT
+2026-09-26T22:16:41:             p.*,
+2026-09-26T22:16:41:             u.full_name
+2026-09-26T22:16:41:         FROM projects p
+2026-09-26T22:16:41:         INNER JOIN team_members tm
+2026-09-26T22:16:41:             ON p.team_id = tm.team_id
+2026-09-26T22:16:41:         INNER JOIN users u
+2026-09-26T22:16:41:             ON p.created_by = u.user_id
+2026-09-26T22:16:41:         WHERE tm.user_id = $1
+2026-09-26T22:16:41:         ORDER BY p.created_at DESC;
+2026-09-26T22:16:41:     
+2026-09-26T22:16:41: [ '1' ]
+2026-09-26T22:16:41: SQL Finished
+2026-09-26T22:16:42: ✅ PostgreSQL Connected
+2026-09-26T22:16:42: ✅ PostgreSQL Connected
+2026-09-26T22:16:42: ✅ PostgreSQL Connected
+2026-09-26T22:16:42: ✅ PostgreSQL Connected
+2026-09-26T22:16:42: 🔔 Notification socket connected: RQpUCwJ1xFhQCzSEAAA4
+2026-09-26T22:16:42: 🔔 Notification socket RQpUCwJ1xFhQCzSEAAA4 joined notification_user_1
+2026-09-26T22:16:42: Executing SQL...
+2026-09-26T22:16:42: 
+2026-09-26T22:16:42:         SELECT COUNT(*)
+2026-09-26T22:16:42:         FROM notifications
+2026-09-26T22:16:42:         WHERE user_id = $1
+2026-09-26T22:16:42:           AND is_read = FALSE;
+2026-09-26T22:16:42:     
+2026-09-26T22:16:42: [ '1' ]
+2026-09-26T22:16:42: 💬 Chat socket SVdot5IsBkO6pyqkAAA6 joined user_1
+2026-09-26T22:16:43: Executing SQL...
+2026-09-26T22:16:43: 
+2026-09-26T22:16:43:         SELECT
+2026-09-26T22:16:43:             u.user_id,
+2026-09-26T22:16:43:             u.full_name,
+2026-09-26T22:16:43:             u.email,
+2026-09-26T22:16:43:             u.is_active,
+2026-09-26T22:16:43:             r.role_name,
+2026-09-26T22:16:43:             r.description AS role_description,
+2026-09-26T22:16:43:             p.phone,
+2026-09-26T22:16:43:             p.profile_image,
+2026-09-26T22:16:43:             p.bio
+2026-09-26T22:16:43:         FROM users u
+2026-09-26T22:16:43:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:16:43:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:43:         WHERE u.user_id = $1;
+2026-09-26T22:16:43:     
+2026-09-26T22:16:43: [ '1' ]
+2026-09-26T22:16:43: SQL Finished
+2026-09-26T22:16:43: Executing SQL...
+2026-09-26T22:16:43: 
+2026-09-26T22:16:43:         SELECT
+2026-09-26T22:16:43:             u.user_id,
+2026-09-26T22:16:43:             u.full_name,
+2026-09-26T22:16:43:             u.email,
+2026-09-26T22:16:43:             u.is_active,
+2026-09-26T22:16:43:             r.role_name,
+2026-09-26T22:16:43:             r.description AS role_description,
+2026-09-26T22:16:43:             p.phone,
+2026-09-26T22:16:43:             p.profile_image,
+2026-09-26T22:16:43:             p.bio
+2026-09-26T22:16:43:         FROM users u
+2026-09-26T22:16:43:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:16:43:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:43:         WHERE u.user_id = $1;
+2026-09-26T22:16:43:     
+2026-09-26T22:16:43: [ '1' ]
+2026-09-26T22:16:43: SQL Finished
+2026-09-26T22:16:43: Executing SQL...
+2026-09-26T22:16:43: 
+2026-09-26T22:16:43:         SELECT
+2026-09-26T22:16:43:             u.user_id,
+2026-09-26T22:16:43:             u.full_name,
+2026-09-26T22:16:43:             u.email,
+2026-09-26T22:16:43:             u.is_active,
+2026-09-26T22:16:43:             r.role_name,
+2026-09-26T22:16:43:             r.description AS role_description,
+2026-09-26T22:16:43:             p.phone,
+2026-09-26T22:16:43:             p.profile_image,
+2026-09-26T22:16:43:             p.bio
+2026-09-26T22:16:43:         FROM users u
+2026-09-26T22:16:43:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:16:43:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:43:         WHERE u.user_id = $1;
+2026-09-26T22:16:43:     
+2026-09-26T22:16:43: [ '1' ]
+2026-09-26T22:16:43: SQL Finished
+2026-09-26T22:16:43: Executing SQL...
+2026-09-26T22:16:43: 
+2026-09-26T22:16:43:         SELECT
+2026-09-26T22:16:43:             u.user_id,
+2026-09-26T22:16:43:             u.full_name,
+2026-09-26T22:16:43:             u.email,
+2026-09-26T22:16:43:             u.is_active,
+2026-09-26T22:16:43:             r.role_name,
+2026-09-26T22:16:43:             r.description AS role_description,
+2026-09-26T22:16:43:             p.phone,
+2026-09-26T22:16:43:             p.profile_image,
+2026-09-26T22:16:43:             p.bio
+2026-09-26T22:16:43:         FROM users u
+2026-09-26T22:16:43:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:16:43:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:43:         WHERE u.user_id = $1;
+2026-09-26T22:16:43:     
+2026-09-26T22:16:43: [ '1' ]
+2026-09-26T22:16:43: SQL Finished
+2026-09-26T22:16:43: Executing SQL...
+2026-09-26T22:16:43: 
+2026-09-26T22:16:43:         SELECT
+2026-09-26T22:16:43:             n.*,
+2026-09-26T22:16:43:             u.full_name AS sender_name,
+2026-09-26T22:16:43:             p.profile_image AS sender_image
+2026-09-26T22:16:43:         FROM notifications n
+2026-09-26T22:16:43:         LEFT JOIN users u
+2026-09-26T22:16:43:             ON n.sender_id = u.user_id
+2026-09-26T22:16:43:         LEFT JOIN user_profiles p
+2026-09-26T22:16:43:             ON u.user_id = p.user_id
+2026-09-26T22:16:43:         WHERE n.user_id = $1
+2026-09-26T22:16:43:         ORDER BY n.created_at DESC
+2026-09-26T22:16:43:         LIMIT $2;
+2026-09-26T22:16:43:     
+2026-09-26T22:16:43: [ '1', 20 ]
+2026-09-26T22:16:43: SQL Finished
+2026-09-26T22:16:43: Executing SQL...
+2026-09-26T22:16:43: 
+2026-09-26T22:16:43:         SELECT 
+2026-09-26T22:16:43:             u.user_id, u.full_name, u.email, p.profile_image,
+2026-09-26T22:16:43:             c.last_message_at,
+2026-09-26T22:16:43:             CAST((SELECT COUNT(*) FROM messages m 
+2026-09-26T22:16:43:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:16:43:              AND m.sender_id = u.user_id 
+2026-09-26T22:16:43:              AND m.is_read = FALSE) AS INTEGER) AS unread_count,
+2026-09-26T22:16:43:             (SELECT content FROM messages m 
+2026-09-26T22:16:43:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:16:43:              ORDER BY created_at DESC LIMIT 1) as last_msg_content,
+2026-09-26T22:16:43:             (SELECT sender_id FROM messages m 
+2026-09-26T22:16:43:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:16:43:              ORDER BY created_at DESC LIMIT 1) as last_msg_sender_id,
+2026-09-26T22:16:43:             (SELECT is_read FROM messages m 
+2026-09-26T22:16:43:              WHERE m.conversation_id = c.conversation_id 
+2026-09-26T22:16:43:              ORDER BY created_at DESC LIMIT 1) as last_msg_is_read
+2026-09-26T22:16:43:         FROM users u
+2026-09-26T22:16:43:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:43:         LEFT JOIN conversations c ON 
+2026-09-26T22:16:43:             (c.user1_id = $1 AND c.user2_id = u.user_id) OR 
+2026-09-26T22:16:43:             (c.user2_id = $1 AND c.user1_id = u.user_id)
+2026-09-26T22:16:43:         WHERE u.user_id != $1
+2026-09-26T22:16:43:         ORDER BY c.last_message_at DESC NULLS LAST, u.full_name ASC;
+2026-09-26T22:16:43:     
+2026-09-26T22:16:43: [ '1' ]
+2026-09-26T22:16:43: SQL Finished
+2026-09-26T22:16:43: SQL Finished
+2026-09-26T22:16:43: Executing SQL...
+2026-09-26T22:16:43: 
+2026-09-26T22:16:43:         SELECT
+2026-09-26T22:16:43:             u.user_id,
+2026-09-26T22:16:43:             u.full_name,
+2026-09-26T22:16:43:             u.email,
+2026-09-26T22:16:43:             u.is_active,
+2026-09-26T22:16:43:             r.role_name,
+2026-09-26T22:16:43:             r.description AS role_description,
+2026-09-26T22:16:43:             p.phone,
+2026-09-26T22:16:43:             p.profile_image,
+2026-09-26T22:16:43:             p.bio
+2026-09-26T22:16:43:         FROM users u
+2026-09-26T22:16:43:         INNER JOIN roles r ON u.role_id = r.role_id
+2026-09-26T22:16:43:         LEFT JOIN user_profiles p ON u.user_id = p.user_id
+2026-09-26T22:16:43:         WHERE u.user_id = $1;
+2026-09-26T22:16:43:     
+2026-09-26T22:16:43: [ '1' ]
+2026-09-26T22:16:43: SQL Finished
