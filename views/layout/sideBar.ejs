@@ -25,8 +25,7 @@
                 <span>Dashboard</span>
             </a>
 
-            <!-- Hide standard project/task views from Admins -->
-           <a href="/projects" class="app-sidebar-item <%= currentPage === 'projects' || currentPage === 'project' ? 'active' : '' %>" title="Projects">
+            <a href="/projects" class="app-sidebar-item <%= currentPage === 'projects' || currentPage === 'project' ? 'active' : '' %>" title="Projects">
                 <i class="bi bi-folder2-open app-sidebar-icon"></i>
                 <span>Projects</span>
             </a>
@@ -34,6 +33,11 @@
             <a href="/tasks" class="app-sidebar-item <%= currentPage === 'tasks' ? 'active' : '' %>" title="Tasks">
                 <i class="bi bi-check2-square app-sidebar-icon"></i>
                 <span>Tasks</span>
+            </a>
+
+            <a href="/meetings" class="app-sidebar-item <%= currentPage === 'meetings' ? 'active' : '' %>" title="Schedule">
+                <i class="bi bi-calendar-event app-sidebar-icon"></i>
+                <span>Schedule</span>
             </a>
         </div>
 
@@ -47,7 +51,7 @@
             </div>
         <% } %>
 
-       <% if (isAdmin) { %>
+        <% if (isAdmin) { %>
             <div class="app-sidebar-group">
                 <div class="app-sidebar-label">System</div>
                 <a href="/admin/users" class="app-sidebar-item <%= currentPage === 'users' ? 'active' : '' %>" title="Users">
@@ -58,7 +62,10 @@
                     <i class="bi bi-microsoft-teams app-sidebar-icon"></i>
                     <span>Teams</span>
                 </a>
-                <!-- NEW: Audit Logs Link -->
+                <a href="/admin/meetings" class="app-sidebar-item <%= currentPage === 'admin_meetings' ? 'active' : '' %>" title="All Meetings">
+                    <i class="bi bi-calendar2-week app-sidebar-icon"></i>
+                    <span>All Meetings</span>
+                </a>
                 <a href="/admin/activities" class="app-sidebar-item <%= currentPage === 'activities' ? 'active' : '' %>" title="Audit Logs">
                     <i class="bi bi-clock-history app-sidebar-icon"></i>
                     <span>Audit Logs</span>

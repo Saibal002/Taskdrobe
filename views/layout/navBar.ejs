@@ -53,12 +53,12 @@
                     </div>
                 </div>
             </div>
-            <li class="nav-item">
-    <a href="/meetings" class="nav-link <%= typeof page !== 'undefined' && page === 'meetings' ? 'active' : '' %>">
-        <i class="bi bi-calendar-event me-2"></i>
-        
-    </a>
-</li>
+
+            <!-- Schedule Quick Link -->
+            <a href="/meetings" class="app-navbar-icon text-decoration-none <%= typeof page !== 'undefined' && page === 'meetings' ? 'active' : '' %>" aria-label="Schedule" title="Schedule">
+                <i class="bi bi-calendar-event"></i>
+            </a>
+
             <!-- Theme Toggle -->
             <button type="button" id="themeToggle" class="app-navbar-icon" aria-label="Toggle theme">
                 <i class="bi bi-moon"></i>
