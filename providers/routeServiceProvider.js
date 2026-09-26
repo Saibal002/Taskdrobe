@@ -2,6 +2,7 @@ const express = require("express");
 
 const routeConfig = require("./routeConfig");
 const authMiddleware = require("../middleware/authMiddleware");
+const { mutationLimiter } = require("../middleware/rateLimiter");
 
 class RouteServiceProvider {
     constructor(app) {
@@ -22,11 +23,14 @@ class RouteServiceProvider {
     registerProtectedRoutes() {
         const protectedRouter = express.Router();
 
-        // Authenticate once for the entire protected group
+        // 1. Authenticate once for the entire protected group
         protectedRouter.use(authMiddleware);
 
-        routeConfig.protected.forEach(({ path, router }) => {
-            protectedRouter.use(path, router);
+        // 2. Apply write/mutation rate limiter now that req.user is populated
+        protectedRouter.use(mutationLimiter);
+
+        routeConfig.protected.forEach(({ path, router, middleware = [] }) => {
+            protectedRouter.use(path, ...middleware, router);
         });
 
         this.app.use("/", protectedRouter);
@@ -34,21 +38,27 @@ class RouteServiceProvider {
 
     registerApiRoutes() {
         this.mount(
-            routeConfig.api.map(({ path, router }) => ({
+            routeConfig.api.map(({ path, router, middleware = [] }) => ({
                 path: `/api${path}`,
+                middleware: [mutationLimiter, ...middleware],
                 router,
             }))
         );
     }
 
     registerRoleRoutes() {
-        this.mountWithMiddleware(routeConfig.roles);
+        this.mountWithMiddleware(
+            routeConfig.roles.map((route) => ({
+                ...route,
+                middleware: [...(route.middleware || []), mutationLimiter],
+            }))
+        );
     }
 
     mount(routes) {
-        routes.forEach(({ path, router }) => {
+        routes.forEach(({ path, router, middleware = [] }) => {
             console.log("📌 MOUNTING:", path);
-            this.app.use(path, router);
+            this.app.use(path, ...middleware, router);
         });
     }
 

@@ -12,7 +12,7 @@ const passport = require("./config/passport");
 const { app: appConfig } = require("./config/environment");
 const pool = require("./plugins/db");
 const errorHandler = require("./middleware/errorHandler");
-
+const { globalLimiter, mutationLimiter } = require("./middleware/rateLimiter");
 const commentModel = require("./models/commentModel"); // Add comment model
 
 //router Service Provider
@@ -85,7 +85,11 @@ app.use((req, res, next) => {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
-
+// ======================
+// Rate Limiting (Applied after static files)
+// ======================
+app.use(globalLimiter);
+app.use(mutationLimiter);
 
 const routeServiceProvider = new RouteServiceProvider(app);
 

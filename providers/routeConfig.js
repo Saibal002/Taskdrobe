@@ -1,5 +1,6 @@
 const authMiddleware = require("../middleware/authMiddleware");
 const requireRole = require("../middleware/roleMiddleware");
+const { authLimiter, apiSearchLimiter } = require("../middleware/rateLimiter");
 
 const homeRoute = require("../routes/homeRoute");
 const authRoute = require("../routes/authRoute");
@@ -7,7 +8,6 @@ const dashboardRoute = require("../routes/dashboardRoute");
 const adminRoute = require("../routes/adminRoutes");
 const managerRoute = require("../routes/managerRoutes");
 const projectRoute = require("../routes/projectRoute");
-// const projectMemberRoutes = require("../routes/projectMemberRoutes");
 const teamRoute = require("../routes/teamRoute");
 const taskRoute = require("../routes/taskRoute");
 const searchRoute = require("../routes/searchRoute");
@@ -27,6 +27,7 @@ module.exports = {
     {
       path: "/auth",
       router: authRoute,
+      middleware: [authLimiter],
     },
   ],
 
@@ -47,17 +48,7 @@ module.exports = {
     {
       path: "/search",
       router: searchRoute,
-    },
-
-    // 2. Root-mounted routers go last to prevent wildcard interception
-    {
-      path: "/",
-      router: dashboardRoute,
-    },
-    
-    {
-      path: "/",
-      router: profileRoute,
+      middleware: [apiSearchLimiter],
     },
     {
       path: "/notes",
@@ -66,8 +57,19 @@ module.exports = {
     {
       path: "/meetings",
       router: meetingRoute,
-    }
+    },
+
+    // 2. Root-mounted routers go last to prevent wildcard interception
+    {
+      path: "/",
+      router: dashboardRoute,
+    },
+    {
+      path: "/",
+      router: profileRoute,
+    },
   ],
+
   api: [
     {
       path: "/chat",
@@ -76,6 +78,7 @@ module.exports = {
     {
       path: "/notifications",
       router: notificationRoute,
+      middleware: [apiSearchLimiter],
     },
     {
       path: "/activities",
