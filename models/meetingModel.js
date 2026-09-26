@@ -94,6 +94,69 @@ class MeetingModel {
         const { rows } = await query(sql, [Number(meetingId), Number(userId)]);
         return rows[0];
     }
+
+
+    /**
+     * GOD MODE: Get all meetings across all teams (past & upcoming) with optional filters
+     */
+    static async getAllMeetingsAdmin({ organizerId, date } = {}) {
+        const params = [];
+        const conditions = [];
+
+        if (organizerId) {
+            params.push(Number(organizerId));
+            conditions.push(`m.organizer_id = $${params.length}`);
+        }
+
+        if (date) {
+            params.push(date);
+            conditions.push(`DATE(m.start_time) = $${params.length}::date`);
+        }
+
+        const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+        const sql = `
+            SELECT 
+                m.*,
+                u.full_name AS organizer_name,
+                u.email AS organizer_email,
+                t.team_name
+            FROM meetings m
+            JOIN users u ON m.organizer_id = u.user_id
+            JOIN teams t ON m.team_id = t.team_id
+            ${whereClause}
+            ORDER BY m.start_time DESC;
+        `;
+        const { rows } = await query(sql, params);
+        return rows;
+    }
+
+    /**
+     * Get distinct meeting creators for the Admin "Created By" filter dropdown
+     */
+    static async getMeetingOrganizers() {
+        const sql = `
+            SELECT DISTINCT u.user_id, u.full_name
+            FROM meetings m
+            JOIN users u ON m.organizer_id = u.user_id
+            ORDER BY u.full_name ASC;
+        `;
+        const { rows } = await query(sql);
+        return rows;
+    }
+
+    /**
+     * Hard delete a meeting (Admins can delete any meeting; Organizers can delete their own)
+     */
+    static async deleteMeeting(meetingId, userId, isAdmin = false) {
+        const sql = isAdmin
+            ? `DELETE FROM meetings WHERE meeting_id = $1 RETURNING meeting_id;`
+            : `DELETE FROM meetings WHERE meeting_id = $1 AND organizer_id = $2 RETURNING meeting_id;`;
+
+        const params = isAdmin ? [Number(meetingId)] : [Number(meetingId), Number(userId)];
+        const { rows } = await query(sql, params);
+        return rows[0];
+    }
 }
 
 module.exports = MeetingModel;

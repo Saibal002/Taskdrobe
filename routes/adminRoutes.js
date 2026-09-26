@@ -5,6 +5,7 @@ const dashboardController = require("../controllers/dashboardController");
 const AdminController = require("../controllers/adminController");
 const authMiddleware = require("../middleware/authMiddleware");
 const requireRole = require("../middleware/roleMiddleware");
+const MeetingController = require("../controllers/meetingController");
 
 // Ensure every single route in this file requires Admin privileges
 router.use(authMiddleware, requireRole("admin"));
@@ -15,6 +16,7 @@ router.get("/dashboard", dashboardController.adminDashboard);
 router.get("/teams-view", AdminController.renderTeamsView);
 router.get("/teams-view/:teamId", AdminController.renderTeamInsightView);
 router.get("/activities", AdminController.renderAuditLogs);
+router.get("/meetings", MeetingController.getAdminMeetings);
 
 // 2. User Management Views & AJAX
 router.get("/users", AdminController.renderUserManagement);

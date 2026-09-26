@@ -55,7 +55,7 @@
             </div>
 
             <!-- Schedule Quick Link -->
-            <a href="/meetings" class="app-navbar-icon text-decoration-none <%= typeof page !== 'undefined' && page === 'meetings' ? 'active' : '' %>" aria-label="Schedule" title="Schedule">
+            <a href="<%= isAdmin ? '/admin/meetings' : '/meetings' %>" class="app-navbar-icon text-decoration-none <%= typeof page !== 'undefined' && page === 'meetings' ? 'active' : '' %>" aria-label="Schedule" title="Schedule">
                 <i class="bi bi-calendar-event"></i>
             </a>
 

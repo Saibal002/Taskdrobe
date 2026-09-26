@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | TaskDrobe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="app-sidebar-layout">
+    <%- include("layout/navBar", { user: user, page: "admin_meetings" }) %>
+    <script src="/js/navbar.js"></script>
+
+    <main class="app-page-main">
+        <div class="container-fluid py-4 fade-in">
+            
+            <!-- Header -->
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
+                <div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-1 mb-2">
+                        <i class="bi bi-shield-lock-fill me-1"></i>Admin God Mode
+                    </span>
+                    <h1 class="h3 fw-bold mb-1">Global Meeting Audit Log</h1>
+                    <p class="text-secondary mb-0">Monitor, filter, and manage all scheduled and past meetings across every team.</p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fs-6" id="totalMeetingsCount">
+                        <%= meetings ? meetings.length : 0 %> Meetings
+                    </span>
+                </div>
+            </div>
+
+            <!-- Filter Bar: Created By & Date -->
+            <div class="admin-glass-panel p-4 mb-4">
+                <form id="adminMeetingFilterForm" method="GET" action="/admin/meetings" class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold text-secondary">
+                            <i class="bi bi-person-badge me-1"></i>Filter by Created By (Organizer)
+                        </label>
+                        <select class="form-select shadow-none rounded-3" name="organizerId" id="filterOrganizer">
+                            <option value="">All Organizers</option>
+                            <% if (organizers && organizers.length > 0) { %>
+                                <% organizers.forEach(org => { %>
+                                    <option value="<%= org.user_id %>" <%= String(filters.organizerId) === String(org.user_id) ? 'selected' : '' %>>
+                                        <%= org.full_name %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold text-secondary">
+                            <i class="bi bi-calendar-date me-1"></i>Filter by Date
+                        </label>
+                        <input type="date" class="form-control shadow-none rounded-3" name="date" id="filterDate" value="<%= filters.date %>">
+                    </div>
+
+                    <div class="col-md-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 flex-grow-1">
+                            <i class="bi bi-funnel-fill me-1"></i>Apply Filters
+                        </button>
+                        <a href="/admin/meetings" class="btn btn-outline-secondary rounded-pill px-4" id="resetFiltersBtn">
+                            Reset
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Meetings Table -->
+            <div class="admin-glass-panel p-4">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0" id="adminMeetingsTable">
+                        <thead>
+                            <tr class="text-secondary small text-uppercase">
+                                <th>Meeting & Agenda</th>
+                                <th>Team</th>
+                                <th>Created By</th>
+                                <th>Date & Time Slot</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (meetings && meetings.length > 0) { %>
+                                <% const now = new Date(); %>
+                                <% meetings.forEach(m => { 
+                                    const start = new Date(m.start_time);
+                                    const end = new Date(m.end_time);
+                                    const isoDate = start.toISOString().split('T')[0];
+                                    let statusBadge = 'bg-primary bg-opacity-10 text-primary';
+                                    let statusText = 'Upcoming';
+                                    if (now >= start && now <= end) {
+                                        statusBadge = 'bg-success bg-opacity-10 text-success';
+                                        statusText = 'Live Now';
+                                    } else if (now > end) {
+                                        statusBadge = 'bg-secondary bg-opacity-10 text-secondary';
+                                        statusText = 'Completed';
+                                    }
+                                %>
+                                    <tr id="admin-meeting-row-<%= m.meeting_id %>" 
+                                        class="admin-meeting-row"
+                                        data-organizer="<%= m.organizer_id %>"
+                                        data-date="<%= isoDate %>">
+                                        
+                                        <td style="max-width: 280px;">
+                                            <div class="fw-bold"><%= m.title %></div>
+                                            <div class="text-secondary small text-truncate"><%= m.description || 'No description provided.' %></div>
+                                        </td>
+
+                                        <td>
+                                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1">
+                                                <i class="fas fa-users me-1"></i><%= m.team_name %>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <div class="fw-semibold small"><%= m.organizer_name %></div>
+                                            <div class="text-muted" style="font-size: 0.75rem;"><%= m.organizer_email || '' %></div>
+                                        </td>
+
+                                        <td>
+                                            <div class="fw-semibold small text-primary">
+                                                <%= start.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                                            </div>
+                                            <div class="text-secondary" style="font-size: 0.75rem;">
+                                                <%= start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %> - <%= end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <span class="badge <%= statusBadge %> rounded-pill px-3 py-1">
+                                                <%= statusText %>
+                                            </span>
+                                        </td>
+
+                                        <td class="text-end">
+                                            <div class="d-inline-flex align-items-center gap-2">
+                                                <% if (m.meeting_link) { %>
+                                                    <a href="<%= m.meeting_link %>" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3" title="Open Call Link">
+                                                        <i class="fas fa-video me-1"></i>Link
+                                                    </a>
+                                                <% } %>
+                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 btn-admin-delete-meeting" data-id="<%= m.meeting_id %>" title="Force Delete Meeting">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="text-center py-5 text-secondary">
+                                        <i class="bi bi-calendar2-x display-5 d-block mb-2 opacity-25"></i>
+                                        No meetings found matching the selected filters.
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.btn-admin-delete-meeting', function () {
+                const meetingId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Force Delete Meeting?',
+                    text: 'Admin Override: This meeting will be permanently deleted from the database.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, force delete'
+                }).then(function (result) {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/meetings/' + meetingId,
+                            method: 'DELETE',
+                            headers: { 'Accept': 'application/json' },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.success) {
+                                    $('#admin-meeting-row-' + meetingId).fadeOut(300, function () {
+                                        $(this).remove();
+                                        const remaining = $('.admin-meeting-row').length;
+                                        $('#totalMeetingsCount').text(remaining + ' Meetings');
+                                    });
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Deleted!',
+                                        text: 'Meeting removed by Admin.',
+                                        timer: 1200,
+                                        showConfirmButton: false
+                                    });
+                                }
+                            },
+                            error: function (xhr) {
+                                const errMsg = xhr.responseJSON && xhr.responseJSON.message
+                                    ? xhr.responseJSON.message
+                                    : 'Failed to delete meeting.';
+                                Swal.fire('Error', errMsg, 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <%- include("layout/globalChat") %>
+</body>
+</html>
