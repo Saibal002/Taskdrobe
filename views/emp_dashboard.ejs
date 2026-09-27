@@ -56,7 +56,7 @@
 
 <body class="employee-dashboard-page app-sidebar-layout">
     <%- include("layout/navBar.ejs", { user: user, page: "dashboard" }) %>
-    <script src="/js/navBar.js"></script>
+   
 
     <%
         const projectList = Array.isArray(projects) ? projects : [];
@@ -318,7 +318,10 @@
     </button>
 
     <%- include("layout/addProjectModal.ejs") %>
-    <%- include("layout/footer") %>
+     <%- include("layout/globalChat.ejs") %>
+     <%- include("layout/footer") %>
+     <script src="/js/navBar.js"></script>
+    
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -343,6 +346,6 @@
             }
         });
     </script>
-    <%- include("layout/globalChat.ejs") %>
+   
 </body>
 </html>
