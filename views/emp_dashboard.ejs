@@ -313,15 +313,11 @@
         </div>
     </main>
 
-    <button class="btn chat-button position-fixed" type="button" aria-label="Open chat">
-        <i class="fas fa-comment" aria-hidden="true"></i>
-    </button>
+   
 
-    <%- include("layout/addProjectModal.ejs") %>
-     <%- include("layout/globalChat.ejs") %>
-     <%- include("layout/footer") %>
-     <script src="/js/navBar.js"></script>
-    
+   <%- include("layout/addProjectModal.ejs") %>
+    <%- include("layout/footer") %>
+    <script src="/js/navBar.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -346,6 +342,6 @@
             }
         });
     </script>
-   
+    <%- include("layout/globalChat.ejs") %>
 </body>
 </html>
