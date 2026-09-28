@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/images/logo.png" alt="TaskDrobe Logo" width="120" />
+  <img src="public/images/logo.png.png" alt="TaskDrobe Logo" width="120" />
   <h1>🚀 TaskDrobe</h1>
   <p><strong>Enterprise-Grade Project, Team, and Workspace Management Platform</strong></p>
 

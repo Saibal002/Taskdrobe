@@ -1,17 +1,150 @@
 <% const role = (user && user.role_name) || "employee"; %>
 <% const isManager = role === "manager"; %>
 <% const isAdmin = role === "admin"; %>
+<% const homeUrl = isAdmin ? "/admin/dashboard" : isManager ? "/manager/dashboard" : "/dashboard"; %>
 
 <%- include("sideBar", { user: user, page: page || "" }) %>
+
+<style>
+    /* Force navbar inner container to split Left (Logo/Menu) and Right (Actions) */
+    .app-navbar .app-navbar-inner {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        gap: 1rem;
+    }
+
+    /* Pin Logo & Mobile Hamburger to the far left */
+    .app-navbar .app-navbar-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.85rem;
+        margin-right: auto !important;
+        flex-shrink: 0;
+    }
+
+    /* Keep right-side controls anchored to the right */
+    .app-navbar .app-navbar-actions {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        min-width: 0;
+    }
+
+    /* Brand Wrapper */
+    .app-navbar-brand {
+        position: relative;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+    }
+
+    .app-navbar-brand:hover {
+        transform: translateY(-1px);
+    }
+
+    /* Logo Sizing */
+    .app-navbar-brand-logo {
+        position: relative;
+        z-index: 2;
+        height: 48px;
+        width: auto;
+        max-width: 195px;
+        object-fit: contain;
+        display: block;
+        transition: filter 0.25s ease;
+    }
+
+    /* Subtle Tight Nebula Backlight (Hidden in Light Mode) */
+    .app-navbar-brand::before {
+        content: "";
+        position: absolute;
+        inset: 2px -2px;
+        z-index: 0;
+        border-radius: 999px;
+        background: radial-gradient(
+            ellipse at 50% 55%,
+            rgba(148, 163, 255, 0.22) 0%,
+            rgba(99, 102, 241, 0.12) 50%,
+            transparent 80%
+        );
+        filter: blur(9px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Activate Subtle Backlight in Dark Mode */
+    [data-theme="dark"] .app-navbar-brand::before,
+    [data-bs-theme="dark"] .app-navbar-brand::before,
+    body.dark-mode .app-navbar-brand::before,
+    body.dark .app-navbar-brand::before,
+    html.dark .app-navbar-brand::before {
+        opacity: 1;
+    }
+
+    /* Soft crisp edge so dark 'ask' letters stay readable without harsh glow */
+    [data-theme="dark"] .app-navbar-brand-logo,
+    [data-bs-theme="dark"] .app-navbar-brand-logo,
+    body.dark-mode .app-navbar-brand-logo,
+    body.dark .app-navbar-brand-logo,
+    html.dark .app-navbar-brand-logo {
+        filter: drop-shadow(0 0 6px rgba(199, 210, 254, 0.28));
+    }
+
+    /* Tablet Responsiveness */
+    @media (max-width: 991.98px) {
+        .app-navbar-brand-logo {
+            height: 42px;
+            max-width: 165px;
+        }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 575.98px) {
+        .app-navbar .app-navbar-inner {
+            gap: 0.5rem;
+        }
+
+        .app-navbar .app-navbar-left {
+            gap: 0.4rem;
+        }
+
+        .app-navbar-brand {
+            padding: 0.15rem 0.35rem;
+        }
+
+        .app-navbar-brand-logo {
+            height: 34px;
+            max-width: 130px;
+        }
+    }
+</style>
 
 <header class="app-navbar" data-navbar-role="<%= role %>" data-navbar-page="<%= page || '' %>">
     <div class="app-navbar-inner">
 
-        <!-- Mobile Menu Toggle -->
+        <!-- LEFT: Mobile Menu Toggle + Brand Logo -->
         <div class="app-navbar-left">
             <button type="button" id="appSidebarToggle" class="app-navbar-menu" aria-label="Toggle navigation" aria-expanded="false">
                 <i class="bi bi-list"></i>
             </button>
+
+            <a href="<%= homeUrl %>" class="app-navbar-brand" aria-label="TaskDrobe Home">
+                <img
+                    src="/images/logo.png"
+                    onerror="this.onerror=null;this.src='/images/logo.png.png';"
+                    alt="TaskDrobe Logo"
+                    class="app-navbar-brand-logo"
+                >
+            </a>
         </div>
 
         <!-- RIGHT: Controls -->

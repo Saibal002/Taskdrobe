@@ -1,49 +1,654 @@
-<%- include('layout/header', { title: 'Sign Up' }) %>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="auth-layout">
-    <div class="auth-card" style="flex-direction: row-reverse;">
-        
-        <!-- Right Side: Form (Flipped for variety) -->
-        <div class="auth-left">
-            <h2>Create Account</h2>
-            <p>Join TaskDrobe and start managing projects efficiently.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="TaskDrobe Sign Up, Register">
+    <meta name="description" content="Join TaskDrobe and start managing projects, teams, and tasks efficiently.">
+    <meta name="author" content="TaskDrobe">
 
-            <% if (typeof error !== 'undefined' && error) { %>
-                <div style="color: #ff00ff; margin-bottom: 1rem;"><%= error %></div>
-            <% } %>
+    <link rel="icon" href="/images/cutout.png">
+    <title><%= typeof title !== 'undefined' ? title : 'Sign Up | TaskDrobe' %></title>
 
-            <form method="POST" action="/auth/signup">
-                <div class="auth-form-group">
-                    <label for="fullName" class="auth-label">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" class="auth-input" placeholder="Enter your full name" required value="<%= typeof formData !== 'undefined' ? formData.fullName : '' %>">
-                </div>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 
-                <div class="auth-form-group">
-                    <label for="email" class="auth-label">Email</label>
-                    <input type="email" id="email" name="email" class="auth-input" placeholder="Enter your email" required value="<%= typeof formData !== 'undefined' ? formData.email : '' %>">
-                </div>
+    <style>
+        :root {
+            --td-primary: #6366f1;
+            --td-primary-dark: #4f46e5;
+            --td-secondary: #ec4899;
+            --td-cyan: #06b6d4;
+            --td-purple: #8b5cf6;
+            --td-slate-900: #0f172a;
+            --td-slate-600: #475569;
+            --td-slate-400: #94a3b8;
+        }
 
-                <div class="auth-form-group">
-                    <label for="password" class="auth-label">Password</label>
-                    <input type="password" id="password" name="password" class="auth-input" placeholder="Create a password" required>
-                </div>
+        body.auth-page {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f4f7fe;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--td-slate-900);
+        }
 
-                <button type="submit" class="btn-glow" style="margin-top: 1rem;">Sign Up</button>
+        /* Hide the default layout footer bar so the glass canvas stays clean */
+        body.auth-page > footer {
+            display: none !important;
+        }
 
-                <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary); font-size: 0.9rem;">
-                    Already have an account? <a href="/login" style="font-weight: 700;">Login</a>
-                </p>
-            </form>
-        </div>
+        /* =========================================================
+           AMBIENT FLOATING GRADIENT BALLS (BACKGROUND)
+        ========================================================= */
+        .ambient-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 0%, rgba(224, 231, 255, 0.7) 0%, rgba(244, 247, 254, 1) 75%);
+        }
 
-        <!-- Left Side: Visual -->
-        <div class="auth-right">
-            <div class="glass-panel" style="padding: 3rem; text-align: center; max-width: 300px; border: none; background: rgba(255,255,255,0.15);">
-                <h3 style="color: #fff; font-size: 2rem; line-height: 1.2;">Organize.<br>Track.<br>Assign.</h3>
-            </div>
-        </div>
+        .gradient-ball {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(55px);
+            opacity: 0.65;
+            animation: floatOrb 18s ease-in-out infinite alternate;
+        }
 
+        .ball-1 {
+            width: 420px;
+            height: 420px;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            top: -120px;
+            right: -100px;
+            animation-duration: 17s;
+        }
+
+        .ball-2 {
+            width: 360px;
+            height: 360px;
+            background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+            bottom: -90px;
+            left: -70px;
+            animation-duration: 21s;
+            animation-delay: -4s;
+        }
+
+        .ball-3 {
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+            top: 42%;
+            right: 18%;
+            opacity: 0.45;
+            animation-duration: 23s;
+            animation-delay: -8s;
+        }
+
+        .ball-4 {
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
+            top: 14%;
+            left: 15%;
+            opacity: 0.45;
+            animation-duration: 16s;
+            animation-delay: -2s;
+        }
+
+        .ball-5 {
+            width: 170px;
+            height: 170px;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            bottom: 14%;
+            right: 10%;
+            opacity: 0.55;
+            animation-duration: 19s;
+            animation-delay: -6s;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            50% {
+                transform: translate(35px, -30px) scale(1.07) rotate(6deg);
+            }
+            100% {
+                transform: translate(-25px, 25px) scale(0.95) rotate(-6deg);
+            }
+        }
+
+        /* =========================================================
+           MAIN GLASSMORPHISM CONTAINER
+        ========================================================= */
+        .auth-wrapper {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .glass-auth-card {
+            width: 100%;
+            max-width: 1040px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            border-radius: 28px;
+            box-shadow:
+                0 25px 60px -15px rgba(15, 23, 42, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            overflow: hidden;
+        }
+
+        /* Right Column: Form Area */
+        .auth-form-side {
+            padding: 2.75rem 3.25rem;
+            background: rgba(255, 255, 255, 0.55);
+        }
+
+        .brand-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-pill img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(99, 102, 241, 0.18));
+        }
+
+        .auth-heading h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--td-slate-900);
+            margin-bottom: 0.35rem;
+        }
+
+        .auth-heading p {
+            color: var(--td-slate-600);
+            font-size: 0.94rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Server-side Error Banner */
+        .auth-error-alert {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            color: #e11d48;
+            font-size: 0.86rem;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 14px;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Form Controls */
+        .form-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--td-slate-600);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1.5px solid rgba(203, 213, 225, 0.8);
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            font-size: 0.94rem;
+            color: var(--td-slate-900);
+            transition: all 0.2s ease;
+        }
+
+        .form-control::placeholder {
+            color: var(--td-slate-400);
+        }
+
+        .form-control:focus {
+            background: #ffffff;
+            border-color: var(--td-primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+        }
+
+        .input-group .form-control {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+        }
+
+        #togglePassword {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1.5px solid rgba(203, 213, 225, 0.8);
+            border-left: none;
+            border-top-right-radius: 14px;
+            border-bottom-right-radius: 14px;
+            padding: 0 1rem;
+            color: var(--td-slate-600);
+            transition: all 0.2s ease;
+        }
+
+        #togglePassword:hover {
+            color: var(--td-primary);
+            background: #ffffff;
+        }
+
+        /* Buttons */
+        .signup-btn {
+            background: linear-gradient(135deg, var(--td-primary) 0%, var(--td-purple) 100%);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.96rem;
+            padding: 0.85rem 1.5rem;
+            border-radius: 14px;
+            border: none;
+            width: 100%;
+            box-shadow: 0 10px 22px -5px rgba(99, 102, 241, 0.45);
+            transition: all 0.25s ease;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px -6px rgba(99, 102, 241, 0.55);
+        }
+
+        .signup-btn:active {
+            transform: translateY(0);
+        }
+
+        .google-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid rgba(203, 213, 225, 0.85);
+            color: var(--td-slate-900);
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 14px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .google-btn:hover {
+            background: #ffffff;
+            border-color: #94a3b8;
+            color: var(--td-slate-900);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+        }
+
+        .divider-line {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--td-slate-400);
+            font-size: 0.76rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 1.15rem 0;
+        }
+
+        .divider-line::before,
+        .divider-line::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid rgba(203, 213, 225, 0.7);
+        }
+
+        .divider-line:not(:empty)::before {
+            margin-right: 0.85rem;
+        }
+
+        .divider-line:not(:empty)::after {
+            margin-left: 0.85rem;
+        }
+
+        .login-link {
+            color: var(--td-primary);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .login-link:hover {
+            color: var(--td-primary-dark);
+            text-decoration: underline;
+        }
+
+        /* =========================================================
+           LEFT SHOWCASE PANEL (3D ORBS + INNER GLASS CARD)
+        ========================================================= */
+        .auth-showcase-side {
+            position: relative;
+            background: linear-gradient(145deg, #1e1b4b 0%, #312e81 45%, #4f46e5 100%);
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        .sphere {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .sphere-1 {
+            width: 210px;
+            height: 210px;
+            top: -50px;
+            left: -45px;
+            background: radial-gradient(circle at 30% 30%, #f472b6, #9333ea 70%, #3b0764);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: floatOrb 14s ease-in-out infinite alternate;
+        }
+
+        .sphere-2 {
+            width: 145px;
+            height: 145px;
+            bottom: 30px;
+            right: 20px;
+            background: radial-gradient(circle at 30% 30%, #38bdf8, #4f46e5 70%, #1e1b4b);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            animation: floatOrb 11s ease-in-out infinite alternate-reverse;
+        }
+
+        .sphere-3 {
+            width: 70px;
+            height: 70px;
+            top: 20%;
+            right: 14%;
+            background: radial-gradient(circle at 35% 35%, #a7f3d0, #06b6d4 75%);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.35);
+            animation: floatOrb 9s ease-in-out infinite alternate;
+        }
+
+        .sphere-4 {
+            width: 95px;
+            height: 95px;
+            bottom: -20px;
+            left: 18%;
+            background: radial-gradient(circle at 30% 30%, #fde047, #ec4899 70%);
+            opacity: 0.85;
+            animation: floatOrb 13s ease-in-out infinite alternate;
+        }
+
+        .showcase-glass-box {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.11);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 24px;
+            padding: 2.5rem 2.25rem;
+            max-width: 390px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+        }
+
+        .showcase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.38rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+
+        .showcase-glass-box h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.85rem;
+        }
+
+        .showcase-glass-box p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .showcase-logo-stage {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.15rem;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            margin-bottom: 1.5rem;
+        }
+
+        .showcase-logo-stage img {
+            max-height: 100px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.25));
+        }
+
+        .feature-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .feature-pill {
+            font-size: 0.74rem;
+            font-weight: 600;
+            padding: 0.35rem 0.72rem;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        @media (max-width: 767.98px) {
+            .auth-form-side {
+                padding: 2.25rem 1.5rem;
+            }
+            .auth-showcase-side {
+                padding: 2.25rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="auth-page">
+
+    <!-- Ambient Floating Gradient Balls -->
+    <div class="ambient-canvas" aria-hidden="true">
+        <div class="gradient-ball ball-1"></div>
+        <div class="gradient-ball ball-2"></div>
+        <div class="gradient-ball ball-3"></div>
+        <div class="gradient-ball ball-4"></div>
+        <div class="gradient-ball ball-5"></div>
     </div>
-</div>
 
-<%- include('layout/footer') %>
+    <main class="auth-wrapper">
+        <div class="glass-auth-card row g-0">
+
+            <!-- LEFT SIDE: GLASSMORPHIC VISUAL SHOWCASE (Flipped vs Login) -->
+            <div class="auth-showcase-side col-lg-6 col-md-6">
+                <!-- Floating 3D Gradient Spheres -->
+                <div class="sphere sphere-1"></div>
+                <div class="sphere sphere-2"></div>
+                <div class="sphere sphere-3"></div>
+                <div class="sphere sphere-4"></div>
+
+                <div class="showcase-glass-box">
+                    <span class="showcase-badge">
+                        <i class="bi bi-rocket-takeoff-fill text-warning"></i> Get Started Free
+                    </span>
+
+                    <h2>Organize.<br>Track.<br>Assign.</h2>
+                    <p>Build your workspace in seconds and bring projects, meetings, tasks, and team chat under one roof.</p>
+
+                    <div class="showcase-logo-stage">
+                        <img src="/images/logo.png" onerror="this.onerror=null;this.src='/images/logo.png.png';" alt="TaskDrobe Illustration">
+                    </div>
+
+                    <div class="feature-pills">
+                        <span class="feature-pill"><i class="bi bi-check2-circle me-1 text-info"></i>Smart Sprints</span>
+                        <span class="feature-pill"><i class="bi bi-lightning-charge me-1 text-warning"></i>Live Chat</span>
+                        <span class="feature-pill"><i class="bi bi-shield-check me-1 text-success"></i>RBAC Ready</span>
+                        <span class="feature-pill"><i class="bi bi-calendar2-check me-1" style="color: #f472b6;"></i>Conflict-Free Meetings</span>
+                        <span class="feature-pill"><i class="bi bi-graph-up-arrow me-1" style="color: #a78bfa;"></i>Live Analytics</span>
+                        <span class="feature-pill"><i class="bi bi-bell me-1" style="color: #fb923c;"></i>Instant Alerts</span>
+                        <span class="feature-pill"><i class="bi bi-chat-square-text me-1" style="color: #38bdf8;"></i>Threaded Discussions</span>
+                        <span class="feature-pill"><i class="bi bi-journal-richtext me-1" style="color: #4ade80;"></i>Quick Notes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE: SIGNUP FORM -->
+            <div class="auth-form-side col-lg-6 col-md-6 d-flex flex-column justify-content-center">
+
+                <a href="/" class="brand-pill">
+                    <img src="/images/logo.png" onerror="this.onerror=null;this.src='/images/logo.png.png';" alt="TaskDrobe Logo">
+                </a>
+
+                <div class="auth-heading">
+                    <h1>Create Account</h1>
+                    <p>Join TaskDrobe and start managing projects efficiently.</p>
+                </div>
+
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="auth-error-alert" role="alert">
+                        <i class="bi bi-exclamation-octagon-fill fs-5"></i>
+                        <span><%= error %></span>
+                    </div>
+                <% } %>
+
+                <form method="POST" action="/auth/signup" class="w-100" id="signupForm">
+
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            class="form-control"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
+                            value="<%= typeof formData !== 'undefined' && formData.fullName ? formData.fullName : '' %>"
+                        >
+                        <div id="fullNameError" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="name@company.com"
+                            autocomplete="email"
+                            required
+                            value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+                        >
+                        <div id="emailError" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Create a strong password"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button class="btn" type="button" id="togglePassword" aria-label="Toggle password visibility">
+                                👁️
+                            </button>
+                        </div>
+                        <div id="passwordError" class="invalid-feedback d-block"></div>
+                    </div>
+
+                    <button type="submit" class="signup-btn">
+                        Create Workspace Account <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+
+                    <div class="divider-line">or sign up with</div>
+
+                    <a href="/auth/google"
+                        class="google-btn w-100 d-flex align-items-center justify-content-center gap-2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="Google" width="18" height="18">
+                        <span>Continue with Google</span>
+                    </a>
+
+                    <p class="text-center small text-secondary mt-4 mb-0">
+                        Already have an account?
+                        <a href="/login" class="login-link ms-1">Sign In</a>
+                    </p>
+                </form>
+
+                <p class="text-center text-muted small mt-4 mb-0" style="font-size: 0.78rem;">
+                    &copy; <%= new Date().getFullYear() %> TaskDrobe. All Rights Reserved.
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const togglePassword = document.getElementById("togglePassword");
+            const passwordInput = document.getElementById("password");
+
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener("click", () => {
+                    const isPassword = passwordInput.getAttribute("type") === "password";
+                    passwordInput.setAttribute("type", isPassword ? "text" : "password");
+                    togglePassword.textContent = isPassword ? "🙈" : "👁️";
+                });
+            }
+        });
+    </script>
+    <%- include('layout/footer') %>
