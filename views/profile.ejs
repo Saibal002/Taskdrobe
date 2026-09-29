@@ -55,26 +55,33 @@
 
                 <form action="/<%= user.role_name %>/profile/update" method="POST" enctype="multipart/form-data">
                     
-                    <div class="row mb-5">
-                        <div class="col-12 text-center">
-                            <div class="avatar-upload-wrapper mx-auto">
-                                <% if (user.profile_image) { %>
-                                    <img src="<%= user.profile_image %>" alt="Profile Image" class="profile-avatar" id="formAvatarPreview">
-                                <% } else { %>
-                                    <div class="avatar-placeholder" id="formAvatarPlaceholder">
-                                        <%= user.full_name.charAt(0).toUpperCase() %>
-                                    </div>
-                                    <img src="" alt="Profile Image" class="profile-avatar d-none" id="formAvatarPreview">
-                                <% } %>
-                                
-                                <label for="profileImage" class="profile-upload-btn" title="Upload new image">
-                                    <i class="fas fa-camera"></i>
-                                </label>
-                                <input type="file" name="profileImage" id="profileImage" class="d-none" accept="image/jpeg, image/png, image/webp">
-                            </div>
-                            <div class="small text-muted mt-3">Allowed: JPG, PNG, WEBP. Max size: 5MB.</div>
-                        </div>
-                    </div>
+                   <div class="row mb-5">
+    <div class="col-12 text-center">
+        <div class="avatar-upload-wrapper mx-auto">
+            <% if (user.profile_image) { %>
+                <img src="<%= user.profile_image %>" alt="Profile Image" class="profile-avatar" id="formAvatarPreview">
+            <% } else { %>
+                <div class="avatar-placeholder" id="formAvatarPlaceholder">
+                    <%= user.full_name.charAt(0).toUpperCase() %>
+                </div>
+                <img src="" alt="Profile Image" class="profile-avatar d-none" id="formAvatarPreview">
+            <% } %>
+            
+            <label for="profileImage" class="profile-upload-btn" title="Upload new image">
+                <i class="fas fa-camera"></i>
+            </label>
+            <input type="file" name="profileImage" id="profileImage" class="d-none" accept="image/jpeg, image/png, image/webp">
+        </div>
+        <div class="small text-muted mt-3 mb-2">Allowed: JPG, PNG, WEBP. Max size: 5MB.</div>
+        
+        <!-- NEW: Delete Button (Only shows if an image exists) -->
+        <% if (user.profile_image) { %>
+            <button type="button" id="deleteAvatarBtn" class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm fw-bold">
+                <i class="fas fa-trash-alt me-1"></i> Remove Picture
+            </button>
+        <% } %>
+    </div>
+</div>
 
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
@@ -183,10 +190,10 @@
         });
     </script>
 
-    <!-- AJAX Password Change Script -->
+ <!-- AJAX Password Change & Avatar Deletion Script -->
     <script>
         $(document).ready(function() {
-            // Configure SweetAlert Toast
+            // Configure SweetAlert Toast (Available to all scripts inside this block)
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -199,33 +206,27 @@
                 }
             });
 
-            // 1. Real-time Password Match Validation (MOVED OUTSIDE THE SUBMIT BLOCK)
+            // 1. Real-time Password Match Validation
             $('#newPassword, #confirmPassword').on('input', function () {
                 const newPass = $('#newPassword').val();
                 const confirmPass = $('#confirmPassword').val();
 
                 if (confirmPass.length === 0) {
-                    // Remove colored borders if the confirm box is empty
                     $('#confirmPassword').removeClass('is-valid is-invalid');
                 } else if (newPass === confirmPass) {
-                    // Passwords match -> Green border
                     $('#confirmPassword').removeClass('is-invalid').addClass('is-valid');
                 } else {
-                    // Passwords do not match -> Red border
                     $('#confirmPassword').removeClass('is-valid').addClass('is-invalid');
                 }
             });
 
             // 2. Form Submission Logic
             $("#changePasswordForm").on("submit", function(e) {
-                e.preventDefault(); // Stop standard redirect submission
+                e.preventDefault(); 
                 
                 const $form =$(this);
                 const $btn =$("#changePasswordBtn");
-                const originalHtml = $btn.html();
-                
-                // Show loading state
-                $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm me-2"></span> Verifying...');
+                const originalHtml = $btn.html();$btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm me-2"></span> Verifying...');
 
                 $.ajax({
                     url: $form.attr("action"),
@@ -234,25 +235,52 @@
                     success: function(res) {
                         if (res.success) {
                             Toast.fire({ icon: 'success', title: res.message });
-                            $form[0].reset(); // Clear passwords from input fields$('#confirmPassword').removeClass('is-valid is-invalid'); // Reset border colors on success
+                            $form[0].reset();$('#confirmPassword').removeClass('is-valid is-invalid'); 
                         }
                     },
                     error: function(xhr) {
-                        // Extract error message sent from the controller
                         let errorMsg = "A server error occurred. Please try again.";
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             errorMsg = xhr.responseJSON.message;
                         }
-                        // Trigger Error Toast
                         Toast.fire({ icon: 'error', title: errorMsg });
                     },
                     complete: function() {
-                        // Restore button state
                         $btn.prop("disabled", false).html(originalHtml);
                     }
                 });
             });
-        });
+
+            // 3. Avatar Deletion AJAX (Now inside document.ready)
+            $('#deleteAvatarBtn').on('click', function() {
+                if (!confirm("Are you sure you want to remove your profile picture?")) return;
+                
+                const $btn =$(this);
+                const originalHtml = $btn.html();$btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span> Removing...');
+
+                $.ajax({
+                    url: `/<%= user.role_name %>/profile/avatar`,
+                    type: 'DELETE',
+                    success: function(res) {
+                        if (res.success) {
+                            Toast.fire({ icon: 'success', title: res.message });
+                            setTimeout(() => window.location.reload(), 1000); 
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMsg = "Failed to remove picture.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        }
+                        Toast.fire({ icon: 'error', title: errorMsg });
+                        $btn.prop('disabled', false).html(originalHtml);
+                    }
+                });
+            });
+            
+        }); // End of document.ready
     </script>
+</body>
+</html>
 </body>
 </html>

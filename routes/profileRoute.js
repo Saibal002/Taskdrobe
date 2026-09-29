@@ -36,4 +36,10 @@ router.post(
     verifyProfileRoleUrl, 
     profileController.changePassword
 );
+router.delete(
+    "/:role/profile/avatar", 
+    authMiddleware, 
+    verifyProfileRoleUrl, 
+    profileController.deleteAvatar
+);
 module.exports = router;

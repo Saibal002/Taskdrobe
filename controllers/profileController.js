@@ -131,8 +131,40 @@ const changePassword = async (req, res, next) => {
     }
 };
 
+/**
+ * Handle Profile Image Deletion
+ */
+const deleteAvatar = async (req, res, next) => {
+    try {
+        const userProfile = await userModel.findUserById(req.user.user_id);
+        
+        if (!userProfile || !userProfile.profile_image) {
+            return res.status(400).json({ success: false, message: "No profile picture to delete." });
+        }
+
+        // 1. Extract path and delete from Supabase Storage
+        const fullUrl = userProfile.profile_image;
+        const urlParts = fullUrl.split(`/${BUCKET_NAME}/`);
+        
+        if (urlParts.length === 2) {
+            const storagePath = urlParts[1];
+            await supabase.storage.from(BUCKET_NAME).remove([storagePath]);
+        }
+
+        // 2. Clear the database record
+        await userModel.removeProfileImage(req.user.user_id);
+
+        return res.json({ success: true, message: "Profile picture removed successfully." });
+    } catch (err) {
+        console.error("Avatar Deletion Error:", err);
+        return res.status(500).json({ success: false, message: "Error removing profile picture." });
+    }
+};
+
+
 module.exports = {
     getProfile,
     updateProfile,
-    changePassword
+    changePassword,
+    deleteAvatar
 };

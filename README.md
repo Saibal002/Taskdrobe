@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/images/logo.png.png" alt="TaskDrobe Logo" width="120" />
+  <img src="public/images/logo.png.png.png" alt="TaskDrobe Logo" width="120" />
   <h1>🚀 TaskDrobe</h1>
   <p><strong>Enterprise-Grade Project, Team, and Workspace Management Platform</strong></p>
 
@@ -174,7 +174,7 @@ TaskDrobe/
 │   └── 📄 routeServiceProvider.js      # Centralized router mounting & middleware pipeline
 ├── 📁 public/
 │   ├── 📁 css/                         # Modular stylesheets (style, dashboard, manager, emp, project, etc.)
-│   ├── 📁 images/                      # Static brand assets (logo.png)
+│   ├── 📁 images/                      # Static brand assets (logo.png.png)
 │   └── 📁 js/                          # Client-side AJAX & UI scripts (meetings, notes, tasks, navBar, etc.)
 ├── 📁 routes/                          # Express route modules mapped via RouteServiceProvider
 ├── 📁 services/

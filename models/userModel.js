@@ -120,6 +120,18 @@ const upsertUserProfile = async (userId, { phone, profileImage, bio }) => {
 };
 
 /**
+ * Remove Profile Image
+ */
+const removeProfileImage = async (userId) => {
+    const sql = `
+        UPDATE user_profiles 
+        SET profile_image = NULL, updated_at = CURRENT_TIMESTAMP 
+        WHERE user_id = $1;
+    `;
+    await query(sql, [userId]);
+};
+
+/**
  * Update Last Login
  */
 const updateLastLogin = async (userId) => {
@@ -242,4 +254,5 @@ module.exports = {
     getUserByValidResetToken,
     clearPasswordResetToken,
     updatePassword,
+    removeProfileImage
 };
